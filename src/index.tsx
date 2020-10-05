@@ -6,9 +6,19 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
+const tipForScienceTheme = {
+  ...theme,
+  radii: { default: 0 },
+  colors: { background: "black", primary: "#FF0070" },
+  fonts: { 
+    body: "Tahoma",
+    ...(theme as any).fonts,
+  }
+};
+
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={tipForScienceTheme}>
       <App />
     </ThemeProvider>
   </React.StrictMode>,
