@@ -1,48 +1,56 @@
-import React from "react";
-import { Flex, Heading, Button } from "rebass";
+import React from 'react';
+import { Flex, Heading, Button } from 'rebass';
+import { useHistory } from 'react-router-dom';
 
 const buttonStyle = {
-  ":hover": {
-    backgroundColor: "white",
+  ':hover': {
+    backgroundColor: 'white',
   },
-  fontSize: 4
+  fontSize: 4,
 };
 
-const Home = () => (
-  <Flex
-    flexDirection="column"
-    justifyContent="center"
-    height="100%"
-    width="100%"
-    p="3"
-  >
-    <Flex sx={{ flexGrow: 2 }} justifyContent="center" flexDirection="column">
-      <Heading
-        textAlign="center"
-        color="lightgray"
-        fontFamily="Impact"
-        fontSize={80}
-      >
-        TIP FOR SCIENCE
-      </Heading>
-    </Flex>
+const Home = () => {
+  const history = useHistory();
+  const handleClickAbout = () => {
+    history.push('/about');
+  };
+
+  return (
     <Flex
       flexDirection="column"
-      sx={{
-        flexGrow: 1,
-        flexShrink: 0,
-      }}
+      justifyContent="center"
+      height="100%"
+      width="100%"
+      p="3"
     >
-      <Flex mb="2">
-        <Button sx={buttonStyle} mr="1" flex="1">
-          about
-        </Button>
-        <Button sx={buttonStyle} ml="1" flex="1">
-          stats
-        </Button>
+      <Flex sx={{ flexGrow: 2 }} justifyContent="center" flexDirection="column">
+        <Heading
+          textAlign="center"
+          color="lightgray"
+          fontFamily="Impact"
+          fontSize={80}
+        >
+          TIP FOR SCIENCE
+        </Heading>
       </Flex>
-      <Button sx={buttonStyle}>play</Button>
+      <Flex
+        flexDirection="column"
+        sx={{
+          flexGrow: 1,
+          flexShrink: 0,
+        }}
+      >
+        <Flex mb="2">
+          <Button sx={buttonStyle} mr="1" flex="1" onClick={handleClickAbout}>
+            about
+          </Button>
+          <Button sx={buttonStyle} ml="1" flex="1">
+            stats
+          </Button>
+        </Flex>
+        <Button sx={buttonStyle}>play</Button>
+      </Flex>
     </Flex>
-  </Flex>
-);
+  );
+};
 export { Home };

@@ -10,10 +10,10 @@ const tipForScienceTheme = {
   ...theme,
   radii: { default: 0 },
   colors: { background: "black", primary: "#FF0070" },
-  fonts: { 
+  fonts: {
     body: "Tahoma",
     ...(theme as any).fonts,
-  }
+  },
 };
 
 ReactDOM.render(
