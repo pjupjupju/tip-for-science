@@ -14,6 +14,9 @@ const Home = () => {
   const handleClickAbout = () => {
     history.push('/about');
   };
+  const handleClickPlay = () => {
+    history.push('/play');
+  }
 
   return (
     <Flex
@@ -48,7 +51,7 @@ const Home = () => {
             stats
           </Button>
         </Flex>
-        <Button sx={buttonStyle}>play</Button>
+        <Button sx={buttonStyle} onClick={handleClickPlay}>play</Button>
       </Flex>
     </Flex>
   );
