@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Box, Button, Flex, Text } from 'rebass';
 
-const Slide1 = () => <Text color="white">fleeb</Text>;
-const Slide2 = () => <Text color="white">jiny fleeb</Text>;
+import { Slide1 } from '../TutorialSlides';
+
+const Slide2 = () => <Text color="white">jiny fleeb (2)</Text>;
 
 const slideList = [<Slide1 />, <Slide2 />];
 
@@ -11,6 +12,10 @@ const Slider = () => {
   const handleClickNext = () => {
     setValue(value + 1 === slideList.length ? 0 : value + 1);
   };
+  const handleClickPrev = () => {
+    setValue(value === 0 ? slideList.length - 1 : value - 1);
+  };
+
   return (
     <Flex
       flexDirection="column"
@@ -23,7 +28,9 @@ const Slider = () => {
           flexGrow: 1,
           flexShrink: 0,
         }}
-      >{slideList[value]}</Box>
+      >
+        {slideList[value]}
+      </Box>
       <Button
         onClick={handleClickNext}
         sx={{
@@ -32,6 +39,17 @@ const Slider = () => {
         }}
       >
         next ({(value + 1 === slideList.length ? 0 : value + 1) + 1}/
+        {slideList.length})
+      </Button>
+
+      <Button
+        onClick={handleClickPrev}
+        sx={{
+          flexGrow: 0,
+          flexShrink: 0,
+        }}
+      >
+        previous ({(value === 0 ? slideList.length - 1 : value - 1) + 1}/
         {slideList.length})
       </Button>
     </Flex>
