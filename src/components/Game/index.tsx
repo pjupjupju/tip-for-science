@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { Box, Flex, Heading, Image } from 'rebass';
-import { Label, Input } from '@rebass/forms'
-
+import React, { useState, KeyboardEvent } from 'react';
+import { Box, Flex, Heading, Image, Text } from 'rebass';
+import { Label, Input } from '@rebass/forms';
 
 interface Settings {
   question: string;
@@ -9,6 +8,7 @@ interface Settings {
   previousTips: number[];
   correctAnswer: number;
   timeLimit: number;
+  unit: string;
 }
 
 interface GameProps {
@@ -17,9 +17,36 @@ interface GameProps {
   settings: Settings;
 }
 
-const Game = ({ settings: { question, image } }: GameProps) => {
-  const [submitted] = useState(false);
-  return !submitted? (
+const inputStyles = {
+  '::placeholder': {
+    color: 'white',
+  },
+  color: 'white',
+  flex: 1,
+  mx: 3,
+};
+
+const imageStyle = {
+  height: 'calc(30vh)',
+  width: 'calc(30vh)',
+  alignSelf: 'center',
+};
+
+const labelStyle = {
+  flexGrow: 0,
+  flexShrink: 0,
+  width: 'auto',
+  color: 'white',
+};
+
+const Game = ({ settings: { question, image, unit } }: GameProps) => {
+  const [submitted, setSubmitted] = useState(false);
+  const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      setSubmitted(true);
+    }
+  };
+  return !submitted ? (
     <Flex flexDirection="column">
       <Box>
         <Heading
@@ -31,18 +58,40 @@ const Game = ({ settings: { question, image } }: GameProps) => {
           {question}
         </Heading>
       </Box>
-      <Image src={image} />
-      <Flex>
-  <Label htmlFor='tip'>Tip:</Label>
-  <Input
-    id='tip'
-    name='tip'
-    type='number'
-    placeholder='váš tip'
-  />
-</Flex>
+      <Image src={image} sx={imageStyle} />
+      <Flex justifyContent="center" alignItems="center">
+        <Label htmlFor="tip" sx={labelStyle}>
+          tip:
+        </Label>
+        <Input
+          id="tip"
+          name="tip"
+          type="number"
+          placeholder="váš tip"
+          sx={inputStyles}
+          onKeyDown={handleSubmit}
+        />
+        <Text color="white">{unit}</Text>
+      </Flex>
     </Flex>
-  ):null;
+  ) : (
+    <Flex flexDirection="column">
+      <Box>
+        <Heading
+          textAlign="center"
+          color="lightgray"
+          fontFamily="Impact"
+          fontSize={40}
+        >
+          Total score:
+        </Heading>
+      </Box>
+      <Image src={image} sx={imageStyle} />
+      <Flex justifyContent="center" alignItems="center">
+        <Text color="white">Tady bude graf a pod tím nějaký fun fact.</Text>
+      </Flex>
+    </Flex>
+  );
 };
 
 export { Game };

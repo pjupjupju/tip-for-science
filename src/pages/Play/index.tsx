@@ -10,6 +10,7 @@ const Play = () => (
       previousTips: [99, 468],
       correctAnswer: 161,
       timeLimit: 10,
+      unit: "m"
     }}
     onSubmit={() => {}}
     onFinish={() => {}}
