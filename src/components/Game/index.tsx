@@ -39,7 +39,15 @@ const labelStyle = {
   color: 'white',
 };
 
-const Game = ({ settings: { question, image, unit } }: GameProps) => {
+const previousTipStyle = {
+  background: "pink",
+  mr: 1,
+  p: 1,
+}
+
+const Game = ({
+  settings: { question, image, previousTips, unit },
+}: GameProps) => {
   const [submitted, setSubmitted] = useState(false);
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -59,6 +67,16 @@ const Game = ({ settings: { question, image, unit } }: GameProps) => {
         </Heading>
       </Box>
       <Image src={image} sx={imageStyle} />
+      {previousTips != null && previousTips.length !== 0 && (
+        <>
+          <Text textAlign="center" color="pink" mb={1}>Předchozí tipy: </Text>
+          <Flex justifyContent="center" mb={1}>
+            {previousTips.map((previousTip) => (
+              <Text sx={previousTipStyle}>{previousTip}</Text>
+            ))}
+          </Flex>
+        </>
+      )}
       <Flex justifyContent="center" alignItems="center">
         <Label htmlFor="tip" sx={labelStyle}>
           tip:
