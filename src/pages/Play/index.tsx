@@ -5,15 +5,15 @@ import washington from './../../assets/slide1_washington.jpg';
 const Play = () => (
   <Game
     settings={{
-      question: 'Jak velký je fleeb?',
+      question: 'Jak velkou má tadydlencten pán hlavu?',
       image: washington,
-      previousTips: [99, 468],
-      correctAnswer: 161,
+      previousTips: [10, 32],
+      correctAnswer: 18.29,
       timeLimit: 10,
       unit: "m"
     }}
-    onSubmit={() => {}}
-    onFinish={() => {}}
+    onSubmit={() => {console.log("cum sum!")}}
+    onFinish={() => {console.log("odišiel som")}}
   />
 );
 

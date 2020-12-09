@@ -1,8 +1,9 @@
-import React, { useState, KeyboardEvent } from 'react';
+import React, { useState, KeyboardEvent, useEffect } from 'react';
 import { Box, Flex, Heading, Image, Text } from 'rebass';
 import { ResponsiveLine } from '@nivo/line';
 import { Label, Input } from '@rebass/forms';
 import { mockData } from './data';
+import { Link } from 'react-router-dom';
 
 interface Settings {
   question: string;
@@ -48,12 +49,33 @@ const previousTipStyle = {
 };
 
 const Game = ({
-  settings: { question, image, previousTips, unit },
+  settings: { question, image, previousTips, unit, timeLimit },
+  onSubmit,
+  onFinish,
 }: GameProps) => {
   const [submitted, setSubmitted] = useState(false);
   const [tip, setTip] = useState<number | null>(null);
+  useEffect(() => {
+    if (timeLimit && !submitted) {
+      console.log('started timeout');
+      setTimeout(() => {
+        console.log('ended timeout');
+        if (!submitted) {
+          setSubmitted(true);
+        }
+      }, timeLimit * 1000);
+    }
+  }, [timeLimit, submitted]);
+  useEffect(() => {
+    return () => {
+      if (onFinish) {
+        onFinish();
+      }
+    };
+  }, [onFinish]);
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
+      onSubmit();
       setTip(Number(event.currentTarget.value));
       setSubmitted(true);
     }
@@ -65,7 +87,7 @@ const Game = ({
           textAlign="center"
           color="lightgray"
           fontFamily="Impact"
-          fontSize={80}
+          fontSize={30}
         >
           {question}
         </Heading>
@@ -78,7 +100,9 @@ const Game = ({
           </Text>
           <Flex justifyContent="center" mb={1}>
             {previousTips.map((previousTip) => (
-              <Text sx={previousTipStyle}>{previousTip}</Text>
+              <Text sx={previousTipStyle} key={`previous-tip-${previousTip}`}>
+                {previousTip}
+              </Text>
             ))}
           </Flex>
         </>
@@ -155,6 +179,9 @@ const Game = ({
           />
         </Box>
         <Text color="white">Tady bude graf a pod tím nějaký fun fact.</Text>
+        <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
+          🏚 domů
+        </Link>
       </Flex>
     </Flex>
   );
