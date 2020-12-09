@@ -1,13 +1,7 @@
 import React from 'react';
-import { Flex, Heading, Button } from 'rebass';
+import { Flex, Heading } from 'rebass';
 import { useHistory } from 'react-router-dom';
-
-const buttonStyle = {
-  ':hover': {
-    backgroundColor: 'white',
-  },
-  fontSize: 4,
-};
+import { MenuButton } from '../../components';
 
 const Home = () => {
   const history = useHistory();
@@ -44,14 +38,14 @@ const Home = () => {
         }}
       >
         <Flex mb="2">
-          <Button sx={buttonStyle} mr="1" flex="1" onClick={handleClickAbout}>
+          <MenuButton mr="1" flex="1" onClick={handleClickAbout}>
             about
-          </Button>
-          <Button sx={buttonStyle} ml="1" flex="1">
+          </MenuButton>
+          <MenuButton ml="1" flex="1">
             stats
-          </Button>
+          </MenuButton>
         </Flex>
-        <Button sx={buttonStyle} onClick={handleClickPlay}>play</Button>
+        <MenuButton onClick={handleClickPlay}>play</MenuButton>
       </Flex>
     </Flex>
   );

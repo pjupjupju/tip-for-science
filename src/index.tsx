@@ -6,7 +6,7 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
-const tipForScienceTheme = {
+export const tipForScienceTheme = {
   ...theme,
   radii: { default: 0 },
   colors: { background: "black", primary: "#FF0070" },
