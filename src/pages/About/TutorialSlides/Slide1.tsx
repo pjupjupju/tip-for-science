@@ -35,8 +35,8 @@ const Slide1 = () => {
           textAlign="center"
           mb="4"
         >
-          Would you like to know how heavy was the largest elephant that ever
-          lived?
+          Zajímalo by vás, kolik vážil nejtěžší slon v historii?
+          
         </Text>
         <Text
           fontSize={[3, 4, 5]}
@@ -45,8 +45,7 @@ const Slide1 = () => {
           textAlign="center"
           mb="4"
         >
-          How big is the Mount Rushmore's head of George Washington from chin to
-          crown?
+          Jak velká je hlava George Washingtona v sousoší Mount Rushmore?
         </Text>
         <Text
           fontSize={[3, 4, 5]}
@@ -54,7 +53,7 @@ const Slide1 = () => {
           color="primary"
           textAlign="center"
         >
-          How fast does the planet Jupiter rush though space?
+          Jak rychle se pohybuje Jupiter?
         </Text>
       </Box>
     </Flex>
