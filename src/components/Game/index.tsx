@@ -8,15 +8,15 @@ import { Link } from 'react-router-dom';
 interface Settings {
   question: string;
   image: string;
-  previousTips: number[];
+  previousTips?: number[];
   correctAnswer: number;
-  timeLimit: number;
+  timeLimit?: number;
   unit: string;
 }
 
 interface GameProps {
-  onFinish: Function;
-  onSubmit: Function;
+  onFinish?: Function;
+  onSubmit?: Function;
   settings: Settings;
 }
 
@@ -30,8 +30,8 @@ const inputStyles = {
 };
 
 const imageStyle = {
-  height: 'calc(30vh)',
-  width: 'calc(30vh)',
+  height: '210px',
+  width: '100%',
   alignSelf: 'center',
 };
 
@@ -75,30 +75,33 @@ const Game = ({
   }, [onFinish]);
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      onSubmit();
+      if (onSubmit) {
+        onSubmit();
+      }
       setTip(Number(event.currentTarget.value));
       setSubmitted(true);
     }
   };
   return !submitted ? (
     <Flex flexDirection="column">
-      <Box>
-        <Heading
+      <Box height="80px">
+        <Text
+          fontSize={[3, 4, 5]}
+          fontWeight="bold"
+          color="secondary"
           textAlign="center"
-          color="lightgray"
-          fontFamily="Impact"
-          fontSize={30}
+          p={3}
         >
           {question}
-        </Heading>
+        </Text>
       </Box>
       <Image src={image} sx={imageStyle} />
       {previousTips != null && previousTips.length !== 0 && (
         <>
-          <Text textAlign="center" color="#FF0070" mb={1}>
+          <Text textAlign="center" color="#FF0070" my={1}>
             Předchozí tipy:{' '}
           </Text>
-          <Flex justifyContent="center" mb={1}>
+          <Flex justifyContent="center">
             {previousTips.map((previousTip) => (
               <Text sx={previousTipStyle} key={`previous-tip-${previousTip}`}>
                 {previousTip}
@@ -107,7 +110,7 @@ const Game = ({
           </Flex>
         </>
       )}
-      <Flex justifyContent="center" alignItems="center">
+      <Flex justifyContent="center" alignItems="center" p={2}>
         <Label htmlFor="tip" sx={labelStyle}>
           tip:
         </Label>
@@ -124,15 +127,16 @@ const Game = ({
     </Flex>
   ) : (
     <Flex flexDirection="column">
-      <Box>
-        <Heading
+      <Box height="80px">
+        <Text
+          fontSize={[3, 4, 5]}
+          fontWeight="bold"
+          color="secondary"
           textAlign="center"
-          color="lightgray"
-          fontFamily="Impact"
-          fontSize={40}
+          p={3}
         >
           Total score:
-        </Heading>
+        </Text>
       </Box>
       <Image src={image} sx={imageStyle} />
       <Flex justifyContent="center" alignItems="center" flexDirection="column">
