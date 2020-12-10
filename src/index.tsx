@@ -9,7 +9,7 @@ import * as serviceWorker from "./serviceWorker";
 export const tipForScienceTheme = {
   ...theme,
   radii: { default: 0 },
-  colors: { background: "black", primary: "#FF0070" },
+  colors: { background: "black", primary: "#FF0070", secondary: "#5CC9FA" },
   fonts: {
     body: "Tahoma",
     ...(theme as any).fonts,

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Box, Button, Flex, Text } from 'rebass';
 
-import { Slide1 } from '../TutorialSlides';
+import { Slide1, Slide2, Slide3 } from '../TutorialSlides';
 
-const Slide2 = () => <Text color="white">jiny fleeb (2)</Text>;
 
-const slideList = [<Slide1 />, <Slide2 />];
+const slideList = [<Slide1 />, <Slide2 />, <Slide3 />];
 
 const Slider = () => {
   const [value, setValue] = useState(0);

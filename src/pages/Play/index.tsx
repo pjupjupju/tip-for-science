@@ -1,6 +1,6 @@
 import React from 'react';
 import { Game } from './../../components';
-import washington from './../../assets/slide1_washington.jpg';
+import washington from './../../assets/game_washington.jpg';
 
 const Play = () => (
   <Game
