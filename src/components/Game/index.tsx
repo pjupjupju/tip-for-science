@@ -1,5 +1,5 @@
 import React, { useState, KeyboardEvent, useEffect } from 'react';
-import { Box, Flex, Heading, Image, Text } from 'rebass';
+import { Box, Flex, Image, Text } from 'rebass';
 import { ResponsiveLine } from '@nivo/line';
 import { Label, Input } from '@rebass/forms';
 import { mockData } from './data';
@@ -53,6 +53,7 @@ const Game = ({
   onSubmit,
   onFinish,
 }: GameProps) => {
+
   const [submitted, setSubmitted] = useState(false);
   const [tip, setTip] = useState<number | null>(null);
   useEffect(() => {
