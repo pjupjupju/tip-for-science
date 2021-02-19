@@ -1,28 +1,36 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { ThemeProvider } from "emotion-theming";
-import theme from "@rebass/preset";
-import "./index.css";
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { ThemeProvider } from 'emotion-theming';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import theme from '@rebass/preset';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
 
 export const tipForScienceTheme = {
   ...theme,
   radii: { default: 0 },
-  colors: { background: "black", primary: "#FF0070", secondary: "#5CC9FA" },
+  colors: { background: 'black', primary: '#FF0070', secondary: '#5CC9FA' },
   fonts: {
-    body: "Tahoma",
+    body: 'Tahoma',
     ...(theme as any).fonts,
   },
 };
 
+const client = new ApolloClient({
+  uri: 'http://localhost:4000/',
+  cache: new InMemoryCache(),
+});
+
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={tipForScienceTheme}>
-      <App />
-    </ThemeProvider>
+    <ApolloProvider client={client}>
+      <ThemeProvider theme={tipForScienceTheme}>
+        <App />
+      </ThemeProvider>
+    </ApolloProvider>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
