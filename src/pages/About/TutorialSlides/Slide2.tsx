@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Heading, Image, Text } from 'rebass';
+import { Box, Flex, Image, Text } from 'rebass';
 import slune from './../../../assets/slide2_elephant.jpg';
 
 const imageStyle = {
