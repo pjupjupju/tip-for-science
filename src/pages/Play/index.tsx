@@ -1,11 +1,12 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { Game } from './../../components';
 import washington from './../../assets/game_washington.jpg';
-import { QUESTION_QUERY } from '../../gql';
+import { QUESTION_QUERY, SAVE_MUTATION } from '../../gql';
 
 const Play = () => {
-  const{ loading, data } = useQuery(QUESTION_QUERY);
+  const { loading, data } = useQuery(QUESTION_QUERY);
+  const [saveTip] = useMutation(SAVE_MUTATION);
 
   if (loading) {
     return (<div>loading</div>);
@@ -22,8 +23,9 @@ const Play = () => {
       timeLimit: 10,
       unit: 'm',
     }}
-    onSubmit={() => {
+    onSubmit={(value: string) => {
       console.log('cum sum!');
+      saveTip({ variables: { id: 'lfjsdkfhdkj', tip: Number(value) }});
     }}
     onFinish={() => {
       console.log('odišiel som');
