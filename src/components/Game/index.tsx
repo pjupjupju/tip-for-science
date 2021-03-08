@@ -77,7 +77,7 @@ const Game = ({
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       if (onSubmit) {
-        onSubmit();
+        onSubmit(event.currentTarget.value);
       }
       setTip(Number(event.currentTarget.value));
       setSubmitted(true);
