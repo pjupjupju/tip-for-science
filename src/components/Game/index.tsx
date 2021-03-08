@@ -1,9 +1,9 @@
 import React, { useState, KeyboardEvent, useEffect } from 'react';
-import { Box, Flex, Image, Text } from 'rebass';
+import { Box, Button, Flex, Image, Text } from 'rebass';
 import { ResponsiveLine } from '@nivo/line';
 import { Label, Input } from '@rebass/forms';
 import { mockData } from './data';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 interface Settings {
   question: string;
@@ -54,6 +54,8 @@ const Game = ({
   onFinish,
 }: GameProps) => {
 
+  const history = useHistory();
+
   const [submitted, setSubmitted] = useState(false);
   const [tip, setTip] = useState<number | null>(null);
   useEffect(() => {
@@ -84,7 +86,7 @@ const Game = ({
     }
   };
   return !submitted ? (
-    <Flex flexDirection="column">
+    <Flex flexDirection="column" height="100%">
       <Box height="80px">
         <Text
           fontSize={[3, 4, 5]}
@@ -127,7 +129,7 @@ const Game = ({
       </Flex>
     </Flex>
   ) : (
-    <Flex flexDirection="column">
+    <Flex flexDirection="column" height="100%">
       <Box height="80px">
         <Text
           fontSize={[3, 4, 5]}
@@ -187,6 +189,10 @@ const Game = ({
         <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
           🏚 domů
         </Link>
+      </Flex>
+      <Flex justifyContent="space-between" mt="auto">
+        <Button as={Link} onClick={()=>history.push("/")}>flop</Button>
+        <Button>flopšť</Button>
       </Flex>
     </Flex>
   );
