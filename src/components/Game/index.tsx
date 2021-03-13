@@ -15,7 +15,7 @@ interface Settings {
 }
 
 interface GameProps {
-  onFinish?: Function;
+  onFinish: Function;
   onSubmit?: Function;
   settings: Settings;
 }
@@ -53,11 +53,14 @@ const Game = ({
   onSubmit,
   onFinish,
 }: GameProps) => {
-
   const history = useHistory();
 
   const [submitted, setSubmitted] = useState(false);
   const [tip, setTip] = useState<number | null>(null);
+  const handleFinish = () => {
+    onFinish();
+    setSubmitted(false);
+  };
   useEffect(() => {
     if (timeLimit && !submitted) {
       console.log('started timeout');
@@ -69,13 +72,6 @@ const Game = ({
       }, timeLimit * 1000);
     }
   }, [timeLimit, submitted]);
-  useEffect(() => {
-    return () => {
-      if (onFinish) {
-        onFinish();
-      }
-    };
-  }, [onFinish]);
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       if (onSubmit) {
@@ -186,13 +182,12 @@ const Game = ({
           />
         </Box>
         <Text color="white">Tady bude graf a pod tím nějaký fun fact.</Text>
-        <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
-          🏚 domů
-        </Link>
       </Flex>
       <Flex justifyContent="space-between" mt="auto">
-        <Button as={Link} onClick={()=>history.push("/")}>flop</Button>
-        <Button>flopšť</Button>
+        <Button as={Link} onClick={() => history.push('/')}>
+          Domů
+        </Button>
+        <Button onClick={handleFinish}>Pokračovat</Button>
       </Flex>
     </Flex>
   );
