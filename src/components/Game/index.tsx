@@ -1,4 +1,4 @@
-import React, { useState, KeyboardEvent, useEffect } from 'react';
+import React, { useState, KeyboardEvent, useEffect, useRef } from 'react';
 import { Box, Button, Flex, Image, Text } from 'rebass';
 import { ResponsiveLine } from '@nivo/line';
 import { Label, Input } from '@rebass/forms';
@@ -57,6 +57,7 @@ const Game = ({
 
   const [submitted, setSubmitted] = useState(false);
   const [tip, setTip] = useState<number | null>(null);
+  const timeoutRef = useRef<number>();
   const handleFinish = () => {
     onFinish();
     setSubmitted(false);
@@ -64,7 +65,7 @@ const Game = ({
   useEffect(() => {
     if (timeLimit && !submitted) {
       console.log('started timeout');
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         console.log('ended timeout');
         if (!submitted) {
           setSubmitted(true);
@@ -74,6 +75,9 @@ const Game = ({
   }, [timeLimit, submitted]);
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
       if (onSubmit) {
         onSubmit(event.currentTarget.value);
       }

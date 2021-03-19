@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Flex, Text } from 'rebass';
+import { Box, Button, Flex } from 'rebass';
 
 import { Slide1, Slide2, Slide3 } from '../TutorialSlides';
 
