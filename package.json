@@ -9,7 +9,7 @@
     "@rebass/forms": "^4.0.6",
     "@rebass/preset": "^4.0.5",
     "apollo-server": "^2.19.1",
-    "aws-sdk": "^2.836.0",
+    "aws-sdk": "^2.869.0",
     "emotion-theming": "^10.0.27",
     "graphql": "^15.5.0",
     "react": "^16.13.1",
