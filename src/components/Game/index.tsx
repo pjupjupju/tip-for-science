@@ -1,9 +1,9 @@
-import React, { useState, KeyboardEvent, useEffect } from 'react';
-import { Box, Flex, Image, Text } from 'rebass';
+import React, { useState, KeyboardEvent, useEffect, useRef } from 'react';
+import { Box, Button, Flex, Image, Text } from 'rebass';
 import { ResponsiveLine } from '@nivo/line';
 import { Label, Input } from '@rebass/forms';
 import { mockData } from './data';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 interface Settings {
   question: string;
@@ -15,7 +15,7 @@ interface Settings {
 }
 
 interface GameProps {
-  onFinish?: Function;
+  onFinish: Function;
   onSubmit?: Function;
   settings: Settings;
 }
@@ -53,13 +53,19 @@ const Game = ({
   onSubmit,
   onFinish,
 }: GameProps) => {
+  const history = useHistory();
 
   const [submitted, setSubmitted] = useState(false);
   const [tip, setTip] = useState<number | null>(null);
+  const timeoutRef = useRef<number>();
+  const handleFinish = () => {
+    onFinish();
+    setSubmitted(false);
+  };
   useEffect(() => {
     if (timeLimit && !submitted) {
       console.log('started timeout');
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         console.log('ended timeout');
         if (!submitted) {
           setSubmitted(true);
@@ -67,15 +73,11 @@ const Game = ({
       }, timeLimit * 1000);
     }
   }, [timeLimit, submitted]);
-  useEffect(() => {
-    return () => {
-      if (onFinish) {
-        onFinish();
-      }
-    };
-  }, [onFinish]);
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
       if (onSubmit) {
         onSubmit(event.currentTarget.value);
       }
@@ -84,7 +86,7 @@ const Game = ({
     }
   };
   return !submitted ? (
-    <Flex flexDirection="column">
+    <Flex flexDirection="column" height="100%">
       <Box height="80px">
         <Text
           fontSize={[3, 4, 5]}
@@ -127,7 +129,7 @@ const Game = ({
       </Flex>
     </Flex>
   ) : (
-    <Flex flexDirection="column">
+    <Flex flexDirection="column" height="100%">
       <Box height="80px">
         <Text
           fontSize={[3, 4, 5]}
@@ -184,9 +186,12 @@ const Game = ({
           />
         </Box>
         <Text color="white">Tady bude graf a pod tím nějaký fun fact.</Text>
-        <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
-          🏚 domů
-        </Link>
+      </Flex>
+      <Flex justifyContent="space-between" mt="auto">
+        <Button as={Link} onClick={() => history.push('/')}>
+          Domů
+        </Button>
+        <Button onClick={handleFinish}>Pokračovat</Button>
       </Flex>
     </Flex>
   );
