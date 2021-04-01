@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { ThemeProvider } from "emotion-theming";
-import { tipForScienceTheme } from '../src';
+import { tipForScienceTheme } from '../src/App';
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },

@@ -1,8 +1,11 @@
-import { ApolloServer, gql } from 'apollo-server';
-import { saveTip } from './schema/mutation';
+import { gql } from 'apollo-server-express';
+import { saveTip } from './mutation';
 
-const typeDefs = gql`
-  # Q
+export * from './context';
+
+export const typeDefs = /* GraphQL */ gql`
+  scalar DateTime
+
   type Question {
     id: String!
     question: String!
@@ -42,7 +45,7 @@ const questions :Question[] = [
   }
 ];
 
-const resolvers = {
+export const resolvers = {
   Mutation: {
     saveTip,
   },
@@ -50,9 +53,3 @@ const resolvers = {
     getNextQuestion: () => questions[0], // databaze.vytahniMiNextQuestion(130) => Question
   },
 };
-
-const server = new ApolloServer({ typeDefs, resolvers });
-
-server.listen().then(({ url }) => {
-  console.log(`🚀  GraphQL server ready at ${url}`);
-});
