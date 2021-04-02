@@ -62,6 +62,7 @@
       "last 1 safari version"
     ]
   },
+  "types": "./razzle.d.ts", 
   "devDependencies": {
     "@storybook/addon-actions": "^6.1.10",
     "@storybook/addon-essentials": "^6.1.10",
