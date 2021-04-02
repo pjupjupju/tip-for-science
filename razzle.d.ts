@@ -4,9 +4,3 @@ declare namespace NodeJS {
     RAZZLE_PUBLIC_DIR: string;
   }
 }
-
-interface NodeModule {
-  hot?: {
-    accept: Function;
-  };
-}

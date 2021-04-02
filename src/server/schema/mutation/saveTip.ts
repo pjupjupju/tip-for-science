@@ -4,10 +4,10 @@ import { TABLE_QUESTION, TABLE_TIP } from './../../../config';
 export async function saveTip(
   parent: any,
   { id, tip }: { id: string; tip: number },
-  { dynamoDB }: { dynamoDB: DynamoDB.DocumentClient }
+  { dynamo }: { dynamo: DynamoDB.DocumentClient }
 ) {
   console.log(`--- updating Question ${id} with tip ${tip}`);
-  await dynamoDB.put({
+  await dynamo.put({
     TableName: TABLE_TIP,
     Item: {
       question_id: id,
@@ -20,7 +20,7 @@ export async function saveTip(
   // TODO: get next question id somehow
   const nextQuestionId = 'flop';
 
-  const question = dynamoDB.query({
+  const question = dynamo.query({
     TableName: TABLE_QUESTION,
     KeyConditionExpression: 'ID = :id',
     ExpressionAttributeValues: { ':id': nextQuestionId },
@@ -28,7 +28,7 @@ export async function saveTip(
     Limit: 1,
   });
 
-  const lastTips = dynamoDB.query({
+  const lastTips = dynamo.query({
     TableName: TABLE_TIP,
     KeyConditionExpression: 'question_id = :id',
     ExpressionAttributeValues: { ':id': nextQuestionId },
