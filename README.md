@@ -1,7 +1,7 @@
 # Tip for Science 🎯
 
 *Fullstack javascript app with React-based responsive UI.*
-This project was bootstrapped with create-react-app.
+This project was bootstrapped with create-react-app and Razzle
 
 ## How to run
 - clone this repository
