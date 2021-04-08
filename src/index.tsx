@@ -1,39 +1,38 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { ThemeProvider } from 'emotion-theming';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
-import theme from '@rebass/preset';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import http from 'http';
 
-export const tipForScienceTheme = {
-  ...theme,
-  radii: { default: 0 },
-  colors: { background: 'black', primary: '#FF0070', secondary: '#5CC9FA' },
-  fonts: {
-    body: 'Tahoma',
-    ...(theme as any).fonts,
-  },
-};
+if (process.env.NODE_ENV === 'production') {
+  /* Sentry.init({
+    dsn: ...
+  }); */
+}
 
-const client = new ApolloClient({
-  uri: 'http://localhost:4000/',
-  cache: new InMemoryCache(),
-});
+let app = require('./server').default;
 
-ReactDOM.render(
-  <React.StrictMode>
-    <ApolloProvider client={client}>
-      <ThemeProvider theme={tipForScienceTheme}>
-        <App />
-      </ThemeProvider>
-    </ApolloProvider>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+let currentApp = app;
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const server = http.createServer(app);
+
+server
+  .listen(process.env.PORT || 3000, () => {
+    console.log('🚀 started at http://localhost:3000');
+  })
+  .on('error', error => {
+    console.log(error);
+  });
+
+if (module.hot) {
+  console.log('✅  Server-side HMR Enabled!');
+
+  module.hot.accept('./server', () => {
+    console.log('🔁  HMR Reloading `./server`...');
+
+    try {
+      app = require('./server').default;
+      server.removeListener('request', currentApp);
+      server.on('request', app);
+      currentApp = app;
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}
