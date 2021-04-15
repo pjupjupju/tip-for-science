@@ -6,6 +6,7 @@ import './index.css';
 import { About } from './pages/About';
 import { Home } from './pages/Home';
 import { Play } from './pages/Play';
+import { Stats } from './pages/Stats';
 
 export const tipForScienceTheme = {
   ...theme,
@@ -28,6 +29,9 @@ export const App = () => (
         </Route>
         <Route path="/play">
           <Play />
+        </Route>
+        <Route path="/stats">
+          <Stats />
         </Route>
       </Switch>
   </ThemeProvider>
