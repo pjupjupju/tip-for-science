@@ -10,6 +10,9 @@ const Home = () => {
   };
   const handleClickPlay = () => {
     history.push('/play');
+  };
+  const handleClickStats = () => {
+    history.push('/stats');
   }
 
   return (
@@ -41,7 +44,7 @@ const Home = () => {
           <MenuButton mr="1" flex="1" onClick={handleClickAbout}>
             about
           </MenuButton>
-          <MenuButton ml="1" flex="1">
+          <MenuButton ml="1" flex="1" onClick={handleClickStats}>
             stats
           </MenuButton>
         </Flex>
