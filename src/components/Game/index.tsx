@@ -2,7 +2,7 @@ import React, { useState, KeyboardEvent, useEffect, useRef } from 'react';
 import { Box, Button, Flex, Image, Text } from 'rebass';
 import { ResponsiveLine } from '@nivo/line';
 import { Label, Input } from '@rebass/forms';
-import { mockData } from './data';
+import { mockData } from './mockData';
 import { Link, useHistory } from 'react-router-dom';
 
 interface Settings {
@@ -15,6 +15,7 @@ interface Settings {
 }
 
 interface GameProps {
+  isSubmitted: boolean;
   onFinish: Function;
   onSubmit?: Function;
   settings: Settings;
@@ -50,12 +51,14 @@ const previousTipStyle = {
 
 const Game = ({
   settings: { question, image, previousTips, unit, timeLimit },
+  isSubmitted,
   onSubmit,
   onFinish,
 }: GameProps) => {
   const history = useHistory();
+  const setSubmitted = (v: boolean) => {};
 
-  const [submitted, setSubmitted] = useState(false);
+  // const [submitted, setSubmitted] = useState(false);
   const [tip, setTip] = useState<number | null>(null);
   const timeoutRef = useRef<number>();
   const handleFinish = () => {
@@ -63,16 +66,16 @@ const Game = ({
     setSubmitted(false);
   };
   useEffect(() => {
-    if (timeLimit && !submitted) {
+    if (timeLimit && !isSubmitted) {
       console.log('started timeout');
       timeoutRef.current = setTimeout(() => {
         console.log('ended timeout');
-        if (!submitted) {
+        if (!isSubmitted) {
           setSubmitted(true);
         }
       }, timeLimit * 1000);
     }
-  }, [timeLimit, submitted]);
+  }, [timeLimit, isSubmitted]);
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       if (timeoutRef.current) {
@@ -85,7 +88,7 @@ const Game = ({
       setSubmitted(true);
     }
   };
-  return !submitted ? (
+  return !isSubmitted ? (
     <Flex flexDirection="column" height="100%">
       <Box height="80px">
         <Text
