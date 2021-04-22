@@ -1,4 +1,4 @@
-import React, { useState, KeyboardEvent, useEffect, useRef } from 'react';
+import React, { KeyboardEvent } from 'react';
 import { Box, Button, Flex, Image, Text } from 'rebass';
 import { ResponsiveLine } from '@nivo/line';
 import { Label, Input } from '@rebass/forms';
@@ -17,8 +17,9 @@ interface Settings {
 interface GameProps {
   isSubmitted: boolean;
   onFinish: Function;
-  onSubmit?: Function;
+  onSubmit?: (event: KeyboardEvent<HTMLInputElement>) => void;
   settings: Settings;
+  tip?: number;
 }
 
 const inputStyles = {
@@ -54,40 +55,14 @@ const Game = ({
   isSubmitted,
   onSubmit,
   onFinish,
+  tip,
 }: GameProps) => {
   const history = useHistory();
-  const setSubmitted = (v: boolean) => {};
 
-  // const [submitted, setSubmitted] = useState(false);
-  const [tip, setTip] = useState<number | null>(null);
-  const timeoutRef = useRef<number>();
   const handleFinish = () => {
     onFinish();
-    setSubmitted(false);
   };
-  useEffect(() => {
-    if (timeLimit && !isSubmitted) {
-      console.log('started timeout');
-      timeoutRef.current = setTimeout(() => {
-        console.log('ended timeout');
-        if (!isSubmitted) {
-          setSubmitted(true);
-        }
-      }, timeLimit * 1000);
-    }
-  }, [timeLimit, isSubmitted]);
-  const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      if (onSubmit) {
-        onSubmit(event.currentTarget.value);
-      }
-      setTip(Number(event.currentTarget.value));
-      setSubmitted(true);
-    }
-  };
+
   return !isSubmitted ? (
     <Flex flexDirection="column" height="100%">
       <Box height="80px">
@@ -126,7 +101,7 @@ const Game = ({
           type="number"
           placeholder="váš tip"
           sx={inputStyles}
-          onKeyDown={handleSubmit}
+          onKeyDown={onSubmit}
         />
         <Text color="white">{unit}</Text>
       </Flex>
