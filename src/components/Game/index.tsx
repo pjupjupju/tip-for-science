@@ -3,9 +3,9 @@ import { Box, Button, Flex, Image, Text } from 'rebass';
 import { ResponsiveLine } from '@nivo/line';
 import { Label, Input } from '@rebass/forms';
 import { mockData } from './mockData';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-interface Settings {
+export interface Settings {
   question: string;
   image: string;
   previousTips?: number[];
@@ -17,6 +17,7 @@ interface Settings {
 interface GameProps {
   isSubmitted: boolean;
   onFinish: Function;
+  onHome: Function;
   onSubmit?: (event: KeyboardEvent<HTMLInputElement>) => void;
   settings: Settings;
   tip?: number;
@@ -53,14 +54,17 @@ const previousTipStyle = {
 const Game = ({
   settings: { question, image, previousTips, unit, timeLimit },
   isSubmitted,
+  onHome,
   onSubmit,
   onFinish,
   tip,
 }: GameProps) => {
-  const history = useHistory();
 
   const handleFinish = () => {
     onFinish();
+  };
+  const handleClickHome = () => {
+    onHome();
   };
 
   return !isSubmitted ? (
@@ -166,7 +170,7 @@ const Game = ({
         <Text color="white">Tady bude graf a pod tím nějaký fun fact.</Text>
       </Flex>
       <Flex justifyContent="space-between" mt="auto">
-        <Button as={Link} onClick={() => history.push('/')}>
+        <Button as={Link} onClick={handleClickHome}>
           Domů
         </Button>
         <Button onClick={handleFinish}>Pokračovat</Button>
