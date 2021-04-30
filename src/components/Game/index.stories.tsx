@@ -7,6 +7,7 @@ export default { title: 'component/Game', component: Game };
 export const Default = () => (
   <Game
     settings={question}
+    onHome={action('navigate-home')}
     onSubmit={action('submit-value')}
     onFinish={action('finish')}
     isSubmitted={false}
@@ -16,6 +17,7 @@ export const Default = () => (
 export const Submitted = () => (
   <Game
     settings={question}
+    onHome={action('navigate-home')}
     onSubmit={action('submit-value')}
     onFinish={action('finish')}
     isSubmitted={true}
@@ -24,4 +26,3 @@ export const Submitted = () => (
 
 Default.storyName = 'Default Game state';
 Submitted.storyName = 'Submitted Game state';
-
