@@ -28,11 +28,11 @@ interface GameAction {
 const gameReducer = (state: GameState, action: GameAction) => {
   switch (action.type) {
     case 'GAME_INIT':
-      return state;
+      return { ...state, isSubmitted: false };
     case 'GAME_SUBMIT':
-      return state;
+      return { ...state, isSubmitted: true };
     case 'GAME_FINISH':
-      return state;
+      return { ...state, isSubmitted: false };
     default:
       return state;
   }
@@ -51,11 +51,13 @@ const initState = {
 };
 
 const Play = () => {
-  const [gameState, dispatch] = useReducer(gameReducer, initState);
-  console.log(gameState);
+  const [{ question, isSubmitted }, dispatch] = useReducer(
+    gameReducer,
+    initState
+  );
+
   const history = useHistory();
   const onHome = () => history.push('/');
-  const [submitted, setSubmitted] = useState(false);
   // const [tip, setTip] = useState<number | null>(null);
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -70,7 +72,6 @@ const Play = () => {
         },
       });
       // setTip(Number(event.currentTarget.value));
-      setSubmitted(true);
       dispatch({ type: ActionType.GAME_SUBMIT });
     }
   };
@@ -94,16 +95,16 @@ const Play = () => {
   });
 
   useEffect(() => {
-    if (questions[questions.length - 1].timeLimit && !submitted) {
+    if (questions[questions.length - 1].timeLimit && !isSubmitted) {
       console.log('started timeout');
       timeoutRef.current = setTimeout(() => {
         console.log('ended timeout');
-        if (!submitted) {
-          setSubmitted(true);
+        if (!isSubmitted) {
+          dispatch({ type: ActionType.GAME_SUBMIT });
         }
       }, questions[questions.length - 1].timeLimit * 1000);
     }
-  }, [questions, submitted]);
+  }, [questions, isSubmitted]);
 
   if (loading) {
     return <div>loading</div>;
@@ -114,7 +115,7 @@ const Play = () => {
   return (
     <Game
       settings={questions[questions.length - 1]}
-      isSubmitted={submitted}
+      isSubmitted={isSubmitted}
       onHome={onHome}
       onSubmit={handleSubmit}
       onFinish={() => {
