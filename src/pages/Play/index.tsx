@@ -14,6 +14,7 @@ import { useHistory } from 'react-router';
 type GameState = {
   question: Settings;
   isSubmitted: boolean;
+  currentTip?: number;
 };
 
 enum ActionType {
@@ -23,16 +24,22 @@ enum ActionType {
 }
 interface GameAction {
   type: ActionType;
+  payload?: any;
 }
 
 const gameReducer = (state: GameState, action: GameAction) => {
   switch (action.type) {
     case 'GAME_INIT':
-      return { ...state, isSubmitted: false };
+      return { ...state, isSubmitted: false, currentTip: undefined };
     case 'GAME_SUBMIT':
-      return { ...state, isSubmitted: true };
+      return { ...state, isSubmitted: true, currentTip: action.payload?.tip };
     case 'GAME_FINISH':
-      return { ...state, isSubmitted: false };
+      return {
+        ...state,
+        isSubmitted: false,
+        question: action.payload.question,
+        currentTip: undefined,
+      };
     default:
       return state;
   }
@@ -51,33 +58,31 @@ const initState = {
 };
 
 const Play = () => {
-  const [{ question, isSubmitted }, dispatch] = useReducer(
+  const [{ currentTip, question, isSubmitted }, dispatch] = useReducer(
     gameReducer,
     initState
   );
 
   const history = useHistory();
   const onHome = () => history.push('/');
-  // const [tip, setTip] = useState<number | null>(null);
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
+      const myTip = Number(event.currentTarget.value);
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
-      console.log('cum sum!');
       saveTip({
         variables: {
           id: 'lfjsdkfhdkj',
-          tip: Number(event.currentTarget.value),
+          tip: myTip,
         },
       });
       // setTip(Number(event.currentTarget.value));
-      dispatch({ type: ActionType.GAME_SUBMIT });
+      dispatch({ type: ActionType.GAME_SUBMIT, payload: { tip: myTip } });
     }
   };
   const timeoutRef = useRef<number>();
 
-  const [questions, setQuestions] = useState([initState.question]);
   const [nextQuestion, setNextQuestion] = useState<{
     question: string;
     image: string;
@@ -95,16 +100,14 @@ const Play = () => {
   });
 
   useEffect(() => {
-    if (questions[questions.length - 1].timeLimit && !isSubmitted) {
-      console.log('started timeout');
+    if (question.timeLimit && !isSubmitted) {
       timeoutRef.current = setTimeout(() => {
-        console.log('ended timeout');
         if (!isSubmitted) {
           dispatch({ type: ActionType.GAME_SUBMIT });
         }
-      }, questions[questions.length - 1].timeLimit * 1000);
+      }, question.timeLimit * 1000);
     }
-  }, [questions, isSubmitted]);
+  }, [question, isSubmitted]);
 
   if (loading) {
     return <div>loading</div>;
@@ -114,14 +117,30 @@ const Play = () => {
 
   return (
     <Game
-      settings={questions[questions.length - 1]}
+      currentTip={currentTip}
+      settings={question}
       isSubmitted={isSubmitted}
       onHome={onHome}
       onSubmit={handleSubmit}
       onFinish={() => {
+        console.log('is next question null? ', nextQuestion != null);
         if (nextQuestion != null) {
-          setQuestions([...questions, nextQuestion]);
+          // setQuestions([...questions, nextQuestion]);
+          console.log('click finish');
+          dispatch({ type: ActionType.GAME_FINISH, payload: nextQuestion });
         }
+        const dalsiOtazka = {
+          question: 'Kolik kotatek dnes umrelo??',
+          image: washington,
+          previousTips: [10, 32],
+          correctAnswer: 18.29,
+          timeLimit: 5,
+          unit: 'm',
+        };
+        dispatch({
+          type: ActionType.GAME_FINISH,
+          payload: { question: dalsiOtazka },
+        });
       }}
     />
   );
