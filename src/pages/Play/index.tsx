@@ -8,7 +8,7 @@ import React, {
 import { useQuery, useMutation } from '@apollo/client';
 import { Game, Settings } from './../../components';
 import washington from './../../assets/game_washington.jpg';
-import { QUESTION_QUERY, SAVE_MUTATION } from '../../gql';
+import { MY_SCORE_QUERY, QUESTION_QUERY, SAVE_MUTATION } from '../../gql';
 import { useHistory } from 'react-router';
 
 type GameState = {
@@ -92,6 +92,8 @@ const Play = () => {
     unit: string;
   }>();
   const { loading, data } = useQuery(QUESTION_QUERY);
+  const { loading: scoreLoading, data: getMyScoreData } = useQuery(MY_SCORE_QUERY);
+
   const [saveTip] = useMutation(SAVE_MUTATION, {
     onCompleted: ({ saveTip: { __typename, ...data } }) => {
       setNextQuestion(data);
@@ -109,7 +111,7 @@ const Play = () => {
     }
   }, [question, isSubmitted]);
 
-  if (loading) {
+  if (loading || scoreLoading) {
     return <div>loading</div>;
   }
 
@@ -119,6 +121,7 @@ const Play = () => {
     <Game
       currentTip={currentTip}
       settings={question}
+      score={getMyScoreData.getMyScore || 0}
       isSubmitted={isSubmitted}
       onHome={onHome}
       onSubmit={handleSubmit}
