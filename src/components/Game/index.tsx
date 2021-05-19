@@ -23,6 +23,7 @@ interface GameProps {
   onSubmit?: (event: KeyboardEvent<HTMLInputElement>) => void;
   settings: Settings;
   currentTip?: number;
+  score: number;
 }
 
 const inputStyles = {
@@ -63,6 +64,7 @@ const Game = ({
   onSubmit,
   onFinish,
   currentTip,
+  score,
 }: GameProps) => {
   const handleClickFinish = () => {
     onFinish();
@@ -124,7 +126,7 @@ const Game = ({
           textAlign="center"
           p={3}
         >
-          Total score:
+          Total score: {score}
         </Text>
       </Box>
       <Image src={image} sx={imageStyle} />

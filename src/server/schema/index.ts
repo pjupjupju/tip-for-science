@@ -1,5 +1,6 @@
 import { gql } from 'apollo-server-express';
 import { saveTip } from './mutation';
+import { getMyScore } from './query';
 
 export * from './context';
 
@@ -18,6 +19,7 @@ export const typeDefs = /* GraphQL */ gql`
 
   type Query {
     getNextQuestion: Question
+    getMyScore: Float!
   }
 
   type Mutation {
@@ -26,23 +28,23 @@ export const typeDefs = /* GraphQL */ gql`
 `;
 
 type Question = {
-  id: string,
-  question: string,
-  image?: string,
-  previousTips: number[],
-  correctAnswer: number,
-  timeLimit?: number,
-  unit: string,
+  id: string;
+  question: string;
+  image?: string;
+  previousTips: number[];
+  correctAnswer: number;
+  timeLimit?: number;
+  unit: string;
 };
 
-const questions :Question[] = [
+const questions: Question[] = [
   {
     id: '40b86d42-84aa-4ba7-9aa9-80b9c8f80cfa',
-    question: "What is flop?",
+    question: 'What is flop?',
     previousTips: [],
     correctAnswer: 10,
-    unit: "m",
-  }
+    unit: 'm',
+  },
 ];
 
 export const resolvers = {
@@ -51,5 +53,6 @@ export const resolvers = {
   },
   Query: {
     getNextQuestion: () => questions[0], // databaze.vytahniMiNextQuestion(130) => Question
+    getMyScore,
   },
 };

@@ -11,6 +11,7 @@ export const Default = () => (
     onSubmit={action('submit-value')}
     onFinish={action('finish')}
     isSubmitted={false}
+    score={13.12}
   />
 );
 
@@ -22,6 +23,7 @@ export const Submitted = () => (
     onFinish={action('finish')}
     isSubmitted={true}
     currentTip={15}
+    score={13.12}
   />
 );
 
@@ -31,6 +33,7 @@ export const GameOver = () => (
   onSubmit={action('submit-value')}
   onFinish={action('finish')}
   isSubmitted={true}
+  score={13.12}
 />
 );
 
@@ -41,6 +44,7 @@ export const TooClose = () => (
   onFinish={action('finish')}
   isSubmitted={true}
   currentTip={18}
+  score={13.12}
 />
 );
 
