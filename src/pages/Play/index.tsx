@@ -92,13 +92,16 @@ const Play = () => {
     unit: string;
   }>();
   const { loading, data } = useQuery(QUESTION_QUERY);
-  const { loading: scoreLoading, data: getMyScoreData } = useQuery(MY_SCORE_QUERY);
+  const { loading: scoreLoading, data: getMyScoreData } = useQuery(
+    MY_SCORE_QUERY
+  );
 
   const [saveTip] = useMutation(SAVE_MUTATION, {
     onCompleted: ({ saveTip: { __typename, ...data } }) => {
       setNextQuestion(data);
       console.log(data);
     },
+    refetchQueries: ['MyScoreQuery'],
   });
 
   useEffect(() => {
