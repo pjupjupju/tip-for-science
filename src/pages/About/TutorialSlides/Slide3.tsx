@@ -19,6 +19,7 @@ const Slide3 = () => (
     onFinish={() => {
       console.log('odišiel som');
     }}
+    score={5}
     isSubmitted={false}
   />
 );
