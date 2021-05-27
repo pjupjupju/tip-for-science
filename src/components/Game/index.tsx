@@ -1,11 +1,13 @@
-import React, { useState, KeyboardEvent, useEffect, useRef } from 'react';
+import React, { KeyboardEvent } from 'react';
 import { Box, Button, Flex, Image, Text } from 'rebass';
 import { ResponsiveLine } from '@nivo/line';
 import { Label, Input } from '@rebass/forms';
-import { mockData } from './data';
-import { Link, useHistory } from 'react-router-dom';
+import { mockData } from './mockData';
+import { Link } from 'react-router-dom';
+import { TooCloseDialog } from './TooCloseDialog';
+import { GameOverScreen } from './GameOverScreen';
 
-interface Settings {
+export interface Settings {
   question: string;
   image: string;
   previousTips?: number[];
@@ -15,9 +17,13 @@ interface Settings {
 }
 
 interface GameProps {
+  isSubmitted: boolean;
   onFinish: Function;
-  onSubmit?: Function;
+  onHome: Function;
+  onSubmit?: (event: KeyboardEvent<HTMLInputElement>) => void;
   settings: Settings;
+  currentTip?: number;
+  score: number;
 }
 
 const inputStyles = {
@@ -48,44 +54,26 @@ const previousTipStyle = {
   p: 1,
 };
 
+const isTooClose = (currentTip: number, correctAnswer: number): boolean =>
+  currentTip >= correctAnswer * 0.95 && currentTip <= correctAnswer * 1.05;
+
 const Game = ({
-  settings: { question, image, previousTips, unit, timeLimit },
+  settings: { question, image, previousTips, unit, timeLimit, correctAnswer },
+  isSubmitted,
+  onHome,
   onSubmit,
   onFinish,
+  currentTip,
+  score,
 }: GameProps) => {
-  const history = useHistory();
-
-  const [submitted, setSubmitted] = useState(false);
-  const [tip, setTip] = useState<number | null>(null);
-  const timeoutRef = useRef<number>();
-  const handleFinish = () => {
+  const handleClickFinish = () => {
     onFinish();
-    setSubmitted(false);
   };
-  useEffect(() => {
-    if (timeLimit && !submitted) {
-      console.log('started timeout');
-      timeoutRef.current = setTimeout(() => {
-        console.log('ended timeout');
-        if (!submitted) {
-          setSubmitted(true);
-        }
-      }, timeLimit * 1000);
-    }
-  }, [timeLimit, submitted]);
-  const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      if (onSubmit) {
-        onSubmit(event.currentTarget.value);
-      }
-      setTip(Number(event.currentTarget.value));
-      setSubmitted(true);
-    }
+  const handleClickHome = () => {
+    onHome();
   };
-  return !submitted ? (
+
+  return !isSubmitted ? (
     <Flex flexDirection="column" height="100%">
       <Box height="80px">
         <Text
@@ -123,7 +111,7 @@ const Game = ({
           type="number"
           placeholder="váš tip"
           sx={inputStyles}
-          onKeyDown={handleSubmit}
+          onKeyDown={onSubmit}
         />
         <Text color="white">{unit}</Text>
       </Flex>
@@ -138,63 +126,80 @@ const Game = ({
           textAlign="center"
           p={3}
         >
-          Total score:
+          Total score: {score}
         </Text>
       </Box>
       <Image src={image} sx={imageStyle} />
       <Flex justifyContent="center" alignItems="center" flexDirection="column">
-        <Box width="100%" height="200px">
-          <ResponsiveLine
-            enableArea={true}
-            curve="natural"
-            xScale={{
-              type: 'linear',
-              min: 0,
-              max: 50,
-            }}
-            yScale={{
-              type: 'linear',
-              min: 0,
-              max: 1,
-            }}
-            data={mockData}
-            margin={{
-              top: 50,
-              right: 50,
-              bottom: 50,
-              left: 50,
-            }}
-            enableGridX={false}
-            enableGridY={false}
-            enablePoints={false}
-            markers={[
-              {
-                axis: 'x',
-                value: Number(tip),
-                lineStyle: { stroke: 'white', strokeWidth: 1 },
-                legend: 'váš tip',
-                textStyle: { fill: 'white' },
-              },
-              {
-                axis: 'x',
-                value: 18.29,
-                lineStyle: { stroke: '#FF0070', strokeWidth: 1 },
-                legend: 'správná odpověď',
-                textStyle: { fill: '#FF0070' },
-              },
-            ]}
-          />
-        </Box>
-        <Text color="white">Tady bude graf a pod tím nějaký fun fact.</Text>
+        {typeof currentTip !== 'undefined' ? (
+          <>
+            <Box width="100%" height="200px">
+              <ResponsiveLine
+                enableArea={true}
+                curve="natural"
+                xScale={{
+                  type: 'linear',
+                  min: 0,
+                  max: 50,
+                }}
+                yScale={{
+                  type: 'linear',
+                  min: 0,
+                  max: 1,
+                }}
+                data={mockData}
+                margin={{
+                  top: 50,
+                  right: 50,
+                  bottom: 50,
+                  left: 50,
+                }}
+                enableGridX={false}
+                enableGridY={false}
+                enablePoints={false}
+                markers={[
+                  {
+                    axis: 'x',
+                    value: Number(currentTip),
+                    lineStyle: { stroke: 'white', strokeWidth: 1 },
+                    legend: 'váš tip',
+                    textStyle: { fill: 'white' },
+                  },
+                  {
+                    axis: 'x',
+                    value: 18.29,
+                    lineStyle: { stroke: '#FF0070', strokeWidth: 1 },
+                    legend: 'správná odpověď',
+                    textStyle: { fill: '#FF0070' },
+                  },
+                ]}
+              />
+            </Box>
+            {isTooClose(currentTip, correctAnswer) && (
+              <TooCloseDialog
+                onGuessed={() => {
+                  console.log('som frajer a som tipnul');
+                }}
+                onKnewIt={() => {
+                  console.log('som frajer a som vedel');
+                }}
+              />
+            )}
+          </>
+        ) : (
+          <GameOverScreen />
+        )}
       </Flex>
       <Flex justifyContent="space-between" mt="auto">
-        <Button as={Link} onClick={() => history.push('/')}>
+        <Button as={Link} onClick={handleClickHome}>
           Domů
         </Button>
-        <Button onClick={handleFinish}>Pokračovat</Button>
+        <Button as={Link} onClick={handleClickFinish}>
+          Pokračovat
+        </Button>
       </Flex>
     </Flex>
   );
 };
 
-export { Game };
+export { Game, GameOverScreen, TooCloseDialog };
