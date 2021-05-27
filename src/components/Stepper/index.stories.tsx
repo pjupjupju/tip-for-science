@@ -1,7 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Button } from 'rebass';
 import { Stepper } from './';
 
+const length = 10;
 export default { title: 'component/Stepper', component: Stepper };
-export const Default = () => <Stepper length={10} />;
+export const Default = () => {
+  const [active, setActive] = useState(0);
+  const handleClick = () => {
+    console.log('click');
+    setActive(active === length - 1 ? 0 : active + 1);
+  };
+  return (
+    <>
+      <Stepper length={length} step={active} />
+      <Button onClick={handleClick} role="button" sx={{cursor:"pointer"}}>
+        Next
+      </Button>
+    </>
+  );
+};
 
 Default.storyName = 'Stepper';
