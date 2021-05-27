@@ -8,12 +8,12 @@ interface StepperProps {
 
 const dotStyles = {
   padding: 0,
-  width: '0.725rem',
-  height: '0.725rem',
+  width: '14px',
+  height: '14px',
   backgroundColor: 'white',
   border: 'none',
   borderRadius: '50%',
-  margin: '0 0.25rem',
+  margin: '0 3px',
   display: 'inline-block',
 };
 
