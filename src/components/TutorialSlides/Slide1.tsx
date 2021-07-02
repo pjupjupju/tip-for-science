@@ -5,7 +5,8 @@ import elephant from './../../assets/slide1_elephant.jpg';
 import moon from './../../assets/slide1_moon.jpg';
 import { SlideProps } from './types';
 
-const Slide1 = (props: SlideProps) => { // obsah () se pak muze smazat, je to tu pro hloupe lidi
+const Slide1 = (props: SlideProps) => {
+  // obsah () se pak muze smazat, je to tu pro hloupe lidi
   return (
     <Flex flexDirection="column">
       <Flex height="calc(20vh)" width="100%" justifyContent="center">
