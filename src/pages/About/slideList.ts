@@ -1,0 +1,36 @@
+import {
+  Slide1,
+  Slide2,
+  Slide3,
+  Slide4,
+  Slide5,
+  Slide6,
+  Slide7,
+  Slide8,
+  Slide9,
+  Slide10,
+  Slide11,
+  Slide12,
+  Slide13,
+  Slide14,
+  Slide15,
+} from './../../components/TutorialSlides';
+import { Stepper } from '../../components/Stepper';
+
+export const slideList = [
+  { content: Slide1, stepper: Stepper },
+  { content: Slide2, stepper: Stepper },
+  { content: Slide3 },
+  { content: Slide4, stepper: Stepper },
+  { content: Slide5, stepper: Stepper },
+  { content: Slide6, stepper: Stepper },
+  { content: Slide7, stepper: Stepper },
+  { content: Slide8, stepper: Stepper },
+  { content: Slide9 },
+  { content: Slide10, stepper: Stepper },
+  { content: Slide11, stepper: Stepper },
+  { content: Slide12, stepper: Stepper },
+  { content: Slide13 },
+  { content: Slide14, stepper: Stepper },
+  { content: Slide15, stepper: Stepper },
+];
