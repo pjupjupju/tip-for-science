@@ -24,7 +24,7 @@ const Dot = ({ isActive }: { isActive: boolean }) => (
   <Box as="li" sx={isActive ? activeDotStyles : dotStyles} />
 );
 
-export const Stepper = ({ step = 0, length }: CommonTutorialProps) => {
+export const Stepper = ({ step = 0, length }: Pick<CommonTutorialProps, "step" | "length">) => {
   const items = new Array(length).fill(0);
   return (
     <Flex justifyContent="center">

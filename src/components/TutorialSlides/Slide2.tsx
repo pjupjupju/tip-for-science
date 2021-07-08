@@ -41,7 +41,7 @@ const Slide2 = (props: SlideProps) => {
         <Text color="primary" as="span">
           9500
         </Text>
-        , nebo
+        , nebo{' '}
         <Text color="primary" as="span">
           15 000{' '}
         </Text>
