@@ -7,7 +7,6 @@ export default { title: 'component/Stepper', component: Stepper };
 export const Default = () => {
   const [active, setActive] = useState(0);
   const handleClick = () => {
-    console.log('click');
     setActive(active === length - 1 ? 0 : active + 1);
   };
   return (
