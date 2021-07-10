@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useReducer } from 'react';
 import { Box, Flex } from 'rebass';
 import {
   TutorialSlide,
@@ -14,11 +14,52 @@ interface TutorialProps {
   slideList: SlideSettings[];
 }
 
+type TutorialState = {
+  currentTip?: number;
+  step: number;
+};
+
+enum ActionType {
+  TUTORIAL_INIT = 'TUTORIAL_INIT',
+  TIP_SUBMIT = 'TIP_SUBMIT',
+  NEXT_STEP = 'NEXT_STEP',
+}
+interface TutorialGameAction {
+  type: ActionType;
+  payload?: any;
+}
+
+const initState = {
+  step: 0,
+};
+
+const tutorialReducer = (state: TutorialState, action: TutorialGameAction) => {
+  switch (action.type) {
+    case 'TUTORIAL_INIT':
+      return { ...state, currentTip: undefined, step: 0 };
+    case 'TIP_SUBMIT':
+      return { ...state, currentTip: action.payload?.tip };
+    case 'NEXT_STEP':
+      return {
+        ...state,
+        step: state.step + 1,
+      };
+    default:
+      return state;
+  }
+};
+
 const Tutorial = ({ slideList }: TutorialProps) => {
-  const [step, setStep] = useState(0);
+  const [{ currentTip, step }, dispatch] = useReducer(
+    tutorialReducer,
+    initState
+  );
+  console.log(currentTip);
+
   const handleNextStep = () => {
-    setStep(step + 1 < slideList.length ? step + 1 : 0);
+    dispatch({ type: ActionType.NEXT_STEP }); //////// OŠETŘIT POSLEDNÍ SLIDE
   };
+
   const handleSubmitTip = (tip: number) => {
     console.log('submitted:', tip);
   };
