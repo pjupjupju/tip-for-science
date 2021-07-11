@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Flex, Image, Text } from 'rebass';
-import slune from './../../../assets/slide2_elephant.jpg';
+import elephant from './../../assets/slide1_elephant.jpg';
+import { SlideProps } from './types';
 
 const imageStyle = {
   height: '210px',
@@ -8,7 +9,7 @@ const imageStyle = {
   alignSelf: 'center',
 };
 
-const Slide2 = () => {
+const Slide2 = (props: SlideProps) => {
   return (
     <Flex flexDirection="column">
       <Box height="80px">
@@ -22,7 +23,7 @@ const Slide2 = () => {
           Nebojte, správné odpovědi se brzy dozvíte! Nejdřív ale zkuste hádat...
         </Text>
       </Box>
-      <Image src={slune} sx={imageStyle} />
+      <Image src={elephant} sx={imageStyle} />
       <Text
         fontSize={[3, 4, 5]}
         fontWeight="bold"
@@ -40,7 +41,7 @@ const Slide2 = () => {
         <Text color="primary" as="span">
           9500
         </Text>
-        , nebo
+        , nebo{' '}
         <Text color="primary" as="span">
           15 000{' '}
         </Text>

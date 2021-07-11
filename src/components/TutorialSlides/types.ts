@@ -1,4 +1,3 @@
-export interface SlideProps {
-  step: number;
-  currentTip?: number;
-  };
+import { CommonTutorialProps } from "../TutorialSlide";
+
+export interface SlideProps extends CommonTutorialProps {};

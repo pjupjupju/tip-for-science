@@ -6,6 +6,7 @@ import { mockData } from './mockData';
 import { Link } from 'react-router-dom';
 import { TooCloseDialog } from './TooCloseDialog';
 import { GameOverScreen } from './GameOverScreen';
+import { PreviousTips } from './PreviousTips';
 
 export interface Settings {
   question: string;
@@ -48,12 +49,6 @@ const labelStyle = {
   color: 'white',
 };
 
-const previousTipStyle = {
-  background: '#FF0070',
-  mr: 1,
-  p: 1,
-};
-
 const isTooClose = (currentTip: number, correctAnswer: number): boolean =>
   currentTip >= correctAnswer * 0.95 && currentTip <= correctAnswer * 1.05;
 
@@ -87,20 +82,7 @@ const Game = ({
         </Text>
       </Box>
       <Image src={image} sx={imageStyle} />
-      {previousTips != null && previousTips.length !== 0 && (
-        <>
-          <Text textAlign="center" color="#FF0070" my={1}>
-            Předchozí tipy:{' '}
-          </Text>
-          <Flex justifyContent="center">
-            {previousTips.map((previousTip) => (
-              <Text sx={previousTipStyle} key={`previous-tip-${previousTip}`}>
-                {previousTip}
-              </Text>
-            ))}
-          </Flex>
-        </>
-      )}
+      <PreviousTips previousTips={previousTips} unit={unit} />
       <Flex justifyContent="center" alignItems="center" p={2}>
         <Label htmlFor="tip" sx={labelStyle}>
           tip:
@@ -202,4 +184,4 @@ const Game = ({
   );
 };
 
-export { Game, GameOverScreen, TooCloseDialog };
+export { Game, GameOverScreen, TooCloseDialog, PreviousTips };
