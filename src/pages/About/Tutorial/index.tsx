@@ -4,6 +4,7 @@ import {
   TutorialSlide,
   CommonTutorialProps,
 } from '../../../components/TutorialSlide';
+import { slideList } from '../slideList';
 
 interface SlideSettings {
   content: FC<CommonTutorialProps>;
@@ -17,6 +18,7 @@ interface TutorialProps {
 type TutorialState = {
   currentTip?: number;
   step: number;
+  length: number;
 };
 
 enum ActionType {
@@ -31,6 +33,7 @@ interface TutorialGameAction {
 
 const initState = {
   step: 0,
+  length: slideList.length,
 };
 
 const tutorialReducer = (state: TutorialState, action: TutorialGameAction) => {
@@ -42,7 +45,7 @@ const tutorialReducer = (state: TutorialState, action: TutorialGameAction) => {
     case 'NEXT_STEP':
       return {
         ...state,
-        step: state.step + 1,
+        step: state.step + 1 < state.length ? state.step + 1 : state.step,
       };
     default:
       return state;
@@ -57,11 +60,11 @@ const Tutorial = ({ slideList }: TutorialProps) => {
   console.log(currentTip);
 
   const handleNextStep = () => {
-    dispatch({ type: ActionType.NEXT_STEP }); //////// OŠETŘIT POSLEDNÍ SLIDE
+    dispatch({ type: ActionType.NEXT_STEP });
   };
 
   const handleSubmitTip = (tip: number) => {
-    console.log('submitted:', tip);
+    dispatch({ type: ActionType.TIP_SUBMIT, payload: { tip } });
   };
 
   return (
