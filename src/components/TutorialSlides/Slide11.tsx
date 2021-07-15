@@ -1,8 +1,11 @@
 import React from 'react';
-import { Box, Flex, Text } from 'rebass';
+import { Box, Button, Flex, Text } from 'rebass';
 import { SlideProps } from './types';
 
-const Slide11 = (props: SlideProps) => {
+const Slide11 = ( {handleNextStep}: SlideProps) => {
+  const handleClickNext = () => {
+    handleNextStep();
+  }
   return (
     <Flex flexDirection="column">
       <Box p="4">
@@ -35,6 +38,7 @@ const Slide11 = (props: SlideProps) => {
           Využíváme výhod tzv. kulturní dědičnosti.
         </Text>
       </Box>
+      <Button onClick={handleClickNext}>Další</Button>
     </Flex>
   );
 };

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Flex, Image, Text } from 'rebass';
+import { useHistory } from 'react-router';
+import { Box, Button, Flex, Image, Text } from 'rebass';
 import logo from './../../assets/logoskoly.png';
 import { SlideProps } from './types';
 
@@ -10,6 +11,13 @@ const imageStyle = {
 };
 
 const Slide15 = (props: SlideProps) => {
+  const history = useHistory();
+  const handleClickHome = () => {
+    history.push('/');
+  };
+  const handleClickPlay = () => {
+    history.push('/play');
+  };
   return (
     <Flex flexDirection="column">
       <Box height="80px">
@@ -33,6 +41,8 @@ const Slide15 = (props: SlideProps) => {
       >
         Tip for Science bylo vytvořeno evolučními biology z Univerzity Karlovy.
       </Text>
+      <Button onClick={handleClickHome}>Domů</Button>
+      <Button onClick={handleClickPlay}>Začít hrát</Button>
     </Flex>
   );
 };

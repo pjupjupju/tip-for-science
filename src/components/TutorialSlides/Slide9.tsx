@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
+import React, { KeyboardEvent } from 'react';
 import { Box, Flex, Image, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
 import washington from './../../assets/game_washington.jpg';
@@ -17,14 +17,6 @@ const inputStyles = {
   color: 'white',
   flex: 1,
   mx: 3,
-};
-
-const inputStyles2 = {
-  '::placeholder': {
-    color: '#000',
-  },
-  color: '#000',
-  background: 'white',
 };
 
 const imageStyle = {
@@ -48,24 +40,10 @@ const previousTips = [28, 105];
 
 const Slide9 = ({ onSubmit = () => {} }: Slide9Props) => {
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
-    onSubmit(Number(event.currentTarget.value));
-  };
-
-  const timeoutRef = useRef<number>();
-
-  const [timeLimitEnded, setTimeLimitEnded] = useState(false);
-  useEffect(() => {
-    if (timeoutRef.current == null) {
-      timeoutRef.current = setTimeout(() => {
-        setTimeLimitEnded(true);
-      }, 3 * 1000);
+    if (event.key === 'Enter') {
+      onSubmit(Number(event.currentTarget.value));
     }
-    return () => {
-      if (timeoutRef.current != null) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  });
+  };
 
   return (
     <Flex flexDirection="column" height="100%">
@@ -96,32 +74,6 @@ const Slide9 = ({ onSubmit = () => {} }: Slide9Props) => {
         />
         <Text color="white">{unit}</Text>
       </Flex>
-      {timeLimitEnded && (
-        <Flex
-          p={3}
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          sx={{
-            background: 'rgba(0,0,0,0.85)',
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          }}
-        >
-          <Text fontWeight={500} textAlign="center" my={1} color="primary">
-            Vypršel ti čas! Tentokrát ale ještě můžeš zadat odpověď zde:
-          </Text>
-          <Input
-            id="tip2"
-            name="tip"
-            type="number"
-            placeholder="váš tip"
-            sx={inputStyles2}
-            onKeyDown={handleSubmit}
-          />
-        </Flex>
-      )}
     </Flex>
   );
 };

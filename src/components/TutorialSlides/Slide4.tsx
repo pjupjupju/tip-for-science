@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Image, Text } from 'rebass';
+import { Box, Button, Flex, Image, Text } from 'rebass';
 import elephant from './../../assets/slide1_elephant.jpg';
 import { SlideProps } from './types';
 
@@ -9,7 +9,11 @@ const imageStyle = {
   alignSelf: 'center',
 };
 
-const Slide4 = (props: SlideProps) => {
+const Slide4 = ({ handleNextStep }: SlideProps) => {
+  const handleClickNext = () => {
+    handleNextStep();
+  };
+
   return (
     <Flex flexDirection="column">
       <Box height="80px">
@@ -36,6 +40,7 @@ const Slide4 = (props: SlideProps) => {
         11 000 kg a v kohoutku měřil 3,96 metru. Byl tedy téměř o metr vyšší než
         průměrný slon africký.
       </Text>
+      <Button onClick={handleClickNext}>Další</Button>
     </Flex>
   );
 };

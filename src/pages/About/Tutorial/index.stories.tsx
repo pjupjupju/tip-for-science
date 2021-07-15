@@ -5,11 +5,9 @@ import { Stepper } from '../../../components/Stepper';
 
 const StorySlide1 = ({ step, handleNextStep, length }: any) => (
   <Box>
-    <Text color="secondary">this is slide number 1</Text>
+    <Text color="secondary">this is slide number {step + 1} of {length}</Text>
     <Button
-      onClick={() => {
-        handleNextStep(step === length - 1 ? 0 : step + 1);
-      }}
+      onClick={handleNextStep}
     >
       Next
     </Button>
@@ -17,11 +15,9 @@ const StorySlide1 = ({ step, handleNextStep, length }: any) => (
 );
 const StorySlide2 = ({ step, handleNextStep, length }: any) => (
   <Box>
-    <Text color="secondary">this is slide number {step + 1}</Text>
+    <Text color="secondary">this is slide number {step + 1} of {length}</Text>
     <Button
-      onClick={() => {
-        handleNextStep(step === length - 1 ? 0 : step + 1);
-      }}
+      onClick={handleNextStep}
     >
       Next
     </Button>

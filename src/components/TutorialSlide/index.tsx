@@ -18,9 +18,6 @@ export const TutorialSlide = ({
   // step,
   content: Content, ...contentProps
 }: TutorialSlideProps) => {
-  console.log('stepper', StepperComponent);
-  console.log('content', Content);
-  console.log('props', contentProps);
   return (
     <Flex flexDirection="column" alignItems="center" width="100%" height="100%">
       <Content {...contentProps} />

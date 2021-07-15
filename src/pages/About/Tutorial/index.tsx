@@ -33,7 +33,6 @@ interface TutorialGameAction {
 
 const initState = {
   step: 0,
-  length: slideList.length,
 };
 
 const tutorialReducer = (state: TutorialState, action: TutorialGameAction) => {
@@ -41,7 +40,11 @@ const tutorialReducer = (state: TutorialState, action: TutorialGameAction) => {
     case 'TUTORIAL_INIT':
       return { ...state, currentTip: undefined, step: 0 };
     case 'TIP_SUBMIT':
-      return { ...state, currentTip: action.payload?.tip };
+      return {
+        ...state,
+        currentTip: action.payload?.tip,
+        step: state.step + 1 < state.length ? state.step + 1 : state.step,
+      };
     case 'NEXT_STEP':
       return {
         ...state,
@@ -53,10 +56,10 @@ const tutorialReducer = (state: TutorialState, action: TutorialGameAction) => {
 };
 
 const Tutorial = ({ slideList }: TutorialProps) => {
-  const [{ currentTip, step }, dispatch] = useReducer(
-    tutorialReducer,
-    initState
-  );
+  const [{ currentTip, step }, dispatch] = useReducer(tutorialReducer, {
+    ...initState,
+    length: slideList.length,
+  });
   console.log(currentTip);
 
   const handleNextStep = () => {
