@@ -1,11 +1,11 @@
-import React, { KeyboardEvent, useEffect, useRef } from 'react';
+import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { Box, Flex, Image, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
 import washington from './../../assets/game_washington.jpg';
 import { PreviousTips } from '../Game';
 
 interface Slide13Props {
-  onSubmit?: (value: number) => void;
+  onSubmit: (value: number) => void;
   currentTip?: number;
   step: number;
 }
@@ -17,6 +17,14 @@ const inputStyles = {
   color: 'white',
   flex: 1,
   mx: 3,
+};
+
+const inputStyles2 = {
+  '::placeholder': {
+    color: '#000',
+  },
+  color: '#000',
+  background: 'white',
 };
 
 const imageStyle = {
@@ -38,16 +46,26 @@ const unit = 'km/h';
 const previousTips = [80000, 1000, 500, 20000];
 const timeLimit = 10;
 
-const Slide13 = ({ onSubmit = () => {} }: Slide13Props) => {
+const Slide13 = ({ onSubmit }: Slide13Props) => {
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
-    onSubmit(Number(event.currentTarget.value));
+    if (event.key === 'Enter') {
+      onSubmit(Number(event.currentTarget.value));
+    }
   };
   const timeoutRef = useRef<number>();
-  
-  useEffect(() => {    
+
+  const [timeLimitEnded, setTimeLimitEnded] = useState(false);
+  useEffect(() => {
+    if (timeoutRef.current == null) {
       timeoutRef.current = setTimeout(() => {
-        onSubmit(0);
+        setTimeLimitEnded(true);
       }, timeLimit * 1000);
+    }
+    return () => {
+      if (timeoutRef.current != null) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
   });
 
   return (
@@ -79,6 +97,32 @@ const Slide13 = ({ onSubmit = () => {} }: Slide13Props) => {
         />
         <Text color="white">{unit}</Text>
       </Flex>
+      {timeLimitEnded && (
+        <Flex
+          p={3}
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          sx={{
+            background: 'rgba(0,0,0,0.85)',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          <Text fontWeight={500} textAlign="center" my={1} color="primary">
+            Vypršel ti čas! Tentokrát ale ještě můžeš zadat odpověď zde:
+          </Text>
+          <Input
+            id="tip2"
+            name="tip"
+            type="number"
+            placeholder="váš tip"
+            sx={inputStyles2}
+            onKeyDown={handleSubmit}
+          />
+        </Flex>
+      )}
     </Flex>
   );
 };

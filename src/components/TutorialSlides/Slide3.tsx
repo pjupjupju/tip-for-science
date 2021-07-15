@@ -4,7 +4,7 @@ import { Label, Input } from '@rebass/forms';
 import elephant from './../../assets/slide1_elephant.jpg';
 
 interface Slide3Props {
-  onSubmit?: (value: number) => void;
+  onSubmit: (value: number) => void;
   currentTip?: number;
   step: number;
 }
@@ -35,9 +35,11 @@ const question = 'Kolik vážil nejtěžší slon evaaaa?';
 const image = elephant;
 const unit = 'kg';
 
-const Slide3 = ({ onSubmit = () => {} }: Slide3Props) => {
+const Slide3 = ({ onSubmit }: Slide3Props) => {
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
-    onSubmit(Number(event.currentTarget.value));
+    if (event.key === 'Enter') {
+      onSubmit(Number(event.currentTarget.value));
+    }
   };
 
   return (

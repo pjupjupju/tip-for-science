@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Image, Text } from 'rebass';
+import { Box, Button, Flex, Image, Text } from 'rebass';
 import wildchart from './../../assets/slide5_graf.jpg';
 import { SlideProps } from './types';
 
@@ -9,7 +9,10 @@ const imageStyle = {
   alignSelf: 'center',
 };
 
-const Slide7 = (props: SlideProps) => {
+const Slide7 = ({ handleNextStep }: SlideProps) => {
+  const handleClickNext = () => {
+    handleNextStep();
+  };
   return (
     <Flex flexDirection="column">
       <Box height="80px">
@@ -24,6 +27,7 @@ const Slide7 = (props: SlideProps) => {
         </Text>
       </Box>
       <Image src={wildchart} sx={imageStyle} />
+      <Button onClick={handleClickNext}>Další</Button>
     </Flex>
   );
 };

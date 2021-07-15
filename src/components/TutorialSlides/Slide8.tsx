@@ -1,8 +1,11 @@
 import React from 'react';
-import { Box, Flex, Text } from 'rebass';
+import { Box, Button, Flex, Text } from 'rebass';
 import { SlideProps } from './types';
 
-const Slide8 = (props: SlideProps) => {
+const Slide8 = ({ handleNextStep }: SlideProps) => {
+  const handleClickNext = () => {
+    handleNextStep();
+  };
   return (
     <Flex flexDirection="column">
       <Box p="4">
@@ -33,9 +36,10 @@ const Slide8 = (props: SlideProps) => {
         >
           Několik z nich uvidíš pokaždé jako nápovědu společně s otázkou. *tohle
           všechno zní česky hrozně divně a můj mozek je nyní příliš v
-          programátorském m=odu na to abych vymýšlelo kvalitní copy :D*
+          programátorském módu na to abych vymýšlelo kvalitní copy :D*
         </Text>
       </Box>
+      <Button onClick={handleClickNext}>Další</Button>
     </Flex>
   );
 };

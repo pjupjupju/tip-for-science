@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Image, Text } from 'rebass';
+import { Box, Button, Flex, Image, Text } from 'rebass';
 import elephant from './../../assets/slide1_elephant.jpg';
 import { SlideProps } from './types';
 
@@ -9,7 +9,11 @@ const imageStyle = {
   alignSelf: 'center',
 };
 
-const Slide2 = (props: SlideProps) => {
+const Slide2 = ({ handleNextStep }: SlideProps) => {
+  const handleClickNext = () => {
+    handleNextStep();
+  };
+
   return (
     <Flex flexDirection="column">
       <Box height="80px">
@@ -47,6 +51,7 @@ const Slide2 = (props: SlideProps) => {
         </Text>
         kg.
       </Text>
+      <Button onClick={handleClickNext}>Další</Button>
     </Flex>
   );
 };

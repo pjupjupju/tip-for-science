@@ -1,8 +1,11 @@
 import React from 'react';
-import { Box, Flex, Text } from 'rebass';
+import { Box, Button, Flex, Text } from 'rebass';
 import { SlideProps } from './types';
 
-const Slide12 = (props: SlideProps) => {
+const Slide12 = ({ handleNextStep }: SlideProps) => {
+  const handleClickNext = () => {
+    handleNextStep();
+  };
   return (
     <Flex flexDirection="column">
       <Box p="4">
@@ -18,6 +21,7 @@ const Slide12 = (props: SlideProps) => {
           strategii, když bude mít k dispozici pouze skupinovou inteligenci.
         </Text>
       </Box>
+      <Button onClick={handleClickNext}>Další</Button>
     </Flex>
   );
 };

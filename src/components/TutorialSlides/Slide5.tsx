@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Image, Text } from 'rebass';
+import { Box, Button, Flex, Image, Text } from 'rebass';
 import wildchart from './../../assets/slide5_graf.jpg';
 import { SlideProps } from './types';
 
@@ -9,7 +9,10 @@ const imageStyle = {
   alignSelf: 'center',
 };
 
-const Slide5 = (props: SlideProps) => {
+const Slide5 = ({ handleNextStep }: SlideProps) => {
+  const handleClickNext = () => {
+    handleNextStep();
+  };
   return (
     <Flex flexDirection="column">
       <Box height="80px">
@@ -35,6 +38,7 @@ const Slide5 = (props: SlideProps) => {
         Na tomto skvělém přehledném grafu je tvá odpověď, uvedené nápovědy a
         správná odpověď.
       </Text>
+      <Button onClick={handleClickNext}>Další</Button>
     </Flex>
   );
 };
