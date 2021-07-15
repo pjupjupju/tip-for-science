@@ -1,24 +1,27 @@
-import React, { ReactNode } from 'react';
+import React, { FC } from 'react';
 import { Box, Flex } from 'rebass';
 
-interface TutorialSlideProps {
+export interface CommonTutorialProps {
   step: number;
+  length: number;
   handleNextStep: Function;
   currentTip?: number;
-  handleSubmitTip: Function;
-  stepper: ReactNode;
-  content: ReactNode;
+  onSubmit: (value: number) => void;
+}
+interface TutorialSlideProps extends CommonTutorialProps {
+  stepper?: FC<CommonTutorialProps>;
+  content: FC<CommonTutorialProps>;
 }
 
 export const TutorialSlide = ({
   stepper: StepperComponent,
   // step,
-  content: Content,
+  content: Content, ...contentProps
 }: TutorialSlideProps) => {
   return (
     <Flex flexDirection="column" alignItems="center" width="100%" height="100%">
-      {Content}
-      <Box mb="auto">{StepperComponent}</Box>
+      <Content {...contentProps} />
+      {StepperComponent && <Box mb="auto"><StepperComponent {...contentProps} /></Box>}
     </Flex>
   );
 };

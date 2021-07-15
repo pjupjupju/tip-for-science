@@ -1,11 +1,15 @@
 import React from 'react';
-import { Box, Flex, Image, Text } from 'rebass';
+import { Box, Button, Flex, Image, Text } from 'rebass';
 import washington from './../../assets/slide1_washington.jpg';
 import elephant from './../../assets/slide1_elephant.jpg';
 import moon from './../../assets/slide1_moon.jpg';
 import { SlideProps } from './types';
 
-const Slide1 = (props: SlideProps) => { // obsah () se pak muze smazat, je to tu pro hloupe lidi
+const Slide1 = ({ handleNextStep }: SlideProps) => {
+  // obsah () se pak muze smazat, je to tu pro hloupe lidi
+  const handleClickNext = () => {
+    handleNextStep();
+  };
   return (
     <Flex flexDirection="column">
       <Flex height="calc(20vh)" width="100%" justifyContent="center">
@@ -55,6 +59,7 @@ const Slide1 = (props: SlideProps) => { // obsah () se pak muze smazat, je to tu
         >
           Jak rychle se pohybuje Jupiter?
         </Text>
+        <Button onClick={handleClickNext}>Další</Button>
       </Box>
     </Flex>
   );
