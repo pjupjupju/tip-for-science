@@ -4,6 +4,7 @@ import washington from './../../assets/slide1_washington.jpg';
 import elephant from './../../assets/slide1_elephant.jpg';
 import moon from './../../assets/slide1_moon.jpg';
 import { SlideProps } from './types';
+import { Container } from '../Container';
 
 const Slide1 = ({ handleNextStep }: SlideProps) => {
   // obsah () se pak muze smazat, je to tu pro hloupe lidi
@@ -11,7 +12,7 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
     handleNextStep();
   };
   return (
-    <Flex flexDirection="column">
+    <Container>
       <Flex height="calc(20vh)" width="100%" justifyContent="center">
         <Image
           src={elephant}
@@ -61,7 +62,7 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
         </Text>
         <Button onClick={handleClickNext}>Další</Button>
       </Box>
-    </Flex>
+    </Container>
   );
 };
 

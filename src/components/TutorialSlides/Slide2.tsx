@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Button, Flex, Image, Text } from 'rebass';
+import { Box, Button, Image, Text } from 'rebass';
+import { Container } from '../Container';
 import elephant from './../../assets/slide1_elephant.jpg';
 import { SlideProps } from './types';
 
@@ -15,7 +16,7 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
   };
 
   return (
-    <Flex flexDirection="column">
+    <Container>
       <Box height="80px">
         <Text
           fontSize={[3, 4, 5]}
@@ -52,7 +53,7 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
         kg.
       </Text>
       <Button onClick={handleClickNext}>Další</Button>
-    </Flex>
+    </Container>
   );
 };
 
