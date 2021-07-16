@@ -4,7 +4,6 @@ import {
   TutorialSlide,
   CommonTutorialProps,
 } from '../../../components/TutorialSlide';
-import { slideList } from '../slideList';
 
 interface SlideSettings {
   content: FC<CommonTutorialProps>;
