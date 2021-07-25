@@ -20,7 +20,8 @@ const commonSlideProps = {
   step: 0,
   length: 1,
   handleNextStep: action('next step'),
-  onSubmit: action('submit game')
+  onSubmit: action('submit game'),
+  currentTip: 210,
 };
 
 export default { title: 'component/TutorialSlides' };

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Button, Flex, Text } from 'rebass';
+import { Button, Text } from 'rebass';
+import { Container } from '../Container';
 import { SlideProps } from './types';
 
 const Slide11 = ( {handleNextStep}: SlideProps) => {
@@ -7,8 +8,7 @@ const Slide11 = ( {handleNextStep}: SlideProps) => {
     handleNextStep();
   }
   return (
-    <Flex flexDirection="column">
-      <Box p="4">
+    <Container>
         <Text
           fontSize={[3, 4, 5]}
           fontWeight="bold"
@@ -37,9 +37,8 @@ const Slide11 = ( {handleNextStep}: SlideProps) => {
         >
           Využíváme výhod tzv. kulturní dědičnosti.
         </Text>
-      </Box>
       <Button onClick={handleClickNext}>Další</Button>
-    </Flex>
+    </Container>
   );
 };
 

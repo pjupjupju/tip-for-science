@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { TooCloseDialog } from './TooCloseDialog';
 import { GameOverScreen } from './GameOverScreen';
 import { PreviousTips } from './PreviousTips';
+import { getScore } from '../../helpers';
 
 export interface Settings {
   question: string;
@@ -108,7 +109,7 @@ const Game = ({
           textAlign="center"
           p={3}
         >
-          Total score: {score}
+          Score: {typeof currentTip != "undefined" ? getScore(currentTip, correctAnswer).toFixed(3) : 0}
         </Text>
       </Box>
       <Image src={image} sx={imageStyle} />

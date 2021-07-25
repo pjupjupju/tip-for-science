@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Button, Flex, Text } from 'rebass';
+import { Button, Text } from 'rebass';
+import { Container } from '../Container';
 import { SlideProps } from './types';
 
 const Slide12 = ({ handleNextStep }: SlideProps) => {
@@ -7,8 +8,7 @@ const Slide12 = ({ handleNextStep }: SlideProps) => {
     handleNextStep();
   };
   return (
-    <Flex flexDirection="column">
-      <Box p="4">
+    <Container>
         <Text
           fontSize={[3, 4, 5]}
           fontWeight="bold"
@@ -20,9 +20,8 @@ const Slide12 = ({ handleNextStep }: SlideProps) => {
           nás, jak tento druh extrémně spolupracujících opic nalezne optimální
           strategii, když bude mít k dispozici pouze skupinovou inteligenci.
         </Text>
-      </Box>
       <Button onClick={handleClickNext}>Další</Button>
-    </Flex>
+    </Container>
   );
 };
 

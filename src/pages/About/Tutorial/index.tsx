@@ -59,7 +59,6 @@ const Tutorial = ({ slideList }: TutorialProps) => {
     ...initState,
     length: slideList.length,
   });
-  console.log(currentTip);
 
   const handleNextStep = () => {
     dispatch({ type: ActionType.NEXT_STEP });
@@ -88,6 +87,7 @@ const Tutorial = ({ slideList }: TutorialProps) => {
           handleNextStep={handleNextStep}
           onSubmit={handleSubmitTip}
           length={slideList.length}
+          currentTip={currentTip}
         />
       </Box>
     </Flex>
