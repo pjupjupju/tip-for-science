@@ -1,22 +1,24 @@
 import React from 'react';
-import { Box, Button, Flex, Image, Text } from 'rebass';
+import { Button, Image, Text } from 'rebass';
+import { Container } from '../Container';
+import { TutorialHeader } from '../TutorialHeader';
 import elephant from './../../assets/slide1_elephant.jpg';
 import { SlideProps } from './types';
 
 const imageStyle = {
-  height: '210px',
+  minHeight: '210px',
   width: '100%',
   alignSelf: 'center',
 };
 
-const Slide4 = ({ handleNextStep }: SlideProps) => {
+const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
   const handleClickNext = () => {
     handleNextStep();
   };
 
   return (
-    <Flex flexDirection="column">
-      <Box height="80px">
+    <Container>
+      <TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
           fontWeight="bold"
@@ -24,9 +26,9 @@ const Slide4 = ({ handleNextStep }: SlideProps) => {
           textAlign="center"
           p={3}
         >
-          bžilion kg? těsně vedle!
+          {currentTip} kg? těsně vedle!
         </Text>
-      </Box>
+      </TutorialHeader>
       <Image src={elephant} sx={imageStyle} />
       <Text
         fontSize={[3, 4, 5]}
@@ -41,7 +43,7 @@ const Slide4 = ({ handleNextStep }: SlideProps) => {
         průměrný slon africký.
       </Text>
       <Button onClick={handleClickNext}>Další</Button>
-    </Flex>
+    </Container>
   );
 };
 

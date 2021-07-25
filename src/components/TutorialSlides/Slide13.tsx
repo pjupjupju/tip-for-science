@@ -1,14 +1,11 @@
 import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { Box, Flex, Image, Text } from 'rebass';
+import { Flex, Image, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
 import washington from './../../assets/game_washington.jpg';
 import { PreviousTips } from '../Game';
-
-interface Slide13Props {
-  onSubmit: (value: number) => void;
-  currentTip?: number;
-  step: number;
-}
+import { Container } from '../Container';
+import { TutorialHeader } from '../TutorialHeader';
+import { SlideProps } from './types';
 
 const inputStyles = {
   '::placeholder': {
@@ -28,7 +25,7 @@ const inputStyles2 = {
 };
 
 const imageStyle = {
-  height: '210px',
+  minHeight: '210px',
   width: '100%',
   alignSelf: 'center',
 };
@@ -46,7 +43,7 @@ const unit = 'km/h';
 const previousTips = [80000, 1000, 500, 20000];
 const timeLimit = 10;
 
-const Slide13 = ({ onSubmit }: Slide13Props) => {
+const Slide13 = ({ onSubmit }: SlideProps) => {
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       onSubmit(Number(event.currentTarget.value));
@@ -69,8 +66,8 @@ const Slide13 = ({ onSubmit }: Slide13Props) => {
   });
 
   return (
-    <Flex flexDirection="column" height="100%">
-      <Box height="80px">
+    <Container>
+      <TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
           fontWeight="bold"
@@ -80,7 +77,7 @@ const Slide13 = ({ onSubmit }: Slide13Props) => {
         >
           {question}
         </Text>
-      </Box>
+      </TutorialHeader>
       <Image src={image} sx={imageStyle} />
       <PreviousTips previousTips={previousTips} unit={unit} />
       <Flex justifyContent="center" alignItems="center" p={2}>
@@ -123,7 +120,7 @@ const Slide13 = ({ onSubmit }: Slide13Props) => {
           />
         </Flex>
       )}
-    </Flex>
+    </Container>
   );
 };
 

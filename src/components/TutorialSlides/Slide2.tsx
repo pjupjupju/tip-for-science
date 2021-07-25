@@ -1,11 +1,12 @@
 import React from 'react';
-import { Box, Button, Image, Text } from 'rebass';
+import { Button, Image, Text } from 'rebass';
 import { Container } from '../Container';
+import { TutorialHeader } from '../TutorialHeader';
 import elephant from './../../assets/slide1_elephant.jpg';
 import { SlideProps } from './types';
 
 const imageStyle = {
-  height: '210px',
+  minHeight: '210px',
   width: '100%',
   alignSelf: 'center',
 };
@@ -17,17 +18,18 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
 
   return (
     <Container>
-      <Box height="80px">
+      <TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
           fontWeight="bold"
           color="secondary"
           textAlign="center"
-          p={3}
+          px={3}
+          py={5}
         >
           Nebojte, správné odpovědi se brzy dozvíte! Nejdřív ale zkuste hádat...
         </Text>
-      </Box>
+      </TutorialHeader>
       <Image src={elephant} sx={imageStyle} />
       <Text
         fontSize={[3, 4, 5]}

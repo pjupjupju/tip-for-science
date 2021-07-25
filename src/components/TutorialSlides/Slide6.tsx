@@ -1,10 +1,12 @@
 import React from 'react';
-import { Box, Button, Flex, Image, Text } from 'rebass';
+import { Button, Image, Text } from 'rebass';
+import { Container } from '../Container';
+import { TutorialHeader } from '../TutorialHeader';
 import wildchart from './../../assets/slide5_graf.jpg';
 import { SlideProps } from './types';
 
 const imageStyle = {
-  height: '210px',
+  minHeight: '210px',
   width: '100%',
   alignSelf: 'center',
 };
@@ -14,8 +16,8 @@ const Slide6 = ({ handleNextStep }: SlideProps) => {
     handleNextStep();
   };
   return (
-    <Flex flexDirection="column">
-      <Box height="80px">
+    <Container>
+      <TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
           fontWeight="bold"
@@ -25,7 +27,7 @@ const Slide6 = ({ handleNextStep }: SlideProps) => {
         >
           Za svou odpověď bys dostal/a 0,69 bodu.
         </Text>
-      </Box>
+      </TutorialHeader>
       <Image src={wildchart} sx={imageStyle} />
       <Text
         fontSize={[3, 4, 5]}
@@ -38,7 +40,7 @@ const Slide6 = ({ handleNextStep }: SlideProps) => {
         Body získáš, pokud se trefíš mezi 50 - 200 % hodnoty správné odpovědi.
       </Text>
       <Button onClick={handleClickNext}>Další</Button>
-    </Flex>
+    </Container>
   );
 };
 
