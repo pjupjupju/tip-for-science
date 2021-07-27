@@ -65,21 +65,18 @@ const Play = () => {
 
   const history = useHistory();
   const onHome = () => history.push('/');
-  const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      const myTip = Number(event.currentTarget.value);
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      saveTip({
-        variables: {
-          id: 'lfjsdkfhdkj',
-          tip: myTip,
-        },
-      });
-      // setTip(Number(event.currentTarget.value));
-      dispatch({ type: ActionType.GAME_SUBMIT, payload: { tip: myTip } });
+  const onSubmit = (myTip: number) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
     }
+    saveTip({
+      variables: {
+        id: 'lfjsdkfhdkj',
+        tip: myTip,
+      },
+    });
+    // setTip(Number(event.currentTarget.value));
+    dispatch({ type: ActionType.GAME_SUBMIT, payload: { tip: myTip } });
   };
   const timeoutRef = useRef<number>();
 
@@ -127,7 +124,7 @@ const Play = () => {
       score={getMyScoreData.getMyScore || 0}
       isSubmitted={isSubmitted}
       onHome={onHome}
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
       onFinish={() => {
         console.log('is next question null? ', nextQuestion != null);
         if (nextQuestion != null) {
