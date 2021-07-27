@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Image, Text } from 'rebass';
+import { getScore } from '../../helpers';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import wildchart from './../../assets/slide5_graf.jpg';
@@ -11,7 +12,7 @@ const imageStyle = {
   alignSelf: 'center',
 };
 
-const Slide6 = ({ handleNextStep }: SlideProps) => {
+const Slide6 = ({ handleNextStep, currentTip }: SlideProps) => {
   const handleClickNext = () => {
     handleNextStep();
   };
@@ -25,7 +26,7 @@ const Slide6 = ({ handleNextStep }: SlideProps) => {
           textAlign="center"
           p={3}
         >
-          Za svou odpověď bys dostal/a 0,69 bodu.
+          Za svou odpověď bys dostal/a {typeof currentTip !== "undefined" ? getScore(currentTip,11000).toFixed(3) : 0} bodu.
         </Text>
       </TutorialHeader>
       <Image src={wildchart} sx={imageStyle} />

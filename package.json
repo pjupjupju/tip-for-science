@@ -26,6 +26,7 @@
     "history": "^5.0.0",
     "razzle": "^4.0.4",
     "react": "^17.0.1",
+    "react-circular-progressbar": "^2.0.4",
     "react-dom": "^17.0.1",
     "react-helmet": "^6.1.0",
     "react-loadable": "^5.5.0",
@@ -63,7 +64,7 @@
       "last 1 safari version"
     ]
   },
-  "types": "./razzle.d.ts", 
+  "types": "./razzle.d.ts",
   "devDependencies": {
     "@storybook/addon-actions": "^6.1.10",
     "@storybook/addon-essentials": "^6.1.10",
