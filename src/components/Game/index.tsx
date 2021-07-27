@@ -8,6 +8,7 @@ import { TooCloseDialog } from './TooCloseDialog';
 import { GameOverScreen } from './GameOverScreen';
 import { PreviousTips } from './PreviousTips';
 import { getScore } from '../../helpers';
+import { Container } from '../Container';
 
 export interface Settings {
   question: string;
@@ -70,7 +71,7 @@ const Game = ({
   };
 
   return !isSubmitted ? (
-    <Flex flexDirection="column" height="100%">
+    <Container>
       <Box height="80px">
         <Text
           fontSize={[3, 4, 5]}
@@ -98,9 +99,9 @@ const Game = ({
         />
         <Text color="white">{unit}</Text>
       </Flex>
-    </Flex>
+    </Container>
   ) : (
-    <Flex flexDirection="column" height="100%">
+    <Container>
       <Box height="80px">
         <Text
           fontSize={[3, 4, 5]}
@@ -109,7 +110,10 @@ const Game = ({
           textAlign="center"
           p={3}
         >
-          Score: {typeof currentTip != "undefined" ? getScore(currentTip, correctAnswer).toFixed(3) : 0}
+          Score:{' '}
+          {typeof currentTip != 'undefined'
+            ? getScore(currentTip, correctAnswer).toFixed(3)
+            : 0}
         </Text>
       </Box>
       <Image src={image} sx={imageStyle} />
@@ -181,7 +185,7 @@ const Game = ({
           Pokračovat
         </Button>
       </Flex>
-    </Flex>
+    </Container>
   );
 };
 

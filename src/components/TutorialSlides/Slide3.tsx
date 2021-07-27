@@ -5,7 +5,6 @@ import elephant from './../../assets/slide1_elephant.jpg';
 import { TutorialHeader } from '../TutorialHeader';
 import { Container } from '../Container';
 import { SlideProps } from './types';
-import { getScore } from '../../helpers';
 
 const inputStyles = {
   '::placeholder': {
