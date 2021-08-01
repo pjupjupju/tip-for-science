@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ResponsiveLine } from '@nivo/line';
 import { getScore } from '../../helpers';
+import { CartesianMarkerProps } from '@nivo/core';
 
 interface ScoreChartProps {
   currentTip: number;
@@ -8,6 +9,30 @@ interface ScoreChartProps {
 }
 
 const ScoreChart = ({ currentTip, correctAnswer }: ScoreChartProps) => {
+  const markers = useMemo<CartesianMarkerProps[]>(
+    () => [
+      {
+        axis: 'x',
+        value: Number(currentTip),
+        lineStyle: {
+          stroke: '#5CC8F9',
+          strokeWidth: 1,
+          transform: `translateY(${(
+            50 *
+            (1 - getScore(currentTip, correctAnswer))
+          ).toFixed(0)}%)
+                    scaleY(${getScore(currentTip, correctAnswer).toFixed(2)})`,
+        },
+      },
+      {
+        axis: 'x',
+        value: correctAnswer,
+        lineStyle: { stroke: '#fff', strokeWidth: 1 },
+      },
+    ],
+    [currentTip, correctAnswer]
+  );
+
   const data = [
     {
       id: 'exp',
@@ -84,29 +109,7 @@ const ScoreChart = ({ currentTip, correctAnswer }: ScoreChartProps) => {
       enableGridY={false}
       enablePoints={false}
       curve="monotoneX"
-      markers={[
-        {
-          axis: 'x',
-          value: Number(currentTip),
-          lineStyle: {
-            stroke: '#5CC8F9',
-            strokeWidth: 1,
-            transform: `
-                      translateY(${(
-                        50 *
-                        (1 - getScore(currentTip, correctAnswer))
-                      ).toFixed(0)}%)
-                      scaleY(${getScore(currentTip, correctAnswer).toFixed(
-                        2
-                      )})`,
-          },
-        },
-        {
-          axis: 'x',
-          value: correctAnswer,
-          lineStyle: { stroke: '#fff', strokeWidth: 1 },
-        },
-      ]}
+      markers={markers}
     />
   );
 };
