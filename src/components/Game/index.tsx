@@ -2,7 +2,6 @@ import React, { KeyboardEvent, useRef } from 'react';
 import { Box, Button, Flex, Image, Text } from 'rebass';
 import { ResponsiveLine } from '@nivo/line';
 import { Label, Input } from '@rebass/forms';
-import { mockData } from './mockData';
 import { Link } from 'react-router-dom';
 import { TooCloseDialog } from './TooCloseDialog';
 import { GameOverScreen } from './GameOverScreen';
@@ -64,6 +63,49 @@ const Game = ({
   currentTip,
   score,
 }: GameProps) => {
+  const mockData = [
+    {
+      id: 'exp',
+      color: '#F7CE46',
+      data: [
+        {
+          x: 0.5 * correctAnswer,
+          y: 0,
+        },
+        {
+          x: 0.625 * correctAnswer,
+          y: getScore(0.625 * correctAnswer, correctAnswer),
+        },
+        {
+          x: 0.75 * correctAnswer,
+          y: getScore(0.75 * correctAnswer, correctAnswer),
+        },
+        {
+          x: 0.875 * correctAnswer,
+          y: getScore(0.875 * correctAnswer, correctAnswer),
+        },
+        {
+          x: correctAnswer,
+          y: 1,
+        },
+      ],
+    },
+    {
+      id: 'lin',
+      color: '#F7CE45',
+      data: [
+        {
+          x: correctAnswer,
+          y: 1,
+        },
+        {
+          x: 2 * correctAnswer,
+          y: 0,
+        },
+      ],
+    },
+  ];
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleClickFinish = () => {
@@ -115,7 +157,9 @@ const Game = ({
         />
         <Text color="white">{unit}</Text>
       </Flex>{' '}
-      <Flex py={2} justifyContent="flex-end"><SubmitButton onClick={handleClickSubmit} timeLimit={timeLimit} /></Flex>
+      <Flex py={2} justifyContent="flex-end">
+        <SubmitButton onClick={handleClickSubmit} timeLimit={timeLimit} />
+      </Flex>
     </Container>
   ) : (
     <Container>
@@ -140,17 +184,21 @@ const Game = ({
             <Box width="100%" height="200px">
               <ResponsiveLine
                 enableArea={true}
-                curve="natural"
-                xScale={{
-                  type: 'linear',
-                  min: 0,
-                  max: 50,
-                }}
+                colors={{ datum: 'color' }}
                 yScale={{
                   type: 'linear',
                   min: 0,
                   max: 1,
                 }}
+                xScale={{
+                  type: 'linear',
+                  min: 0,
+                  max: correctAnswer * 2.5,
+                }}
+                axisBottom={{
+                  tickValues: [currentTip, correctAnswer],
+                }}
+                axisLeft={{ tickValues: [0, 1], legend: "score", legendPosition: 'middle', legendOffset: -15 }}
                 data={mockData}
                 margin={{
                   top: 50,
@@ -161,20 +209,28 @@ const Game = ({
                 enableGridX={false}
                 enableGridY={false}
                 enablePoints={false}
+                curve="monotoneX"
                 markers={[
                   {
                     axis: 'x',
                     value: Number(currentTip),
-                    lineStyle: { stroke: 'white', strokeWidth: 1 },
-                    legend: 'váš tip',
-                    textStyle: { fill: 'white' },
+                    lineStyle: {
+                      stroke: '#5CC8F9',
+                      strokeWidth: 1,
+                      transform: `
+                      translateY(${(
+                        50 *
+                        (1 - getScore(currentTip, correctAnswer))
+                      ).toFixed(0)}%)
+                      scaleY(${getScore(currentTip, correctAnswer).toFixed(
+                        2
+                      )})`,
+                    },
                   },
                   {
                     axis: 'x',
-                    value: 18.29,
-                    lineStyle: { stroke: '#FF0070', strokeWidth: 1 },
-                    legend: 'správná odpověď',
-                    textStyle: { fill: '#FF0070' },
+                    value: correctAnswer,
+                    lineStyle: { stroke: '#fff', strokeWidth: 1 },
                   },
                 ]}
               />
