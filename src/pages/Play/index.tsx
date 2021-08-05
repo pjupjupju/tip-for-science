@@ -2,7 +2,6 @@ import React, {
   useEffect,
   useRef,
   useState,
-  KeyboardEvent,
   useReducer,
 } from 'react';
 import { useQuery, useMutation } from '@apollo/client';

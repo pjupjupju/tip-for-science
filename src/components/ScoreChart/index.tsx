@@ -9,6 +9,7 @@ interface ScoreChartProps {
 }
 
 const ScoreChart = ({ currentTip, correctAnswer }: ScoreChartProps) => {
+  const score = getScore(currentTip, correctAnswer);
   const markers = useMemo<CartesianMarkerProps[]>(
     () => [
       {
@@ -17,11 +18,11 @@ const ScoreChart = ({ currentTip, correctAnswer }: ScoreChartProps) => {
         lineStyle: {
           stroke: '#5CC8F9',
           strokeWidth: 1,
-          transform: `translateY(${(
-            50 *
-            (1 - getScore(currentTip, correctAnswer))
-          ).toFixed(0)}%)
-                    scaleY(${getScore(currentTip, correctAnswer).toFixed(2)})`,
+          transform: `translateY(calc(${(
+            100 *
+            (1 - score)
+          ).toFixed(0)}% - ${(100 * (1 - score)).toFixed(0)}px))
+                    scaleY(${score.toFixed(2)})`,
         },
       },
       {
@@ -29,8 +30,20 @@ const ScoreChart = ({ currentTip, correctAnswer }: ScoreChartProps) => {
         value: correctAnswer,
         lineStyle: { stroke: '#fff', strokeWidth: 1 },
       },
+      {
+        axis: 'y',
+        value: score,
+        legend: `+${score.toFixed(3)}`,
+        textStyle: {
+          fill: '#feff00',
+        },
+        lineStyle: {
+          stroke: '#feff00',
+          strokeWidth: 1,
+        },
+      },
     ],
-    [currentTip, correctAnswer]
+    [currentTip, correctAnswer, score]
   );
 
   const data = [
