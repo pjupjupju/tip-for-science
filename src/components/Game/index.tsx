@@ -1,6 +1,5 @@
 import React, { KeyboardEvent, useRef } from 'react';
 import { Box, Button, Flex, Image, Text } from 'rebass';
-import { ResponsiveLine } from '@nivo/line';
 import { Label, Input } from '@rebass/forms';
 import { Link } from 'react-router-dom';
 import { TooCloseDialog } from './TooCloseDialog';

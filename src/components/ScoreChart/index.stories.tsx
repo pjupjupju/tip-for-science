@@ -5,7 +5,7 @@ export default { title: 'component/ScoreChart', component: ScoreChart };
 export const Default = () => (
   <ScoreChart
     correctAnswer={18.29}
-    currentTip={35}
+    currentTip={10}
   />
 );
 
