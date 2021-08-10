@@ -47,7 +47,7 @@ const Slide3 = ({ onSubmit }: SlideProps) => {
           fontWeight="bold"
           color="secondary"
           textAlign="center"
-          p={3}
+          p={2}
         >
           {question}
         </Text>

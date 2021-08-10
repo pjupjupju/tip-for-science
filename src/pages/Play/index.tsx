@@ -6,7 +6,8 @@ import React, {
 } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { Game, Settings } from './../../components';
-import washington from './../../assets/game_washington.jpg';
+import kitties from './../../assets/game_kitties.jpg';
+import washington from './../../assets/game_washington.jpg'
 import { MY_SCORE_QUERY, QUESTION_QUERY, SAVE_MUTATION } from '../../gql';
 import { useHistory } from 'react-router';
 
@@ -133,11 +134,10 @@ const Play = () => {
         }
         const dalsiOtazka = {
           question: 'Kolik kotatek dnes umrelo??',
-          image: washington,
-          previousTips: [10, 32],
-          correctAnswer: 18.29,
-          timeLimit: 5,
-          unit: 'm',
+          image: kitties,
+          previousTips: [1000000, 50000],
+          correctAnswer: 150000,
+          timeLimit: 10,
         };
         dispatch({
           type: ActionType.GAME_FINISH,

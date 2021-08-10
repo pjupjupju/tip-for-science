@@ -3,14 +3,18 @@ import React, { ReactNode } from 'react';
 
 interface ContainerProps {
   children: ReactNode;
+  isRelative?: boolean;
 }
 
-const Container = ({ children }: ContainerProps) => (
+const relativePositionStyles = { position: 'relative' };
+
+const Container = ({ children, isRelative = false }: ContainerProps) => (
   <Flex
     maxWidth={['100%', '100%', '700px']}
-    height={['100%', '100%', 'auto']}
+    height="100%"
     mx="auto"
     flexDirection="column"
+    sx={isRelative ? relativePositionStyles : undefined}
   >
     {children}
   </Flex>

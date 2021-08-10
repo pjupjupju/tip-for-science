@@ -24,14 +24,14 @@ const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
           fontWeight="bold"
           color="secondary"
           textAlign="center"
-          p={3}
+          p={2}
         >
           {currentTip} kg? těsně vedle!
         </Text>
       </TutorialHeader>
       <Image src={elephant} sx={imageStyle} />
       <Text
-        fontSize={[3, 4, 5]}
+        fontSize={[3, 4, 4]}
         fontWeight="bold"
         color="secondary"
         textAlign="center"
@@ -42,7 +42,13 @@ const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
         11 000 kg a v kohoutku měřil 3,96 metru. Byl tedy téměř o metr vyšší než
         průměrný slon africký.
       </Text>
-      <Button onClick={handleClickNext}>Další</Button>
+      <Button
+        mt="auto"
+        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
+        onClick={handleClickNext}
+      >
+        Další
+      </Button>
     </Container>
   );
 };

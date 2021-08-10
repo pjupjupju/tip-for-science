@@ -40,7 +40,13 @@ const Slide8 = ({ handleNextStep }: SlideProps) => {
           programátorském módu na to abych vymýšlelo kvalitní copy :D*
         </Text>
       </Box>
-      <Button onClick={handleClickNext}>Další</Button>
+      <Button
+        mt="auto"
+        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
+        onClick={handleClickNext}
+      >
+        Další
+      </Button>
     </Container>
   );
 };

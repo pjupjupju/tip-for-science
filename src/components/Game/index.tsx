@@ -159,7 +159,7 @@ const Game = ({
           <GameOverScreen />
         )}
       </Flex>
-      <Flex justifyContent="space-between" mt="auto">
+      <Flex justifyContent="space-between" mt={['auto', 'auto', 3]}>
         <Button as={Link} onClick={handleClickHome}>
           Domů
         </Button>
