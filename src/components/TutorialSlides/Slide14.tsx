@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button, Image, Text } from 'rebass';
+import { Button, Image, Text, Box } from 'rebass';
 import { Container } from '../Container';
+import { ScoreChart } from '../ScoreChart';
 import { TutorialHeader } from '../TutorialHeader';
 import elephant from './../../assets/slide1_elephant.jpg';
-import chart from './../../assets/slide5_graf.jpg';
 import { SlideProps } from './types';
 
 const imageStyle = {
@@ -13,6 +13,7 @@ const imageStyle = {
 };
 
 const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
+  const correctAnswer = 47051;
   const handleClickNext = () => {
     handleNextStep();
   };
@@ -30,9 +31,18 @@ const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
         </Text>
       </TutorialHeader>
       <Image src={elephant} sx={imageStyle} />
-
-      <Image src={chart} sx={imageStyle} />
-      <Button onClick={handleClickNext}>Další</Button>
+      <Box width="100%" height="200px">
+        {typeof currentTip !== 'undefined' && (
+          <ScoreChart currentTip={currentTip} correctAnswer={correctAnswer} />
+        )}
+      </Box>
+      <Button
+        mt="auto"
+        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
+        onClick={handleClickNext}
+      >
+        Další
+      </Button>
     </Container>
   );
 };

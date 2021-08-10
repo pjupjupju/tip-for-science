@@ -9,18 +9,25 @@ const Slide12 = ({ handleNextStep }: SlideProps) => {
   };
   return (
     <Container>
-        <Text
-          fontSize={[3, 4, 5]}
-          fontWeight="bold"
-          color="primary"
-          textAlign="center"
-          mb="4"
-        >
-          Tato hra je jeden velký experiment v rámci kulturní evoluce. Zajímá
-          nás, jak tento druh extrémně spolupracujících opic nalezne optimální
-          strategii, když bude mít k dispozici pouze skupinovou inteligenci.
-        </Text>
-      <Button onClick={handleClickNext}>Další</Button>
+      <Text
+        fontSize={[3, 4, 5]}
+        fontWeight="bold"
+        color="primary"
+        textAlign="center"
+        mb="4"
+        mt="4"
+      >
+        Tato hra je jeden velký experiment v rámci kulturní evoluce. Zajímá nás,
+        jak tento druh extrémně spolupracujících opic nalezne optimální
+        strategii, když bude mít k dispozici pouze skupinovou inteligenci.
+      </Text>
+      <Button
+        mt="auto"
+        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
+        onClick={handleClickNext}
+      >
+        Další
+      </Button>
     </Container>
   );
 };

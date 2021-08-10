@@ -1,18 +1,13 @@
 import React from 'react';
-import { Button, Image, Text } from 'rebass';
+import { Button, Text, Box } from 'rebass';
 import { getScore } from '../../helpers';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
-import wildchart from './../../assets/slide5_graf.jpg';
 import { SlideProps } from './types';
-
-const imageStyle = {
-  minHeight: '210px',
-  width: '100%',
-  alignSelf: 'center',
-};
+import { ScoreChart } from '../ScoreChart';
 
 const Slide6 = ({ handleNextStep, currentTip }: SlideProps) => {
+  const correctAnswer = 11000;
   const handleClickNext = () => {
     handleNextStep();
   };
@@ -26,10 +21,18 @@ const Slide6 = ({ handleNextStep, currentTip }: SlideProps) => {
           textAlign="center"
           p={3}
         >
-          Za svou odpověď bys dostal/a {typeof currentTip !== "undefined" ? getScore(currentTip,11000).toFixed(3) : 0} bodu.
+          Za svou odpověď bys dostal/a{' '}
+          {typeof currentTip !== 'undefined'
+            ? getScore(currentTip, 11000).toFixed(3)
+            : 0}{' '}
+          bodu.
         </Text>
       </TutorialHeader>
-      <Image src={wildchart} sx={imageStyle} />
+      <Box width="100%" height="200px">
+        {typeof currentTip !== 'undefined' && (
+          <ScoreChart currentTip={currentTip} correctAnswer={correctAnswer} />
+        )}
+      </Box>
       <Text
         fontSize={[3, 4, 5]}
         fontWeight="bold"
@@ -40,7 +43,13 @@ const Slide6 = ({ handleNextStep, currentTip }: SlideProps) => {
       >
         Body získáš, pokud se trefíš mezi 50 - 200 % hodnoty správné odpovědi.
       </Text>
-      <Button onClick={handleClickNext}>Další</Button>
+      <Button
+        mt="auto"
+        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
+        onClick={handleClickNext}
+      >
+        Další
+      </Button>
     </Container>
   );
 };

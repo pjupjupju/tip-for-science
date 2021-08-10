@@ -61,8 +61,14 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
         >
           Jak rychle se pohybuje Jupiter?
         </Text>
-        <Button onClick={handleClickNext}>Další</Button>
       </Box>
+      <Button
+        mt="auto"
+        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
+        onClick={handleClickNext}
+      >
+        Další
+      </Button>
     </Container>
   );
 };

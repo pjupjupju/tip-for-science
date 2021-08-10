@@ -7,6 +7,7 @@ import { SlideProps } from './types';
 
 const imageStyle = {
   minHeight: '210px',
+  maxHeight: '400px',
   width: '100%',
   alignSelf: 'center',
 };
@@ -25,14 +26,14 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
           color="secondary"
           textAlign="center"
           px={3}
-          py={5}
+          py={4}
         >
           Nebojte, správné odpovědi se brzy dozvíte! Nejdřív ale zkuste hádat...
         </Text>
       </TutorialHeader>
       <Image src={elephant} sx={imageStyle} />
       <Text
-        fontSize={[3, 4, 5]}
+        fontSize={[3, 4, 4]}
         fontWeight="bold"
         color="secondary"
         textAlign="center"
@@ -54,7 +55,12 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
         </Text>
         kg.
       </Text>
-      <Button onClick={handleClickNext}>Další</Button>
+      <Button
+        sx={{ position: ['initial', 'initial', 'relative'], top: '-20px' }}
+        onClick={handleClickNext}
+      >
+        Další
+      </Button>
     </Container>
   );
 };

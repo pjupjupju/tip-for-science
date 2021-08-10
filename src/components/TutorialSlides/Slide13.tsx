@@ -66,7 +66,7 @@ const Slide13 = ({ onSubmit }: SlideProps) => {
   });
 
   return (
-    <Container>
+    <Container isRelative={true}>
       <TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
