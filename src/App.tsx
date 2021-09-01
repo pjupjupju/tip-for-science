@@ -7,6 +7,7 @@ import { About } from './pages/About';
 import { Home } from './pages/Home';
 import { Play } from './pages/Play';
 import { Stats } from './pages/Stats';
+import { Signup } from "./pages/Signup";
 
 export const tipForScienceTheme = {
   ...theme,
@@ -32,6 +33,9 @@ export const App = () => (
         </Route>
         <Route path="/stats">
           <Stats />
+        </Route>
+        <Route path="/signup">
+          <Signup />
         </Route>
       </Switch>
   </ThemeProvider>

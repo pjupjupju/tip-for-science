@@ -2,6 +2,7 @@ import React from 'react';
 import { Flex, Button } from 'rebass';
 import { Label, Input } from '@rebass/forms';
 import { Container } from '../../components';
+import { setItem } from '../../io';
 
 const inputStyles = {
   '::placeholder': {
@@ -16,7 +17,10 @@ const labelStyles = {
 };
 
 const Signup = () => {
-  const handleSignUp = () => {};
+  const handleSignUp = () => {
+    setItem('user', JSON.stringify({ token: 'p100f33cz3k' }));
+  };
+
   return (
     <Container>
       <Flex
