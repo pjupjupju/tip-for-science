@@ -15,8 +15,8 @@ const Home = ({ isSignedIn = false }) => {
     history.push('/stats');
   };
 
-  const handleClickSignIn = () => {
-    history.push('/signin');
+  const handleClickSignUp = () => {
+    history.push('/signup');
   };
 
   return (
@@ -63,7 +63,7 @@ const Home = ({ isSignedIn = false }) => {
             <MenuButton onClick={handleClickPlay}>play</MenuButton>
           )}
           {!isSignedIn && (
-            <MenuButton onClick={handleClickSignIn}>sign in</MenuButton>
+            <MenuButton onClick={handleClickSignUp}>sign in</MenuButton>
           )}
         </Flex>
       </Flex>
