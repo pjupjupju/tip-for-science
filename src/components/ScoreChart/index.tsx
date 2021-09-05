@@ -6,22 +6,27 @@ import { CartesianMarkerProps } from '@nivo/core';
 interface ScoreChartProps {
   currentTip: number;
   correctAnswer: number;
+  previousTips?: number[];
 }
 
-const ScoreChart = ({ currentTip, correctAnswer }: ScoreChartProps) => {
+const ScoreChart = ({
+  currentTip,
+  correctAnswer,
+  previousTips = [],
+}: ScoreChartProps) => {
   const score = getScore(currentTip, correctAnswer);
-  const markers = useMemo<CartesianMarkerProps[]>(
-    () => [
+  const markers = useMemo<CartesianMarkerProps[]>(() => {
+    const baseMarkers: CartesianMarkerProps[] = [
       {
         axis: 'x',
         value: Number(currentTip),
         lineStyle: {
           stroke: '#5CC8F9',
           strokeWidth: 1,
-          transform: `translateY(calc(${(
+          transform: `translateY(calc(${(100 * (1 - score)).toFixed(0)}% - ${(
             100 *
             (1 - score)
-          ).toFixed(0)}% - ${(100 * (1 - score)).toFixed(0)}px))
+          ).toFixed(0)}px))
                     scaleY(${score.toFixed(2)})`,
         },
       },
@@ -36,15 +41,42 @@ const ScoreChart = ({ currentTip, correctAnswer }: ScoreChartProps) => {
         legend: `+${score.toFixed(3)}`,
         textStyle: {
           fill: '#feff00',
+          transform: `scale(2, 2) translate(50px, -10px)`,
         },
         lineStyle: {
           stroke: '#feff00',
           strokeWidth: 1,
+          transform: `scaleX(${0.4 * (currentTip / correctAnswer)})`,
         },
       },
-    ],
-    [currentTip, correctAnswer, score]
-  );
+    ];
+
+    const previousScore = previousTips.map((tip) =>
+      getScore(tip, correctAnswer)
+    );
+    const previousTipsMarkers: CartesianMarkerProps[] = previousTips.map(
+      (tip, index) => ({
+        axis: 'x',
+        value: Number(tip),
+        lineStyle: {
+          stroke: '#FF0070',
+          strokeWidth: 1,
+          transform:
+            previousScore[index] > 0
+              ? `translateY(calc(${(100 * (1 - previousScore[index])).toFixed(
+                  0
+                )}% - ${(100 * (1 - previousScore[index])).toFixed(0)}px))
+          scaleY(${previousScore[index].toFixed(2)})`
+              : `translateY(calc(${(100 * 1).toFixed(0)}% - ${(100 * 1).toFixed(
+                  0
+                )}px))
+                    scaleY(0.05)`,
+        },
+      })
+    );
+
+    return [...baseMarkers, ...previousTipsMarkers];
+  }, [currentTip, correctAnswer, previousTips, score]);
 
   const data = [
     {

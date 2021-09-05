@@ -3,24 +3,15 @@ import { ScoreChart } from './';
 
 export default { title: 'component/ScoreChart', component: ScoreChart };
 export const Default = () => (
-  <ScoreChart
-    correctAnswer={18.29}
-    currentTip={10}
-  />
+  <ScoreChart correctAnswer={18.29} currentTip={10} />
 );
 
-export const Close = () => (
-  <ScoreChart
-    correctAnswer={18.29}
-    currentTip={18}
-  />
-);
+export const Close = () => <ScoreChart correctAnswer={18.29} currentTip={18} />;
 
-export const Zero = () => (
-  <ScoreChart
-    correctAnswer={18.29}
-    currentTip={5}
-  />
+export const Zero = () => <ScoreChart correctAnswer={18.29} currentTip={5} />;
+
+export const WithPreviousTips = () => (
+  <ScoreChart correctAnswer={18.29} currentTip={10} previousTips={[13, 27]} />
 );
 
 Default.storyName = 'Default chart';
