@@ -3,7 +3,12 @@ import { Flex, Heading } from 'rebass';
 import { useHistory } from 'react-router-dom';
 import { MenuButton, Container } from '../../components';
 
-const Home = ({ isSignedIn = false }) => {
+interface HomeProps {
+  isSignedIn: boolean;
+  onLogOut: Function;
+}
+
+const Home = ({ isSignedIn = false, onLogOut }: HomeProps) => {
   const history = useHistory();
   const handleClickAbout = () => {
     history.push('/about');
@@ -14,9 +19,11 @@ const Home = ({ isSignedIn = false }) => {
   const handleClickStats = () => {
     history.push('/stats');
   };
-
   const handleClickSignUp = () => {
     history.push('/signup');
+  };
+  const handleClickLogOut = () => {
+    onLogOut();
   };
 
   return (
@@ -60,7 +67,10 @@ const Home = ({ isSignedIn = false }) => {
             )}
           </Flex>
           {isSignedIn && (
-            <MenuButton onClick={handleClickPlay}>play</MenuButton>
+            <>
+              <MenuButton onClick={handleClickPlay} mb="2">play</MenuButton>
+              <MenuButton onClick={handleClickLogOut}>log out</MenuButton>
+            </>
           )}
           {!isSignedIn && (
             <MenuButton onClick={handleClickSignUp}>sign in</MenuButton>

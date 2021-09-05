@@ -142,6 +142,7 @@ const Game = ({
               <ScoreChart
                 currentTip={currentTip}
                 correctAnswer={correctAnswer}
+                previousTips={previousTips}
               />
             </Box>
             {isTooClose(currentTip, correctAnswer) && (

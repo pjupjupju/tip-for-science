@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Flex, Button } from 'rebass';
 import { Label, Input } from '@rebass/forms';
 import { Container } from '../../components';
 import { setItem } from '../../io';
+import { UserContext } from '../../userContext';
+import { useHistory } from 'react-router-dom';
 
 const inputStyles = {
   '::placeholder': {
@@ -17,8 +19,12 @@ const labelStyles = {
 };
 
 const Signup = () => {
+  const { setUser } = useContext(UserContext);
+  const history = useHistory();
   const handleSignUp = () => {
     setItem('user', JSON.stringify({ token: 'p100f33cz3k' }));
+    setUser({ token: 'p100f33cz3k' });
+    history.push('/');
   };
 
   return (
