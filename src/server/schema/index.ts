@@ -18,6 +18,15 @@ export const typeDefs = /* GraphQL */ gql`
     unit: String!
   }
 
+  type Tip {
+    id: String!
+    question: String!
+    previousTips: [Float]
+    correctAnswer: Float!
+    tip: Float!
+    msElapsed: Int!
+  }
+
   type Query {
     getNextQuestion: Question
     getMyScore: Float!
@@ -73,6 +82,15 @@ type Question = {
   correctAnswer: number;
   timeLimit?: number;
   unit: string;
+};
+
+type Tip = {
+  id: string;
+  question: string;
+  previousTips: number[];
+  correctAnswer: number;
+  tip: number;
+  msElapsed: number;
 };
 
 const questions: Question[] = [
