@@ -9,7 +9,7 @@ import { Play } from './pages/Play';
 import { Stats } from './pages/Stats';
 import { Signup } from './pages/Signup';
 import { UserContext } from './userContext';
-import { getItem } from './io';
+import { getItem, removeItem } from './io';
 
 export const tipForScienceTheme = {
   ...theme,
@@ -24,6 +24,7 @@ export const tipForScienceTheme = {
 export const App = () => {
   const [user, setUser] = useState<string | null>(null);
   const handleLogOut = () => {
+    removeItem('user');
     setUser(null);
   };
   useEffect(() => {

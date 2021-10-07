@@ -10,4 +10,10 @@ const setItem = (key: string, value: string) => {
   }
 };
 
-export { getItem, setItem };
+const removeItem = (key: string) => {
+  if (typeof localStorage.removeItem !== 'undefined') {
+    localStorage.removeItem(key);
+  }
+};
+
+export { getItem, setItem, removeItem };

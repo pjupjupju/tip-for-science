@@ -1,10 +1,12 @@
-import React, { useContext } from 'react';
-import { Flex, Button } from 'rebass';
+import React, { useContext, useState } from 'react';
+import { Flex, Button, Box, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
 import { Container } from '../../components';
 import { setItem } from '../../io';
 import { UserContext } from '../../userContext';
 import { useHistory } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
+import { SIGN_IN_MUTATION } from '../../gql';
 
 const inputStyles = {
   '::placeholder': {
@@ -20,11 +22,34 @@ const labelStyles = {
 
 const Signup = () => {
   const { setUser } = useContext(UserContext);
+  const [errors, setErrors] = useState([]);
   const history = useHistory();
-  const handleSignUp = () => {
-    setItem('user', JSON.stringify({ token: 'p100f33cz3k' }));
-    setUser({ token: 'p100f33cz3k' });
-    history.push('/');
+
+  const [signIn] = useMutation(SIGN_IN_MUTATION, {
+    onCompleted: ({ signIn: { __typename, ...data } }) => {
+      console.log(data);
+    },
+    // onError:
+  });
+
+  const handleSignUp = async () => {
+    const { data } = await signIn({
+      variables: {
+        email: 'jurajhrib@gmail.com',
+        password: 'tipforscience123',
+      },
+    });
+
+    console.log('here are data:', data);
+    console.log('here are errors: ', data.signIn.errors);
+
+    if (data && !data.signIn.errors) {
+      setItem('user', JSON.stringify({ token: 'p100f33cz3k' }));
+      setUser({ token: 'p100f33cz3k' });
+      history.push('/');
+    } else {
+      setErrors(data!.signIn!.errors);
+    }
   };
 
   return (
@@ -60,6 +85,13 @@ const Signup = () => {
         <Button onClick={handleSignUp} my={3}>
           Přihlásit
         </Button>
+        {errors.length > 0 && (
+          <Box>
+            {errors.map((item: { error: string }) => (
+              <Text color="red">{item.error}</Text>
+            ))}
+          </Box>
+        )}
       </Flex>
     </Container>
   );
