@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, Heading, Flex } from 'rebass';
+import { Button, Flex } from 'rebass';
+import { UserScoreCurve } from '../../components/UserScoreCurve';
 
 const Stats = () => {
   const history = useHistory();
@@ -9,7 +10,7 @@ const Stats = () => {
   };
   return (
     <Flex flexDirection="column" height="100%">
-      <Heading color="lightgray">Stats</Heading>
+      <UserScoreCurve />
       <Flex mt="auto">
         <Button onClick={handleClickBack}>zpět</Button>
       </Flex>
