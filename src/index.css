@@ -1,7 +1,9 @@
-body,html,#root {
+body,
+html,
+#root {
   width: 100%;
   height: 100%;
-} 
+}
 
 body {
   margin: 0;
@@ -15,4 +17,9 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* flep */
+text[dominant-baseline='text-before-edge'] {
+  font-size: 22px !important;
 }

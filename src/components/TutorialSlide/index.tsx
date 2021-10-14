@@ -16,12 +16,17 @@ interface TutorialSlideProps extends CommonTutorialProps {
 export const TutorialSlide = ({
   stepper: StepperComponent,
   // step,
-  content: Content, ...contentProps
+  content: Content,
+  ...contentProps
 }: TutorialSlideProps) => {
   return (
     <Flex flexDirection="column" alignItems="center" width="100%" height="100%">
       <Content {...contentProps} />
-      {StepperComponent && <Box mb="auto"><StepperComponent {...contentProps} /></Box>}
+      {StepperComponent && (
+        <Box mb="auto">
+          <StepperComponent {...contentProps} />
+        </Box>
+      )}
     </Flex>
   );
 };

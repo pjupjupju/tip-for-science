@@ -5,8 +5,10 @@ import { createUploadLink } from 'apollo-upload-client';
 import React from 'react';
 import { hydrate } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from 'emotion-theming';
 import fetch from 'unfetch';
 import { App } from './App';
+import { tipForScienceTheme } from './theme';
 
 /* if (process.env.NODE_ENV === 'production') {
   Sentry.init({
@@ -26,10 +28,12 @@ const client = new ApolloClient({
 hydrate(
   <BrowserRouter>
     <ApolloProvider client={client}>
-      <App />
+      <ThemeProvider theme={tipForScienceTheme}>
+        <App />
+      </ThemeProvider>
     </ApolloProvider>
   </BrowserRouter>,
-  document.getElementById('root'),
+  document.getElementById('root')
 );
 
 if (module.hot) {
