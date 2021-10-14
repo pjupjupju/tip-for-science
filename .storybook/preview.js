@@ -1,10 +1,19 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { ThemeProvider } from 'emotion-theming';
-import { tipForScienceTheme } from '../src/App';
+import { tipForScienceTheme } from '../src/theme';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
+  backgrounds: {
+    default: 'tips',
+    values: [
+      {
+        name: 'tips',
+        value: '#000',
+      },
+    ],
+  },
   layout: 'fullscreen',
 };
 

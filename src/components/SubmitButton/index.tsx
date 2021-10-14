@@ -40,7 +40,7 @@ const SubmitButton = ({ timeLimit, ...rest }: ButtonProps & { timeLimit?: number
   typeof timeLimit !== 'undefined' ? (
     <AnimatedButton {...rest} timeLimit={timeLimit} />
   ) : (
-    <Button {...rest}>button</Button>
+    <Button {...rest}>Odeslat</Button>
   );
 
 export { SubmitButton };

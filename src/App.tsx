@@ -1,60 +1,61 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { ThemeProvider } from 'emotion-theming';
-import theme from '@rebass/preset';
+import { Flex } from 'rebass';
+import { useMutation, useQuery } from '@apollo/client';
 import './index.css';
 import { About } from './pages/About';
 import { Home } from './pages/Home';
 import { Play } from './pages/Play';
 import { Stats } from './pages/Stats';
 import { Signup } from './pages/Signup';
-import { UserContext } from './userContext';
-import { getItem, removeItem } from './io';
-
-export const tipForScienceTheme = {
-  ...theme,
-  radii: { default: 0 },
-  colors: { background: 'black', primary: '#FF0070', secondary: '#5CC9FA' },
-  fonts: {
-    body: 'Tahoma',
-    ...(theme as any).fonts,
-  },
-};
+import { AuthQueryName, AUTH_QUERY, SIGN_OUT_MUTATION } from './gql';
+import { Spinner } from './components';
 
 export const App = () => {
-  const [user, setUser] = useState<string | null>(null);
+  const { loading, data } = useQuery(AUTH_QUERY);
+  const [signOut] = useMutation(SIGN_OUT_MUTATION, {
+    refetchQueries: [AuthQueryName],
+    onCompleted: ({ signOut: { __typename, ...data } }) => {
+      console.log(data);
+    },
+  });
+
+  const user = data ? data.viewer.user : null;
   const handleLogOut = () => {
-    removeItem('user');
-    setUser(null);
+    signOut();
   };
-  useEffect(() => {
-    const userFromStorage = getItem('user');
-    if (userFromStorage) {
-      setUser(userFromStorage);
-      console.log('user: ', userFromStorage);
-    }
-  }, []);
+
+  if (loading) {
+    return (
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        height="100%"
+        width="100%"
+        p="3"
+      >
+        <Spinner />
+      </Flex>
+    );
+  }
+
   return (
-    <UserContext.Provider value={{ user, setUser }}>
-      <ThemeProvider theme={tipForScienceTheme}>
-        <Switch>
-          <Route path="/" exact>
-            <Home isSignedIn={user != null} onLogOut={handleLogOut} />
-          </Route>
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/play">
-            <Play />
-          </Route>
-          <Route path="/stats">
-            <Stats />
-          </Route>
-          <Route path="/signup">
-            <Signup />
-          </Route>
-        </Switch>
-      </ThemeProvider>
-    </UserContext.Provider>
+    <Switch>
+      <Route path="/" exact>
+        <Home isSignedIn={user != null} onLogOut={handleLogOut} />
+      </Route>
+      <Route path="/about">
+        <About />
+      </Route>
+      <Route path="/play">
+        <Play />
+      </Route>
+      <Route path="/stats">
+        <Stats />
+      </Route>
+      <Route path="/signup">
+        <Signup />
+      </Route>
+    </Switch>
   );
 };
