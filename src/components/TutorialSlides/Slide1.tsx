@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Flex, Image, Text } from 'rebass';
+import { Box, Button, Image, Text } from 'rebass';
 import washington from './../../assets/slide1_washington.jpg';
 import elephant from './../../assets/slide1_elephant.jpg';
 import moon from './../../assets/slide1_moon.jpg';

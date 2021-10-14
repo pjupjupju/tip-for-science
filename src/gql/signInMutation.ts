@@ -7,6 +7,13 @@ export const SIGN_IN_MUTATION = gql`
         viewer {
           user {
             email
+            id
+            slug
+            name
+            role
+            score
+            createdAt
+            updatedAt
           }
         }
       }

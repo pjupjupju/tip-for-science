@@ -5,6 +5,7 @@ import { findUserById } from '../../model';
 export const Viewer: IResolverObject<any, GraphQLContext> = {
   id: () => 1,
   user: (source: any, args: any, context) => {
+    console.log('konext: ', context.user);
     if (context.user == null) {
       return null;
     }

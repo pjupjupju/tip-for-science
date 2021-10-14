@@ -1,6 +1,6 @@
 import { gql } from 'apollo-server-express';
-import { saveTip, signIn, signUp } from './mutation';
-import { getMyScore } from './query';
+import { saveTip, signIn, signOut, signUp } from './mutation';
+import { getMyScore, viewer } from './query';
 import * as types from './types';
 
 export * from './context';
@@ -30,11 +30,13 @@ export const typeDefs = /* GraphQL */ gql`
   type Query {
     getNextQuestion: Question
     getMyScore: Float!
+    viewer: Viewer!
   }
 
   type Mutation {
     saveTip(id: String!, tip: Int!): Question
     signIn(email: String!, password: String!): SignInResult!
+    signOut: SignOutResult!
     signUp(email: String!, password: String!): SignUpResult!
   }
 
@@ -45,13 +47,19 @@ export const typeDefs = /* GraphQL */ gql`
     viewer: Viewer!
   }
 
+  type SignOutResult {
+    viewer: Viewer!
+  }
+
   type User {
-    description: String
     email: String!
     id: ID!
+    slug: String
     name: String
     role: UserRole!
     score: Float
+    createdAt: DateTime!
+    updatedAt: DateTime!
   }
 
   enum UserRole {
@@ -103,15 +111,19 @@ const questions: Question[] = [
   },
 ];
 
+// const viewer = () => {};
+
 export const resolvers = {
   Mutation: {
     saveTip,
     signIn,
+    signOut,
     signUp,
   },
   Query: {
     getNextQuestion: () => questions[0], // databaze.vytahniMiNextQuestion(130) => Question
     getMyScore,
+    viewer,
   },
-  ...types
+  ...types,
 };

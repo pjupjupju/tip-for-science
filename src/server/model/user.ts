@@ -21,6 +21,7 @@ export async function createUser(
     createdAt: new Date().toISOString(),
     email: args.email,
     id,
+    name: '',
     password: args.password,
     role: args.role,
     slug: id, // use id by default as user's slug
