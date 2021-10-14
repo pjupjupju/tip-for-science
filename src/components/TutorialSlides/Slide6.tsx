@@ -1,21 +1,19 @@
 import React from 'react';
-import { Box, Button, Flex, Image, Text } from 'rebass';
-import wildchart from './../../assets/slide5_graf.jpg';
+import { Button, Text, Box } from 'rebass';
+import { getScore } from '../../helpers';
+import { Container } from '../Container';
+import { TutorialHeader } from '../TutorialHeader';
 import { SlideProps } from './types';
+import { ScoreChart } from '../ScoreChart';
 
-const imageStyle = {
-  height: '210px',
-  width: '100%',
-  alignSelf: 'center',
-};
-
-const Slide6 = ({ handleNextStep }: SlideProps) => {
+const Slide6 = ({ handleNextStep, currentTip }: SlideProps) => {
+  const correctAnswer = 11000;
   const handleClickNext = () => {
     handleNextStep();
   };
   return (
-    <Flex flexDirection="column">
-      <Box height="80px">
+    <Container>
+      <TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
           fontWeight="bold"
@@ -23,10 +21,18 @@ const Slide6 = ({ handleNextStep }: SlideProps) => {
           textAlign="center"
           p={3}
         >
-          Za svou odpověď bys dostal/a 0,69 bodu.
+          Za svou odpověď bys dostal/a{' '}
+          {typeof currentTip !== 'undefined'
+            ? getScore(currentTip, 11000).toFixed(3)
+            : 0}{' '}
+          bodu.
         </Text>
+      </TutorialHeader>
+      <Box width="100%" height="200px">
+        {typeof currentTip !== 'undefined' && (
+          <ScoreChart currentTip={currentTip} correctAnswer={correctAnswer} />
+        )}
       </Box>
-      <Image src={wildchart} sx={imageStyle} />
       <Text
         fontSize={[3, 4, 5]}
         fontWeight="bold"
@@ -37,8 +43,14 @@ const Slide6 = ({ handleNextStep }: SlideProps) => {
       >
         Body získáš, pokud se trefíš mezi 50 - 200 % hodnoty správné odpovědi.
       </Text>
-      <Button onClick={handleClickNext}>Další</Button>
-    </Flex>
+      <Button
+        mt="auto"
+        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
+        onClick={handleClickNext}
+      >
+        Další
+      </Button>
+    </Container>
   );
 };
 

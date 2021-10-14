@@ -3,6 +3,7 @@ import { getDataFromTree } from '@apollo/react-ssr';
 import { ApolloServer } from 'apollo-server-express';
 import { DynamoDB } from 'aws-sdk';
 import { renderStylesToString } from '@emotion/server';
+import { ThemeProvider } from 'emotion-theming';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { StaticRouterContext } from 'react-router';
@@ -14,6 +15,7 @@ import { resolve } from 'path';
 import { App } from '../App';
 import { Document } from './Document';
 import { createContext, typeDefs, resolvers } from './schema';
+import { tipForScienceTheme } from '../theme';
 
 // eslint-disable-next-line import/no-dynamic-require
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
@@ -103,12 +105,11 @@ server.get('/*', async (req, res, next) => {
     });
     const context: StaticRouterContext = {};
     const bootstrap = (
-      <StaticRouter
-        context={context}
-        location={req.url || '/'}
-      >
+      <StaticRouter context={context} location={req.url || '/'}>
         <ApolloProvider client={client}>
-          <App />
+          <ThemeProvider theme={tipForScienceTheme}>
+            <App />
+          </ThemeProvider>
         </ApolloProvider>
       </StaticRouter>
     );

@@ -1,10 +1,13 @@
 import React from 'react';
-import { Box, Button, Flex, Image, Text } from 'rebass';
+import { Button, Image, Text } from 'rebass';
+import { Container } from '../Container';
+import { TutorialHeader } from '../TutorialHeader';
 import elephant from './../../assets/slide1_elephant.jpg';
 import { SlideProps } from './types';
 
 const imageStyle = {
-  height: '210px',
+  minHeight: '210px',
+  maxHeight: '400px',
   width: '100%',
   alignSelf: 'center',
 };
@@ -15,21 +18,22 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
   };
 
   return (
-    <Flex flexDirection="column">
-      <Box height="80px">
+    <Container>
+      <TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
           fontWeight="bold"
           color="secondary"
           textAlign="center"
-          p={3}
+          px={3}
+          py={4}
         >
           Nebojte, správné odpovědi se brzy dozvíte! Nejdřív ale zkuste hádat...
         </Text>
-      </Box>
+      </TutorialHeader>
       <Image src={elephant} sx={imageStyle} />
       <Text
-        fontSize={[3, 4, 5]}
+        fontSize={[3, 4, 4]}
         fontWeight="bold"
         color="secondary"
         textAlign="center"
@@ -51,8 +55,13 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
         </Text>
         kg.
       </Text>
-      <Button onClick={handleClickNext}>Další</Button>
-    </Flex>
+      <Button
+        sx={{ position: ['initial', 'initial', 'relative'], top: '-20px' }}
+        onClick={handleClickNext}
+      >
+        Další
+      </Button>
+    </Container>
   );
 };
 

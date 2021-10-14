@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Button, Flex, Text } from 'rebass';
+import { Box, Button, Text } from 'rebass';
+import { Container } from '../Container';
 import { SlideProps } from './types';
 
 const Slide8 = ({ handleNextStep }: SlideProps) => {
@@ -7,7 +8,7 @@ const Slide8 = ({ handleNextStep }: SlideProps) => {
     handleNextStep();
   };
   return (
-    <Flex flexDirection="column">
+    <Container>
       <Box p="4">
         <Text
           fontSize={[3, 4, 5]}
@@ -39,8 +40,14 @@ const Slide8 = ({ handleNextStep }: SlideProps) => {
           programátorském módu na to abych vymýšlelo kvalitní copy :D*
         </Text>
       </Box>
-      <Button onClick={handleClickNext}>Další</Button>
-    </Flex>
+      <Button
+        mt="auto"
+        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
+        onClick={handleClickNext}
+      >
+        Další
+      </Button>
+    </Container>
   );
 };
 

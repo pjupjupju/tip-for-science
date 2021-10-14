@@ -1,13 +1,10 @@
 import React, { KeyboardEvent } from 'react';
-import { Box, Flex, Image, Text } from 'rebass';
+import { Flex, Image, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
 import elephant from './../../assets/slide1_elephant.jpg';
-
-interface Slide3Props {
-  onSubmit: (value: number) => void;
-  currentTip?: number;
-  step: number;
-}
+import { TutorialHeader } from '../TutorialHeader';
+import { Container } from '../Container';
+import { SlideProps } from './types';
 
 const inputStyles = {
   '::placeholder': {
@@ -19,7 +16,7 @@ const inputStyles = {
 };
 
 const imageStyle = {
-  height: '210px',
+  minHeight: '210px',
   width: '100%',
   alignSelf: 'center',
 };
@@ -35,7 +32,7 @@ const question = 'Kolik vážil nejtěžší slon evaaaa?';
 const image = elephant;
 const unit = 'kg';
 
-const Slide3 = ({ onSubmit }: Slide3Props) => {
+const Slide3 = ({ onSubmit }: SlideProps) => {
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       onSubmit(Number(event.currentTarget.value));
@@ -43,18 +40,18 @@ const Slide3 = ({ onSubmit }: Slide3Props) => {
   };
 
   return (
-    <Flex flexDirection="column" height="100%">
-      <Box height="80px">
+    <Container>
+      <TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
           fontWeight="bold"
           color="secondary"
           textAlign="center"
-          p={3}
+          p={2}
         >
           {question}
         </Text>
-      </Box>
+      </TutorialHeader>
       <Image src={image} sx={imageStyle} />
       <Flex justifyContent="center" alignItems="center" p={2}>
         <Label htmlFor="tip" sx={labelStyle}>
@@ -70,7 +67,7 @@ const Slide3 = ({ onSubmit }: Slide3Props) => {
         />
         <Text color="white">{unit}</Text>
       </Flex>
-    </Flex>
+    </Container>
   );
 };
 

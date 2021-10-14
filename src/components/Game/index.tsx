@@ -1,12 +1,14 @@
-import React, { KeyboardEvent } from 'react';
+import React, { KeyboardEvent, useRef } from 'react';
 import { Box, Button, Flex, Image, Text } from 'rebass';
-import { ResponsiveLine } from '@nivo/line';
 import { Label, Input } from '@rebass/forms';
-import { mockData } from './mockData';
 import { Link } from 'react-router-dom';
 import { TooCloseDialog } from './TooCloseDialog';
 import { GameOverScreen } from './GameOverScreen';
 import { PreviousTips } from './PreviousTips';
+import { getScore } from '../../helpers';
+import { Container } from '../Container';
+import { SubmitButton } from '../SubmitButton';
+import { ScoreChart } from '../ScoreChart';
 
 export interface Settings {
   question: string;
@@ -21,7 +23,7 @@ interface GameProps {
   isSubmitted: boolean;
   onFinish: Function;
   onHome: Function;
-  onSubmit?: (event: KeyboardEvent<HTMLInputElement>) => void;
+  onSubmit?: (tip: number) => void;
   settings: Settings;
   currentTip?: number;
   score: number;
@@ -61,6 +63,8 @@ const Game = ({
   currentTip,
   score,
 }: GameProps) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const handleClickFinish = () => {
     onFinish();
   };
@@ -68,8 +72,20 @@ const Game = ({
     onHome();
   };
 
+  const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && onSubmit) {
+      onSubmit(Number(event.currentTarget.value));
+    }
+  };
+
+  const handleClickSubmit = () => {
+    if (inputRef.current && onSubmit) {
+      onSubmit(Number(inputRef.current.value));
+    }
+  };
+
   return !isSubmitted ? (
-    <Flex flexDirection="column" height="100%">
+    <Container>
       <Box height="80px">
         <Text
           fontSize={[3, 4, 5]}
@@ -88,18 +104,22 @@ const Game = ({
           tip:
         </Label>
         <Input
+          ref={inputRef}
           id="tip"
           name="tip"
           type="number"
           placeholder="váš tip"
           sx={inputStyles}
-          onKeyDown={onSubmit}
+          onKeyDown={handleSubmit}
         />
         <Text color="white">{unit}</Text>
+      </Flex>{' '}
+      <Flex py={2} justifyContent="flex-end">
+        <SubmitButton onClick={handleClickSubmit} timeLimit={timeLimit} />
       </Flex>
-    </Flex>
+    </Container>
   ) : (
-    <Flex flexDirection="column" height="100%">
+    <Container>
       <Box height="80px">
         <Text
           fontSize={[3, 4, 5]}
@@ -108,7 +128,10 @@ const Game = ({
           textAlign="center"
           p={3}
         >
-          Total score: {score}
+          Score:{' '}
+          {typeof currentTip != 'undefined'
+            ? getScore(currentTip, correctAnswer).toFixed(3)
+            : 0}
         </Text>
       </Box>
       <Image src={image} sx={imageStyle} />
@@ -116,45 +139,10 @@ const Game = ({
         {typeof currentTip !== 'undefined' ? (
           <>
             <Box width="100%" height="200px">
-              <ResponsiveLine
-                enableArea={true}
-                curve="natural"
-                xScale={{
-                  type: 'linear',
-                  min: 0,
-                  max: 50,
-                }}
-                yScale={{
-                  type: 'linear',
-                  min: 0,
-                  max: 1,
-                }}
-                data={mockData}
-                margin={{
-                  top: 50,
-                  right: 50,
-                  bottom: 50,
-                  left: 50,
-                }}
-                enableGridX={false}
-                enableGridY={false}
-                enablePoints={false}
-                markers={[
-                  {
-                    axis: 'x',
-                    value: Number(currentTip),
-                    lineStyle: { stroke: 'white', strokeWidth: 1 },
-                    legend: 'váš tip',
-                    textStyle: { fill: 'white' },
-                  },
-                  {
-                    axis: 'x',
-                    value: 18.29,
-                    lineStyle: { stroke: '#FF0070', strokeWidth: 1 },
-                    legend: 'správná odpověď',
-                    textStyle: { fill: '#FF0070' },
-                  },
-                ]}
+              <ScoreChart
+                currentTip={currentTip}
+                correctAnswer={correctAnswer}
+                previousTips={previousTips}
               />
             </Box>
             {isTooClose(currentTip, correctAnswer) && (
@@ -172,7 +160,7 @@ const Game = ({
           <GameOverScreen />
         )}
       </Flex>
-      <Flex justifyContent="space-between" mt="auto">
+      <Flex justifyContent="space-between" mt={['auto', 'auto', 3]}>
         <Button as={Link} onClick={handleClickHome}>
           Domů
         </Button>
@@ -180,7 +168,7 @@ const Game = ({
           Pokračovat
         </Button>
       </Flex>
-    </Flex>
+    </Container>
   );
 };
 

@@ -1,21 +1,18 @@
 import React from 'react';
-import { Box, Button, Flex, Image, Text } from 'rebass';
-import wildchart from './../../assets/slide5_graf.jpg';
+import { Button, Box, Text } from 'rebass';
+import { Container } from '../Container';
+import { TutorialHeader } from '../TutorialHeader';
 import { SlideProps } from './types';
+import { ScoreChart } from '../ScoreChart';
 
-const imageStyle = {
-  height: '210px',
-  width: '100%',
-  alignSelf: 'center',
-};
-
-const Slide5 = ({ handleNextStep }: SlideProps) => {
+const Slide5 = ({ handleNextStep, currentTip }: SlideProps) => {
+  const correctAnswer = 11000;
   const handleClickNext = () => {
     handleNextStep();
   };
   return (
-    <Flex flexDirection="column">
-      <Box height="80px">
+    <Container>
+      <TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
           fontWeight="bold"
@@ -23,10 +20,14 @@ const Slide5 = ({ handleNextStep }: SlideProps) => {
           textAlign="center"
           p={3}
         >
-          bžilion kg? těsně vedle!
+          {currentTip} kg? těsně vedle!
         </Text>
+      </TutorialHeader>
+      <Box width="100%" height="200px">
+        {typeof currentTip !== 'undefined' && (
+          <ScoreChart currentTip={currentTip} correctAnswer={correctAnswer} />
+        )}
       </Box>
-      <Image src={wildchart} sx={imageStyle} />
       <Text
         fontSize={[3, 4, 5]}
         fontWeight="bold"
@@ -38,8 +39,14 @@ const Slide5 = ({ handleNextStep }: SlideProps) => {
         Na tomto skvělém přehledném grafu je tvá odpověď, uvedené nápovědy a
         správná odpověď.
       </Text>
-      <Button onClick={handleClickNext}>Další</Button>
-    </Flex>
+      <Button
+        mt="auto"
+        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
+        onClick={handleClickNext}
+      >
+        Další
+      </Button>
+    </Container>
   );
 };
 

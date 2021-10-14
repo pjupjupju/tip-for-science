@@ -1,9 +1,11 @@
 import React from 'react';
-import { Box, Button, Flex, Image, Text } from 'rebass';
+import { Box, Button, Image, Text } from 'rebass';
 import washington from './../../assets/slide1_washington.jpg';
 import elephant from './../../assets/slide1_elephant.jpg';
 import moon from './../../assets/slide1_moon.jpg';
 import { SlideProps } from './types';
+import { Container } from '../Container';
+import { TutorialHeader } from '../TutorialHeader';
 
 const Slide1 = ({ handleNextStep }: SlideProps) => {
   // obsah () se pak muze smazat, je to tu pro hloupe lidi
@@ -11,8 +13,8 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
     handleNextStep();
   };
   return (
-    <Flex flexDirection="column">
-      <Flex height="calc(20vh)" width="100%" justifyContent="center">
+    <Container>
+      <TutorialHeader centerVertically={false}>
         <Image
           src={elephant}
           sx={{
@@ -31,7 +33,7 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
             width: 'calc(20vh)',
           }}
         />
-      </Flex>
+      </TutorialHeader>
       <Box p="4">
         <Text
           fontSize={[3, 4, 5]}
@@ -59,9 +61,15 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
         >
           Jak rychle se pohybuje Jupiter?
         </Text>
-        <Button onClick={handleClickNext}>Další</Button>
       </Box>
-    </Flex>
+      <Button
+        mt="auto"
+        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
+        onClick={handleClickNext}
+      >
+        Další
+      </Button>
+    </Container>
   );
 };
 

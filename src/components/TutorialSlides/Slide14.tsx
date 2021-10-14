@@ -1,22 +1,25 @@
 import React from 'react';
-import { Box, Button, Flex, Image, Text } from 'rebass';
+import { Button, Image, Text, Box } from 'rebass';
+import { Container } from '../Container';
+import { ScoreChart } from '../ScoreChart';
+import { TutorialHeader } from '../TutorialHeader';
 import elephant from './../../assets/slide1_elephant.jpg';
-import chart from './../../assets/slide5_graf.jpg';
 import { SlideProps } from './types';
 
 const imageStyle = {
-  height: '210px',
+  minHeight: '210px',
   width: '100%',
   alignSelf: 'center',
 };
 
-const Slide14 = ({ handleNextStep }: SlideProps) => {
+const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
+  const correctAnswer = 47051;
   const handleClickNext = () => {
     handleNextStep();
   };
   return (
-    <Flex flexDirection="column">
-      <Box height="80px">
+    <Container>
+      <TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
           fontWeight="bold"
@@ -24,14 +27,23 @@ const Slide14 = ({ handleNextStep }: SlideProps) => {
           textAlign="center"
           p={3}
         >
-          flibžion za sekundu? to je úplně přesně!
+          {currentTip} za sekundu? to je úplně přesně!
         </Text>
-      </Box>
+      </TutorialHeader>
       <Image src={elephant} sx={imageStyle} />
-
-      <Image src={chart} sx={imageStyle} />
-      <Button onClick={handleClickNext}>Další</Button>
-    </Flex>
+      <Box width="100%" height="200px">
+        {typeof currentTip !== 'undefined' && (
+          <ScoreChart currentTip={currentTip} correctAnswer={correctAnswer} />
+        )}
+      </Box>
+      <Button
+        mt="auto"
+        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
+        onClick={handleClickNext}
+      >
+        Další
+      </Button>
+    </Container>
   );
 };
 

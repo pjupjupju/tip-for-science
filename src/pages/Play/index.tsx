@@ -2,12 +2,12 @@ import React, {
   useEffect,
   useRef,
   useState,
-  KeyboardEvent,
   useReducer,
 } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { Game, Settings } from './../../components';
-import washington from './../../assets/game_washington.jpg';
+import kitties from './../../assets/game_kitties.jpg';
+import washington from './../../assets/game_washington.jpg'
 import { MY_SCORE_QUERY, QUESTION_QUERY, SAVE_MUTATION } from '../../gql';
 import { useHistory } from 'react-router';
 
@@ -65,21 +65,18 @@ const Play = () => {
 
   const history = useHistory();
   const onHome = () => history.push('/');
-  const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      const myTip = Number(event.currentTarget.value);
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      saveTip({
-        variables: {
-          id: 'lfjsdkfhdkj',
-          tip: myTip,
-        },
-      });
-      // setTip(Number(event.currentTarget.value));
-      dispatch({ type: ActionType.GAME_SUBMIT, payload: { tip: myTip } });
+  const onSubmit = (myTip: number) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
     }
+    saveTip({
+      variables: {
+        id: 'lfjsdkfhdkj',
+        tip: myTip,
+      },
+    });
+    // setTip(Number(event.currentTarget.value));
+    dispatch({ type: ActionType.GAME_SUBMIT, payload: { tip: myTip } });
   };
   const timeoutRef = useRef<number>();
 
@@ -127,7 +124,7 @@ const Play = () => {
       score={getMyScoreData.getMyScore || 0}
       isSubmitted={isSubmitted}
       onHome={onHome}
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
       onFinish={() => {
         console.log('is next question null? ', nextQuestion != null);
         if (nextQuestion != null) {
@@ -137,11 +134,10 @@ const Play = () => {
         }
         const dalsiOtazka = {
           question: 'Kolik kotatek dnes umrelo??',
-          image: washington,
-          previousTips: [10, 32],
-          correctAnswer: 18.29,
-          timeLimit: 5,
-          unit: 'm',
+          image: kitties,
+          previousTips: [1000000, 50000],
+          correctAnswer: 150000,
+          timeLimit: 10,
         };
         dispatch({
           type: ActionType.GAME_FINISH,

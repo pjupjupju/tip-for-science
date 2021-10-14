@@ -1,21 +1,17 @@
 import React from 'react';
-import { Box, Button, Flex, Image, Text } from 'rebass';
-import wildchart from './../../assets/slide5_graf.jpg';
+import { Button, Text, Box } from 'rebass';
+import { Container } from '../Container';
+import { TutorialHeader } from '../TutorialHeader';
 import { SlideProps } from './types';
-
-const imageStyle = {
-  height: '210px',
-  width: '100%',
-  alignSelf: 'center',
-};
+import { ScoreChart } from '../ScoreChart';
 
 const Slide7 = ({ handleNextStep }: SlideProps) => {
   const handleClickNext = () => {
     handleNextStep();
   };
   return (
-    <Flex flexDirection="column">
-      <Box height="80px">
+    <Container>
+      <TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
           fontWeight="bold"
@@ -25,10 +21,18 @@ const Slide7 = ({ handleNextStep }: SlideProps) => {
         >
           Tady můžeš vidět celý graf toho, jak funguje distribuce bodů:
         </Text>
+      </TutorialHeader>
+      <Box width="100%" height="200px">
+        <ScoreChart currentTip={50} correctAnswer={100} />
       </Box>
-      <Image src={wildchart} sx={imageStyle} />
-      <Button onClick={handleClickNext}>Další</Button>
-    </Flex>
+      <Button
+        mt="auto"
+        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
+        onClick={handleClickNext}
+      >
+        Další
+      </Button>
+    </Container>
   );
 };
 
