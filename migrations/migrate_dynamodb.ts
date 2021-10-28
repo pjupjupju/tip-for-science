@@ -1,5 +1,5 @@
 import { DynamoDB } from 'aws-sdk';
-import { TABLE_USER, USERS_BY_EMAIL_INDEX, USERS_BY_SLUG_INDEX } from '../src/config';
+import { TABLE_QUESTION, TABLE_USER, USERS_BY_EMAIL_INDEX, USERS_BY_SLUG_INDEX } from '../src/config';
 
 // create table if does not exist
 const config: DynamoDB.ClientConfiguration =
@@ -24,8 +24,9 @@ async function migrate() {
           { AttributeName: 'id', AttributeType: 'S' },
           { AttributeName: 'email', AttributeType: 'S' },
           { AttributeName: 'slug', AttributeType: 'S' },
+          { AttributeName: 'userskey', AttributeType: 'S' },
         ],
-        KeySchema: [{ AttributeName: 'id', KeyType: 'HASH' }],
+        KeySchema: [{ AttributeName: 'id', KeyType: 'HASH' }, { AttributeName: 'userskey', KeyType: 'RANGE' }],
         GlobalSecondaryIndexes: [
           {
             IndexName: USERS_BY_EMAIL_INDEX,
@@ -42,6 +43,20 @@ async function migrate() {
             },
           },
         ],
+      })
+      .promise();
+  }
+
+  if (tables.TableNames && !tables.TableNames.includes(TABLE_QUESTION)) {
+    await db
+      .createTable({
+        TableName: TABLE_QUESTION,
+        BillingMode: 'PAY_PER_REQUEST',
+        AttributeDefinitions: [
+          { AttributeName: 'id', AttributeType: 'S' },
+          { AttributeName: 'questionskey', AttributeType: 'S' },
+        ],
+        KeySchema: [{ AttributeName: 'id', KeyType: 'HASH' }, { AttributeName: 'questionskey', KeyType: 'RANGE' }],
       })
       .promise();
   }

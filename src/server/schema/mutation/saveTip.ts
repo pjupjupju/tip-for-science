@@ -1,48 +1,47 @@
 import { DynamoDB } from 'aws-sdk';
-import { TABLE_QUESTION, TABLE_TIP } from './../../../config';
+import { ulid } from 'ulid';
+import { User } from '../../model/types';
+import { TABLE_QUESTION } from './../../../config';
 
 export async function saveTip(
   parent: any,
   { id, tip }: { id: string; tip: number },
-  { dynamo }: { dynamo: DynamoDB.DocumentClient }
+  { dynamo, user }: { dynamo: DynamoDB.DocumentClient; user: User }
 ) {
   console.log(`--- updating Question ${id} with tip ${tip}`);
-  await dynamo.put({
-    TableName: TABLE_TIP,
+
+  const tipId =  ulid();
+
+  const question = await dynamo.put({
+    TableName: TABLE_QUESTION,
     Item: {
+      id,
+      questionskey: `RUN#${1}`,
+      lastTips: [tip],
+    },
+  }).promise();
+
+  console.log(question);
+
+  /*
+
+  await dynamo.put({
+    TableName: TABLE_USER,
+    Item: {
+      id: "01FGFWT7TPF5G3CEEGQHH7BAGX",
       question_id: id,
+      userskey: `TIP#${tipId}`,
       tip,
-      user_id: 21,
       created_at: new Date(),
     },
   });
+  */
 
   // TODO: get next question id somehow
   const nextQuestionId = 'flop';
 
-  const question = dynamo.query({
-    TableName: TABLE_QUESTION,
-    KeyConditionExpression: 'ID = :id',
-    ExpressionAttributeValues: { ':id': nextQuestionId },
-    ScanIndexForward: false,
-    Limit: 1,
-  });
-
-  const lastTips = dynamo.query({
-    TableName: TABLE_TIP,
-    KeyConditionExpression: 'question_id = :id',
-    ExpressionAttributeValues: { ':id': nextQuestionId },
-    ScanIndexForward: false,
-    Limit: 2,
-  }) as any;
-
-  await Promise.all([question, lastTips]);
-
   return {
-    ...question,
-    previousTips: lastTips.map(
-      (previousTip: { tip: number }) => previousTip.tip
-    ),
+    tipId
   };
 
   /*
