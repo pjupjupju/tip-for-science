@@ -1,6 +1,11 @@
 import { gql } from 'apollo-server-express';
 import { saveTip, signIn, signOut, signUp } from './mutation';
-import { getMyScore, viewer } from './query';
+import {
+  getLastTipsByQuestionId,
+  getMyScore,
+  getUserStats,
+  viewer,
+} from './query';
 import * as types from './types';
 
 export * from './context';
@@ -27,9 +32,20 @@ export const typeDefs = /* GraphQL */ gql`
     msElapsed: Int!
   }
 
+  type TimeSeriesStats {
+    day: DateTime!
+    score: Float!
+  }
+
+  type Stats {
+    days: [TimeSeriesStats]
+  }
+
   type Query {
+    getLastTipsByQuestionId(questionId: String!, runId: Int!): [Int]
     getNextQuestion: Question
     getMyScore: Float!
+    getUserStats: Stats!
     viewer: Viewer!
   }
 
@@ -121,8 +137,10 @@ export const resolvers = {
     signUp,
   },
   Query: {
+    getLastTipsByQuestionId,
     getNextQuestion: () => questions[0], // databaze.vytahniMiNextQuestion(130) => Question
     getMyScore,
+    getUserStats,
     viewer,
   },
   ...types,

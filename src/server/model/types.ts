@@ -4,6 +4,7 @@
  export interface User {
   createdAt: string;
   id: string;
+  userskey: string;
   email: string;
   name?: string | void;
   password: string;

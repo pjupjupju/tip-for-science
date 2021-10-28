@@ -21,6 +21,7 @@ export async function createUser(
     createdAt: new Date().toISOString(),
     email: args.email,
     id,
+    userskey: `USER#${id}`,
     name: '',
     password: args.password,
     role: args.role,
@@ -62,7 +63,7 @@ export async function findUserById(
   const { Item } = await dynamo
     .get({
       TableName: TABLE_USER,
-      Key: { id },
+      Key: { id, userskey: `USER#${id}` },
     })
     .promise();
 

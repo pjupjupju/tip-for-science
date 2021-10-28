@@ -28,11 +28,13 @@ async function createUser() {
   const user: User = {
     createdAt: new Date().toISOString(),
     id,
+    userskey: `USER#${id}`,
     email: email.toLowerCase(),
     password: hashSync(password, 10),
     role: UserRole.admin,
     slug: id,
     updatedAt: new Date().toISOString(),
+    score: 0,
   };
 
 
