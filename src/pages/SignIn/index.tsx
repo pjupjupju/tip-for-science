@@ -4,9 +4,9 @@ import { Label, Input } from '@rebass/forms';
 import { useForm } from 'react-hook-form';
 
 import { Container } from '../../components';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import { AuthQueryName, SIGN_UP_MUTATION } from '../../gql';
+import { AuthQueryName, SIGN_IN_MUTATION } from '../../gql';
 
 const inputStyles = {
   '::placeholder': {
@@ -20,32 +20,32 @@ const labelStyles = {
   fontWeight: 600,
 };
 
-const SignUp = () => {
+const SignIn = () => {
   const { register, handleSubmit } = useForm();
 
   const [errors, setErrors] = useState([]);
   const history = useHistory();
 
-  const [signUp] = useMutation(SIGN_UP_MUTATION, {
+  const [signIn] = useMutation(SIGN_IN_MUTATION, {
     refetchQueries: [AuthQueryName],
-    onCompleted: ({ signUp: { __typename, ...data } }) => {
+    onCompleted: ({ signIn: { __typename, ...data } }) => {
       console.log(data);
     },
     // onError:
   });
 
   const onSubmit = async (values: { email: string; password: string }) => {
-    const { data } = await signUp({
+    const { data } = await signIn({
       variables: {
         email: values.email,
         password: values.password,
       },
     });
 
-    if (data && !data.signUp.errors) {
+    if (data && !data.signIn.errors) {
       history.push('/');
     } else {
-      setErrors(data!.signUp!.errors);
+      setErrors(data!.signIn!.errors);
     }
   };
 
@@ -82,18 +82,22 @@ const SignUp = () => {
           {...register('password')}
         />
         <Button type="submit" my={3}>
-          Vytvořit
+          Přihlásit
         </Button>
         {errors.length > 0 && (
           <Box>
-            {errors.map((item: { error: string }, index) => (
-              <Text color="red" key={`error-${index}`}>{item.error}</Text>
+            {errors.map((item: { error: string }) => (
+              <Text color="red">{item.error}</Text>
             ))}
           </Box>
         )}
-        
+        <Flex justifyContent="center">
+          <Text color="white" fontSize="1">
+            Nemáš účet? <Link to="/signup" style={{color: "#FF0070"}}>Vytvořit účet</Link>
+          </Text>
+        </Flex>
       </Flex>
     </Container>
   );
 };
-export { SignUp };
+export { SignIn };
