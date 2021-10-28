@@ -7,9 +7,10 @@ import { About } from './pages/About';
 import { Home } from './pages/Home';
 import { Play } from './pages/Play';
 import { Stats } from './pages/Stats';
-import { Signup } from './pages/Signup';
+import { SignIn } from './pages/SignIn';
 import { AuthQueryName, AUTH_QUERY, SIGN_OUT_MUTATION } from './gql';
 import { Spinner } from './components';
+import { SignUp } from './pages/SignUp';
 
 export const App = () => {
   const { loading, data } = useQuery(AUTH_QUERY);
@@ -53,8 +54,11 @@ export const App = () => {
       <Route path="/stats">
         <Stats />
       </Route>
+      <Route path="/signin">
+        <SignIn />
+      </Route>
       <Route path="/signup">
-        <Signup />
+        <SignUp />
       </Route>
     </Switch>
   );
