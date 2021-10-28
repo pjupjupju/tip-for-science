@@ -6,7 +6,7 @@ interface UserModelContext {
 }
 
 
-// TODO: create whole code 
+// TODO: create whole code
 export async function getGameQuestion(
   id: string,
   runId: string,
