@@ -17,10 +17,18 @@ export async function createUser(
   { dynamo }: UserModelContext
 ) {
   const id = ulid();
+
+  // TODO: change to real bundle - get it from DB
+  const initialQuestions = ['40b86d42-84aa-4ba7-9aa9-80b9c8f80cfa'];
+  const restQuestions = ['30b86d42-84aa-4ba7-9aa9-80b9c8f80cfa'];
+  const bundle = generateQuestionBundle(initialQuestions, restQuestions);
+
   const user: User = {
+    bundle,
     createdAt: new Date().toISOString(),
     email: args.email,
     id,
+    lastQuestion: null,
     userskey: `USER#${id}`,
     name: '',
     password: args.password,
@@ -90,4 +98,35 @@ export async function findUserByEmail(
   }
 
   return (Items[0] as User) || null;
+}
+
+export async function updateQuestionBundle(
+  userId: string,
+  newQuestionList: string[],
+  oldBundle: string[],
+  { dynamo }: UserModelContext
+): Promise<any> {
+  const restBundle = generateQuestionBundle([], newQuestionList);
+
+  const params = {
+    TableName: TABLE_USER,
+    Key: { id: userId, userskey: `USER#${userId}` },
+    UpdateExpression: 'set bundle = :bundle, lastQuestion = :lastQuestion',
+    ExpressionAttributeValues: {
+      ':bundle': [...oldBundle, ...restBundle],
+      ':lastQuestion': null,
+    },
+  };
+
+  return dynamo.update(params).promise();
+}
+
+function generateQuestionBundle(
+  initialQuestionIds: string[],
+  restAvailableQuestionIds: string[]
+): string[] {
+  const intitialBundle = initialQuestionIds.sort(() => Math.random() - 0.5);
+  const restBundle = restAvailableQuestionIds.sort(() => Math.random() - 0.5);
+
+  return [...intitialBundle, ...restBundle];
 }
