@@ -45,7 +45,7 @@ export const App = () => {
   return (
     <Switch>
       <Route path="/" exact>
-        <Home isSignedIn={user != null} onLogOut={handleLogOut} />
+        <Home user={user} onLogOut={handleLogOut} />
       </Route>
       <Route path="/about">
         <About />
