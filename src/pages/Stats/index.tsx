@@ -1,7 +1,6 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
-import { Button, Flex } from 'rebass';
 import { UserScoreCurve } from '../../components/UserScoreCurve';
 import { Button, Heading, Flex, Text } from 'rebass';
 import { MY_USER_STATS_QUERY } from '../../gql';
@@ -32,14 +31,15 @@ const Stats = () => {
 
   return (
     <Flex flexDirection="column" height="100%">
-        <Heading color="lightgray">Stats</Heading>
-        <Text color="white">{JSON.stringify(
-            data.getUserStats.days.map((d: { day: string; score: number }) => ({
-                x: d.day,
-                y: d.score,
-            }))
+      <Heading color="lightgray">Stats</Heading>
+      <Text color="white">
+        {JSON.stringify(
+          data.getUserStats.days.map((d: { day: string; score: number }) => ({
+            x: d.day,
+            y: d.score,
+          }))
         )}
-        </Text>
+      </Text>
       <UserScoreCurve />
       <Flex mt="auto">
         <Button onClick={handleClickBack}>zpět</Button>

@@ -3,6 +3,7 @@ import { saveTip, signIn, signOut, signUp } from './mutation';
 import {
   getLastTipsByQuestionId,
   getMyScore,
+  getOnlineStats,
   getNextQuestion,
   getUserStats,
   viewer,
@@ -44,10 +45,15 @@ export const typeDefs = /* GraphQL */ gql`
     days: [TimeSeriesStats]
   }
 
+  type OnlineStats {
+    onlineUsers: Int!
+  }
+
   type Query {
     getLastTipsByQuestionId(questionId: String!, runId: Int!): [Int]
     getNextQuestion: Question
     getMyScore: Float!
+    getOnlineStats: OnlineStats!
     getUserStats: Stats!
     viewer: Viewer!
   }
@@ -110,8 +116,6 @@ type Tip = {
   msElapsed: number;
 };
 
-// const viewer = () => {};
-
 export const resolvers = {
   Mutation: {
     saveTip,
@@ -123,6 +127,7 @@ export const resolvers = {
     getLastTipsByQuestionId,
     getNextQuestion,
     getMyScore,
+    getOnlineStats,
     getUserStats,
     viewer,
   },

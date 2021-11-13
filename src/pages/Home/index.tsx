@@ -11,7 +11,7 @@ interface User {
   role: UserRole;
 }
 interface HomeProps {
-  user: User;
+  user: User | null;
   onLogOut: Function;
 }
 
@@ -85,7 +85,7 @@ const Home = ({ user, onLogOut }: HomeProps) => {
           </Flex>
           {isSignedIn && (
             <>
-              {user.role === UserRole.admin && (
+              {user && user.role === UserRole.admin && (
                 <MenuButton onClick={handleClickDashboard} mb="2">
                   dashboard
                 </MenuButton>

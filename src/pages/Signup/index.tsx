@@ -34,6 +34,8 @@ const SignUp = () => {
     // onError:
   });
 
+  console.log('just for fun console log');
+
   const onSubmit = async (values: { email: string; password: string }) => {
     const { data } = await signUp({
       variables: {
