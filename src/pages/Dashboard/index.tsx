@@ -1,15 +1,21 @@
+import { useQuery } from '@apollo/client';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Button, Flex, Heading, Link, Text } from 'rebass';
 import { Container } from '../../components';
+import { ONLINE_STATS_QUERY } from '../../gql';
 
 const handleClickDashboard = () => {
   console.log('Si kliknul!');
 };
 
-const online = 1;
-
 const Dashboard = () => {
+  const { loading, data } = useQuery(ONLINE_STATS_QUERY);
+
+  if (loading) {
+    return <div>loading</div>;
+  }
+
   return (
     <Container>
       <Heading color="primary" my={4}>
@@ -51,9 +57,9 @@ const Dashboard = () => {
         <Flex flexDirection="column">
           <Text color="white" fontFamily="Tahoma" mb={3}>
             <b>Online users: </b>
-            {online}
+            {data.getOnlineStats.onlineUsers}
           </Text>
-          <RouterLink to="user-list" component={Link} color="primary">
+          <RouterLink to="/dashboard/user-list" component={Link} color="primary">
             Show user list
           </RouterLink>
         </Flex>
