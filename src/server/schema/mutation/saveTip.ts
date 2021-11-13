@@ -1,7 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
 import { ulid } from 'ulid';
 import { User } from '../../model/types';
-import { TABLE_QUESTION } from './../../../config';
+import { TABLE_QUESTION, TABLE_USER } from './../../../config';
 
 export async function saveTip(
   parent: any,
@@ -12,6 +12,16 @@ export async function saveTip(
 
   const tipId =  ulid();
 
+
+  // TODO: disable Run or Generation if conditions are met (maybe for generation do nothing?)
+  
+  // startNewRun() => disable this run and create new one with initial data and disable it in RunCache?
+
+  // saveNewGenLT()
+
+  console.log('here we disable run or generation, if conditions were met');
+  //
+
   const question = await dynamo.put({
     TableName: TABLE_QUESTION,
     Item: {
@@ -20,6 +30,17 @@ export async function saveTip(
       lastTips: [tip],
     },
   }).promise();
+
+  const params = {
+    TableName: TABLE_USER,
+    Key: { id: user.id, userskey: `USER#${user.id}` },
+    UpdateExpression: 'lastQuestion = :lastQuestion',
+    ExpressionAttributeValues: {
+      ':lastQuestion': id,
+    },
+  };
+
+  await dynamo.update(params).promise();
 
   console.log(question);
 
