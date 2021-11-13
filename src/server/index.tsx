@@ -14,6 +14,7 @@ import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import { resolve } from 'path';
 import { App } from '../App';
 import { Document } from './Document';
+import { RunCache } from './io';
 import { createContext, typeDefs, resolvers } from './schema';
 import { tipForScienceTheme } from '../theme';
 
@@ -31,6 +32,8 @@ const dynamo = new DynamoDB.DocumentClient(
       }
 );
 
+const runCache = new RunCache(15, { dynamo });
+
 const staticDir =
   process.env.NODE_ENV === 'production'
     ? resolve(__dirname, './public')
@@ -40,7 +43,7 @@ const staticDir =
 // server.use(Sentry.Handlers.errorHandler());
 
 const app = new ApolloServer({
-  context: createContext({ dynamo }),
+  context: createContext({ dynamo, runCache }),
   debug: process.env.NODE_ENV !== 'production',
   playground: process.env.NODE_ENV !== 'production',
   formatError(error) {

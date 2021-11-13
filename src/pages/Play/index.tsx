@@ -1,18 +1,11 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useReducer,
-} from 'react';
+import React, { useEffect, useRef, useReducer } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { Game, Settings } from './../../components';
-import kitties from './../../assets/game_kitties.jpg';
-import washington from './../../assets/game_washington.jpg'
+import { Game } from './../../components';
+// import washington from './../../assets/game_washington.jpg';
 import { MY_SCORE_QUERY, QUESTION_QUERY, SAVE_MUTATION } from '../../gql';
 import { useHistory } from 'react-router';
 
 type GameState = {
-  question: Settings;
   isSubmitted: boolean;
   currentTip?: number;
 };
@@ -37,7 +30,6 @@ const gameReducer = (state: GameState, action: GameAction) => {
       return {
         ...state,
         isSubmitted: false,
-        question: action.payload.question,
         currentTip: undefined,
       };
     default:
@@ -46,19 +38,11 @@ const gameReducer = (state: GameState, action: GameAction) => {
 };
 
 const initState = {
-  question: {
-    question: 'Jak velkou má tadydlencten pán hlavu?',
-    image: washington,
-    previousTips: [10, 32],
-    correctAnswer: 18.29,
-    timeLimit: 10,
-    unit: 'm',
-  },
   isSubmitted: false,
 };
 
 const Play = () => {
-  const [{ currentTip, question, isSubmitted }, dispatch] = useReducer(
+  const [{ currentTip, isSubmitted }, dispatch] = useReducer(
     gameReducer,
     initState
   );
@@ -75,41 +59,32 @@ const Play = () => {
         tip: myTip,
       },
     });
-    // setTip(Number(event.currentTarget.value));
     dispatch({ type: ActionType.GAME_SUBMIT, payload: { tip: myTip } });
   };
   const timeoutRef = useRef<number>();
 
-  const [nextQuestion, setNextQuestion] = useState<{
-    question: string;
-    image: string;
-    previousTips: number[];
-    correctAnswer: number;
-    timeLimit: number;
-    unit: string;
-  }>();
-  const { loading, data } = useQuery(QUESTION_QUERY);
+  const { loading, data, refetch } = useQuery(QUESTION_QUERY);
   const { loading: scoreLoading, data: getMyScoreData } = useQuery(
     MY_SCORE_QUERY
   );
 
   const [saveTip] = useMutation(SAVE_MUTATION, {
     onCompleted: ({ saveTip: { __typename, ...data } }) => {
-      setNextQuestion(data);
+      refetch();
       console.log(data);
     },
     refetchQueries: ['MyScoreQuery'],
   });
 
   useEffect(() => {
-    if (question.timeLimit && !isSubmitted) {
+    if (data && data.getNextQuestion.timeLimit && !isSubmitted) {
       timeoutRef.current = setTimeout(() => {
         if (!isSubmitted) {
           dispatch({ type: ActionType.GAME_SUBMIT });
         }
-      }, question.timeLimit * 1000);
+      }, data.getNextQuestion.timeLimit * 1000);
     }
-  }, [question, isSubmitted]);
+  }, [data, isSubmitted]);
 
   if (loading || scoreLoading) {
     return <div>loading</div>;
@@ -120,28 +95,15 @@ const Play = () => {
   return (
     <Game
       currentTip={currentTip}
-      settings={question}
+      settings={data.getNextQuestion}
       score={getMyScoreData.getMyScore || 0}
       isSubmitted={isSubmitted}
       onHome={onHome}
       onSubmit={onSubmit}
       onFinish={() => {
-        console.log('is next question null? ', nextQuestion != null);
-        if (nextQuestion != null) {
-          // setQuestions([...questions, nextQuestion]);
-          console.log('click finish');
-          dispatch({ type: ActionType.GAME_FINISH, payload: nextQuestion });
-        }
-        const dalsiOtazka = {
-          question: 'Kolik kotatek dnes umrelo??',
-          image: kitties,
-          previousTips: [1000000, 50000],
-          correctAnswer: 150000,
-          timeLimit: 10,
-        };
+        // TODO: pokud neexistuje dalsi otazka?
         dispatch({
           type: ActionType.GAME_FINISH,
-          payload: { question: dalsiOtazka },
         });
       }}
     />

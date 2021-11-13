@@ -19,8 +19,8 @@ const Home = ({ isSignedIn = false, onLogOut }: HomeProps) => {
   const handleClickStats = () => {
     history.push('/stats');
   };
-  const handleClickSignUp = () => {
-    history.push('/signup');
+  const handleClickSignIn = () => {
+    history.push('/signin');
   };
   const handleClickLogOut = () => {
     onLogOut();
@@ -73,7 +73,7 @@ const Home = ({ isSignedIn = false, onLogOut }: HomeProps) => {
             </>
           )}
           {!isSignedIn && (
-            <MenuButton onClick={handleClickSignUp}>sign in</MenuButton>
+            <MenuButton onClick={handleClickSignIn}>sign in</MenuButton>
           )}
         </Flex>
       </Flex>
