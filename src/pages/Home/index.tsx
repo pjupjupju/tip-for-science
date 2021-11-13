@@ -3,25 +3,42 @@ import { Flex, Heading } from 'rebass';
 import { useHistory } from 'react-router-dom';
 import { MenuButton, Container } from '../../components';
 
+enum UserRole {
+  admin = 'admin',
+  player = 'player',
+}
+interface User {
+  role: UserRole;
+}
 interface HomeProps {
-  isSignedIn: boolean;
+  user: User;
   onLogOut: Function;
 }
 
-const Home = ({ isSignedIn = false, onLogOut }: HomeProps) => {
+const Home = ({ user, onLogOut }: HomeProps) => {
+  const isSignedIn = !!user;
   const history = useHistory();
+
   const handleClickAbout = () => {
     history.push('/about');
   };
+
+  const handleClickDashboard = () => {
+    history.push('/dashboard');
+  };
+
   const handleClickPlay = () => {
     history.push('/play');
   };
+
   const handleClickStats = () => {
     history.push('/stats');
   };
+
   const handleClickSignIn = () => {
     history.push('/signin');
   };
+
   const handleClickLogOut = () => {
     onLogOut();
   };
@@ -68,7 +85,14 @@ const Home = ({ isSignedIn = false, onLogOut }: HomeProps) => {
           </Flex>
           {isSignedIn && (
             <>
-              <MenuButton onClick={handleClickPlay} mb="2">play</MenuButton>
+              {user.role === UserRole.admin && (
+                <MenuButton onClick={handleClickDashboard} mb="2">
+                  dashboard
+                </MenuButton>
+              )}
+              <MenuButton onClick={handleClickPlay} mb="2">
+                play
+              </MenuButton>
               <MenuButton onClick={handleClickLogOut}>log out</MenuButton>
             </>
           )}

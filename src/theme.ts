@@ -5,7 +5,8 @@ export const tipForScienceTheme = {
   radii: { default: 0 },
   colors: { background: 'black', primary: '#FF0070', secondary: '#5CC9FA' },
   fonts: {
-    body: 'Tahoma',
     ...(theme as any).fonts,
+    body: 'Tahoma',
+    heading: 'Tahoma',
   },
 };
