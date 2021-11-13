@@ -11,6 +11,8 @@ import { SignIn } from './pages/SignIn';
 import { AuthQueryName, AUTH_QUERY, SIGN_OUT_MUTATION } from './gql';
 import { Spinner } from './components';
 import { SignUp } from './pages/SignUp';
+import { Dashboard } from './pages/Dashboard';
+import { Page404 } from './pages/Page404';
 
 export const App = () => {
   const { loading, data } = useQuery(AUTH_QUERY);
@@ -43,7 +45,7 @@ export const App = () => {
   return (
     <Switch>
       <Route path="/" exact>
-        <Home isSignedIn={user != null} onLogOut={handleLogOut} />
+        <Home user={user} onLogOut={handleLogOut} />
       </Route>
       <Route path="/about">
         <About />
@@ -59,6 +61,14 @@ export const App = () => {
       </Route>
       <Route path="/signup">
         <SignUp />
+      </Route>
+      {user && user.role === 'admin' && (
+        <Route path="/dashboard">
+          <Dashboard />
+        </Route>
+      )}
+      <Route path="*">
+        <Page404 />
       </Route>
     </Switch>
   );
