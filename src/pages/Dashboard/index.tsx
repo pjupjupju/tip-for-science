@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Button, Flex, Heading, Link, Text } from 'rebass';
-import { Container } from '../../components';
+import { BackButton, Container } from '../../components';
 import { ONLINE_STATS_QUERY } from '../../gql';
 
 const handleClickDashboard = () => {
@@ -64,6 +64,7 @@ const Dashboard = () => {
           </RouterLink>
         </Flex>
       </Flex>
+      <BackButton>domů</BackButton>
     </Container>
   );
 };

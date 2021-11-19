@@ -8,6 +8,8 @@ const buttonStyles = {
   fontSize: 4,
 };
 
-const MenuButton = ({ ...restProps }: Omit<ButtonProps, 'sx'>) => <Button sx={buttonStyles} {...restProps as any} />
+const MenuButton = ({ ...restProps }: Omit<ButtonProps, 'sx'>) => (
+  <Button sx={buttonStyles} {...(restProps as any)} />
+);
 
 export { MenuButton };
