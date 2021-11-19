@@ -1,10 +1,18 @@
 import React from 'react';
-import { Line } from '@nivo/line';
+import moment from 'moment';
+import { ResponsiveLine } from '@nivo/line';
 
-const UserScoreCurve = () => {
+type StatsData = { x: number; y: number };
+interface UserScoreCurveProps {
+  stats: StatsData[];
+}
+
+const UserScoreCurve = ({ stats }: UserScoreCurveProps) => {
+
   const data = [
     {
       id: 'userScoreCurve',
+        /*
       data: [
         { x: '2021-01-01', y: 1.5 },
         { x: '2021-01-02', y: 4 },
@@ -15,11 +23,12 @@ const UserScoreCurve = () => {
         { x: '2021-01-07', y: 16 },
         { x: '2021-01-08', y: 18 },
       ],
+      */
+     data: stats.map(({x,y}: StatsData) => ({y,x: moment(x).format("YYYY-MM-DD")})),
     },
   ];
 
   const commonProperties = {
-    width: 900,
     height: 400,
     margin: { top: 20, right: 20, bottom: 60, left: 80 },
     data,
@@ -30,7 +39,7 @@ const UserScoreCurve = () => {
   };
 
   return (
-    <Line
+    <ResponsiveLine
       {...commonProperties}
       xScale={{
         type: 'time',
