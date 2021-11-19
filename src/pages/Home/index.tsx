@@ -74,11 +74,11 @@ const Home = ({ user, onLogOut }: HomeProps) => {
           }}
         >
           <Flex mb="2">
-            <MenuButton mr="1" flex="1" onClick={handleClickAbout}>
+            <MenuButton flex="1" onClick={handleClickAbout}>
               about
             </MenuButton>
             {isSignedIn && (
-              <MenuButton ml="1" flex="1" onClick={handleClickStats}>
+              <MenuButton ml="2" flex="1" onClick={handleClickStats}>
                 stats
               </MenuButton>
             )}
