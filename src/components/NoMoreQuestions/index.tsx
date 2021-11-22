@@ -1,6 +1,6 @@
-import { Button, Flex, Heading, Text } from 'rebass';
+import { Flex, Heading, Text } from 'rebass';
 import React from 'react';
-import { Container } from '..';
+import { BackButton, Container } from '..';
 
 interface NoMoreQuestionsProps {
   score: Number;
@@ -15,7 +15,7 @@ const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => (
       justifyContent="center"
       alignItems="center"
     >
-      <Heading my={4} color="primary" fontSize={4}>
+      <Heading textAlign="center" my={4} color="primary" fontSize={4}>
         Toto byla prozatím poslední otázka.
         <br />
         Tvoje skóre:{' '}
@@ -23,10 +23,10 @@ const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => (
           {score}
         </Text>
       </Heading>
-      <Heading mb={3} color="white" fontSize={2}>
-        Když doplníme další otázky, dámě ti vědět na tvůj registrační mail.
+      <Heading textAlign="center" mb={3} color="white" fontSize={2}>
+        Když doplníme další otázky, dáme ti vědět na tvůj registrační mail.
       </Heading>
-      <Button>back</Button>
+      <BackButton pushDown={false}>domů</BackButton>
     </Flex>
   </Container>
 );
