@@ -161,12 +161,8 @@ const Game = ({
         )}
       </Flex>
       <Flex justifyContent="space-between" mt={['auto', 'auto', 3]}>
-        <Button as={Link} onClick={handleClickHome}>
-          Domů
-        </Button>
-        <Button as={Link} onClick={handleClickFinish}>
-          Pokračovat
-        </Button>
+        <Button onClick={handleClickHome}>Domů</Button>
+        <Button onClick={handleClickFinish}>Pokračovat</Button>
       </Flex>
     </Container>
   );

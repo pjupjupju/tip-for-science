@@ -59,7 +59,7 @@ export const typeDefs = /* GraphQL */ gql`
   }
 
   type Mutation {
-    saveTip(id: String!, tip: Int!): Question
+    saveTip(id: String!, tip: Int!): String
     signIn(email: String!, password: String!): SignInResult!
     signOut: SignOutResult!
     signUp(email: String!, password: String!): SignUpResult!
