@@ -77,6 +77,8 @@ export async function saveTip(
   const { correctAnswer } = getQuestion(id);
   const questionScore = getScore(tip, correctAnswer);
 
+  console.log('add score: ', questionScore);
+
   await updateScore(user.id, questionScore, { dynamo });
 
   // TODO: disable Run or Generation if conditions are met (maybe for generation do nothing?)

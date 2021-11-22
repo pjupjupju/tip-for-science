@@ -1,11 +1,9 @@
 import React, { KeyboardEvent, useRef } from 'react';
 import { Box, Button, Flex, Image, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
-import { Link } from 'react-router-dom';
 import { TooCloseDialog } from './TooCloseDialog';
 import { GameOverScreen } from './GameOverScreen';
 import { PreviousTips } from './PreviousTips';
-import { getScore } from '../../helpers';
 import { Container } from '../Container';
 import { SubmitButton } from '../SubmitButton';
 import { ScoreChart } from '../ScoreChart';
@@ -128,10 +126,7 @@ const Game = ({
           textAlign="center"
           p={3}
         >
-          Score:{' '}
-          {typeof currentTip != 'undefined'
-            ? getScore(currentTip, correctAnswer).toFixed(3)
-            : 0}
+          Score: {score.toFixed(3)}
         </Text>
       </Box>
       <Image src={image} sx={imageStyle} />

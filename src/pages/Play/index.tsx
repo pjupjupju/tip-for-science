@@ -56,7 +56,7 @@ const Play = () => {
     }
     saveTip({
       variables: {
-        id: 'lfjsdkfhdkj',
+        id: questionId,
         tip: myTip,
       },
     });
