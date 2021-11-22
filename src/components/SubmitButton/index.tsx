@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Box, Button, ButtonProps } from 'rebass';
 import { animated, useSpring } from 'react-spring';
 
@@ -22,11 +22,6 @@ const AnimatedButton = ({ timeLimit, ...rest }: { timeLimit: number }) => {
     config: { duration: timeLimit * 1000 },
   });
 
-  useEffect(() => {
-    setTimeout(() => {
-      console.log('finished');
-    }, timeLimit * 1000);
-  }, [timeLimit]);
   return (
     <Button {...rest}>
       <AnimatedCircle

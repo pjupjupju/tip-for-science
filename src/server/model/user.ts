@@ -19,8 +19,12 @@ export async function createUser(
   const id = ulid();
 
   // TODO: change to real bundle - get it from DB
-  const initialQuestions = ['40b86d42-84aa-4ba7-9aa9-80b9c8f80cfa'];
-  const restQuestions = ['30b86d42-84aa-4ba7-9aa9-80b9c8f80cfa'];
+  const initialQuestions = [
+    '30b86d42-84aa-4ba7-9aa9-80b9c8f80cfa',
+    '30b86d42-84aa-4ba7-9aa9-80b9c8f80cfb',
+    '30b86d42-84aa-4ba7-9aa9-80b9c8f80cfc',
+  ];
+  const restQuestions = ['30b86d42-84aa-4ba7-9aa9-80b9c8f80cfd'];
   const bundle = generateQuestionBundle(initialQuestions, restQuestions);
 
   const user: User = {
@@ -115,6 +119,42 @@ export async function updateQuestionBundle(
     ExpressionAttributeValues: {
       ':bundle': [...oldBundle, ...restBundle],
       ':lastQuestion': null,
+    },
+  };
+
+  return dynamo.update(params).promise();
+}
+
+export async function updateLastQuestion(
+  userId: string,
+  newLastQuestion: string,
+  { dynamo }: UserModelContext
+): Promise<any> {
+  const params = {
+    TableName: TABLE_USER,
+    Key: { id: userId, userskey: `USER#${userId}` },
+    UpdateExpression: 'set lastQuestion = :newLastQuestion',
+    ExpressionAttributeValues: {
+      ':newLastQuestion': newLastQuestion,
+    },
+  };
+
+  return dynamo.update(params).promise();
+}
+
+export async function updateScore(
+  userId: string,
+  scoreAddition: number,
+  { dynamo }: UserModelContext
+): Promise<any> {
+  const params = {
+    TableName: TABLE_USER,
+    Key: { id: userId, userskey: `USER#${userId}` },
+    UpdateExpression:
+      'set score = if_not_exists(score, :start) + :scoreAddition',
+    ExpressionAttributeValues: {
+      ':scoreAddition': scoreAddition,
+      ':start': 0,
     },
   };
 
