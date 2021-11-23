@@ -7,6 +7,7 @@ import { PreviousTips } from './PreviousTips';
 import { Container } from '../Container';
 import { SubmitButton } from '../SubmitButton';
 import { ScoreChart } from '../ScoreChart';
+import { getScore } from '../../helpers';
 
 export interface Settings {
   question: string;
@@ -49,8 +50,7 @@ const labelStyle = {
   color: 'white',
 };
 
-const isTooClose = (currentTip: number, correctAnswer: number): boolean =>
-  currentTip >= correctAnswer * 0.95 && currentTip <= correctAnswer * 1.05;
+const isTooClose = (score: number): boolean => score >= 0.95;
 
 const Game = ({
   settings: { question, image, previousTips, unit, timeLimit, correctAnswer },
@@ -62,6 +62,11 @@ const Game = ({
   score,
 }: GameProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const questionScore =
+    typeof currentTip !== 'undefined'
+      ? getScore(currentTip, correctAnswer)
+      : null;
 
   const handleClickFinish = () => {
     onFinish();
@@ -140,7 +145,7 @@ const Game = ({
                 previousTips={previousTips}
               />
             </Box>
-            {isTooClose(currentTip, correctAnswer) && (
+            {questionScore !== null && isTooClose(questionScore) && (
               <TooCloseDialog
                 onGuessed={() => {
                   console.log('som frajer a som tipnul');
@@ -150,6 +155,25 @@ const Game = ({
                 }}
               />
             )}
+            {questionScore === 0 && (
+              <Text textAlign="center" color="white">
+                Ajéje, tohle se úplně nepovedlo!
+              </Text>
+            )}
+            {questionScore !== null &&
+              questionScore > 0 &&
+              questionScore < 0.4 && (
+                <Text textAlign="center" color="white">
+                  Těsně vedle!
+                </Text>
+              )}
+            {questionScore !== null &&
+              questionScore >= 0.4 &&
+              questionScore < 0.95 && (
+                <Text textAlign="center" color="white">
+                  Obdivuhodné!
+                </Text>
+              )}
           </>
         ) : (
           <GameOverScreen />
