@@ -96,7 +96,7 @@ export async function saveTip(
     TableName: TABLE_QUESTION,
     Item: {
       id,
-      questionskey: `RUN#${1}`,
+      qsk: `RUN#${1}`,
       lastTips: [tip],
     },
   }).promise();

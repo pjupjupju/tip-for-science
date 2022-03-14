@@ -56,6 +56,14 @@ export async function signIn(
     // eslint-disable-next-line no-param-reassign
     context.user = { id: user.id };
 
+    await new Promise<void>((resolve, reject) => {
+      try {
+        context.request.session!.save((err) => (err ? reject(err) : resolve()));
+      } catch (e) {
+        reject(e);
+      }
+    });
+
     return {
       type: 'SignInSuccess',
       viewer: {},
