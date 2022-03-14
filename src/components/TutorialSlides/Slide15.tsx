@@ -1,6 +1,9 @@
+import { useQuery } from '@apollo/client';
 import React from 'react';
 import { useHistory } from 'react-router';
-import { Button, Image, Text } from 'rebass';
+import { Button, Flex, Image, Text } from 'rebass';
+import { Spinner } from '..';
+import { AUTH_QUERY } from '../../gql';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import logo from './../../assets/logoskoly.png';
@@ -13,6 +16,12 @@ const imageStyle = {
 };
 
 const Slide15 = (props: SlideProps) => {
+  const { loading, data } = useQuery(AUTH_QUERY, {
+    fetchPolicy: 'cache-first',
+  });
+
+  const isLoggedIn = !!data?.viewer?.user;
+
   const history = useHistory();
   const handleClickHome = () => {
     history.push('/');
@@ -20,6 +29,10 @@ const Slide15 = (props: SlideProps) => {
   const handleClickPlay = () => {
     history.push('/play');
   };
+  const handleClickSignIn = () => {
+    history.push('/signin');
+  };
+
   return (
     <Container>
       <TutorialHeader>
@@ -44,7 +57,17 @@ const Slide15 = (props: SlideProps) => {
         Tip for Science bylo vytvořeno evolučními biology z Univerzity Karlovy.
       </Text>
       <Button onClick={handleClickHome}>Domů</Button>
-      <Button onClick={handleClickPlay}>Začít hrát</Button>
+      {loading && (
+        <Flex justifyContent="center">
+          <Spinner />
+        </Flex>
+      )}
+      {!loading && isLoggedIn && (
+        <Button onClick={handleClickPlay}>Začít hrát</Button>
+      )}
+      {!loading && !isLoggedIn && (
+        <Button onClick={handleClickSignIn}>Přihlásit se</Button>
+      )}
     </Container>
   );
 };

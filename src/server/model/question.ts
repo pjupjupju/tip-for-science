@@ -15,14 +15,14 @@ export async function getGameQuestion(
   const params = {
     TableName: TABLE_QUESTION,
     KeyConditionExpression:
-      '#id = :id and begins_with(#questionskey, :questionskey)',
+      '#id = :id and begins_with(#qsk, :qsk)',
     ExpressionAttributeNames: {
       '#id': 'id',
-      '#questionskey': 'questionskey',
+      '#qsk': 'qsk',
     },
     ExpressionAttributeValues: {
       ':id': id,
-      ':questionskey': `RUN#${1}`,
+      ':qsk': `RUN#${1}`,
     },
   };
 
@@ -41,14 +41,14 @@ export async function findLastTipsByQuestion(
   const params = {
     TableName: TABLE_QUESTION,
     KeyConditionExpression:
-      '#id = :id and begins_with(#questionskey, :questionskey)',
+      '#id = :id and begins_with(#qsk, :qsk)',
     ExpressionAttributeNames: {
       '#id': 'id',
-      '#questionskey': 'questionskey',
+      '#qsk': 'qsk',
     },
     ExpressionAttributeValues: {
       ':id': id,
-      ':questionskey': `RUN#${1}`,
+      ':qsk': `RUN#${1}`,
     },
   };
 

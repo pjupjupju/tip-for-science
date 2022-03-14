@@ -11,9 +11,14 @@
     "@nivo/line": "^0.66.0",
     "@rebass/forms": "^4.0.6",
     "@rebass/preset": "^4.0.5",
+    "@sentry/node": "^6.18.2",
+    "@sentry/react": "^6.18.2",
+    "@sentry/tracing": "^6.18.2",
+    "@sentry/types": "^6.18.2",
     "@svgr/webpack": "^5.5.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/jsonwebtoken": "^8.5.1",
+    "@types/session-file-store": "^1.2.2",
     "apollo": "^2.32.5",
     "apollo-boost": "^0.4.9",
     "apollo-server": "^2.19.1",
@@ -42,6 +47,7 @@
     "react-scripts": "3.4.3",
     "react-spring": "^9.2.4",
     "rebass": "^4.0.7",
+    "session-file-store": "^1.5.0",
     "ts-node": "^9.1.1",
     "ulid": "^2.3.0",
     "unfetch": "^4.2.0",
@@ -58,7 +64,8 @@
     "build-storybook": "build-storybook -s public",
     "types": "tsc",
     "migrate:dynamodb": "ts-node -P migrations/tsconfig.json migrations/migrate_dynamodb.ts",
-    "user:create:admin": "ts-node -P migrations/tsconfig.json migrations/create_admin.ts"
+    "user:create:admin": "ts-node -P migrations/tsconfig.json migrations/create_admin.ts",
+    "seed:dynamodb": "ts-node -P migrations/tsconfig.json migrations/create_seed_data.ts"
   },
   "eslintConfig": {
     "extends": "react-app"

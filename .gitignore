@@ -6,6 +6,7 @@
 .pnp.js
 dynamodb-data
 cache
+sessions
 
 # testing
 /coverage

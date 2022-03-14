@@ -1,21 +1,25 @@
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import { getDataFromTree } from '@apollo/react-ssr';
 import { ApolloServer } from 'apollo-server-express';
+import { SchemaLink } from '@apollo/client/link/schema';
 import { DynamoDB } from 'aws-sdk';
 import { renderStylesToString } from '@emotion/server';
 import { ThemeProvider } from 'emotion-theming';
+import * as Sentry from '@sentry/node';
+import * as Tracing from '@sentry/tracing';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { StaticRouterContext } from 'react-router';
 import { StaticRouter } from 'react-router-dom';
 import express from 'express';
 import expressSession from 'express-session';
+import createSessionFileStore from 'session-file-store';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import { resolve } from 'path';
 import { App } from '../App';
 import { Document } from './Document';
 import { RunCache } from './io';
-import { createContext, typeDefs, resolvers } from './schema';
+import { createContext, typeDefs, resolvers, schema } from './schema';
 import { tipForScienceTheme } from '../theme';
 
 // eslint-disable-next-line import/no-dynamic-require
@@ -32,15 +36,12 @@ const dynamo = new DynamoDB.DocumentClient(
       }
 );
 
-const runCache = new RunCache(15, { dynamo });
+const runCache = new RunCache(15, 5, { dynamo });
 
 const staticDir =
   process.env.NODE_ENV === 'production'
     ? resolve(__dirname, './public')
     : process.env.RAZZLE_PUBLIC_DIR;
-
-// server.use(Sentry.Handlers.requestHandler());
-// server.use(Sentry.Handlers.errorHandler());
 
 const app = new ApolloServer({
   context: createContext({ dynamo, runCache }),
@@ -67,6 +68,7 @@ server
   .set('trust proxy', true)
   .use(
     expressSession({
+      store: new (createSessionFileStore(expressSession as any))() as any,
       cookie: {
         // set max age to 90 days in ms
         maxAge: 3 * 30 * 24 * 60 * 60 * 1000,
@@ -90,6 +92,28 @@ server
     })
   );
 
+Sentry.init({
+  dsn:
+    'https://b480280810f9447ab512f4519fe32aed@o1163471.ingest.sentry.io/6251598',
+  integrations: [
+    // enable HTTP calls tracing
+    new Sentry.Integrations.Http({ tracing: true }),
+    // enable Express.js middleware tracing
+    new Tracing.Integrations.Express({ app: server }),
+  ],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
+
+// RequestHandler creates a separate execution context using domains, so that every
+// transaction/span/breadcrumb is attached to its own Hub instance
+server.use(Sentry.Handlers.requestHandler());
+// TracingHandler creates a trace for every incoming request
+server.use(Sentry.Handlers.tracingHandler());
+
 app.applyMiddleware({ app: server, path: '/api' });
 
 server.get('/*', async (req, res, next) => {
@@ -105,6 +129,7 @@ server.get('/*', async (req, res, next) => {
     const client = new ApolloClient({
       cache: new InMemoryCache(),
       ssrMode: true,
+      link: new SchemaLink({ schema }),
     });
     const context: StaticRouterContext = {};
     const bootstrap = (
