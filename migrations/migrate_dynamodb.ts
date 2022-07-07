@@ -63,7 +63,8 @@ async function migrate() {
         AttributeDefinitions: [
           { AttributeName: 'id', AttributeType: 'S' },
           { AttributeName: 'qsk', AttributeType: 'S' },
-          { AttributeName: 'qer_gsi', AttributeType: 'S' },
+          { AttributeName: 'gsi_pk', AttributeType: 'S' },
+          { AttributeName: 'gsi_sk', AttributeType: 'S' },
         ],
         KeySchema: [
           { AttributeName: 'id', KeyType: 'HASH' },
@@ -73,8 +74,8 @@ async function migrate() {
           {
             IndexName: 'QER_GSI',
             KeySchema: [
-              { AttributeName: 'qer_gsi', KeyType: 'HASH' },
-              { AttributeName: 'qsk', KeyType: 'RANGE' },
+              { AttributeName: 'gsi_pk', KeyType: 'HASH' },
+              { AttributeName: 'gsi_sk', KeyType: 'RANGE' },
             ],
             Projection: {
               ProjectionType: 'ALL',
