@@ -1,6 +1,13 @@
 import { ValidationError } from 'yup';
 import { GraphQLContext } from '..';
-import { findUserById, updateLastQuestion } from '../../model';
+import {
+  findUserById,
+  getGameQuestion,
+  updateLastQuestion,
+  getCurrentGenerationTips,
+  updateCurrentGeneration,
+  disableRun,
+} from '../../model';
 // import { TABLE_USER } from './../../../config';
 
 type Question = {
@@ -111,9 +118,31 @@ export async function getNextQuestion(
     : userRecord.bundle[0];
 
   const rId = runCache.getRunId(nextQuestionId);
+
   const nextQuestion = getQuestion(nextQuestionId);
 
-  await updateLastQuestion(user.id, nextQuestionId, { dynamo });
+  /*
+  const nextQuestion = getGameQuestion('Q#01G72KM48C7NZE04YWJXSMWWJS', '1', {
+    dynamo,
+  });
+
+
+  
+
+  const tips = getCurrentGenerationTips('Q#01G72MR3R85C2XYWP6ABD3G2ZR', 2, 1, {
+    dynamo,
+  });
+
+
+
+  const tips = await disableRun('Q#01G7CTA6JW8Y37VDC5XKHGEC69', '1', {
+    dynamo,
+  });
+
+  const rId = '1';
+
+      */
+  // await updateLastQuestion(user.id, nextQuestionId, { dynamo });
 
   return {
     ...nextQuestion,

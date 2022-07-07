@@ -16,6 +16,7 @@ const db = new DynamoDB.DocumentClient(
 async function createSeedData() {
   const id1 = ulid();
   const id2 = ulid();
+  const id3 = ulid();
   const password = ulid();
 
   const idQ1 = ulid();
@@ -61,6 +62,22 @@ async function createSeedData() {
             },
           },
         },
+        {
+          PutRequest: {
+            Item: {
+              id: id3,
+              batch: [idQ1, idQ2],
+              createdAt: new Date().toISOString(),
+              userskey: `USER#${id3}`,
+              email: 'testuser3@testuser.com',
+              password: hashSync(password, 10),
+              role: UserRole.player,
+              slug: id3,
+              score: 10,
+              updatedAt: new Date().toISOString(),
+            },
+          },
+        },
       ],
     },
   };
@@ -80,7 +97,12 @@ async function createSeedData() {
                 timeLimit: 20,
                 unit: '',
               },
-              qsk: `Q#${idQ1}`,
+              strategy: {
+                initialTips: [],
+                selectionPressure: [],
+
+              },
+              qsk: `QDATA#${idQ1}`,
             },
           },
         },
@@ -96,7 +118,7 @@ async function createSeedData() {
                 timeLimit: 20,
                 unit: 'kg',
               },
-              qsk: `Q#${idQ2}`,
+              qsk: `QDATA#${idQ2}`,
             },
           },
         },
@@ -111,9 +133,20 @@ async function createSeedData() {
           PutRequest: {
             Item: {
               id: `Q#${idQ1}`,
-              qsk: `R#1`,
-              qer_qsi: `Q#${idQ1}#false#R#1`,
-              lastTips: [44, 310],
+              qsk: `Q#${idQ1}#false#R#1`,
+              gsi_pk: `Q#${idQ1}#false#R#1`,
+              gsi_sk: `Q#${idQ1}#R#1`,
+              run: 1,
+              generation: 1,
+              settings: {
+                question: 'Do kolika jazyků už byla přeložena Bible?',
+                image:
+                  'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Gutenberg_Bible%2C_Lenox_Copy%2C_New_York_Public_Library%2C_2009._Pic_01.jpg/1200px-Gutenberg_Bible%2C_Lenox_Copy%2C_New_York_Public_Library%2C_2009._Pic_01.jpg',
+                correctAnswer: 2454,
+                timeLimit: 20,
+                unit: '',
+              },
+              previousTips: [44, 310],
             },
           },
         },
@@ -121,9 +154,20 @@ async function createSeedData() {
           PutRequest: {
             Item: {
               id: `Q#${idQ1}`,
-              qsk: `R#2`,
-              qer_qsi: `Q#${idQ1}#true#R#2`,
-              lastTips: [10, 377],
+              qsk: `Q#${idQ1}#true#R#2`,
+              gsi_pk: `Q#${idQ1}#true#R#2`,
+              gsi_sk: `Q#${idQ1}#R#2`,
+              run: 2,
+              generation: 1,
+              settings: {
+                question: 'Do kolika jazyků už byla přeložena Bible?',
+                image:
+                  'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Gutenberg_Bible%2C_Lenox_Copy%2C_New_York_Public_Library%2C_2009._Pic_01.jpg/1200px-Gutenberg_Bible%2C_Lenox_Copy%2C_New_York_Public_Library%2C_2009._Pic_01.jpg',
+                correctAnswer: 2454,
+                timeLimit: 20,
+                unit: '',
+              },
+              previousTips: [10, 377],
             },
           },
         },
@@ -131,9 +175,20 @@ async function createSeedData() {
           PutRequest: {
             Item: {
               id: `Q#${idQ2}`,
-              qsk: `R#1`,
-              qer_qsi: `Q#${idQ2}#true#R#1`,
-              lastTips: [1002, 7800],
+              qsk: `Q#${idQ2}#true#R#1`,
+              gsi_pk: `Q#${idQ2}#true#R#1`,
+              gsi_sk: `Q#${idQ2}#R#1`,
+              generation: 1,
+              run: 1,
+              settings: {
+                question: 'Do kolika jazyků už byla přeložena Bible?',
+                image:
+                  'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Gutenberg_Bible%2C_Lenox_Copy%2C_New_York_Public_Library%2C_2009._Pic_01.jpg/1200px-Gutenberg_Bible%2C_Lenox_Copy%2C_New_York_Public_Library%2C_2009._Pic_01.jpg',
+                correctAnswer: 2454,
+                timeLimit: 20,
+                unit: '',
+              },
+              previousTips: [1002, 7800],
             },
           },
         },
@@ -142,7 +197,16 @@ async function createSeedData() {
             Item: {
               id: `Q#${idQ1}`,
               qsk: `T#${idT1}`,
-              qer_qsi: `Q#${idQ1}#false#R#1`,
+              gsi_pk: `Q#${idQ1}#R#1#G#1`,
+              gsi_sk: `T#${idT1}`,
+              run: 1,
+              generation: 1,
+              data: {
+                tip: 150,
+                previousTips: [44,310],
+                time: 3000,
+                createdBy: id1,
+              }
             },
           },
         },
@@ -151,7 +215,17 @@ async function createSeedData() {
             Item: {
               id: `Q#${idQ1}`,
               qsk: `T#${idT2}`,
-              qer_qsi: `Q#${idQ1}#false#R#1`,
+              gsi_pk: `Q#${idQ1}#R#1#G#1`,
+              gsi_sk: `T#${idT2}`,
+              run: 1,
+              generation: 1,
+              data: {
+                tip: 2450,
+                previousTips: [44,310],
+                time: 2000,
+                createdBy: id2,
+                knewAnwer: false,
+              }
             },
           },
         },
@@ -160,7 +234,17 @@ async function createSeedData() {
             Item: {
               id: `Q#${idQ1}`,
               qsk: `T#${idT3}`,
-              qer_qsi: `Q#${idQ1}#true#R#2`,
+              gsi_pk: `Q#${idQ1}#R#2#G#1`,
+              gsi_sk: `T#${idT3}`,
+              run: 2, 
+              generation: 1,
+              data: {
+                tip: 278,
+                previousTips: [10,377],
+                time: 3000,
+                createdBy: id3,
+                knewAnwer: false,
+              }
             },
           },
         },
@@ -169,7 +253,17 @@ async function createSeedData() {
             Item: {
               id: `Q#${idQ2}`,
               qsk: `T#${idT4}`,
-              qer_qsi: `Q#${idQ2}#true#R#1`,
+              gsi_pk: `Q#${idQ2}#R#1#G#1`,
+              gsi_sk: `T#${idT4}`,
+              run: 1,
+              generation: 1,
+              data: {
+                tip: 3100,
+                previousTips: [1002, 7800],
+                msElapsed: 4500,
+                createdBy: id1,
+                knewAnwer: false,
+              }
             },
           },
         },

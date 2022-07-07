@@ -8,7 +8,7 @@ export async function getLastTipsByQuestionId(
   { questionId, runId }: { questionId: string; runId: string },
   context: { dynamo: DynamoDB.DocumentClient }
 ): Promise<LastTipsRecord> {
-  console.log(`--- getting lasttip for Question ${questionId} with run ${runId}`);
+  console.log(`--- getting previous tips for Question ${questionId} with run ${runId}`);
 
   const lastTipsRecord = await findLastTipsByQuestion(
     questionId,

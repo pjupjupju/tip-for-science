@@ -97,7 +97,7 @@ export async function saveTip(
     Item: {
       id,
       qsk: `RUN#${1}`,
-      lastTips: [tip],
+      previousTips: [tip],
     },
   }).promise();
 
