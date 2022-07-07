@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server-express';
+import { gql, makeExecutableSchema } from 'apollo-server-express';
 import { saveTip, signIn, signOut, signUp } from './mutation';
 import {
   getLastTipsByQuestionId,
@@ -59,7 +59,7 @@ export const typeDefs = /* GraphQL */ gql`
   }
 
   type Mutation {
-    saveTip(id: String!, tip: Int!): Question
+    saveTip(id: String!, tip: Int!): String
     signIn(email: String!, password: String!): SignInResult!
     signOut: SignOutResult!
     signUp(email: String!, password: String!): SignUpResult!
@@ -133,3 +133,8 @@ export const resolvers = {
   },
   ...types,
 };
+
+export const schema = makeExecutableSchema({
+  resolvers: resolvers as any, // todo: fix types later (why it tries to satisfy number as return type?)
+  typeDefs,
+});

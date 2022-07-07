@@ -27,10 +27,12 @@ type RunCacheData = {
  */
 class RunCache {
   millisecondsToLive: number;
+  onlineThreshold: number;
   cache: RunCacheData | null;
 
-  constructor(secondsToLive = 15, { dynamo }: ServerContext) {
+  constructor(secondsToLive = 15, onlineThreshold = 5, { dynamo }: ServerContext) {
     this.millisecondsToLive = secondsToLive * 1000;
+    this.onlineThreshold = onlineThreshold;
     // TODO: swap for real data
     this.cache = {
       '30b86d42-84aa-4ba7-9aa9-80b9c8f80cfa': {
