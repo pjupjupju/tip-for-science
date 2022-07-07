@@ -1,12 +1,14 @@
 import { DynamoDB } from 'aws-sdk';
 import { findLastTipsByQuestion } from '../../model';
 
+type LastTipsRecord = any;
+
 export async function getLastTipsByQuestionId(
   parent: any,
   { questionId, runId }: { questionId: string; runId: string },
   context: { dynamo: DynamoDB.DocumentClient }
-) {
-  console.log(`--- getting lasttip for Question ${questionId} with run ${runId}`);
+): Promise<LastTipsRecord> {
+  console.log(`--- getting previous tips for Question ${questionId} with run ${runId}`);
 
   const lastTipsRecord = await findLastTipsByQuestion(
     questionId,

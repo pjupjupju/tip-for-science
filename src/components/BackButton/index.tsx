@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, ButtonProps, Flex } from 'rebass';
+import { Button, ButtonProps, Flex, FlexProps } from 'rebass';
 import { Link } from 'react-router-dom';
 
 const BackButtonComponent = ({ children, ...props }: ButtonProps) => (
@@ -8,12 +8,19 @@ const BackButtonComponent = ({ children, ...props }: ButtonProps) => (
   </Button>
 );
 
-const BackButton = ({ children }: { children: string }) => (
-  <Flex mt="auto">
-    <Link component={BackButtonComponent} to="/">
-      {children}
-    </Link>
-  </Flex>
-);
+const BackButton = ({
+  children,
+  pushDown = true,
+  ...props
+}: FlexProps & { pushDown?: boolean }) => {
+  const pushDownProps = pushDown ? { mt: 'auto' } : {};
+  return (
+    <Flex {...pushDownProps} {...props}>
+      <Link component={BackButtonComponent} to="/">
+        {children}
+      </Link>
+    </Flex>
+  );
+};
 
 export { BackButton };

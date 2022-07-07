@@ -2,6 +2,7 @@ export * from "./BackButton";
 export * from "./Container";
 export * from "./Game";
 export * from "./MenuButton";
+export * from './NoMoreQuestions';
 export * from "./ScoreChart";
 export * from './Spinner';
 export * from "./Stepper";

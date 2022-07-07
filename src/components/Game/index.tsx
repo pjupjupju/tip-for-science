@@ -1,14 +1,13 @@
 import React, { KeyboardEvent, useRef } from 'react';
 import { Box, Button, Flex, Image, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
-import { Link } from 'react-router-dom';
 import { TooCloseDialog } from './TooCloseDialog';
 import { GameOverScreen } from './GameOverScreen';
 import { PreviousTips } from './PreviousTips';
-import { getScore } from '../../helpers';
 import { Container } from '../Container';
 import { SubmitButton } from '../SubmitButton';
 import { ScoreChart } from '../ScoreChart';
+import { getScore } from '../../helpers';
 
 export interface Settings {
   question: string;
@@ -51,8 +50,7 @@ const labelStyle = {
   color: 'white',
 };
 
-const isTooClose = (currentTip: number, correctAnswer: number): boolean =>
-  currentTip >= correctAnswer * 0.95 && currentTip <= correctAnswer * 1.05;
+const isTooClose = (score: number): boolean => score >= 0.95;
 
 const Game = ({
   settings: { question, image, previousTips, unit, timeLimit, correctAnswer },
@@ -64,6 +62,11 @@ const Game = ({
   score,
 }: GameProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const questionScore =
+    typeof currentTip !== 'undefined'
+      ? getScore(currentTip, correctAnswer)
+      : null;
 
   const handleClickFinish = () => {
     onFinish();
@@ -128,10 +131,7 @@ const Game = ({
           textAlign="center"
           p={3}
         >
-          Score:{' '}
-          {typeof currentTip != 'undefined'
-            ? getScore(currentTip, correctAnswer).toFixed(3)
-            : 0}
+          Score: {score.toFixed(3)}
         </Text>
       </Box>
       <Image src={image} sx={imageStyle} />
@@ -145,7 +145,7 @@ const Game = ({
                 previousTips={previousTips}
               />
             </Box>
-            {isTooClose(currentTip, correctAnswer) && (
+            {questionScore !== null && isTooClose(questionScore) && (
               <TooCloseDialog
                 onGuessed={() => {
                   console.log('som frajer a som tipnul');
@@ -155,18 +155,33 @@ const Game = ({
                 }}
               />
             )}
+            {questionScore === 0 && (
+              <Text textAlign="center" color="white">
+                Ajéje, tohle se úplně nepovedlo!
+              </Text>
+            )}
+            {questionScore !== null &&
+              questionScore > 0 &&
+              questionScore < 0.4 && (
+                <Text textAlign="center" color="white">
+                  Těsně vedle!
+                </Text>
+              )}
+            {questionScore !== null &&
+              questionScore >= 0.4 &&
+              questionScore < 0.95 && (
+                <Text textAlign="center" color="white">
+                  Obdivuhodné!
+                </Text>
+              )}
           </>
         ) : (
           <GameOverScreen />
         )}
       </Flex>
       <Flex justifyContent="space-between" mt={['auto', 'auto', 3]}>
-        <Button as={Link} onClick={handleClickHome}>
-          Domů
-        </Button>
-        <Button as={Link} onClick={handleClickFinish}>
-          Pokračovat
-        </Button>
+        <Button onClick={handleClickHome}>Domů</Button>
+        <Button onClick={handleClickFinish}>Pokračovat</Button>
       </Flex>
     </Container>
   );
