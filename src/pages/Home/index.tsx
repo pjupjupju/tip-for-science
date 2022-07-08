@@ -58,12 +58,15 @@ const Home = ({ user, onLogOut }: HomeProps) => {
           flexDirection="column"
         >
           <Heading
-            textAlign="center"
-            color="lightgray"
-            fontFamily="Impact"
+            textAlign="left"
+            color="#D6D6D6"
+            fontFamily="Raleway"
+            fontWeight={900}
+            lineHeight="0.85em"
+            mx="auto"
             fontSize={80}
           >
-            TIP FOR SCIENCE
+            TIP FOR <br/>SCIENCE
           </Heading>
         </Flex>
         <Flex
@@ -75,11 +78,11 @@ const Home = ({ user, onLogOut }: HomeProps) => {
         >
           <Flex mb="2">
             <MenuButton flex="1" onClick={handleClickAbout}>
-              about
+              About
             </MenuButton>
             {isSignedIn && (
               <MenuButton ml="2" flex="1" onClick={handleClickStats}>
-                stats
+                Stats
               </MenuButton>
             )}
           </Flex>
@@ -87,17 +90,17 @@ const Home = ({ user, onLogOut }: HomeProps) => {
             <>
               {user && user.role === UserRole.admin && (
                 <MenuButton onClick={handleClickDashboard} mb="2">
-                  dashboard
+                  Dashboard
                 </MenuButton>
               )}
-              <MenuButton onClick={handleClickPlay} mb="2">
-                play
+              <MenuButton onClick={handleClickPlay} mb="2" primary>
+                Play
               </MenuButton>
-              <MenuButton onClick={handleClickLogOut}>log out</MenuButton>
+              <MenuButton onClick={handleClickLogOut}>Sign out</MenuButton>
             </>
           )}
           {!isSignedIn && (
-            <MenuButton onClick={handleClickSignIn}>sign in</MenuButton>
+            <MenuButton onClick={handleClickSignIn}>Sign in</MenuButton>
           )}
         </Flex>
       </Flex>

@@ -10,7 +10,8 @@ export const tipForScienceTheme = {
   colors: { background: 'black', primary: '#FF0070', secondary: '#5CC9FA' },
   fonts: {
     ...(theme as any).fonts,
-    body: 'Tahoma',
-    heading: 'Tahoma',
+    // todo: why this doesn't work
+    body: 'Jost',
+    heading: 'Jost',
   },
 };
