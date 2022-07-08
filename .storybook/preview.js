@@ -2,6 +2,8 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { ThemeProvider } from 'emotion-theming';
 import { tipForScienceTheme } from '../src/theme';
+import { GlobalStyles } from '../src/GlobalStyles';
+
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -19,6 +21,7 @@ export const parameters = {
 
 const wrapper = (storyFn) => (
   <MemoryRouter>
+    <GlobalStyles />
     <ThemeProvider theme={tipForScienceTheme}>{storyFn()}</ThemeProvider>
   </MemoryRouter>
 );
