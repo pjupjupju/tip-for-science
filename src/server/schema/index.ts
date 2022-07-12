@@ -1,7 +1,6 @@
 import { gql, makeExecutableSchema } from 'apollo-server-express';
 import { saveTip, signIn, signOut, signUp } from './mutation';
 import {
-  getLastTipsByQuestionId,
   getMyScore,
   getOnlineStats,
   getNextQuestion,
@@ -50,7 +49,6 @@ export const typeDefs = /* GraphQL */ gql`
   }
 
   type Query {
-    getLastTipsByQuestionId(questionId: String!, runId: Int!): [Int]
     getNextQuestion: Question
     getMyScore: Float!
     getOnlineStats: OnlineStats!
@@ -124,7 +122,6 @@ export const resolvers = {
     signUp,
   },
   Query: {
-    getLastTipsByQuestionId,
     getNextQuestion,
     getMyScore,
     getOnlineStats,

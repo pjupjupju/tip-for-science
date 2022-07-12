@@ -1,7 +1,7 @@
 /**
  * User from db
  */
- export interface User {
+export interface User {
   bundle: string[];
   createdAt: string;
   id: string;
@@ -17,6 +17,34 @@
    * ISO 8601 DateTime
    */
   updatedAt: string;
+}
+
+type QuestionSettings = {
+  question: string;
+  image: string;
+  correctAnswer: number;
+  timeLimit?: number;
+  unit: string;
+};
+
+type QuestionStrategy = {
+  initialTips: number[][];
+  selectionPressure: number[];
+  tipsPerGeneration: number[];
+};
+
+/**
+ * Question from db
+ */
+export interface DynamoQuestion {
+  id: string;
+  qsk: string;
+  gsi_pk: string;
+  gsi_sk: string;
+  generation: number;
+  run: number;
+  settings: QuestionSettings;
+  strategy: QuestionStrategy;
 }
 
 /**

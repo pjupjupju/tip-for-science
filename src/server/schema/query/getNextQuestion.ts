@@ -22,68 +22,6 @@ type Question = {
   unit: string;
 };
 
-const mockQuestions = [
-  {
-    id: '30b86d42-84aa-4ba7-9aa9-80b9c8f80cfa',
-    gId: 0,
-    question: 'Do kolika jazyků už byla přeložena Bible?',
-    image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Gutenberg_Bible%2C_Lenox_Copy%2C_New_York_Public_Library%2C_2009._Pic_01.jpg/1200px-Gutenberg_Bible%2C_Lenox_Copy%2C_New_York_Public_Library%2C_2009._Pic_01.jpg',
-    previousTips: [198, 350],
-    correctAnswer: 2454,
-    timeLimit: 20,
-    unit: '',
-  },
-  {
-    id: '30b86d42-84aa-4ba7-9aa9-80b9c8f80cfb',
-    gId: 0,
-    question: 'Kolik je na světě monarchií?',
-    image:
-      'https://upload.wikimedia.org/wikipedia/commons/9/99/CrownBohemia3.jpg',
-    previousTips: [30, 50],
-    correctAnswer: 44,
-    timeLimit: 20,
-    unit: '',
-  },
-  {
-    id: '30b86d42-84aa-4ba7-9aa9-80b9c8f80cfc',
-    gId: 0,
-    question: 'V jakém roce byl vynalezen plyš?',
-    image: 'https://m.media-amazon.com/images/I/71+W1KVVt4L._AC_SX425_.jpg',
-    previousTips: [1897, 1905],
-    correctAnswer: 1590,
-    timeLimit: 20,
-    unit: '',
-  },
-  {
-    id: '30b86d42-84aa-4ba7-9aa9-80b9c8f80cfd',
-    gId: 0,
-    question: 'Kolik členů má Český rybářský svaz?',
-    image:
-      'https://cdn.pixabay.com/photo/2020/03/15/10/48/fishing-4933219__340.jpg',
-    previousTips: [80000, 250000],
-    correctAnswer: 250279,
-    timeLimit: 20,
-    unit: '',
-  },
-];
-
-function getQuestion(id: string) {
-  return (
-    mockQuestions.find((q) => q.id === id) || {
-      id: '30b86d42-84aa-4ba7-9aa9-80b9c8f80cfa',
-      gId: 0,
-      question: 'Do kolika jazyků už byla přeložena Bible?',
-      image:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Gutenberg_Bible%2C_Lenox_Copy%2C_New_York_Public_Library%2C_2009._Pic_01.jpg/1200px-Gutenberg_Bible%2C_Lenox_Copy%2C_New_York_Public_Library%2C_2009._Pic_01.jpg',
-      previousTips: [198, 350],
-      correctAnswer: 2454,
-      timeLimit: 20,
-      unit: '',
-    }
-  );
-}
-
 export async function getNextQuestion(
   parent: any,
   _: {},
@@ -98,9 +36,6 @@ export async function getNextQuestion(
   if (userRecord == null) {
     throw new ValidationError('User does not exist.');
   }
-
-  console.log('user', user);
-  console.log('userRecord', userRecord);
 
   const lastQuestion = userRecord.lastQuestion;
 
@@ -117,35 +52,46 @@ export async function getNextQuestion(
     ? userRecord.bundle[userRecord.bundle.indexOf(lastQuestion) + 1]
     : userRecord.bundle[0];
 
-  const rId = runCache.getRunId(nextQuestionId);
+  const nextQuestionRuns = await getGameQuestion(nextQuestionId, {
+    dynamo,
+  });
 
-  const nextQuestion = getQuestion(nextQuestionId);
+  // okay, here we have to decide whether we first look into cache to find out which run is not full, or first fetch all runs and then go through cache
+  const runRecord = await runCache.getRunId(nextQuestionId, nextQuestionRuns);
+
+  const runItem = // TODO: fix this, we do not want to do slice of last character, lol, what about runs with more than 1 digits, better recreate key
+    nextQuestionRuns.find((r: any) => r.qsk.slice(-1) === runRecord.run.toString()) ||
+    nextQuestionRuns[0];
+
+  const tips = await getCurrentGenerationTips(
+    nextQuestionId,
+    Number(runItem.qsk.slice(-1)),
+    runItem.generation,
+    {
+      dynamo,
+    }
+  );
+
+  console.log('tips in this gen: ', JSON.stringify(tips));
 
   /*
-  const nextQuestion = getGameQuestion('Q#01G72KM48C7NZE04YWJXSMWWJS', '1', {
-    dynamo,
-  });
-
-
-  
-
-  const tips = getCurrentGenerationTips('Q#01G72MR3R85C2XYWP6ABD3G2ZR', 2, 1, {
-    dynamo,
-  });
-
-
 
   const tips = await disableRun('Q#01G7CTA6JW8Y37VDC5XKHGEC69', '1', {
     dynamo,
   });
 
-  const rId = '1';
-
-      */
+  */
   // await updateLastQuestion(user.id, nextQuestionId, { dynamo });
 
   return {
-    ...nextQuestion,
-    rId,
+    id: runItem.id,
+    gId: runItem.generation,
+    rId: runItem.run,
+    question: runItem.settings.question,
+    image: runItem.settings.image,
+    previousTips: runItem.previousTips,
+    correctAnswer: runItem.settings.correctAnswer,
+    timeLimit: runItem.settings.timeLimit,
+    unit: runItem.settings.unit,
   };
 }

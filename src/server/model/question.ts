@@ -7,7 +7,6 @@ interface UserModelContext {
 
 export async function getGameQuestion(
   id: string,
-  runId: string,
   { dynamo }: UserModelContext
 ): Promise<any | null> {
   const params = {
@@ -25,13 +24,62 @@ export async function getGameQuestion(
 
   const result = await dynamo.query(params).promise();
 
-  console.log('question with runs: ', JSON.stringify(result.Items));
+  return result.Items;
+}
 
-  const lastTips =
-    result.Items && result.Items.length > 0
-      ? result.Items[0].previousTips
-      : null;
-  return lastTips;
+export async function createQuestionRun(
+  id: string,
+  { dynamo }: UserModelContext
+) {
+  const question: any = await dynamo // TODO: get rid of this any!
+    .query({
+      TableName: TABLE_QUESTION,
+      KeyConditionExpression: '#id = :id and begins_with(#qsk, :qsk)',
+      ExpressionAttributeNames: {
+        '#id': 'id',
+        '#qsk': 'qsk',
+      },
+      ExpressionAttributeValues: {
+        ':id': id,
+        ':qsk': 'QDATA#',
+      },
+    })
+    .promise();
+
+  const runId = question.run + 1;
+  const runIndex = runId - 1;
+
+  const params = {
+    id: question.id,
+    qsk: `Q#${question.id}#true#R#${runId}`,
+    gsi_pk: `Q#${question.id}#true#R#${runId}`,
+    gsi_sk: `Q#${question.id}#R#${runId}`,
+    generation: 1,
+    previousTips:
+      question.strategy.initialTips[
+        runIndex % question.strategy.initialTips.length
+      ],
+    run: runId,
+    settings: question.settings,
+    strategy: {
+      selectionPressure:
+        question.strategy.selectionPressure[
+          runIndex % question.strategy.selectionPressure.length
+        ],
+      tipsPerGeneration:
+        question.strategy.tipsPerGeneration[
+          runIndex % question.strategy.tipsPerGeneration.length
+        ],
+    },
+  };
+
+  return dynamo
+    .put({
+      ReturnValues: 'ALL_OLD',
+      TableName: TABLE_QUESTION,
+      Item: params,
+    })
+    .promise();
 }
 
 export async function getCurrentGenerationTips(
@@ -56,36 +104,7 @@ export async function getCurrentGenerationTips(
 
   const result = await dynamo.query(params).promise();
 
-  console.log('last tips for generation: ', JSON.stringify(result.Items));
-}
-
-export async function findLastTipsByQuestion(
-  id: string,
-  runId: string,
-  { dynamo }: UserModelContext
-): Promise<any | null> {
-  const params = {
-    TableName: TABLE_QUESTION,
-    KeyConditionExpression: '#id = :id and begins_with(#qsk, :qsk)',
-    ExpressionAttributeNames: {
-      '#id': 'id',
-      '#qsk': 'qsk',
-    },
-    ExpressionAttributeValues: {
-      ':id': id,
-      ':qsk': `R#${runId}`,
-    },
-  };
-
-  const result = await dynamo.query(params).promise();
-
-  const lastTips =
-    result.Items && result.Items.length > 0
-      ? result.Items[0].previousTips
-      : null;
-
-  console.log('result: ', result.Items);
-  return lastTips;
+  return result.Items;
 }
 
 export async function updateCurrentGeneration(
