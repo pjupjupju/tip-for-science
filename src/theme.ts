@@ -10,7 +10,7 @@ export const tipForScienceTheme = {
   colors: { background: 'black', primary: '#FF0070', secondary: '#5CC9FA' },
   fonts: {
     ...(theme as any).fonts,
-    // todo: why this doesn't work
+    // todo: why this doesn't work, probably some problem with rebass and emotion?
     body: 'Jost',
     heading: 'Jost',
   },

@@ -1,7 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
 import { ulid } from 'ulid';
 import * as yup from 'yup';
-import { TABLE_USER, USERS_BY_EMAIL_INDEX } from '../../config';
+import { TABLE_USER, TABLE_QUESTION, USERS_BY_EMAIL_INDEX } from '../../config';
 import { User, UserRole } from './types';
 
 interface UserModelContext {
@@ -18,13 +18,14 @@ export async function createUser(
 ) {
   const id = ulid();
 
-  // TODO: change to real bundle - get it from DB
-  const initialQuestions = [
-    '30b86d42-84aa-4ba7-9aa9-80b9c8f80cfa',
-    '30b86d42-84aa-4ba7-9aa9-80b9c8f80cfb',
-    '30b86d42-84aa-4ba7-9aa9-80b9c8f80cfc',
-  ];
-  const restQuestions = ['30b86d42-84aa-4ba7-9aa9-80b9c8f80cfd'];
+  const { Items: questions } = await getQuestionCorpus(dynamo);
+
+  const initialQuestions = questions
+    .filter((q: any) => q.isInit)
+    .map((q: any) => q.id);
+  const restQuestions = questions
+    .filter((q: any) => !q.isInit)
+    .map((q: any) => q.id);
   const bundle = generateQuestionBundle(initialQuestions, restQuestions);
 
   const user: User = {
@@ -159,6 +160,24 @@ export async function updateScore(
   };
 
   return dynamo.update(params).promise();
+}
+
+async function getQuestionCorpus(
+  dynamo: DynamoDB.DocumentClient
+): Promise<any | null> {
+  const params = {
+    TableName: TABLE_QUESTION,
+    IndexName: 'QER_GSI',
+    KeyConditionExpression: '#gsipk = :gsipk',
+    ExpressionAttributeNames: {
+      '#gsipk': 'gsi_pk',
+    },
+    ExpressionAttributeValues: {
+      ':gsipk': 'Q',
+    },
+  };
+
+  return dynamo.query(params).promise();
 }
 
 function generateQuestionBundle(
