@@ -58,6 +58,13 @@ const Play = () => {
       variables: {
         id: questionId,
         tip: myTip,
+        rId: data.getNextQuestion.rId,
+        gId: data.getNextQuestion.gId,
+        previousTips: data.getNextQuestion.previousTips,
+        // TODO: move saveTip call after we find out whether he was too close and knew it
+        knewAnswer: false,
+        // TODO: get msElapsed from timeoutref before we clear timeout
+        msElapsed: 3000,
       },
     });
     dispatch({ type: ActionType.GAME_SUBMIT, payload: { tip: myTip } });

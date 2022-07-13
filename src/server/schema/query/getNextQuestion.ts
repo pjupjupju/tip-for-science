@@ -2,13 +2,10 @@ import { ValidationError } from 'yup';
 import { GraphQLContext } from '..';
 import {
   findUserById,
-  getGameQuestion,
+  getEnabledQuestionRuns,
   updateLastQuestion,
   getCurrentGenerationTips,
-  updateCurrentGeneration,
-  disableRun,
 } from '../../model';
-// import { TABLE_USER } from './../../../config';
 
 type Question = {
   id: string;
@@ -52,20 +49,20 @@ export async function getNextQuestion(
     ? userRecord.bundle[userRecord.bundle.indexOf(lastQuestion) + 1]
     : userRecord.bundle[0];
 
-  const nextQuestionRuns = await getGameQuestion(nextQuestionId, {
+  const nextQuestionRuns = await getEnabledQuestionRuns(nextQuestionId, {
     dynamo,
   });
 
-  // okay, here we have to decide whether we first look into cache to find out which run is not full, or first fetch all runs and then go through cache
+  // get the preferred run from cache
   const runRecord = await runCache.getRunId(nextQuestionId, nextQuestionRuns);
 
-  const runItem = // TODO: fix this, we do not want to do slice of last character, lol, what about runs with more than 1 digits, better recreate key
-    nextQuestionRuns.find((r: any) => r.qsk.slice(-1) === runRecord.run.toString()) ||
+  const runItem =
+    nextQuestionRuns.find((r: any) => r.run === runRecord.run.toString()) ||
     nextQuestionRuns[0];
 
   const tips = await getCurrentGenerationTips(
     nextQuestionId,
-    Number(runItem.qsk.slice(-1)),
+    Number(runItem.run),
     runItem.generation,
     {
       dynamo,
@@ -74,13 +71,6 @@ export async function getNextQuestion(
 
   console.log('tips in this gen: ', JSON.stringify(tips));
 
-  /*
-
-  const tips = await disableRun('Q#01G7CTA6JW8Y37VDC5XKHGEC69', '1', {
-    dynamo,
-  });
-
-  */
   // await updateLastQuestion(user.id, nextQuestionId, { dynamo });
 
   return {
