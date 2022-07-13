@@ -100,7 +100,7 @@ const Home = ({ user, onLogOut }: HomeProps) => {
             </>
           )}
           {!isSignedIn && (
-            <MenuButton onClick={handleClickSignIn}>Sign in</MenuButton>
+            <MenuButton onClick={handleClickSignIn} primary>Sign in</MenuButton>
           )}
         </Flex>
       </Flex>

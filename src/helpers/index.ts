@@ -12,10 +12,8 @@ const getScore = (currentTip: number, correctAnswer: number): number => {
     return 1;
   }
   if (currentTip > correctAnswer) {
-    // console.log('current tip > correct Answer');
     return (2 * correctAnswer - currentTip) / correctAnswer;
   }
-  // console.log('posledni');
   return 1 - Math.pow((currentTip - correctAnswer) / (correctAnswer / 2), 2);
 };
 

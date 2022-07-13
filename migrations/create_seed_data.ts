@@ -34,7 +34,7 @@ async function createSeedData() {
           PutRequest: {
             Item: {
               id: id1,
-              batch: [idQ1, idQ2],
+              bundle: [idQ1, idQ2],
               createdAt: new Date().toISOString(),
               userskey: `USER#${id1}`,
               email: 'testuser1@testuser.com',
@@ -50,7 +50,7 @@ async function createSeedData() {
           PutRequest: {
             Item: {
               id: id2,
-              batch: [idQ1, idQ2],
+              bundle: [idQ1, idQ2],
               createdAt: new Date().toISOString(),
               userskey: `USER#${id2}`,
               email: 'testuser2@testuser.com',
@@ -66,7 +66,7 @@ async function createSeedData() {
           PutRequest: {
             Item: {
               id: id3,
-              batch: [idQ1, idQ2],
+              bundle: [idQ1, idQ2],
               createdAt: new Date().toISOString(),
               userskey: `USER#${id3}`,
               email: 'testuser3@testuser.com',
@@ -89,6 +89,7 @@ async function createSeedData() {
           PutRequest: {
             Item: {
               id: `Q#${idQ1}`,
+              run: 2, 
               settings: {
                 question: 'Do kolika jazyků už byla přeložena Bible?',
                 image:
@@ -113,6 +114,7 @@ async function createSeedData() {
           PutRequest: {
             Item: {
               id: `Q#${idQ2}`,
+              run: 1,
               settings: {
                 question: 'Kolik váží 1200kg slon?',
                 image:
@@ -229,6 +231,8 @@ async function createSeedData() {
                 previousTips: [44,310],
                 time: 3000,
                 createdBy: id1,
+                createdAt: new Date().toISOString(),
+                knewAnswer: false,
               }
             },
           },
@@ -247,7 +251,8 @@ async function createSeedData() {
                 previousTips: [44,310],
                 time: 2000,
                 createdBy: id2,
-                knewAnwer: false,
+                createdAt: new Date().toISOString(),
+                knewAnswer: false,
               }
             },
           },
@@ -266,7 +271,8 @@ async function createSeedData() {
                 previousTips: [10,377],
                 time: 3000,
                 createdBy: id3,
-                knewAnwer: false,
+                createdAt: new Date().toISOString(),
+                knewAnswer: false,
               }
             },
           },
@@ -285,7 +291,8 @@ async function createSeedData() {
                 previousTips: [1002, 7800],
                 msElapsed: 4500,
                 createdBy: id1,
-                knewAnwer: false,
+                createdAt: new Date().toISOString(),
+                knewAnswer: false,
               }
             },
           },

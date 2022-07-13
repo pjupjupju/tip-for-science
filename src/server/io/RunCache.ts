@@ -58,6 +58,9 @@ class RunCache {
         return [r.run, 0];
       }
 
+      // TODO: debug run cache, because it might work weirdly
+      console.log(`RUN no. ${r.run}: `, cachedItem);
+
       return [r.run, cachedItem];
     }) as [number, number][])
       .sort((a: [number, number], b: [number, number]) => a[1] - b[1])
@@ -65,9 +68,11 @@ class RunCache {
 
     // If no runs are available, we create a new run
     if (sortedRuns.length === 0) {
-      const { Attributes: run } = await createQuestionRun(questionId, {
+      console.log('creating run!!!');
+      const run = await createQuestionRun(questionId, {
         dynamo: this.dynamo,
       });
+
       this.increment(`${questionId}#R#${(run as RunData).run}`);
 
       return run as RunData;

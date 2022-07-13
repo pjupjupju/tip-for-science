@@ -47,6 +47,11 @@ export interface DynamoQuestion {
   strategy: QuestionStrategy;
 }
 
+export type RunStrategy = {
+  selectionPressure: number;
+  tipsPerGeneration: number;
+};
+
 /**
  * User roles
  */
