@@ -25,11 +25,11 @@ export async function saveTip(
   },
   { dynamo, user }: { dynamo: DynamoDB.DocumentClient; user: User }
 ) {
-  console.log(`--- updating Question ${id} with tip ${tip}`);
+  console.log(`--- updating Question ${id}, Run ${rId}, Generation ${gId} with tip ${tip}`);
 
   const question = await getQuestion(id, { dynamo });
   const { strategy, settings } = question;
-  console.log('strategia Oi!: ', strategy);
+
   const runIndex = rId - 1;
 
   await createQuestionTip(

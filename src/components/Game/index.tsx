@@ -148,10 +148,10 @@ const Game = ({
             {questionScore !== null && isTooClose(questionScore) && (
               <TooCloseDialog
                 onGuessed={() => {
-                  console.log('som frajer a som tipnul');
+                  console.log('Tip marked as guessed.');
                 }}
                 onKnewIt={() => {
-                  console.log('som frajer a som vedel');
+                  console.log('Tip marked as knew-answer.');
                 }}
               />
             )}

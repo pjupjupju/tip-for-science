@@ -6,7 +6,7 @@ import { BackButton, Container } from '../../components';
 import { ONLINE_STATS_QUERY } from '../../gql';
 
 const handleClickDashboard = () => {
-  console.log('Si kliknul!');
+  // console.log('Si kliknul!');
 };
 
 const Dashboard = () => {

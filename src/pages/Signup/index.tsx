@@ -29,12 +29,10 @@ const SignUp = () => {
   const [signUp] = useMutation(SIGN_UP_MUTATION, {
     refetchQueries: [AuthQueryName],
     onCompleted: ({ signUp: { __typename, ...data } }) => {
-      console.log(data);
+      // console.log(data);
     },
     // onError:
   });
-
-  console.log('just for fun console log');
 
   const onSubmit = async (values: { email: string; password: string }) => {
     const { data } = await signUp({

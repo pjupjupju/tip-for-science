@@ -42,7 +42,6 @@ const initState = {
 };
 
 const Play = () => {
-  console.log('RENDERING');
   const [{ currentTip, isSubmitted }, dispatch] = useReducer(
     gameReducer,
     initState
@@ -86,7 +85,7 @@ const Play = () => {
 
   const [saveTip] = useMutation(SAVE_MUTATION, {
     onCompleted: ({ saveTip: { __typename, ...data } }) => {
-      console.log('savetip-complete', data);
+      // console.log('savetip-complete', data);
     },
     refetchQueries: ['MyScoreQuery'],
   });

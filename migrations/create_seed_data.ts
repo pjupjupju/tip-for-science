@@ -21,11 +21,13 @@ async function createSeedData() {
 
   const idQ1 = ulid();
   const idQ2 = ulid();
+  const idQ3 = ulid();
 
   const idT1 = ulid();
   const idT2 = ulid();
   const idT3 = ulid();
   const idT4 = ulid();
+  const idT5 = ulid();
 
   const paramsForUserBatch = {
     RequestItems: {
@@ -89,7 +91,7 @@ async function createSeedData() {
           PutRequest: {
             Item: {
               id: `Q#${idQ1}`,
-              run: 2, 
+              run: 2,
               settings: {
                 question: 'Do kolika jazyků už byla přeložena Bible?',
                 image:
@@ -99,7 +101,11 @@ async function createSeedData() {
                 unit: '',
               },
               strategy: {
-                initialTips: [[155, 410, 2900, 4555], [160, 175, 2500, 3100], [220, 244, 2340, 2430]],
+                initialTips: [
+                  [155, 410, 2900, 4555],
+                  [160, 175, 2500, 3100],
+                  [220, 244, 2340, 2430],
+                ],
                 selectionPressure: [0.2, 0.2, 0.4],
                 tipsPerGeneration: [5, 5, 5],
               },
@@ -116,15 +122,19 @@ async function createSeedData() {
               id: `Q#${idQ2}`,
               run: 1,
               settings: {
-                question: 'Kolik váží 1200kg slon?',
+                question: 'Kolik vážil nejtěžší známý slon?',
                 image:
-                  'https://cs.wikipedia.org/wiki/Slon#/media/Soubor:ElephantTrainingCamp.jpg',
-                correctAnswer: 1200,
+                  'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80',
+                correctAnswer: 10400,
                 timeLimit: 20,
                 unit: 'kg',
               },
               strategy: {
-                initialTips: [[155, 410, 2900, 4555], [160, 175, 2500, 3100], [220, 244, 2340, 2430]],
+                initialTips: [
+                  [155, 410, 2900, 4555],
+                  [160, 175, 2500, 3100],
+                  [220, 244, 2340, 2430],
+                ],
                 selectionPressure: [0.2, 0.2, 0.4],
                 tipsPerGeneration: [5, 5, 5],
               },
@@ -132,6 +142,35 @@ async function createSeedData() {
               qsk: `QDATA#${idQ2}`,
               gsi_pk: `Q`,
               gsi_sk: `QDATA#${idQ2}`,
+            },
+          },
+        },
+        {
+          PutRequest: {
+            Item: {
+              id: `Q#${idQ3}`,
+              run: 1,
+              settings: {
+                question: 'Jak vysoká je Šikmá věž v Pise?',
+                image:
+                  'https://images.unsplash.com/photo-1551981996-1e0aa26c5fba?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2440&q=80',
+                correctAnswer: 57,
+                timeLimit: 20,
+                unit: 'm',
+              },
+              strategy: {
+                initialTips: [
+                  [19, 89, 180],
+                  [29, 69, 181],
+                  [80, 90, 100],
+                ],
+                selectionPressure: [0.2, 0.2, 0.4],
+                tipsPerGeneration: [5, 5, 5],
+              },
+              isInit: false,
+              qsk: `QDATA#${idQ3}`,
+              gsi_pk: `Q`,
+              gsi_sk: `QDATA#${idQ3}`,
             },
           },
         },
@@ -186,7 +225,7 @@ async function createSeedData() {
               },
               strategy: {
                 selectionPressure: 0.2,
-                tipsPerGeneration: 5
+                tipsPerGeneration: 5,
               },
               previousTips: [10, 377],
             },
@@ -202,10 +241,10 @@ async function createSeedData() {
               generation: 1,
               run: 1,
               settings: {
-                question: 'Kolik váží 1200kg slon?',
+                question: 'Kolik vážil nejtěžší známý slon?',
                 image:
-                  'https://cs.wikipedia.org/wiki/Slon#/media/Soubor:ElephantTrainingCamp.jpg',
-                correctAnswer: 1200,
+                  'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80',
+                correctAnswer: 10400,
                 timeLimit: 20,
                 unit: 'kg',
               },
@@ -220,6 +259,33 @@ async function createSeedData() {
         {
           PutRequest: {
             Item: {
+              id: `Q#${idQ3}`,
+              qsk: `Q#${idQ3}#true#R#1`,
+              gsi_pk: `Q#${idQ3}#true#R#1`,
+              gsi_sk: `Q#${idQ3}#R#1`,
+              generation: 1,
+              run: 1,
+              settings: {
+                question: 'Jak vysoká je Šikmá věž v Pise?',
+                image:
+                  'https://images.unsplash.com/photo-1551981996-1e0aa26c5fba?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2440&q=80',
+                correctAnswer: 57,
+                timeLimit: 20,
+                unit: 'm',
+              },
+              strategy: {
+                initialTips: [19, 89, 180],
+
+                selectionPressure: [0.2],
+                tipsPerGeneration: [5],
+              },
+              previousTips: [19, 89, 180],
+            },
+          },
+        },
+        {
+          PutRequest: {
+            Item: {
               id: `Q#${idQ1}`,
               qsk: `T#${idT1}`,
               gsi_pk: `Q#${idQ1}#R#1#G#1`,
@@ -228,12 +294,12 @@ async function createSeedData() {
               generation: 1,
               data: {
                 tip: 150,
-                previousTips: [44,310],
+                previousTips: [44, 310],
                 time: 3000,
                 createdBy: id1,
                 createdAt: new Date().toISOString(),
                 knewAnswer: false,
-              }
+              },
             },
           },
         },
@@ -248,12 +314,12 @@ async function createSeedData() {
               generation: 1,
               data: {
                 tip: 2450,
-                previousTips: [44,310],
+                previousTips: [44, 310],
                 time: 2000,
                 createdBy: id2,
                 createdAt: new Date().toISOString(),
                 knewAnswer: false,
-              }
+              },
             },
           },
         },
@@ -264,16 +330,16 @@ async function createSeedData() {
               qsk: `T#${idT3}`,
               gsi_pk: `Q#${idQ1}#R#2#G#1`,
               gsi_sk: `T#${idT3}`,
-              run: 2, 
+              run: 2,
               generation: 1,
               data: {
                 tip: 278,
-                previousTips: [10,377],
+                previousTips: [10, 377],
                 time: 3000,
                 createdBy: id3,
                 createdAt: new Date().toISOString(),
                 knewAnswer: false,
-              }
+              },
             },
           },
         },
@@ -293,7 +359,27 @@ async function createSeedData() {
                 createdBy: id1,
                 createdAt: new Date().toISOString(),
                 knewAnswer: false,
-              }
+              },
+            },
+          },
+        },
+        {
+          PutRequest: {
+            Item: {
+              id: `Q#${idQ3}`,
+              qsk: `T#${idT5}`,
+              gsi_pk: `Q#${idQ3}#R#1#G#1`,
+              gsi_sk: `T#${idT5}`,
+              run: 1,
+              generation: 1,
+              data: {
+                tip: 3100,
+                previousTips: [19, 89, 180],
+                msElapsed: 4500,
+                createdBy: id1,
+                createdAt: new Date().toISOString(),
+                knewAnswer: false,
+              },
             },
           },
         },
