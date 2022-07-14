@@ -1,5 +1,5 @@
 import React from 'react';
-import { css, keyframes } from '@emotion/css';
+import { css, keyframes } from 'emotion';
 
 const spin = keyframes`
   to {
