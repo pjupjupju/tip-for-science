@@ -29,7 +29,7 @@ const SignIn = () => {
   const [signIn] = useMutation(SIGN_IN_MUTATION, {
     refetchQueries: [AuthQueryName],
     onCompleted: ({ signIn: { __typename, ...data } }) => {
-      console.log(data);
+      // console.log(data);
     },
     // onError:
   });

@@ -19,7 +19,7 @@ export const App = () => {
   const [signOut] = useMutation(SIGN_OUT_MUTATION, {
     refetchQueries: [AuthQueryName],
     onCompleted: ({ signOut: { __typename, ...data } }) => {
-      console.log(data);
+      // console.log(data);
     },
   });
 

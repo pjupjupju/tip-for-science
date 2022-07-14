@@ -59,7 +59,7 @@ class RunCache {
       }
 
       // TODO: debug run cache, because it might work weirdly
-      console.log(`RUN no. ${r.run}: `, cachedItem);
+      // console.log(`RUN no. ${r.run}: `, cachedItem);
 
       return [r.run, cachedItem];
     }) as [number, number][])
@@ -68,7 +68,6 @@ class RunCache {
 
     // If no runs are available, we create a new run
     if (sortedRuns.length === 0) {
-      console.log('creating run!!!');
       const run = await createQuestionRun(questionId, {
         dynamo: this.dynamo,
       });

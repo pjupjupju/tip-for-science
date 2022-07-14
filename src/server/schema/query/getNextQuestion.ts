@@ -59,6 +59,10 @@ export async function getNextQuestion(
   const runItem =
     nextQuestionRuns.find((r: any) => r.run === runRecord.run.toString()) ||
     nextQuestionRuns[0];
+  
+  /*
+
+  TODO: we do not need this anymore, delete later
 
   const tips = await getCurrentGenerationTips(
     nextQuestionId,
@@ -71,7 +75,9 @@ export async function getNextQuestion(
 
   console.log('tips in this gen: ', JSON.stringify(tips));
 
-  // await updateLastQuestion(user.id, nextQuestionId, { dynamo });
+  */
+
+  await updateLastQuestion(user.id, nextQuestionId, { dynamo });
 
   return {
     id: runItem.id,
