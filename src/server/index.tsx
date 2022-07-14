@@ -3,7 +3,7 @@ import { getDataFromTree } from '@apollo/react-ssr';
 import { ApolloServer } from 'apollo-server-express';
 import { SchemaLink } from '@apollo/client/link/schema';
 import { DynamoDB } from 'aws-sdk';
-import { renderStylesToString } from '@emotion/server';
+import { renderStylesToString } from 'emotion-server';
 import { ThemeProvider } from 'emotion-theming';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';

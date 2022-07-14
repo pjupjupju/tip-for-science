@@ -1,4 +1,5 @@
 import React from 'react';
+import { injectGlobal } from 'emotion';
 import { Flex, Heading } from 'rebass';
 import { useHistory } from 'react-router-dom';
 import { MenuButton, Container } from '../../components';
@@ -14,6 +15,13 @@ interface HomeProps {
   user: User | null;
   onLogOut: Function;
 }
+
+
+injectGlobal`
+  body {
+    background-color: #161616 !important;
+  }
+`
 
 const Home = ({ user, onLogOut }: HomeProps) => {
   const isSignedIn = !!user;
@@ -66,7 +74,8 @@ const Home = ({ user, onLogOut }: HomeProps) => {
             mx="auto"
             fontSize={80}
           >
-            TIP FOR <br/>SCIENCE
+            TIP FOR <br />
+            SCIENCE
           </Heading>
         </Flex>
         <Flex
@@ -100,7 +109,9 @@ const Home = ({ user, onLogOut }: HomeProps) => {
             </>
           )}
           {!isSignedIn && (
-            <MenuButton onClick={handleClickSignIn} primary>Sign in</MenuButton>
+            <MenuButton onClick={handleClickSignIn} primary>
+              Sign in
+            </MenuButton>
           )}
         </Flex>
       </Flex>
