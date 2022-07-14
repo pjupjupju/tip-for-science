@@ -4,7 +4,7 @@ import { Label, Input } from '@rebass/forms';
 import { useForm } from 'react-hook-form';
 
 import { Container } from '../../components';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { AuthQueryName, SIGN_UP_MUTATION } from '../../gql';
 
@@ -87,11 +87,20 @@ const SignUp = () => {
         {errors.length > 0 && (
           <Box>
             {errors.map((item: { error: string }, index) => (
-              <Text color="red" key={`error-${index}`}>{item.error}</Text>
+              <Text color="red" key={`error-${index}`}>
+                {item.error}
+              </Text>
             ))}
           </Box>
         )}
-        
+        <Flex justifyContent="center">
+          <Text color="white" fontSize="1">
+            Máš účet?{' '}
+            <Link to="/signin" style={{ color: '#FF0070' }}>
+              Přihlásit se
+            </Link>
+          </Text>
+        </Flex>
       </Flex>
     </Container>
   );
