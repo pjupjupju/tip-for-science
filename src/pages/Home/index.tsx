@@ -1,8 +1,9 @@
 import React from 'react';
 import { injectGlobal } from 'emotion';
-import { Flex, Heading } from 'rebass';
+import { Flex, Heading, Image } from 'rebass';
 import { useHistory } from 'react-router-dom';
 import { MenuButton, Container } from '../../components';
+import { TargetImage } from '../../components/TargetImage';
 
 enum UserRole {
   admin = 'admin',
@@ -16,12 +17,11 @@ interface HomeProps {
   onLogOut: Function;
 }
 
-
 injectGlobal`
   body {
     background-color: #161616 !important;
   }
-`
+`;
 
 const Home = ({ user, onLogOut }: HomeProps) => {
   const isSignedIn = !!user;
@@ -53,6 +53,7 @@ const Home = ({ user, onLogOut }: HomeProps) => {
 
   return (
     <Container>
+      <TargetImage />
       <Flex
         flexDirection="column"
         justifyContent="center"
