@@ -1,6 +1,6 @@
 import React from 'react';
 import { injectGlobal } from 'emotion';
-import { Flex, Heading, Image } from 'rebass';
+import { Flex, Heading } from 'rebass';
 import { useHistory } from 'react-router-dom';
 import { MenuButton, Container } from '../../components';
 import { TargetImage } from '../../components/TargetImage';
