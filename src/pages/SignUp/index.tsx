@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Flex, Button, Box, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
 import { useForm } from 'react-hook-form';
-
-import { Container } from '../../components';
+import * as Yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
+
+import { Container } from '../../components';
 import { AuthQueryName, SIGN_UP_MUTATION } from '../../gql';
+import { useYupValidationResolver } from '../../helpers/useYupValidationResolver';
 
 const inputStyles = {
   '::placeholder': {
@@ -20,10 +22,25 @@ const labelStyles = {
   fontWeight: 600,
 };
 
-const SignUp = () => {
-  const { register, handleSubmit } = useForm();
+const MIN_PASSWORD_LENGTH = 6;
 
-  const [errors, setErrors] = useState([]);
+const validationSchema = Yup.object().shape({
+  password: Yup.string()
+    .required('Password is mendatory')
+    .min(
+      MIN_PASSWORD_LENGTH,
+      `Password must be at ${MIN_PASSWORD_LENGTH} char long`
+    ),
+  confirmPassword: Yup.string()
+    .required('Please confirm password')
+    .oneOf([Yup.ref('password')], 'Passwords do not match'),
+});
+
+const SignUp = () => {
+  const [errors, setErrors] = useState<Array<{ error: string }>>([]);
+  const resolver = useYupValidationResolver(validationSchema, setErrors);
+  const { register, handleSubmit } = useForm({ resolver });
+
   const history = useHistory();
 
   const [signUp] = useMutation(SIGN_UP_MUTATION, {
@@ -35,6 +52,8 @@ const SignUp = () => {
   });
 
   const onSubmit = async (values: { email: string; password: string }) => {
+    console.log('sem to asi nedojde?');
+
     const { data } = await signUp({
       variables: {
         email: values.email,
@@ -80,6 +99,16 @@ const SignUp = () => {
           mb={2}
           sx={inputStyles}
           {...register('password')}
+        />
+        <Label htmlFor="password" sx={labelStyles}>
+          Heslo znovu
+        </Label>
+        <Input
+          id="confirmPassword"
+          type="password"
+          mb={2}
+          sx={inputStyles}
+          {...register('confirmPassword')}
         />
         <Button type="submit" my={3}>
           Vytvořit
