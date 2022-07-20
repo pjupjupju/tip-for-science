@@ -8,7 +8,11 @@ import { useMutation } from '@apollo/client';
 
 import { Container } from '../../components';
 import { AuthQueryName, SIGN_UP_MUTATION } from '../../gql';
-import { useYupValidationResolver } from '../../helpers/useYupValidationResolver';
+import {
+  MIN_PASSWORD_LENGTH,
+  emailRegex,
+  useYupValidationResolver,
+} from '../../helpers';
 
 const inputStyles = {
   '::placeholder': {
@@ -22,9 +26,10 @@ const labelStyles = {
   fontWeight: 600,
 };
 
-const MIN_PASSWORD_LENGTH = 6;
-
 const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .required('Email is mandatory')
+    .matches(emailRegex, 'Please provide a valid e-mail'),
   password: Yup.string()
     .required('Password is mendatory')
     .min(

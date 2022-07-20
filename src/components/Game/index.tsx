@@ -89,7 +89,7 @@ const Game = ({
 
   return !isSubmitted ? (
     <Container>
-      <Box height="80px">
+      <Box minHeight="80px">
         <Text
           fontSize={[3, 4, 5]}
           fontWeight="bold"
@@ -123,7 +123,7 @@ const Game = ({
     </Container>
   ) : (
     <Container>
-      <Box height="80px">
+      <Box minHeight="80px">
         <Text
           fontSize={[3, 4, 5]}
           fontWeight="bold"

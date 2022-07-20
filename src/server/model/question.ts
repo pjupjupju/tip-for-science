@@ -4,10 +4,68 @@ import {
   MAX_TOO_CLOSE_ANSWERS_PER_GENERATION,
   TABLE_QUESTION,
 } from '../../config';
-import { DynamoQuestion, RunStrategy } from './types';
+import { sliceIntoChunks } from '../../helpers';
+import { DynamoQuestion, ImportedQuestionSettings, RunStrategy } from './types';
 
 interface UserModelContext {
   dynamo: DynamoDB.DocumentClient;
+}
+
+export async function batchCreateQuestions(
+  questions: ImportedQuestionSettings[],
+  { dynamo }: UserModelContext
+) {
+  const chunks = sliceIntoChunks(questions, 24);
+
+  const paramsForEachChunk = chunks.map((chunk) => ({
+    RequestItems: {
+      [TABLE_QUESTION]: chunk.map(
+        ({
+          question,
+          image,
+          isInit,
+          correctAnswer,
+          timeLimit,
+          unit,
+        }: ImportedQuestionSettings) => {
+          const id = ulid();
+          return {
+            PutRequest: {
+              Item: {
+                id: `Q#${id}`,
+                run: 0,
+                settings: {
+                  question,
+                  image,
+                  correctAnswer,
+                  timeLimit,
+                  unit,
+                },
+                strategy: {
+                  initialTips: [[155, 410, 2900, 4555]],
+                  selectionPressure: [0.2],
+                  tipsPerGeneration: [5],
+                },
+                isInit,
+                qsk: `QDATA#${id}`,
+                gsi_pk: `Q`,
+                gsi_sk: `QDATA#${id}`,
+              },
+            },
+          };
+        }
+      ),
+    },
+  }));
+
+  // TODO: maybe do it in a trasnaction later, because it might happen, that it breaks and we do not know, where we stopped
+  const allPromises = paramsForEachChunk.map((params) =>
+    dynamo.batchWrite(params).promise()
+  );
+
+  const results = await Promise.all(allPromises);
+
+  return results;
 }
 
 export async function getQuestion(id: string, { dynamo }: UserModelContext) {
@@ -94,7 +152,7 @@ export async function createQuestionRun(
     )
     .promise();
 
-    return params;
+  return params;
 }
 
 export async function createQuestionTip(
@@ -175,7 +233,7 @@ export async function createQuestionTip(
             return disableRun(id, run, { dynamo });
           }
 
-          // new generatoion and new previous tips
+          // new generation and new previous tips
           return updateCurrentGeneration(
             id,
             run,
