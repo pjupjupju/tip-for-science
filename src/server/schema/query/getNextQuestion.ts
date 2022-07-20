@@ -4,7 +4,6 @@ import {
   findUserById,
   getEnabledQuestionRuns,
   updateLastQuestion,
-  getCurrentGenerationTips,
 } from '../../model';
 
 type Question = {
@@ -27,6 +26,8 @@ export async function getNextQuestion(
   if (user == null) {
     throw new ValidationError('Unauthorized.');
   }
+
+  console.log('user: ', user);
 
   const userRecord = await findUserById(user.id, { dynamo });
 
@@ -55,10 +56,6 @@ export async function getNextQuestion(
 
   // get the preferred run from cache
   const runRecord = await runCache.getRunId(nextQuestionId, nextQuestionRuns);
-
-  const runItem =
-    nextQuestionRuns.find((r: any) => r.run === runRecord.run.toString()) ||
-    nextQuestionRuns[0];
   
   /*
 
@@ -80,14 +77,14 @@ export async function getNextQuestion(
   await updateLastQuestion(user.id, nextQuestionId, { dynamo });
 
   return {
-    id: runItem.id,
-    gId: runItem.generation,
-    rId: runItem.run,
-    question: runItem.settings.question,
-    image: runItem.settings.image,
-    previousTips: runItem.previousTips,
-    correctAnswer: runItem.settings.correctAnswer,
-    timeLimit: runItem.settings.timeLimit,
-    unit: runItem.settings.unit,
+    id: runRecord.id,
+    gId: runRecord.generation,
+    rId: runRecord.run,
+    question: runRecord.settings.question,
+    image: runRecord.settings.image,
+    previousTips: runRecord.previousTips,
+    correctAnswer: runRecord.settings.correctAnswer,
+    timeLimit: runRecord.settings.timeLimit,
+    unit: runRecord.settings.unit,
   };
 }

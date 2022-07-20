@@ -1,5 +1,5 @@
 import { gql, makeExecutableSchema } from 'apollo-server-express';
-import { saveTip, signIn, signOut, signUp } from './mutation';
+import { importQuestions, saveTip, signIn, signOut, signUp } from './mutation';
 import {
   getMyScore,
   getOnlineStats,
@@ -57,6 +57,7 @@ export const typeDefs = /* GraphQL */ gql`
   }
 
   type Mutation {
+    importQuestions: String
     saveTip(
       id: String!
       tip: Int!
@@ -124,6 +125,7 @@ type Tip = {
 
 export const resolvers = {
   Mutation: {
+    importQuestions,
     saveTip,
     signIn,
     signOut,

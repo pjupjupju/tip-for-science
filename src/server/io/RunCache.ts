@@ -1,16 +1,11 @@
 import { DynamoDB } from 'aws-sdk';
-import { createQuestionRun } from '../model';
+import { createQuestionRun, DynamoRun } from '../model';
 
 const MAX_ONLINE_PER_RUN = 5;
 
 // TODO: create reusable context type in server folder or server/types
 interface ServerContext {
   dynamo: DynamoDB.DocumentClient;
-}
-
-interface RunData {
-  id: string;
-  run: number;
 }
 
 type OnlineStats = {
@@ -48,9 +43,9 @@ class RunCache {
     this.getOnlineData = this.getOnlineData.bind(this);
   }
 
-  async getRunId(questionId: string, runs: [RunData]): Promise<RunData> {
+  async getRunId(questionId: string, runs: DynamoRun[]): Promise<DynamoRun> {
     // We simplify run objects, sort them and filter out the full ones
-    const sortedRuns = (runs.map((r: RunData) => {
+    const sortedRuns = (runs.map((r: DynamoRun) => {
       const key = `${r.id}#R#${r.run}`;
       const cachedItem = this.online.get(key);
       if (!cachedItem) {
@@ -72,16 +67,16 @@ class RunCache {
         dynamo: this.dynamo,
       });
 
-      this.increment(`${questionId}#R#${(run as RunData).run}`);
+      this.increment(`${questionId}#R#${(run as DynamoRun).run}`);
 
-      return run as RunData;
+      return run as DynamoRun;
     }
 
     // If we find run to use, we increment online count and return the run object
     const runId = sortedRuns[0][0];
     this.increment(`${questionId}#R#${runId}`);
 
-    return runs.find((r) => r.run === runId) as RunData; // force as defined, because we know it is
+    return runs.find((r) => r.run === runId) as DynamoRun; // force as defined, because we know it is
   }
 
   increment(key: string) {

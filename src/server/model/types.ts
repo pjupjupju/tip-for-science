@@ -19,7 +19,7 @@ export interface User {
   updatedAt: string;
 }
 
-type QuestionSettings = {
+export type QuestionSettings = {
   question: string;
   image: string;
   correctAnswer: number;
@@ -50,6 +50,30 @@ export interface DynamoQuestion {
 export type RunStrategy = {
   selectionPressure: number;
   tipsPerGeneration: number;
+};
+
+export interface DynamoRun {
+  id: string;
+  qsk: string;
+  gsi_pk: string;
+  gsi_sk: string;
+  generation: number;
+  previousTips: number[];
+  run: number;
+  settings: QuestionSettings;
+  strategy: RunStrategy;
+}
+
+/**
+ * Question from IMPORT
+ */
+export type ImportedQuestionSettings = {
+  question: string;
+  image: string;
+  correctAnswer: number;
+  timeLimit?: number;
+  unit: string;
+  isInit: boolean;
 };
 
 /**
