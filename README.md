@@ -8,11 +8,12 @@ It uses GraphQL for client-server communication and DynamoDB to store data.
 
 - Node v14+
 - Docker
+- optionally Yarn (or else use `npm` instead of `yarn` in commands)
 
 ## How to run locally
 
 - clone this repository
-- with node installed run: `yarn install`
+- with node installed run: `yarn install` for yarn or `npm install` for npm
 - start database docker container: `docker-compose up`
 - start server and ui with `yarn start` (UI will run on [http://localhost:3000](http://localhost:3000) and API with playground on [http://localhost:3000/api](http://localhost:3000/api))
 - to allow running imports, generate or copy `google-credentials.json` to `src/server/io` folder
