@@ -1,5 +1,4 @@
 import React from 'react';
-import { injectGlobal } from 'emotion';
 import { Flex, Heading } from 'rebass';
 import { useHistory } from 'react-router-dom';
 import { MenuButton, Container } from '../../components';
@@ -16,12 +15,6 @@ interface HomeProps {
   user: User | null;
   onLogOut: Function;
 }
-
-injectGlobal`
-  body {
-    background-color: #161616 !important;
-  }
-`;
 
 const Home = ({ user, onLogOut }: HomeProps) => {
   const isSignedIn = !!user;
@@ -69,7 +62,6 @@ const Home = ({ user, onLogOut }: HomeProps) => {
           <Heading
             textAlign="left"
             color="#D6D6D6"
-            fontFamily="Raleway"
             fontWeight={900}
             lineHeight="0.85em"
             mx="auto"

@@ -84,6 +84,99 @@ async function createSeedData() {
     },
   };
 
+  // Stress test
+  const paramsForUserBatch1 = {
+    RequestItems: {
+      [TABLE_USER]: Array(24)
+        .fill(null)
+        .map((_, index) => ({
+          PutRequest: {
+            Item: {
+              id: `${id1}${index}`,
+              bundle: [idQ1, idQ2],
+              createdAt: new Date().toISOString(),
+              userskey: `USER#${id1}${index}`,
+              email: `generatedtestuser${index}@testuser.com`,
+              password: hashSync(password, 10),
+              role: UserRole.player,
+              slug: `${id1}${index}`,
+              score: 10 + index,
+              updatedAt: new Date().toISOString(),
+            },
+          },
+        })),
+    },
+  };
+
+  const paramsForUserBatch2 = {
+    RequestItems: {
+      [TABLE_USER]: Array(24)
+        .fill(null)
+        .map((_, index) => ({
+          PutRequest: {
+            Item: {
+              id: `${id2}${index}`,
+              bundle: [idQ1, idQ2],
+              createdAt: new Date().toISOString(),
+              userskey: `USER#${id2}${index}`,
+              email: `generatedtestuser${index}@testuser.com`,
+              password: hashSync(password, 10),
+              role: UserRole.player,
+              slug: `${id2}${index}`,
+              score: 10 + index,
+              updatedAt: new Date().toISOString(),
+            },
+          },
+        })),
+    },
+  };
+
+  const paramsForUserBatch3 = {
+    RequestItems: {
+      [TABLE_USER]: Array(24)
+        .fill(null)
+        .map((_, index) => ({
+          PutRequest: {
+            Item: {
+              id: `${id3}${index}`,
+              bundle: [idQ1, idQ2],
+              createdAt: new Date().toISOString(),
+              userskey: `USER#${id3}${index}`,
+              email: `generatedtestuser${index}@testuser.com`,
+              password: hashSync(password, 10),
+              role: UserRole.player,
+              slug: `${id3}${index}`,
+              score: 10 + index,
+              updatedAt: new Date().toISOString(),
+            },
+          },
+        })),
+    },
+  };
+
+  const paramsForUserBatch4 = {
+    RequestItems: {
+      [TABLE_USER]: Array(24)
+        .fill(null)
+        .map((_, index) => ({
+          PutRequest: {
+            Item: {
+              id: `${id3}${index}${index}`,
+              bundle: [idQ1, idQ2],
+              createdAt: new Date().toISOString(),
+              userskey: `USER#${id3}${index}${index}`,
+              email: `generatedtestuser${index}${index}@testuser.com`,
+              password: hashSync(password, 10),
+              role: UserRole.player,
+              slug: `${id3}${index}${index}`,
+              score: 10 + index,
+              updatedAt: new Date().toISOString(),
+            },
+          },
+        })),
+    },
+  };
+
   const paramsForQuestionBatch = {
     RequestItems: {
       [TABLE_QUESTION]: [
@@ -388,6 +481,12 @@ async function createSeedData() {
   };
 
   await db.batchWrite(paramsForUserBatch).promise();
+
+  await db.batchWrite(paramsForUserBatch1).promise();
+  await db.batchWrite(paramsForUserBatch2).promise();
+  await db.batchWrite(paramsForUserBatch3).promise();
+  await db.batchWrite(paramsForUserBatch4).promise();
+
   console.log(`✅ User data have been created successfully.`);
 
   await db.batchWrite(paramsForQuestionBatch).promise();

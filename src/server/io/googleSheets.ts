@@ -57,9 +57,12 @@ async function getQuestionBatch(
       correctAnswer: r[2],
       unit: r[3],
       image: r[4],
-      timeLimit: parseInt(r[6]),
+      timeLimit: isNaN(parseInt(r[6])) ? undefined : parseInt(r[6]),
       isInit: r[7].toLowerCase() === 'true',
     }));
+
+    // TODO: filter to include only rows with white background or other way to select what is not imported yet
+    // TODO: change background color or setting in spreadsheet to mark what has been already imported - maybe do it after database insert instead?
 
     /*
     return rows

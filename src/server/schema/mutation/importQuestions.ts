@@ -15,9 +15,27 @@ export async function importQuestions(
     'import'
   );
 
+  if (questions.length === 0) {
+    // return true but log, that nothing was found to be imported
+    console.log('No data to import, skipping database insert.');
+    return true;
+  }
+
   const importData = await batchCreateQuestions(questions, { dynamo });
 
-  console.log('import result: ', JSON.stringify(importData));
+  const notImported = importData
+    .filter(
+      (result) =>
+        result['UnprocessedItems'] &&
+        Object.keys(result['UnprocessedItems']).length !== 0
+    )
+    .map((result) =>
+      console.error(
+        'Unprocessed questions for import: ',
+        JSON.stringify(result['UnprocessedItems'])
+      )
+    );
 
-  return 'ok';
+  // return true for successfull import of all questions, false when something did not succeed
+  return notImported.length === 0;
 }
