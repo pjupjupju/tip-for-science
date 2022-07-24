@@ -15,9 +15,10 @@ const TargetImage = () => (
     sx={{
       position: 'absolute',
       opacity: 0.05,
-      left: '120px',
-      top: '-50px',
-      width: '50%',
+      left: ['-50px', '-10%', '10%'],
+      top: ['10%', '10%', '5%'],
+      width: ['75%', '75%', '50%'],
+      maxWidth: '960px',
       zIndex: -1,
       animation: `${float} 10s ease-in-out infinite`,
     }}

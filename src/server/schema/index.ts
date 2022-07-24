@@ -57,7 +57,7 @@ export const typeDefs = /* GraphQL */ gql`
   }
 
   type Mutation {
-    importQuestions: String
+    importQuestions: Boolean
     saveTip(
       id: String!
       tip: Int!

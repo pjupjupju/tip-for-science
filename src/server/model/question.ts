@@ -1,10 +1,13 @@
-import { DynamoDB } from 'aws-sdk';
+import { AWSError, DynamoDB } from 'aws-sdk';
+import { ScanOutput } from 'aws-sdk/clients/dynamodb';
 import { ulid } from 'ulid';
 import {
-  MAX_TOO_CLOSE_ANSWERS_PER_GENERATION,
+  MAX_PERCENT_TOO_CLOSE_ANSWERS_PER_GEN,
+  PERCENTAGE_CONSIDERED_TOO_CLOSE,
   TABLE_QUESTION,
+  TABLE_USER,
 } from '../../config';
-import { sliceIntoChunks } from '../../helpers';
+import { generateQuestionBundle, sliceIntoChunks } from '../../helpers';
 import { DynamoQuestion, ImportedQuestionSettings, RunStrategy } from './types';
 
 interface UserModelContext {
@@ -16,6 +19,8 @@ export async function batchCreateQuestions(
   { dynamo }: UserModelContext
 ) {
   const chunks = sliceIntoChunks(questions, 24);
+  const initialQuestionIds: string[] = [];
+  const questionIds: string[] = [];
 
   const paramsForEachChunk = chunks.map((chunk) => ({
     RequestItems: {
@@ -29,6 +34,13 @@ export async function batchCreateQuestions(
           unit,
         }: ImportedQuestionSettings) => {
           const id = ulid();
+
+          if (isInit) {
+            initialQuestionIds.push(`Q#${id}`);
+          } else {
+            questionIds.push(`Q#${id}`);
+          }
+
           return {
             PutRequest: {
               Item: {
@@ -64,6 +76,8 @@ export async function batchCreateQuestions(
   );
 
   const results = await Promise.all(allPromises);
+
+  await updateUserBatches(initialQuestionIds, questionIds, { dynamo });
 
   return results;
 }
@@ -310,6 +324,76 @@ async function updateCurrentGeneration(
   return dynamo.update(params).promise();
 }
 
+async function updateUserBatches(
+  initialQuestionIds: string[],
+  questionIds: string[],
+  { dynamo }: UserModelContext
+): Promise<any> {
+  // TODO: add GSI which marks USER as USER (sort key does not matter, but it might be created date or score, or we might create another GSI for score too)
+  const params = {
+    TableName: TABLE_USER,
+  };
+
+  // get last item of both sets of question ids, just to check whether the user already has it
+  const [lastQuestionAdded] = [...initialQuestionIds, ...questionIds].slice(-1);
+  let users: string[] = [];
+
+  const onScanUsersAndUpdateBundles = async (
+    err: AWSError,
+    data: ScanOutput
+  ): Promise<void> => {
+    if (err) {
+      console.error('Unable to scan the table. Error:', JSON.stringify(err));
+    } else {
+      const additionalUsers = (data as any).Items.filter(
+        ({ bundle }: { bundle: string[] }) =>
+          !bundle.includes(lastQuestionAdded)
+      );
+
+      if (additionalUsers.length > 0) {
+        const chunks = sliceIntoChunks(additionalUsers, 24);
+
+        const paramsForEachChunk = chunks.map((chunk) =>
+          chunk.map(({ id, bundle }) => ({
+            Update: {
+              TableName: TABLE_USER,
+              Key: { id, userskey: `USER#${id}` },
+              UpdateExpression: 'set bundle = :bundle',
+              ExpressionAttributeValues: {
+                ':bundle': [
+                  ...bundle,
+                  ...generateQuestionBundle(initialQuestionIds, questionIds),
+                ],
+              },
+            },
+          }))
+        );
+
+        const allPromises = paramsForEachChunk.map((params) =>
+          dynamo
+            .transactWrite({
+              TransactItems: params,
+            })
+            .promise()
+        );
+
+        await Promise.all(allPromises);
+      }
+
+      users = [...users, ...additionalUsers];
+
+      if (typeof data.LastEvaluatedKey !== 'undefined') {
+        dynamo.scan(
+          { ...params, ExclusiveStartKey: data.LastEvaluatedKey },
+          onScanUsersAndUpdateBundles
+        );
+      }
+    }
+  };
+
+  dynamo.scan(params, onScanUsersAndUpdateBundles);
+}
+
 async function disableRun(
   questionId: string,
   runId: string | number,
@@ -355,7 +439,7 @@ function getNewPreviousTips(
   correctAnswer: number,
   { selectionPressure }: RunStrategy
 ): number[] {
-  // TODO: do we want to use Math.floor? How do we make sure, we never create FLOAT?
+  // TODO: do we want to use Math.floor? How do we make sure, we never create FLOAT? This is probably not app's job
   const numTipsToRemove = Math.floor(selectionPressure * tips.length);
   return tips
     .sort((a, b) => Math.abs(correctAnswer - a) - Math.abs(correctAnswer - b))
@@ -367,12 +451,12 @@ function isGenerationTooCloseToCorrectAnswer(
   tips: number[],
   correctAnswer: number
 ): boolean {
-  const fraction = 0.1 * correctAnswer;
+  // Fraction of correct answer which is considered to be too close
+  const fraction = (correctAnswer * PERCENTAGE_CONSIDERED_TOO_CLOSE) / 100;
 
   return (
-    MAX_TOO_CLOSE_ANSWERS_PER_GENERATION <=
+    (tips.length * MAX_PERCENT_TOO_CLOSE_ANSWERS_PER_GEN) / 100 <=
     tips.reduce((count: number, t: number) => {
-      // MATH:
       if (Math.abs(correctAnswer - t) <= fraction) {
         return count + 1;
       }

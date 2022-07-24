@@ -2,6 +2,7 @@ import { DynamoDB } from 'aws-sdk';
 import { ulid } from 'ulid';
 import * as yup from 'yup';
 import { TABLE_USER, TABLE_QUESTION, USERS_BY_EMAIL_INDEX } from '../../config';
+import { generateQuestionBundle } from '../../helpers';
 import { User, UserRole } from './types';
 
 interface UserModelContext {
@@ -178,14 +179,4 @@ async function getQuestionCorpus(
   };
 
   return dynamo.query(params).promise();
-}
-
-function generateQuestionBundle(
-  initialQuestionIds: string[],
-  restAvailableQuestionIds: string[]
-): string[] {
-  const intitialBundle = initialQuestionIds.sort(() => Math.random() - 0.5);
-  const restBundle = restAvailableQuestionIds.sort(() => Math.random() - 0.5);
-
-  return [...intitialBundle, ...restBundle];
 }

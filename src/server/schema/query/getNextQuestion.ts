@@ -26,13 +26,14 @@ export async function getNextQuestion(
   if (user == null) {
     throw new ValidationError('Unauthorized.');
   }
-
-  console.log('user: ', user);
-
   const userRecord = await findUserById(user.id, { dynamo });
 
   if (userRecord == null) {
     throw new ValidationError('User does not exist.');
+  }
+
+  if (userRecord.bundle.length === 0) {
+    return null;
   }
 
   const lastQuestion = userRecord.lastQuestion;
@@ -56,23 +57,6 @@ export async function getNextQuestion(
 
   // get the preferred run from cache
   const runRecord = await runCache.getRunId(nextQuestionId, nextQuestionRuns);
-  
-  /*
-
-  TODO: we do not need this anymore, delete later
-
-  const tips = await getCurrentGenerationTips(
-    nextQuestionId,
-    Number(runItem.run),
-    runItem.generation,
-    {
-      dynamo,
-    }
-  );
-
-  console.log('tips in this gen: ', JSON.stringify(tips));
-
-  */
 
   await updateLastQuestion(user.id, nextQuestionId, { dynamo });
 

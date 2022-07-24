@@ -57,8 +57,6 @@ const SignUp = () => {
   });
 
   const onSubmit = async (values: { email: string; password: string }) => {
-    console.log('sem to asi nedojde?');
-
     const { data } = await signUp({
       variables: {
         email: values.email,

@@ -1,5 +1,4 @@
 import { DynamoDB } from 'aws-sdk';
-// import { ulid } from 'ulid';
 import { getScore } from '../../../helpers';
 import { createQuestionTip, getQuestion, updateScore } from '../../model';
 import { User } from '../../model/types';
@@ -25,8 +24,6 @@ export async function saveTip(
   },
   { dynamo, user }: { dynamo: DynamoDB.DocumentClient; user: User }
 ) {
-  console.log(`--- updating Question ${id}, Run ${rId}, Generation ${gId} with tip ${tip}`);
-
   const question = await getQuestion(id, { dynamo });
   const { strategy, settings } = question;
 
@@ -63,7 +60,7 @@ export async function saveTip(
 
   //
   /*s
-  Update user question progress
+  Update user question-score progress
 
   await dynamo.put({
     TableName: TABLE_USER,
