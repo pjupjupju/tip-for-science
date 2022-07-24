@@ -1,6 +1,7 @@
 # Tip for Science 🎯
 
 _Fullstack javascript app with React-based responsive UI._
+
 This project was bootstrapped with create-react-app and Razzle.
 It uses GraphQL for client-server communication and DynamoDB to store data.
 
