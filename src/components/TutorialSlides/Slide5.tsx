@@ -15,7 +15,6 @@ const Slide5 = ({ handleNextStep, currentTip }: SlideProps) => {
       <TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
-          fontWeight="bold"
           color="secondary"
           textAlign="center"
           p={3}
@@ -30,14 +29,12 @@ const Slide5 = ({ handleNextStep, currentTip }: SlideProps) => {
       </Box>
       <Text
         fontSize={[3, 4, 5]}
-        fontWeight="bold"
         color="secondary"
         textAlign="center"
         py={4}
         px={3}
       >
-        Na tomto skvělém přehledném grafu je tvá odpověď, uvedené nápovědy a
-        správná odpověď.
+        Na tomto grafu můžeš vidět svou odpověď, uvedené nápovědy a správnou odpověď.
       </Text>
       <Button
         mt="auto"

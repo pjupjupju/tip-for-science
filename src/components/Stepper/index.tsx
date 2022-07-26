@@ -17,7 +17,7 @@ const activeDotStyles = {
   ...dotStyles,
   transform: 'scale(1.2)',
   transformOrigin: 'center',
-  backgroundColor: '#3498db',
+  backgroundColor: 'secondary',
 };
 
 const Dot = ({ isActive }: { isActive: boolean }) => (

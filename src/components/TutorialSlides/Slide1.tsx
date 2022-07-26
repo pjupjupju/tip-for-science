@@ -37,8 +37,8 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
       <Box p="4">
         <Text
           fontSize={[3, 4, 5]}
-          fontWeight="bold"
-          color="primary"
+          // fontWeight="bold"
+          color="secondary"
           textAlign="center"
           mb="4"
         >
@@ -46,8 +46,8 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
         </Text>
         <Text
           fontSize={[3, 4, 5]}
-          fontWeight="bold"
-          color="primary"
+          // fontWeight="bold"
+          color="secondary"
           textAlign="center"
           mb="4"
         >
@@ -55,8 +55,8 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
         </Text>
         <Text
           fontSize={[3, 4, 5]}
-          fontWeight="bold"
-          color="primary"
+          // fontWeight="bold"
+          color="secondary"
           textAlign="center"
         >
           Jak rychle se pohybuje Jupiter?

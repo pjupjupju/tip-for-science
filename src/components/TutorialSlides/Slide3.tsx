@@ -28,7 +28,7 @@ const labelStyle = {
   color: 'white',
 };
 
-const question = 'Kolik vážil nejtěžší slon evaaaa?';
+const question = 'Kolik vážil nejtěžší slon?';
 const image = elephant;
 const unit = 'kg';
 
@@ -44,7 +44,6 @@ const Slide3 = ({ onSubmit }: SlideProps) => {
       <TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
-          fontWeight="bold"
           color="secondary"
           textAlign="center"
           p={2}
@@ -58,15 +57,15 @@ const Slide3 = ({ onSubmit }: SlideProps) => {
           tip:
         </Label>
         <Input
-          id="tip"
+          id="tip" 
           name="tip"
-          type="number"
-          placeholder="váš tip"
+          type="number" 
+          placeholder="váš tip" //shlm: přidat submit tlačítko
           sx={inputStyles}
           onKeyDown={handleSubmit}
         />
         <Text color="white">{unit}</Text>
-      </Flex>
+      </Flex> 
     </Container>
   );
 };
