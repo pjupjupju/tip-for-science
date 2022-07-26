@@ -20,8 +20,7 @@ const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
     <Container>
       <TutorialHeader>
         <Text
-          fontSize={[3, 4, 5]}
-          fontWeight="bold"
+          fontSize={[3, 4, 4]}
           color="secondary"
           textAlign="center"
           p={2}
@@ -32,7 +31,6 @@ const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
       <Image src={elephant} sx={imageStyle} />
       <Text
         fontSize={[3, 4, 4]}
-        fontWeight="bold"
         color="secondary"
         textAlign="center"
         py={4}

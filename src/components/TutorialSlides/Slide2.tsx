@@ -1,15 +1,17 @@
 import React from 'react';
-import { Button, Image, Text } from 'rebass';
+import { Box, Button, Image, Text } from 'rebass';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import elephant from './../../assets/slide1_elephant.jpg';
 import { SlideProps } from './types';
 
 const imageStyle = {
-  minHeight: '210px',
-  maxHeight: '400px',
-  width: '100%',
-  alignSelf: 'center',
+  flexShrink: 1,
+  flexGrow: 1,
+  backgroundImage: `url(${elephant})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
 };
 
 const Slide2 = ({ handleNextStep }: SlideProps) => {
@@ -22,35 +24,33 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
       <TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
-          fontWeight="bold"
           color="secondary"
           textAlign="center"
           px={3}
           py={4}
         >
-          Nebojte, správné odpovědi se brzy dozvíte! Nejdřív ale zkuste hádat...
+          Neboj, správné odpovědi se brzy dozvíš! Nejdřív ale zkus hádat...
         </Text>
       </TutorialHeader>
-      <Image src={elephant} sx={imageStyle} />
+      <Box sx={imageStyle} />
       <Text
         fontSize={[3, 4, 4]}
-        fontWeight="bold"
         color="secondary"
-        textAlign="center"
+        textAlign="center" // shlm: zarovnat next button dolů
         py={4}
         px={3}
       >
         Největší známý slon byl zastřelen v roce 1956 v Angole. Předchozí hráči
         Tip for Science hádali, že toto obrovské zvíře vážilo{' '}
-        <Text color="primary" as="span">
+        <Text color="accent" as="span">
           8 300
         </Text>
         ,{' '}
-        <Text color="primary" as="span">
+        <Text color="accent" as="span">
           9500
         </Text>
         , nebo{' '}
-        <Text color="primary" as="span">
+        <Text color="accent" as="span">
           15 000{' '}
         </Text>
         kg.
