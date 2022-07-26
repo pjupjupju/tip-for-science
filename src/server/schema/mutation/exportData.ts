@@ -1,5 +1,5 @@
 import { DynamoDB } from 'aws-sdk';
-import { createQuestionTip, getQuestion, updateScore } from '../../model';
+import { exportTipData } from '../../model';
 import { User } from '../../model/types';
 
 export async function exportData(
@@ -7,5 +7,7 @@ export async function exportData(
   _: any,
   { dynamo, user }: { dynamo: DynamoDB.DocumentClient; user: User }
 ) {
-  return 'ok';
+  const downloadUrl = await exportTipData({ dynamo });
+
+  return downloadUrl;
 }

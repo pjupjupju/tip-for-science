@@ -47,6 +47,7 @@ export async function saveTip(
       },
       generation: gId,
       previousTips,
+      timeLimit: settings.timeLimit,
       knewAnswer,
       msElapsed,
       userId: user.id,

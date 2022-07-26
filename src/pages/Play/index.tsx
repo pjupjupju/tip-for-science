@@ -53,6 +53,7 @@ const Play = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
+    const msElapsed = new Date().getTime() - gameStart.current;
     saveTip({
       variables: {
         id: questionId,
@@ -63,16 +64,20 @@ const Play = () => {
         // TODO: move saveTip call after we find out whether he was too close and knew it
         knewAnswer: false,
         // TODO: get msElapsed from timeoutref before we clear timeout
-        msElapsed: 3000,
+        msElapsed,
       },
     });
     dispatch({ type: ActionType.GAME_SUBMIT, payload: { tip: myTip } });
   };
   const timeoutRef = useRef<number>();
+  const gameStart = useRef<number>(new Date().getTime());
 
   const { loading, data, networkStatus, refetch } = useQuery(QUESTION_QUERY, {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'network-only',
+    onCompleted: () => {
+      gameStart.current = new Date().getTime();
+    },
   });
   const { id: questionId, timeLimit } =
     data != null
@@ -100,6 +105,7 @@ const Play = () => {
     ) {
       timeoutRef.current = setTimeout(() => {
         if (!isSubmitted) {
+          // TODO: implement forced saveTip here if we want to save also unanswered questions
           dispatch({ type: ActionType.GAME_SUBMIT });
         }
       }, timeLimit * 1000);

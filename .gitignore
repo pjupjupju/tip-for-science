@@ -14,6 +14,9 @@ sessions
 # testing
 /coverage
 
+# development
+export-tipdata**.csv
+
 # production
 /build
 

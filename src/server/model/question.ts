@@ -1,5 +1,7 @@
+import fs from 'fs';
 import { AWSError, DynamoDB } from 'aws-sdk';
 import { ScanOutput } from 'aws-sdk/clients/dynamodb';
+import { format } from '@fast-csv/format';
 import { ulid } from 'ulid';
 import {
   MAX_PERCENT_TOO_CLOSE_ANSWERS_PER_GEN,
@@ -8,7 +10,13 @@ import {
   TABLE_USER,
 } from '../../config';
 import { generateQuestionBundle, sliceIntoChunks } from '../../helpers';
-import { DynamoQuestion, ImportedQuestionSettings, RunStrategy } from './types';
+import {
+  DynamoQuestion,
+  DynamoTip,
+  ImportedQuestionSettings,
+  RunStrategy,
+} from './types';
+import uploadCsvToS3 from '../io/uploadCsvToS3';
 
 interface UserModelContext {
   dynamo: DynamoDB.DocumentClient;
@@ -178,6 +186,7 @@ export async function createQuestionTip(
     strategy,
     generation,
     previousTips,
+    timeLimit,
     knewAnswer,
     msElapsed,
     userId,
@@ -189,6 +198,7 @@ export async function createQuestionTip(
     strategy: RunStrategy;
     generation: number;
     previousTips: number[];
+    timeLimit?: number;
     knewAnswer: boolean;
     msElapsed: number;
     userId: string;
@@ -214,6 +224,8 @@ export async function createQuestionTip(
       msElapsed,
       createdBy: userId,
       createdAt: new Date().toISOString(),
+      correctAnswer,
+      timeLimit,
       knewAnswer,
     },
   };
@@ -301,6 +313,115 @@ async function updateCurrentHighestRun(
   };
 
   return dynamo.update(params).promise();
+}
+
+export async function exportTipData({
+  dynamo,
+}: UserModelContext): Promise<any> {
+  let downloadUrl = '';
+
+  const params = {
+    TableName: TABLE_QUESTION,
+    FilterExpression: 'begins_with(qsk, :qsk)',
+    ExpressionAttributeValues: {
+      ':qsk': 'T#',
+    },
+  };
+
+  const headers = [
+    'time',
+    'date',
+    'itemID',
+    'participantID',
+    'questionID',
+    'runID',
+    'generationID',
+    'correct',
+    'nparents',
+    'parent1',
+    'parent2',
+    'parent3',
+    'parent4',
+    'parent5',
+    'answered',
+    'answertime',
+    'limit',
+    'tip',
+  ];
+
+  const returnValueOrEmptyString = (value: any) =>
+    typeof value === 'undefined' ? '' : value;
+
+  const stream = format({ headers });
+
+  if (process.env.NODE_ENV !== 'production') {
+    const writableStream = fs.createWriteStream(
+      `export-tipdata-${Date.now()}.csv`
+    );
+
+    stream.pipe(writableStream);
+  }
+
+  const onScanTips = async (err: AWSError, data: ScanOutput): Promise<void> => {
+    if (err) {
+      console.error('Unable to scan the table. Error:', JSON.stringify(err));
+    } else {
+      const items = (data as any).Items;
+
+      if (items.length > 0) {
+        items.forEach((row: DynamoTip) => {
+          stream.write({
+            time: new Date(Date.parse(row.data.createdAt))
+              .toTimeString()
+              .split('(')[0]
+              .trim(),
+            date: row.data.createdAt.substring(0, 10),
+            itemID: row.qsk,
+            participantID: row.data.createdBy,
+            questionID: row.id,
+            runID: row.run,
+            generationID: row.generation,
+            correct: row.data.correctAnswer,
+            nparents: row.data.previousTips.length,
+            parent1: returnValueOrEmptyString(row.data.previousTips[0]),
+            parent2: returnValueOrEmptyString(row.data.previousTips[1]),
+            parent3: returnValueOrEmptyString(row.data.previousTips[2]),
+            parent4: returnValueOrEmptyString(row.data.previousTips[3]),
+            parent5: returnValueOrEmptyString(row.data.previousTips[4]),
+            answered: row.data.tip !== null ? 'true' : 'false',
+            answertime: row.data.msElapsed,
+            limit:
+              typeof row.data.timeLimit === 'undefined'
+                ? 'false'
+                : row.data.timeLimit * 1000,
+            tip: row.data.tip,
+          });
+        });
+      }
+
+      if (typeof data.LastEvaluatedKey !== 'undefined') {
+        dynamo.scan(
+          { ...params, ExclusiveStartKey: data.LastEvaluatedKey },
+          onScanTips
+        );
+      } else {
+        if (process.env.NODE_ENV === 'production') {
+          downloadUrl = await uploadCsvToS3(
+            stream,
+            `export-tipdata-${Date.now()}`
+          );
+        } else {
+          downloadUrl = 'local';
+        }
+
+        stream.end();
+      }
+    }
+  };
+
+  await dynamo.scan(params, onScanTips).promise();
+
+  return downloadUrl;
 }
 
 async function updateCurrentGeneration(
