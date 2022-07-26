@@ -27,6 +27,17 @@ export type QuestionSettings = {
   unit: string;
 };
 
+type TipSettings = {
+  tip: number;
+  correctAnswer: number;
+  previousTips: number[];
+  timeLimit?: number;
+  msElapsed: number;
+  createdBy: string;
+  knewAnswer: boolean;
+  createdAt: string;
+};
+
 type QuestionStrategy = {
   initialTips: number[][];
   selectionPressure: number[];
@@ -45,6 +56,16 @@ export interface DynamoQuestion {
   run: number;
   settings: QuestionSettings;
   strategy: QuestionStrategy;
+}
+
+export interface DynamoTip {
+  id: string;
+  qsk: string;
+  gsi_pk: string;
+  gsi_sk: string;
+  generation: number;
+  run: number;
+  data: TipSettings;
 }
 
 export type RunStrategy = {

@@ -1,3 +1,7 @@
+// AWS configuration
+export const S3_BUCKET_NAME = 'tfsapp';
+export const AWS_REGION = 'eu-central-1';
+
 // Database configuration
 
 export const TABLE_USER = 'User';
