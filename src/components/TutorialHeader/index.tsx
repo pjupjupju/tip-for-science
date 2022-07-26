@@ -6,14 +6,17 @@ interface TutorialHeaderProps {
   children: ReactNode;
 }
 
-const verticallyCentered = { alignItems: 'center'};
+const verticallyCentered = { alignItems: 'center' };
 
-const TutorialHeader = ({ children, centerVertically = true }: TutorialHeaderProps) => (
+const TutorialHeader = ({
+  children,
+  centerVertically = true,
+}: TutorialHeaderProps) => (
   <Flex
-    maxHeight="calc(20vh)"
+    minHeight="80px"
     width="100%"
     justifyContent="center"
-    {...centerVertically && verticallyCentered}
+    {...(centerVertically && verticallyCentered)}
   >
     {children}
   </Flex>

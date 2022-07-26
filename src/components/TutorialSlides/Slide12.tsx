@@ -11,8 +11,7 @@ const Slide12 = ({ handleNextStep }: SlideProps) => {
     <Container>
       <Text
         fontSize={[3, 4, 5]}
-        fontWeight="bold"
-        color="primary"
+        color="secondary"
         textAlign="center"
         mb="4"
         mt="4"

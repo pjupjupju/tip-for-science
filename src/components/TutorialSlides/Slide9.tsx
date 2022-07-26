@@ -30,7 +30,7 @@ const labelStyle = {
 };
 
 const question =
-  'Nyní vidíš i dvě předchozí odpovědi na otázku jak vysoká je hlava George Washingtona v sousoší Mt. Rushmore. ';
+  'Jak vysoká je hlava George Washingtona v sousoší Mt. Rushmore?';
 const image = washington;
 const unit = 'm';
 const previousTips = [28, 105];
@@ -45,13 +45,9 @@ const Slide9 = ({ onSubmit = () => {} }: SlideProps) => {
   return (
     <Container>
       <TutorialHeader>
-        <Text
-          fontSize={[3, 4, 5]}
-          fontWeight="bold"
-          color="secondary"
-          textAlign="center"
-          p={3}
-        >
+        <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" p={3}>
+          Nyní máš k dispozici i předchozí tipy.
+          <br />
           {question}
         </Text>
       </TutorialHeader>

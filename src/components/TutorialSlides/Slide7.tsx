@@ -11,19 +11,20 @@ const Slide7 = ({ handleNextStep }: SlideProps) => {
   };
   return (
     <Container>
-      <TutorialHeader>
-        <Text
-          fontSize={[3, 4, 5]}
-          fontWeight="bold"
-          color="secondary"
-          textAlign="center"
-          p={3}
-        >
-          Tady můžeš vidět celý graf toho, jak funguje distribuce bodů:
+      <Box p="4">
+        <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" mb="4">
+          Tato hra je modelem evoluce.
         </Text>
-      </TutorialHeader>
-      <Box width="100%" height="200px">
-        <ScoreChart currentTip={50} correctAnswer={100} />
+        <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" mb="4">
+          Tvé tipy a tipy ostatních hráčů tvoří populace. V rámci nich
+          jednotlivé tipy bojují o přežití, hledají partnery, množí se.
+        </Text>
+        <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" mb="4">
+          Ty, které přežijí, se mohou jako "předchozí tip" zobrazit právě tobě.
+        </Text>
+        <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center">
+          A tvůj tip, pokud přežije, může vidět někdo další.
+        </Text>
       </Box>
       <Button
         mt="auto"
