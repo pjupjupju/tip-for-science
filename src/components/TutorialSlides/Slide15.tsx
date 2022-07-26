@@ -38,7 +38,6 @@ const Slide15 = (props: SlideProps) => {
       <TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
-          fontWeight="bold"
           color="secondary"
           textAlign="center"
           p={3}
@@ -49,12 +48,11 @@ const Slide15 = (props: SlideProps) => {
       <Image src={logo} sx={imageStyle} />
       <Text
         fontSize={[3, 4, 5]}
-        fontWeight="bold"
         color="secondary"
         textAlign="center"
         p={3}
       >
-        Tip for Science bylo vytvořeno evolučními biology z Univerzity Karlovy.
+        Tip for Science bylo vytvořeno evolučními biology z Univerzity Karlovy.
       </Text>
       <Button onClick={handleClickHome}>Domů</Button>
       {loading && (

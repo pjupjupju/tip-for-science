@@ -70,7 +70,6 @@ const Slide13 = ({ onSubmit }: SlideProps) => {
       <TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
-          fontWeight="bold"
           color="secondary"
           textAlign="center"
           p={3}
