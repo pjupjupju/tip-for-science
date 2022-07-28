@@ -17,7 +17,6 @@ import {
   RunStrategy,
 } from './types';
 import uploadCsvToS3 from '../io/uploadCsvToS3';
-
 interface UserModelContext {
   dynamo: DynamoDB.DocumentClient;
 }
@@ -211,6 +210,10 @@ export async function createQuestionTip(
     dynamo,
   });
 
+  const currentTipsWithAnswer = currentTips.filter(
+    (t: DynamoTip) => !['undefined', 'null'].includes(typeof t.data.tip)
+  );
+
   const params = {
     id,
     qsk: `T#${tipId}`,
@@ -244,9 +247,9 @@ export async function createQuestionTip(
         }
 
         // If we hit tips per generation threshold, start new generation by updating RUN
-        if (currentTips.length + 1 === strategy.tipsPerGeneration) {
+        if (currentTipsWithAnswer.length + 1 === strategy.tipsPerGeneration) {
           const allGenerationTips = [
-            ...currentTips.map((t: any) => t.data.tip),
+            ...currentTipsWithAnswer.map((t: any) => t.data.tip),
             tip,
           ];
           // If we hit correct answer for too many people in generation, we disable this RUN
@@ -359,6 +362,7 @@ export async function exportTipData({
       `export-tipdata-${Date.now()}.csv`
     );
 
+    // @ts-ignore
     stream.pipe(writableStream);
   }
 

@@ -14,7 +14,7 @@ export interface GraphQLContext {
   dynamo: DynamoDB.DocumentClient;
   request: Request;
   runCache: RunCache;
-  user?: UserTokenData | void;
+  user?: UserTokenData;
 }
 
 interface ContextOptions {
