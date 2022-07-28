@@ -23,7 +23,7 @@ class RunCache {
   millisecondsToLive: number;
   onlineThreshold: number;
   online: Map<string, number>;
-  timeouts: Map<string, number>;
+  timeouts: Map<string, ReturnType<typeof setTimeout>>;
   dynamo: DynamoDB.DocumentClient;
 
   constructor(

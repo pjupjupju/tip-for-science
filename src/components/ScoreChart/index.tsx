@@ -121,6 +121,7 @@ const ScoreChart = ({
     },
   ];
   return (
+    // @ts-ignore
     <ResponsiveLine
       enableArea={true}
       colors={{ datum: 'color' }}

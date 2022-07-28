@@ -6,12 +6,6 @@ import { findUserByEmail } from '../../model';
 import { JWT_SECRET } from '../../../config';
 import { SignInResultSource } from '../types';
 
-declare module 'express-session' {
-  interface Session {
-    token: string;
-  }
-}
-
 export async function signIn(
   parent: any,
   args: { email: string; password: string },

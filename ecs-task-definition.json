@@ -1,0 +1,25 @@
+{
+  "family": "tfs-app",
+  "executionRoleArn": "arn:aws:iam::107652262785:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [
+      {
+          "name": "tfs-app",
+          "image": "107652262785.dkr.ecr.eu-central-1.amazonaws.com/tfs-app:latest",
+          "portMappings": [
+              {
+                  "containerPort": 3000,
+                  "hostPort": 3000,
+                  "protocol": "tcp"
+              }
+          ],
+          "essential": true
+      }
+  ],
+  "requiresCompatibilities": [
+      "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "512"
+}
+
