@@ -39,7 +39,6 @@ const UserScoreCurve = ({ stats }: UserScoreCurveProps) => {
   };
 
   return (
-    // @ts-ignore
     <ResponsiveLine
       {...commonProperties}
       xScale={{
