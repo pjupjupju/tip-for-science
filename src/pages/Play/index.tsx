@@ -69,7 +69,7 @@ const Play = () => {
     });
     dispatch({ type: ActionType.GAME_SUBMIT, payload: { tip: myTip } });
   };
-  const timeoutRef = useRef<number>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
   const gameStart = useRef<number>(new Date().getTime());
 
   const { loading, data, networkStatus, refetch } = useQuery(QUESTION_QUERY, {

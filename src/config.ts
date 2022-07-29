@@ -1,5 +1,5 @@
 // AWS configuration
-export const S3_BUCKET_NAME = 'tfsapp';
+export const S3_BUCKET_NAME = 'tfsstorage';
 export const AWS_REGION = 'eu-central-1';
 
 // Database configuration
