@@ -21,7 +21,6 @@ RUN yarn build
 
 
 # Copying source files
-COPY build ./build
 
 EXPOSE 3000
 

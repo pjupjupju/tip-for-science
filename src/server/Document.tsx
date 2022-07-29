@@ -6,9 +6,10 @@ interface DocumentProps {
   helmet: HelmetData;
   js: string;
   state: any;
+  css: React.ReactNode;
 }
 
-export function Document({ content, helmet, js, state }: DocumentProps) {
+export function Document({ content, css, helmet, js, state }: DocumentProps) {
   return (
     <html lang="sk">
       <head>
@@ -46,6 +47,7 @@ export function Document({ content, helmet, js, state }: DocumentProps) {
           href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;700&display=swap"
           rel="stylesheet"
         ></link>
+        {css}
       </head>
       <body>
         <div id="root" dangerouslySetInnerHTML={{ __html: content }} />
