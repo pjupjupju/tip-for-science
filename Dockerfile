@@ -13,7 +13,8 @@ COPY yarn.lock .
 
 RUN yarn install
 
-RUN echo "{}" >> ./src/server/io/google-credentials.json
+RUN echo "{}" >> google-credentials.json
+COPY google-credentials.json ./src/server/io
 
 COPY . .
 
