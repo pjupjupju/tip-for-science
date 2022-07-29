@@ -93,8 +93,7 @@ server
   );
 
 Sentry.init({
-  dsn:
-    'https://b480280810f9447ab512f4519fe32aed@o1163471.ingest.sentry.io/6251598',
+  dsn: 'https://b480280810f9447ab512f4519fe32aed@o1163471.ingest.sentry.io/6251598',
   integrations: [
     // enable HTTP calls tracing
     new Sentry.Integrations.Http({ tracing: true }),
@@ -148,6 +147,16 @@ server.get('/*', async (req, res, next) => {
     const helmet = Helmet.renderStatic();
     const initialState = client.extract();
 
+    const cssLinksFromAssets = (assets, entrypoint): string => {
+      return assets[entrypoint]
+        ? assets[entrypoint].css
+          ? assets[entrypoint].css.map((asset) => (
+              <link rel="stylesheet" href={asset} />
+            ))
+          : ''
+        : '';
+    };
+
     if (context.url) {
       res.redirect(context.url);
     } else {
@@ -158,6 +167,7 @@ server.get('/*', async (req, res, next) => {
             <Document
               content={markup}
               helmet={helmet}
+              css={cssLinksFromAssets(assets, 'client')}
               js={assets.client.js}
               state={initialState}
             />

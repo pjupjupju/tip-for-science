@@ -14,15 +14,17 @@ const server = http.createServer(app);
 
 server
   .listen(process.env.PORT || 3000, () => {
-    console.log('🚀 started at http://localhost:3000');
+    console.log(`🚀 server running at http://localhost:${process.env.PORT || 3000}`);
   })
-  .on('error', error => {
+  .on('error', (error) => {
     console.log(error);
   });
 
+// @ts-ignore
 if (module.hot) {
   console.log('✅  Server-side HMR Enabled!');
 
+  // @ts-ignore
   module.hot.accept('./server', () => {
     console.log('🔁  HMR Reloading `./server`...');
 

@@ -22,7 +22,6 @@ const PreviousTips = ({ previousTips, unit }: PreviousTipsProps) =>
         {previousTips.map((previousTip) => (
           <Text sx={previousTipStyle} key={`previous-tip-${previousTip}`}>
             {previousTip}
-            {unit != null ? ` ${unit}` : ''}
           </Text>
         ))}
       </Flex>

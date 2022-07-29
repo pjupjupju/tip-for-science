@@ -49,7 +49,7 @@ const Slide13 = ({ onSubmit }: SlideProps) => {
       onSubmit(Number(event.currentTarget.value));
     }
   };
-  const timeoutRef = useRef<number>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   const [timeLimitEnded, setTimeLimitEnded] = useState(false);
   useEffect(() => {
