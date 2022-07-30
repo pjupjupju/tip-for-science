@@ -1,7 +1,7 @@
 import React, { KeyboardEvent } from 'react';
 import { Flex, Image, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
-import washington from './../../assets/game_washington.jpg';
+import washington from './../../assets/washingtonTut.jpg';
 import { PreviousTips } from '../Game/PreviousTips';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
@@ -30,7 +30,7 @@ const labelStyle = {
 };
 
 const question =
-  'Jak vysoká je hlava George Washingtona v sousoší Mt. Rushmore?';
+  'Jak vysoká je hlava George Washingtona v sousoší Mt. Rushmore?';
 const image = washington;
 const unit = 'm';
 const previousTips = [28, 105];
@@ -61,7 +61,7 @@ const Slide9 = ({ onSubmit = () => {} }: SlideProps) => {
           id="tip"
           name="tip"
           type="number"
-          placeholder="váš tip"
+          placeholder="tvůj tip"
           sx={inputStyles}
           onKeyDown={handleSubmit}
         />

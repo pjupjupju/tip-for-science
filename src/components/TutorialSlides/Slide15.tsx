@@ -11,8 +11,11 @@ import { SlideProps } from './types';
 
 const imageStyle = {
   minHeight: '210px',
-  width: '100%',
+  maxHeight: '350px',
+  width: 'auto',
   alignSelf: 'center',
+  px: [4, 4, 6],
+  py: 3,
 };
 
 const Slide15 = (props: SlideProps) => {
@@ -36,36 +39,39 @@ const Slide15 = (props: SlideProps) => {
   return (
     <Container>
       <TutorialHeader>
-        <Text
-          fontSize={[3, 4, 5]}
-          color="secondary"
-          textAlign="center"
-          p={3}
-        >
-          To je vše, nyní jsi připraven na hru naostro!
+        <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" p={4}>
+          To je vše, nyní jsi připraven*a na hru naostro!
         </Text>
       </TutorialHeader>
       <Image src={logo} sx={imageStyle} />
-      <Text
-        fontSize={[3, 4, 5]}
-        color="secondary"
-        textAlign="center"
-        p={3}
-      >
+      <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" p={3}>
         Tip for Science bylo vytvořeno evolučními biology z Univerzity Karlovy.
       </Text>
-      <Button onClick={handleClickHome}>Domů</Button>
-      {loading && (
-        <Flex justifyContent="center">
-          <Spinner />
-        </Flex>
-      )}
-      {!loading && isLoggedIn && (
-        <Button onClick={handleClickPlay}>Začít hrát</Button>
-      )}
-      {!loading && !isLoggedIn && (
-        <Button onClick={handleClickSignIn}>Přihlásit se</Button>
-      )}
+      <Flex>
+        <Button
+          onClick={handleClickHome}
+          sx={{ flex: 1 }}
+          mr={1}
+          backgroundColor={'#414141'}
+        >
+          Domů
+        </Button>
+        {loading && (
+          <Flex justifyContent="center">
+            <Spinner />
+          </Flex>
+        )}
+        {!loading && isLoggedIn && (
+          <Button onClick={handleClickPlay} sx={{ flex: 3 }}>
+            Začít hrát
+          </Button>
+        )}
+        {!loading && !isLoggedIn && (
+          <Button onClick={handleClickSignIn} sx={{ flex: 3 }}>
+            Přihlásit se
+          </Button>
+        )}
+      </Flex>
     </Container>
   );
 };
