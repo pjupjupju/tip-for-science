@@ -17,9 +17,8 @@ const TooCloseDialog = ({
   return (
     <Box>
       <Text color="secondary" textAlign="center" px={3} my={3} fontWeight="bold">
-        Wow! That was close! Did you knew the right answer or did you get lucky?
-        This will not affect your score but it will help us to precise our model
-        of evolution.
+        Wow! To bylo FAKT blízko! Věděl*a jsi správnou odpověď, nebo se ti opravdu podařilo takhle dobře tipnout?
+        Neboj, tvé score to neovlivní, ale pomůže nám to při vyhodnocování dat :)
       </Text>
       <Flex justifyContent="space-between">
         <Button onClick={handleClickGuessed} mx={3}>

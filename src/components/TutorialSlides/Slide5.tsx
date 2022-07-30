@@ -19,7 +19,7 @@ const Slide5 = ({ handleNextStep, currentTip }: SlideProps) => {
           textAlign="center"
           p={3}
         >
-          {currentTip} kg? těsně vedle!
+          Tvůj tip: {currentTip} kg
         </Text>
       </TutorialHeader>
       <Box width="100%" height="200px">
@@ -28,13 +28,13 @@ const Slide5 = ({ handleNextStep, currentTip }: SlideProps) => {
         )}
       </Box>
       <Text
-        fontSize={[3, 4, 5]}
+        fontSize={[3, 4, 4]}
         color="secondary"
         textAlign="center"
         py={4}
         px={3}
       >
-        Na tomto grafu můžeš vidět svou odpověď, uvedené nápovědy a správnou odpověď.
+        Na tomto grafu můžeš vidět svou odpověď, uvedené nápovědy a správnou odpověď.
       </Text>
       <Button
         mt="auto"
