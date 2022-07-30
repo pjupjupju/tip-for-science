@@ -1,7 +1,7 @@
 import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { Flex, Image, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
-import washington from './../../assets/game_washington.jpg';
+import jupiter from './../../assets/jupiterTut.jpg';
 import { PreviousTips } from '../Game';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
@@ -37,8 +37,8 @@ const labelStyle = {
   color: 'white',
 };
 
-const question = 'Jak rychle se pohybuje jupiter? Pozor, běží ti čas!';
-const image = washington;
+const question = 'Jak rychle se otáčí Jupiter? A pozor, běží ti čas!';
+const image = jupiter;
 const unit = 'km/h';
 const previousTips = [80000, 1000, 500, 20000];
 const timeLimit = 10;
@@ -87,7 +87,7 @@ const Slide13 = ({ onSubmit }: SlideProps) => {
           id="tip"
           name="tip"
           type="number"
-          placeholder="váš tip"
+          placeholder="tvůj tip"
           sx={inputStyles}
           onKeyDown={handleSubmit}
         />
@@ -113,7 +113,7 @@ const Slide13 = ({ onSubmit }: SlideProps) => {
             id="tip2"
             name="tip"
             type="number"
-            placeholder="váš tip"
+            placeholder="tvůj tip"
             sx={inputStyles2}
             onKeyDown={handleSubmit}
           />

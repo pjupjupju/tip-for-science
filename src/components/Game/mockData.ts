@@ -1,4 +1,4 @@
-import washington from './../../assets/game_washington.jpg';
+import washington from './../../assets/washingtonTut.jpg';
 
 const mockData = [
   {

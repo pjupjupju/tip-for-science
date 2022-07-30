@@ -1,15 +1,26 @@
 import React from 'react';
-import { Button, Image, Text, Box } from 'rebass';
+import { Button, Text, Box } from 'rebass';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
-import elephant from './../../assets/slide1_elephant.jpg';
+import washington from './../../assets/washingtonTut.jpg';
 import { ScoreChart } from '../ScoreChart';
 import { SlideProps } from './types';
+import {
+  getScore,
+  getScoreSentence,
+  topScoreSentence,
+  highScoreSentence,
+  lowScoreSentence,
+  zeroScoreSentence,
+} from '../../helpers';
 
 const imageStyle = {
-  minHeight: '210px',
-  width: '100%',
-  alignSelf: 'center',
+  flexShrink: 1,
+  flexGrow: 1,
+  backgroundImage: `url(${washington})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
 };
 
 const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
@@ -17,19 +28,32 @@ const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
   const handleClickNext = () => {
     handleNextStep();
   };
+
+  const questionScore = getScore(
+    typeof currentTip === 'undefined' ? 0 : currentTip,
+    18.29
+  );
   return (
     <Container>
       <TutorialHeader>
-        <Text
-          fontSize={[3, 4, 5]}
-          color="secondary"
-          textAlign="center"
-          p={3}
-        >
-          {currentTip} kg? těsně vedle.
+        <Text fontSize={[3, 4, 4]} color="accent" textAlign="center" p={3}>
+          {currentTip} metrů?{' '}
+          {questionScore === 0 && getScoreSentence(zeroScoreSentence)}
+          {questionScore !== null &&
+            questionScore > 0 &&
+            questionScore < 0.4 &&
+            getScoreSentence(lowScoreSentence)}
+          {questionScore !== null &&
+            questionScore >= 0.4 &&
+            questionScore < 0.8 &&
+            getScoreSentence(highScoreSentence)}
+          {questionScore !== null &&
+            questionScore >= 0.8 &&
+            questionScore < 0.95 &&
+            getScoreSentence(topScoreSentence)}
         </Text>
       </TutorialHeader>
-      <Image src={elephant} sx={imageStyle} />
+      <Box sx={imageStyle} />
       <Box width="100%" height="200px">
         {typeof currentTip !== 'undefined' && (
           <ScoreChart currentTip={currentTip} correctAnswer={correctAnswer} />

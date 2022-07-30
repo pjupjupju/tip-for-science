@@ -1,8 +1,8 @@
 import React from 'react';
-import { Box, Button, Image, Text } from 'rebass';
-import washington from './../../assets/slide1_washington.jpg';
-import elephant from './../../assets/slide1_elephant.jpg';
-import moon from './../../assets/slide1_moon.jpg';
+import { Button, Image, Text, Flex } from 'rebass';
+import washington from './../../assets/washingtonTutF.jpg';
+import elephant from './../../assets/elephantTutF.jpg';
+import jupiter from './../../assets/jupiterTutF.jpg';
 import { SlideProps } from './types';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
@@ -15,53 +15,71 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
   return (
     <Container>
       <TutorialHeader centerVertically={false}>
-        <Image
-          src={elephant}
-          sx={{
-            width: 'calc(20vh)',
-          }}
-        />
-        <Image
-          src={washington}
-          sx={{
-            width: 'calc(20vh)',
-          }}
-        />
-        <Image
-          src={moon}
-          sx={{
-            width: 'calc(20vh)',
-          }}
-        />
+        <Text
+          fontSize={[3, 4, 5]}
+          color="secondary"
+          textAlign="center"
+          fontWeight="bold"
+          mb={4}
+          p={4}
+        >
+          Zajímalo by tě...
+        </Text>
       </TutorialHeader>
-      <Box p="4">
-        <Text
-          fontSize={[3, 4, 5]}
-          // fontWeight="bold"
-          color="secondary"
-          textAlign="center"
-          mb="4"
-        >
-          Zajímalo by vás, kolik vážil nejtěžší slon v historii?
-        </Text>
-        <Text
-          fontSize={[3, 4, 5]}
-          // fontWeight="bold"
-          color="secondary"
-          textAlign="center"
-          mb="4"
-        >
-          Jak velká je hlava George Washingtona v sousoší Mount Rushmore?
-        </Text>
-        <Text
-          fontSize={[3, 4, 5]}
-          // fontWeight="bold"
-          color="secondary"
-          textAlign="center"
-        >
-          Jak rychle se pohybuje Jupiter?
-        </Text>
-      </Box>
+      <Flex flexDirection="column">
+        <Flex justifyContent="flex-start">
+          <Image
+            src={elephant}
+            sx={{
+              width: 'calc(20vh)',
+            }}
+          />
+          <Text
+            fontSize={[3, 4, 4]}
+            color="secondary"
+            textAlign="center"
+            mb={4}
+            p={4}
+          >
+            ...kolik vážil nejtěžší slon v historii?
+          </Text>
+        </Flex>
+        <Flex justifyContent="flex-end">
+          <Text
+            fontSize={[3, 4, 4]}
+            color="secondary"
+            textAlign="center"
+            mb={4}
+            p={4}
+          >
+            ...jak velká je hlava George Washingtona
+            <br />v sousoší Mount Rushmore?
+          </Text>
+          <Image
+            src={washington}
+            sx={{
+              width: 'calc(20vh)',
+            }}
+          />
+        </Flex>
+        <Flex justifyContent="flex-start">
+          <Image
+            src={jupiter}
+            sx={{
+              width: 'calc(20vh)',
+            }}
+          />
+          <Text
+            fontSize={[3, 4, 4]}
+            color="secondary"
+            textAlign="center"
+            mb={4}
+            p={4}
+          >
+            ...jak rychle se pohybuje Jupiter?
+          </Text>
+        </Flex>
+      </Flex>
       <Button
         mt="auto"
         sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}

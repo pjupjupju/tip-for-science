@@ -3,8 +3,16 @@ import { Button, Image, Text, Box } from 'rebass';
 import { Container } from '../Container';
 import { ScoreChart } from '../ScoreChart';
 import { TutorialHeader } from '../TutorialHeader';
-import elephant from './../../assets/slide1_elephant.jpg';
+import jupiter from './../../assets/jupiterTut.jpg';
 import { SlideProps } from './types';
+import {
+  getScore,
+  getScoreSentence,
+  topScoreSentence,
+  highScoreSentence,
+  lowScoreSentence,
+  zeroScoreSentence,
+} from '../../helpers';
 
 const imageStyle = {
   minHeight: '210px',
@@ -13,23 +21,35 @@ const imageStyle = {
 };
 
 const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
-  const correctAnswer = 47051;
+  const correctAnswer = 45583;
   const handleClickNext = () => {
     handleNextStep();
   };
+  const questionScore = getScore(
+    typeof currentTip === 'undefined' ? 0 : currentTip,
+    45583
+  );
   return (
     <Container>
       <TutorialHeader>
-        <Text
-          fontSize={[3, 4, 5]}
-          color="secondary"
-          textAlign="center"
-          p={3}
-        >
-          {currentTip} za sekundu? to je úplně přesně!
+        <Text fontSize={[3, 4, 5]} color="accent" textAlign="center" p={3}>
+          {currentTip} km/h?{' '}
+          {questionScore === 0 && getScoreSentence(zeroScoreSentence)}
+          {questionScore !== null &&
+            questionScore > 0 &&
+            questionScore < 0.4 &&
+            getScoreSentence(lowScoreSentence)}
+          {questionScore !== null &&
+            questionScore >= 0.4 &&
+            questionScore < 0.8 &&
+            getScoreSentence(highScoreSentence)}
+          {questionScore !== null &&
+            questionScore >= 0.8 &&
+            questionScore < 0.95 &&
+            getScoreSentence(topScoreSentence)}
         </Text>
       </TutorialHeader>
-      <Image src={elephant} sx={imageStyle} />
+      <Image src={jupiter} sx={imageStyle} />
       <Box width="100%" height="200px">
         {typeof currentTip !== 'undefined' && (
           <ScoreChart currentTip={currentTip} correctAnswer={correctAnswer} />

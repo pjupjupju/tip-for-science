@@ -7,7 +7,14 @@ import { PreviousTips } from './PreviousTips';
 import { Container } from '../Container';
 import { SubmitButton } from '../SubmitButton';
 import { ScoreChart } from '../ScoreChart';
-import { getScore } from '../../helpers';
+import {
+  getScore,
+  getScoreSentence,
+  topScoreSentence,
+  highScoreSentence,
+  lowScoreSentence,
+  zeroScoreSentence,
+} from '../../helpers';
 
 export interface Settings {
   question: string;
@@ -100,7 +107,10 @@ const Game = ({
           {question}
         </Text>
       </Box>
-      <Image src={image} sx={imageStyle} />
+      <Image
+        src="https://i.pinimg.com/originals/2d/9e/f7/2d9ef737d99df359187644338af83118.png"
+        sx={imageStyle}
+      />
       <PreviousTips previousTips={previousTips} unit={unit} />
       <Flex justifyContent="center" alignItems="center" p={2}>
         <Label htmlFor="tip" sx={labelStyle}>
@@ -111,7 +121,7 @@ const Game = ({
           id="tip"
           name="tip"
           type="number"
-          placeholder="váš tip"
+          placeholder="tvůj tip"
           sx={inputStyles}
           onKeyDown={handleSubmit}
         />
@@ -157,21 +167,28 @@ const Game = ({
             )}
             {questionScore === 0 && (
               <Text textAlign="center" color="white">
-                Ajéje, tohle se úplně nepovedlo!
+                {getScoreSentence(zeroScoreSentence)}
               </Text>
             )}
             {questionScore !== null &&
               questionScore > 0 &&
               questionScore < 0.4 && (
                 <Text textAlign="center" color="white">
-                  Těsně vedle!
+                  {getScoreSentence(lowScoreSentence)}
                 </Text>
               )}
             {questionScore !== null &&
               questionScore >= 0.4 &&
+              questionScore < 0.8 && (
+                <Text textAlign="center" color="white">
+                  {getScoreSentence(highScoreSentence)}
+                </Text>
+              )}
+            {questionScore !== null &&
+              questionScore >= 0.8 &&
               questionScore < 0.95 && (
                 <Text textAlign="center" color="white">
-                  Obdivuhodné!
+                  {getScoreSentence(topScoreSentence)}
                 </Text>
               )}
           </>
