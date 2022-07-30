@@ -1,8 +1,8 @@
 import React from 'react';
-import { Box, Button, Image, Text } from 'rebass';
+import { Box, Button, Text } from 'rebass';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
-import elephant from './../../assets/slide1_elephant.jpg';
+import elephant from './../../assets/elephantTut.jpg';
 import { SlideProps } from './types';
 
 const imageStyle = {
@@ -40,7 +40,7 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
         py={4}
         px={3}
       >
-        Největší známý slon byl zastřelen v roce 1956 v Angole. Předchozí hráči
+        Největší známý slon byl zastřelen v roce 1956 v Angole. Řekněme, že předchozí hráči
         Tip for Science hádali, že toto obrovské zvíře vážilo{' '}
         <Text color="accent" as="span">
           8 300

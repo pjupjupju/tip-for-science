@@ -1,7 +1,7 @@
 import React, { KeyboardEvent } from 'react';
 import { Flex, Image, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
-import elephant from './../../assets/slide1_elephant.jpg';
+import elephant from './../../assets/elephantTut.jpg';
 import { TutorialHeader } from '../TutorialHeader';
 import { Container } from '../Container';
 import { SlideProps } from './types';
@@ -41,7 +41,7 @@ const Slide3 = ({ onSubmit }: SlideProps) => {
 
   return (
     <Container>
-      <TutorialHeader>
+<TutorialHeader>
         <Text
           fontSize={[3, 4, 5]}
           color="secondary"
@@ -59,8 +59,9 @@ const Slide3 = ({ onSubmit }: SlideProps) => {
         <Input
           id="tip" 
           name="tip"
-          type="number" 
-          placeholder="váš tip" //shlm: přidat submit tlačítko
+          type="number"
+          inputMode="numeric" 
+          placeholder="tvůj tip" //shlm: přidat submit tlačítko
           sx={inputStyles}
           onKeyDown={handleSubmit}
         />

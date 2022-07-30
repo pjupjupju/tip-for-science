@@ -13,6 +13,7 @@ const Container = ({ children, isRelative = false }: ContainerProps) => (
     maxWidth={['100%', '100%', '700px']}
     height="100%"
     mx="auto"
+    width="100%"
     flexDirection="column"
     sx={isRelative ? relativePositionStyles : undefined}
   >
