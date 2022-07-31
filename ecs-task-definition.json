@@ -20,7 +20,8 @@
         "options": {
           "awslogs-region": "eu-central-1",
           "awslogs-group": "tfsapp-service-logs",
-          "awslogs-create-group": "true"
+          "awslogs-create-group": "true",
+          "awslogs-stream-prefix": "tfs-app"
         }
       }
     }
