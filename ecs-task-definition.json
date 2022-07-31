@@ -1,25 +1,33 @@
 {
   "family": "tfs-app",
   "executionRoleArn": "arn:aws:iam::107652262785:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::107652262785:role/ecs-task-storage-full-access",
   "networkMode": "awsvpc",
   "containerDefinitions": [
-      {
-          "name": "tfs-app",
-          "image": "107652262785.dkr.ecr.eu-central-1.amazonaws.com/tfs-app:latest",
-          "portMappings": [
-              {
-                  "containerPort": 3000,
-                  "hostPort": 3000,
-                  "protocol": "tcp"
-              }
-          ],
-          "essential": true
+    {
+      "name": "tfs-app",
+      "image": "107652262785.dkr.ecr.eu-central-1.amazonaws.com/tfs-app:latest",
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "hostPort": 3000,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "Name": "tfsapp-service",
+          "region": "eu-central-1",
+          "log_group_name": "tfsapp-service-logs",
+          "auto_create_group": "true",
+          "retention_in_days": 5
+        }
       }
+    }
   ],
-  "requiresCompatibilities": [
-      "FARGATE"
-  ],
+  "requiresCompatibilities": ["FARGATE"],
   "cpu": "256",
   "memory": "512"
 }
-
