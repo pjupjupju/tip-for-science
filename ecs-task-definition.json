@@ -21,8 +21,7 @@
           "Name": "tfsapp-service",
           "awslogs-region": "eu-central-1",
           "awslogs-group": "tfsapp-service-logs",
-          "awslogs-create-group": "true",
-          "retention_in_days": "5"
+          "awslogs-create-group": "true"
         }
       }
     }
