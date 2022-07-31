@@ -21,6 +21,7 @@ import { Document } from './Document';
 import { RunCache, runMigrations } from './io';
 import { createContext, typeDefs, resolvers, schema } from './schema';
 import { tipForScienceTheme } from '../theme';
+import { AWS_REGION } from '../config';
 
 // eslint-disable-next-line import/no-dynamic-require
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
@@ -31,10 +32,10 @@ runMigrations();
 
 const dynamo = new DynamoDB.DocumentClient(
   process.env.NODE_ENV === 'production'
-    ? { region: 'eu-central-1' }
+    ? { region: AWS_REGION }
     : {
         endpoint: 'http://localhost:8000',
-        region: 'eu-central-1',
+        region: AWS_REGION,
       }
 );
 
