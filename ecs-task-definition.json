@@ -22,7 +22,7 @@
           "region": "eu-central-1",
           "log_group_name": "tfsapp-service-logs",
           "auto_create_group": "true",
-          "retention_in_days": 5
+          "retention_in_days": "5"
         }
       }
     }
