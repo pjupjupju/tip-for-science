@@ -18,7 +18,7 @@ import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import { resolve } from 'path';
 import { App } from '../App';
 import { Document } from './Document';
-import { RunCache } from './io';
+import { RunCache, runMigrations } from './io';
 import { createContext, typeDefs, resolvers, schema } from './schema';
 import { tipForScienceTheme } from '../theme';
 
@@ -27,9 +27,11 @@ const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
 const server = express();
 
+runMigrations();
+
 const dynamo = new DynamoDB.DocumentClient(
   process.env.NODE_ENV === 'production'
-    ? {}
+    ? { region: 'eu-central-1' }
     : {
         endpoint: 'http://localhost:8000',
         region: 'eu-central-1',
