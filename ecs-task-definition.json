@@ -19,8 +19,8 @@
         "logDriver": "awslogs",
         "options": {
           "Name": "tfsapp-service",
-          "region": "eu-central-1",
-          "log_group_name": "tfsapp-service-logs",
+          "awslogs-region": "eu-central-1",
+          "awslogs-group": "tfsapp-service-logs",
           "auto_create_group": "true",
           "retention_in_days": "5"
         }
