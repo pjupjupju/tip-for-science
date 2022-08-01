@@ -19,7 +19,7 @@ const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => (
         Toto byla prozatím poslední otázka.
         <br />
         Tvoje skóre:{' '}
-        <Text color="turquoise" as="span">
+        <Text color="accent" as="span">
           {score}
         </Text>
       </Heading>

@@ -14,11 +14,7 @@ const Slide8 = ({ handleNextStep }: SlideProps) => {
           V této hře jsi nepostradatelnou hybnou silou dědičnosti!
         </Text>
       </Box>
-      <Button
-        mt="auto"
-        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
-        onClick={handleClickNext}
-      >
+      <Button mt="auto" onClick={handleClickNext}>
         Další
       </Button>
     </Container>

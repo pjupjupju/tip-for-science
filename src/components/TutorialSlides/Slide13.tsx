@@ -1,11 +1,15 @@
 import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { Flex, Image, Text } from 'rebass';
+import { Flex, Box, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
 import jupiter from './../../assets/jupiterTut.jpg';
 import { PreviousTips } from '../Game';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import { SlideProps } from './types';
+import { SubmitButton } from '../SubmitButton';
+import { getTutorialImageStyle } from '../commonStyleSheets';
+
+const imageStyle = getTutorialImageStyle(jupiter);
 
 const inputStyles = {
   '::placeholder': {
@@ -24,12 +28,6 @@ const inputStyles2 = {
   background: 'white',
 };
 
-const imageStyle = {
-  minHeight: '210px',
-  width: '100%',
-  alignSelf: 'center',
-};
-
 const labelStyle = {
   flexGrow: 0,
   flexShrink: 0,
@@ -38,7 +36,6 @@ const labelStyle = {
 };
 
 const question = 'Jak rychle se otáčí Jupiter? A pozor, běží ti čas!';
-const image = jupiter;
 const unit = 'km/h';
 const previousTips = [80000, 1000, 500, 20000];
 const timeLimit = 10;
@@ -68,18 +65,13 @@ const Slide13 = ({ onSubmit }: SlideProps) => {
   return (
     <Container isRelative={true}>
       <TutorialHeader>
-        <Text
-          fontSize={[3, 4, 5]}
-          color="secondary"
-          textAlign="center"
-          p={3}
-        >
+        <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" p={3}>
           {question}
         </Text>
       </TutorialHeader>
-      <Image src={image} sx={imageStyle} />
+      <Box sx={imageStyle} />
       <PreviousTips previousTips={previousTips} unit={unit} />
-      <Flex justifyContent="center" alignItems="center" p={2}>
+      <Flex justifyContent="center" alignItems="baseline" p={2}>
         <Label htmlFor="tip" sx={labelStyle}>
           tip:
         </Label>
@@ -91,7 +83,10 @@ const Slide13 = ({ onSubmit }: SlideProps) => {
           sx={inputStyles}
           onKeyDown={handleSubmit}
         />
-        <Text color="white">{unit}</Text>
+        <Text color="white" mr={2}>
+          {unit}
+        </Text>{' '}
+        <SubmitButton />
       </Flex>
       {timeLimitEnded && (
         <Flex
@@ -106,7 +101,7 @@ const Slide13 = ({ onSubmit }: SlideProps) => {
             height: '100%',
           }}
         >
-          <Text fontWeight={500} textAlign="center" my={1} color="primary">
+          <Text fontWeight={500} textAlign="center" my={1} color="white">
             Vypršel ti čas! Tentokrát ale ještě můžeš zadat odpověď zde:
           </Text>
           <Input

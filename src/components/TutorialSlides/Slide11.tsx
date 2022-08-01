@@ -27,11 +27,7 @@ const Slide11 = ({ handleNextStep }: SlideProps) => {
           Využíváme výhod tzv. kulturní dědičnosti.
         </Text>
       </Box>
-      <Button
-        mt="auto"
-        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
-        onClick={handleClickNext}
-      >
+      <Button mt="auto" onClick={handleClickNext}>
         Další
       </Button>
     </Container>

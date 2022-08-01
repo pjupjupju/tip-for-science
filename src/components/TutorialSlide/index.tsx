@@ -23,7 +23,7 @@ export const TutorialSlide = ({
     <Flex flexDirection="column" alignItems="center" width="100%" height="100%">
       <Content {...contentProps} />
       {StepperComponent && (
-        <Box mb="auto">
+        <Box p={2}>
           <StepperComponent {...contentProps} />
         </Box>
       )}

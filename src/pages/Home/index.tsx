@@ -32,8 +32,8 @@ const Home = ({ user, onLogOut }: HomeProps) => {
     history.push('/play');
   };
 
-  const handleClickStats = () => {
-    history.push('/stats');
+  const handleClickProfile = () => {
+    history.push('/profile');
   };
 
   const handleClickSignIn = () => {
@@ -80,11 +80,11 @@ const Home = ({ user, onLogOut }: HomeProps) => {
         >
           <Flex mb="2">
             <MenuButton flex="1" onClick={handleClickAbout}>
-              About
+              Jak hrát?
             </MenuButton>
             {isSignedIn && (
-              <MenuButton ml="2" flex="1" onClick={handleClickStats}>
-                Stats
+              <MenuButton ml="2" flex="1" onClick={handleClickProfile}>
+                Profil
               </MenuButton>
             )}
           </Flex>
@@ -96,14 +96,14 @@ const Home = ({ user, onLogOut }: HomeProps) => {
                 </MenuButton>
               )}
               <MenuButton onClick={handleClickPlay} mb="2" primary>
-                Play
+                Hrát
               </MenuButton>
-              <MenuButton onClick={handleClickLogOut}>Sign out</MenuButton>
+              <MenuButton onClick={handleClickLogOut}>Odhlásit se</MenuButton>
             </>
           )}
           {!isSignedIn && (
             <MenuButton onClick={handleClickSignIn} primary>
-              Sign in
+              Přihlásit se
             </MenuButton>
           )}
         </Flex>

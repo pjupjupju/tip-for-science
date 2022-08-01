@@ -14,12 +14,7 @@ const Slide6 = ({ handleNextStep, currentTip }: SlideProps) => {
   return (
     <Container>
       <TutorialHeader>
-        <Text
-          fontSize={[3, 4, 5]}
-          color="secondary"
-          textAlign="center"
-          p={3}
-        >
+        <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" p={3}>
           Za svou odpověď bys dostal*a{' '}
           {typeof currentTip !== 'undefined'
             ? getScore(currentTip, 11000).toFixed(3)
@@ -41,11 +36,7 @@ const Slide6 = ({ handleNextStep, currentTip }: SlideProps) => {
       >
         Body získáš, pokud se trefíš mezi 50 - 200 % hodnoty správné odpovědi.
       </Text>
-      <Button
-        mt="auto"
-        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
-        onClick={handleClickNext}
-      >
+      <Button mt="auto" onClick={handleClickNext}>
         Další
       </Button>
     </Container>
