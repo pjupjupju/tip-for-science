@@ -32,6 +32,30 @@ const unit = 'kg';
 
 const Slide3 = ({ onSubmit }: SlideProps) => {
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
+    console.log(event.key);
+    if (
+      ![
+        'Shift',
+        'ArrowLeft',
+        'ArrowRight',
+        'Backspace',
+        'Enter',
+        '.',
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+      ].includes(event.key)
+    ) {
+      event.preventDefault();
+    }
+
     if (event.key === 'Enter') {
       onSubmit(Number(event.currentTarget.value));
     }
@@ -53,6 +77,7 @@ const Slide3 = ({ onSubmit }: SlideProps) => {
           id="tip"
           name="tip"
           type="number"
+          pattern="[1-9]"
           inputMode="numeric"
           placeholder="tvůj tip"
           sx={inputStyles}
