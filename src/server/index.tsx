@@ -26,161 +26,163 @@ import { AWS_REGION } from '../config';
 // eslint-disable-next-line import/no-dynamic-require
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
-const server = express();
+export async function createServer(): Promise<express.Application> {
+  const server = express();
 
-runMigrations();
+  await runMigrations();
 
-const dynamo = new DynamoDB.DocumentClient(
-  process.env.NODE_ENV === 'production'
-    ? { region: AWS_REGION }
-    : {
-        endpoint: 'http://localhost:8000',
-        region: AWS_REGION,
-      }
-);
-
-const runCache = new RunCache(15, 5, { dynamo });
-
-const staticDir =
-  process.env.NODE_ENV === 'production'
-    ? resolve(__dirname, './public')
-    : process.env.RAZZLE_PUBLIC_DIR;
-
-const app = new ApolloServer({
-  context: createContext({ dynamo, runCache }),
-  debug: process.env.NODE_ENV !== 'production',
-  playground: process.env.NODE_ENV !== 'production',
-  formatError(error) {
-    // Sentry.captureException(error);
-
-    console.log(error);
-
-    return {
-      message: 'Error',
-      path: error.path,
-    };
-  },
-  typeDefs,
-  resolvers,
-  uploads: true,
-});
-
-server
-  .disable('x-powered-by')
-  .disable('etag')
-  .set('trust proxy', true)
-  .use(
-    expressSession({
-      store: new (createSessionFileStore(expressSession as any))() as any,
-      cookie: {
-        // set max age to 90 days in ms
-        maxAge: 3 * 30 * 24 * 60 * 60 * 1000,
-        secure: process.env.NODE_ENV === 'production',
-      },
-      secret: [
-        '78831e16-4064-4216-8ea3-ebbe646fd3ff',
-        'f181b705-4239-47a9-ae68-4aa9917e9114',
-        '994d3d3d-6323-41c7-94cf-acfe0e384c93',
-      ],
-      resave: false,
-      name: 'tipforsciencesid',
-      saveUninitialized: false,
-    })
-  )
-  .use(
-    express.static(staticDir, {
-      etag: false,
-      immutable: true,
-      maxAge: '30days',
-    })
+  const dynamo = new DynamoDB.DocumentClient(
+    process.env.NODE_ENV === 'production'
+      ? { region: AWS_REGION }
+      : {
+          endpoint: 'http://localhost:8000',
+          region: AWS_REGION,
+        }
   );
 
-Sentry.init({
-  dsn: 'https://b480280810f9447ab512f4519fe32aed@o1163471.ingest.sentry.io/6251598',
-  integrations: [
-    // enable HTTP calls tracing
-    new Sentry.Integrations.Http({ tracing: true }),
-    // enable Express.js middleware tracing
-    new Tracing.Integrations.Express({ app: server }),
-  ],
+  const runCache = new RunCache(15, 5, { dynamo });
 
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
-});
+  const staticDir =
+    process.env.NODE_ENV === 'production'
+      ? resolve(__dirname, './public')
+      : process.env.RAZZLE_PUBLIC_DIR;
 
-// RequestHandler creates a separate execution context using domains, so that every
-// transaction/span/breadcrumb is attached to its own Hub instance
-server.use(Sentry.Handlers.requestHandler());
-// TracingHandler creates a trace for every incoming request
-server.use(Sentry.Handlers.tracingHandler());
+  const app = new ApolloServer({
+    context: createContext({ dynamo, runCache }),
+    debug: process.env.NODE_ENV !== 'production',
+    playground: process.env.NODE_ENV !== 'production',
+    formatError(error) {
+      // Sentry.captureException(error);
 
-app.applyMiddleware({ app: server, path: '/api' });
+      console.log(error);
 
-server.get('/*', async (req, res, next) => {
-  res.setHeader('Surrogate-Control', 'no-store');
-  res.setHeader(
-    'Cache-Control',
-    'no-store, no-cache, must-revalidate, proxy-revalidate'
-  );
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
+      return {
+        message: 'Error',
+        path: error.path,
+      };
+    },
+    typeDefs,
+    resolvers,
+    uploads: true,
+  });
 
-  try {
-    const client = new ApolloClient({
-      cache: new InMemoryCache(),
-      ssrMode: true,
-      link: new SchemaLink({ schema }),
-    });
-    const context: StaticRouterContext = {};
-    const bootstrap = (
-      <StaticRouter context={context} location={req.url || '/'}>
-        <ApolloProvider client={client}>
-          <ThemeProvider theme={tipForScienceTheme}>
-            <App />
-          </ThemeProvider>
-        </ApolloProvider>
-      </StaticRouter>
+  server
+    .disable('x-powered-by')
+    .disable('etag')
+    .set('trust proxy', true)
+    .use(
+      expressSession({
+        store: new (createSessionFileStore(expressSession as any))() as any,
+        cookie: {
+          // set max age to 90 days in ms
+          maxAge: 3 * 30 * 24 * 60 * 60 * 1000,
+          secure: process.env.NODE_ENV === 'production',
+        },
+        secret: [
+          '78831e16-4064-4216-8ea3-ebbe646fd3ff',
+          'f181b705-4239-47a9-ae68-4aa9917e9114',
+          '994d3d3d-6323-41c7-94cf-acfe0e384c93',
+        ],
+        resave: false,
+        name: 'tipforsciencesid',
+        saveUninitialized: false,
+      })
+    )
+    .use(
+      express.static(staticDir, {
+        etag: false,
+        immutable: true,
+        maxAge: '30days',
+      })
     );
 
-    await getDataFromTree(bootstrap);
+  Sentry.init({
+    dsn: 'https://b480280810f9447ab512f4519fe32aed@o1163471.ingest.sentry.io/6251598',
+    integrations: [
+      // enable HTTP calls tracing
+      new Sentry.Integrations.Http({ tracing: true }),
+      // enable Express.js middleware tracing
+      new Tracing.Integrations.Express({ app: server }),
+    ],
 
-    const markup = renderStylesToString(renderToString(bootstrap));
-    const helmet = Helmet.renderStatic();
-    const initialState = client.extract();
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0,
+  });
 
-    const cssLinksFromAssets = (assets, entrypoint): string => {
-      return assets[entrypoint]
-        ? assets[entrypoint].css
-          ? assets[entrypoint].css.map((asset) => (
-              <link rel="stylesheet" href={asset} />
-            ))
-          : ''
-        : '';
-    };
+  // RequestHandler creates a separate execution context using domains, so that every
+  // transaction/span/breadcrumb is attached to its own Hub instance
+  server.use(Sentry.Handlers.requestHandler());
+  // TracingHandler creates a trace for every incoming request
+  server.use(Sentry.Handlers.tracingHandler());
 
-    if (context.url) {
-      res.redirect(context.url);
-    } else {
-      res
-        .status(context.statusCode || 200)
-        .send(
-          `<!doctype html>${renderToStaticMarkup(
-            <Document
-              content={markup}
-              helmet={helmet}
-              css={cssLinksFromAssets(assets, 'client')}
-              js={assets.client.js}
-              state={initialState}
-            />
-          )}`
-        );
+  app.applyMiddleware({ app: server, path: '/api' });
+
+  server.get('/*', async (req, res, next) => {
+    res.setHeader('Surrogate-Control', 'no-store');
+    res.setHeader(
+      'Cache-Control',
+      'no-store, no-cache, must-revalidate, proxy-revalidate'
+    );
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
+    try {
+      const client = new ApolloClient({
+        cache: new InMemoryCache(),
+        ssrMode: true,
+        link: new SchemaLink({ schema }),
+      });
+      const context: StaticRouterContext = {};
+      const bootstrap = (
+        <StaticRouter context={context} location={req.url || '/'}>
+          <ApolloProvider client={client}>
+            <ThemeProvider theme={tipForScienceTheme}>
+              <App />
+            </ThemeProvider>
+          </ApolloProvider>
+        </StaticRouter>
+      );
+
+      await getDataFromTree(bootstrap);
+
+      const markup = renderStylesToString(renderToString(bootstrap));
+      const helmet = Helmet.renderStatic();
+      const initialState = client.extract();
+
+      const cssLinksFromAssets = (assets, entrypoint): string => {
+        return assets[entrypoint]
+          ? assets[entrypoint].css
+            ? assets[entrypoint].css.map((asset) => (
+                <link rel="stylesheet" href={asset} />
+              ))
+            : ''
+          : '';
+      };
+
+      if (context.url) {
+        res.redirect(context.url);
+      } else {
+        res
+          .status(context.statusCode || 200)
+          .send(
+            `<!doctype html>${renderToStaticMarkup(
+              <Document
+                content={markup}
+                helmet={helmet}
+                css={cssLinksFromAssets(assets, 'client')}
+                js={assets.client.js}
+                state={initialState}
+              />
+            )}`
+          );
+      }
+    } catch (e) {
+      console.log(e);
+      next(e);
     }
-  } catch (e) {
-    console.log(e);
-    next(e);
-  }
-});
+  });
 
-export default server;
+  return server;
+}
