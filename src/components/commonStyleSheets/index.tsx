@@ -8,3 +8,4 @@ const getTutorialImageStyle = (imagePath: string) => ({
   });
 
   export { getTutorialImageStyle };
+  
