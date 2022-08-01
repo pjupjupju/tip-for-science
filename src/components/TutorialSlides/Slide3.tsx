@@ -5,6 +5,8 @@ import elephant from './../../assets/elephantTut.jpg';
 import { TutorialHeader } from '../TutorialHeader';
 import { Container } from '../Container';
 import { SlideProps } from './types';
+import { SubmitButton } from '../SubmitButton';
+import { getTutorialImageStyle } from '../commonStyleSheets';
 
 const inputStyles = {
   '::placeholder': {
@@ -15,11 +17,7 @@ const inputStyles = {
   mx: 3,
 };
 
-const imageStyle = {
-  minHeight: '210px',
-  width: '100%',
-  alignSelf: 'center',
-};
+const imageStyle = getTutorialImageStyle(elephant);
 
 const labelStyle = {
   flexGrow: 0,
@@ -41,32 +39,30 @@ const Slide3 = ({ onSubmit }: SlideProps) => {
 
   return (
     <Container>
-<TutorialHeader>
-        <Text
-          fontSize={[3, 4, 5]}
-          color="secondary"
-          textAlign="center"
-          p={2}
-        >
+      <TutorialHeader>
+        <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" p={2}>
           {question}
         </Text>
       </TutorialHeader>
       <Image src={image} sx={imageStyle} />
-      <Flex justifyContent="center" alignItems="center" p={2}>
+      <Flex justifyContent="center" alignItems="baseline" p={2} marginTop={3}>
         <Label htmlFor="tip" sx={labelStyle}>
           tip:
         </Label>
         <Input
-          id="tip" 
+          id="tip"
           name="tip"
           type="number"
-          inputMode="numeric" 
-          placeholder="tvůj tip" //shlm: přidat submit tlačítko
+          inputMode="numeric"
+          placeholder="tvůj tip"
           sx={inputStyles}
           onKeyDown={handleSubmit}
         />
-        <Text color="white">{unit}</Text>
-      </Flex> 
+        <Text color="white" mr={4}>
+          {unit}
+        </Text>{' '}
+        <SubmitButton />
+      </Flex>
     </Container>
   );
 };

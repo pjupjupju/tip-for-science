@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Image, Text } from 'rebass';
+import { Button, Box, Text } from 'rebass';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import elephant from './../../assets/elephantTut.jpg';
@@ -12,12 +12,9 @@ import {
   lowScoreSentence,
   zeroScoreSentence,
 } from '../../helpers';
+import { getTutorialImageStyle } from '../commonStyleSheets';
 
-const imageStyle = {
-  minHeight: '210px',
-  width: '100%',
-  alignSelf: 'center',
-};
+const imageStyle = getTutorialImageStyle(elephant);
 
 const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
   const handleClickNext = () => {
@@ -48,7 +45,7 @@ const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
             getScoreSentence(topScoreSentence)}
         </Text>
       </TutorialHeader>
-      <Image src={elephant} sx={imageStyle} />
+      <Box sx={imageStyle} />
       <Text
         fontSize={[3, 4, 4]}
         color="secondary"
@@ -56,15 +53,11 @@ const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
         py={4}
         px={3}
       >
-        Největší samec slona, jehož váhu se podařilo zaznamenat, vážil zhruba
-        10 886 kg a v kohoutku měřil 3,96 metru. Byl tedy téměř o metr vyšší než
-        průměrný slon africký.
+        Největší samec slona, jehož váhu se podařilo zaznamenat, vážil 10 886 kg
+        a v kohoutku měřil 3,96 metru. Byl tedy téměř o metr vyšší než průměrný
+        slon africký.
       </Text>
-      <Button
-        mt="auto"
-        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
-        onClick={handleClickNext}
-      >
+      <Button mt="auto" onClick={handleClickNext}>
         Další
       </Button>
     </Container>

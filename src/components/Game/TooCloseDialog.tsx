@@ -1,5 +1,13 @@
 import React from 'react';
-import { Box, Button, Flex, Text } from 'rebass';
+import { Button, Flex, Text, Box } from 'rebass';
+import { Container } from '../Container';
+
+const translucentBox = {
+  background: 'rgba(0,0,0,0.85)',
+  position: 'absolute',
+  top: 0,
+  left: 0,
+};
 
 const TooCloseDialog = ({
   onGuessed,
@@ -14,20 +22,31 @@ const TooCloseDialog = ({
   const handleClickKnewIt = () => {
     onKnewIt();
   };
+
   return (
-    <Box>
-      <Text color="secondary" textAlign="center" px={3} my={3} fontWeight="bold">
-        Wow! To bylo FAKT blízko! Věděl*a jsi správnou odpověď, nebo se ti opravdu podařilo takhle dobře tipnout?
-        Neboj, tvé score to neovlivní, ale pomůže nám to při vyhodnocování dat :)
-      </Text>
-      <Flex justifyContent="space-between">
-        <Button onClick={handleClickGuessed} mx={3}>
-          I guessed it
-        </Button>
-        <Button onClick={handleClickKnewIt} mx={3}>
-          I knew it!
-        </Button>
-      </Flex>
+    <Box width="100%" height="100%" sx={translucentBox}>
+      <Container>
+        <Flex
+          p={3}
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          width="100%"
+          height="100%"
+        >
+          <Text fontWeight={500} textAlign="center" my={3} color="white">
+            Wow! To bylo FAKT blízko! Věděl*a jsi správnou odpověď, nebo se ti
+            opravdu podařilo takhle dobře tipnout?
+            <br />
+            Neboj, tvé skóre to neovlivní, ale pomůže nám to při vyhodnocování
+            dat :)
+          </Text>
+          <Flex justifyContent="space-between" width="100%">
+            <Button onClick={handleClickGuessed}>Tipnul*a jsem</Button>
+            <Button onClick={handleClickKnewIt}> Věděl*a jsem</Button>
+          </Flex>
+        </Flex>
+      </Container>
     </Box>
   );
 };

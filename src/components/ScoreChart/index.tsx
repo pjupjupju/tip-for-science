@@ -23,11 +23,10 @@ const ScoreChart = ({
         lineStyle: {
           stroke: '#5CC8F9',
           strokeWidth: 1,
-          transform: `translateY(calc(${(100 * (1 - score)).toFixed(0)}% - ${(
-            100 *
-            (1 - score)
+          transform: `translateY(calc(${(1 - score).toFixed(0)}% - ${(
+            -score - 100
           ).toFixed(0)}px))
-                    scaleY(${score.toFixed(2)})`,
+                    scaleY(${(score / 100).toFixed(2)})`,
         },
       },
       {
@@ -63,9 +62,9 @@ const ScoreChart = ({
           strokeWidth: 1,
           transform:
             previousScore[index] > 0
-              ? `translateY(calc(${(100 * (1 - previousScore[index])).toFixed(
+              ? `translateY(calc(${(100 * (100 - previousScore[index])).toFixed(
                   0
-                )}% - ${(100 * (1 - previousScore[index])).toFixed(0)}px))
+                )}% - ${(100 * (100 - previousScore[index])).toFixed(0)}px))
           scaleY(${previousScore[index].toFixed(2)})`
               : `translateY(calc(${(100 * 1).toFixed(0)}% - ${(100 * 1).toFixed(
                   0
@@ -101,7 +100,7 @@ const ScoreChart = ({
         },
         {
           x: correctAnswer,
-          y: 1,
+          y: 100,
         },
       ],
     },
@@ -111,7 +110,7 @@ const ScoreChart = ({
       data: [
         {
           x: correctAnswer,
-          y: 1,
+          y: 100,
         },
         {
           x: 2 * correctAnswer,
@@ -127,7 +126,7 @@ const ScoreChart = ({
       yScale={{
         type: 'linear',
         min: 0,
-        max: 1,
+        max: 100,
       }}
       xScale={{
         type: 'linear',
@@ -138,7 +137,7 @@ const ScoreChart = ({
         tickValues: [currentTip, correctAnswer],
       }}
       axisLeft={{
-        tickValues: [0, 1],
+        tickValues: [0, 100],
         legend: 'score',
         legendPosition: 'middle',
         legendOffset: -15,
