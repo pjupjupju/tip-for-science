@@ -1,4 +1,5 @@
 import http from 'http';
+import { Application } from 'express';
 
 const env = process.env.NODE_ENV;
 
@@ -8,58 +9,74 @@ if (env === 'production') {
   }); */
 }
 
-let app = require('./server').default;
+let { createServer } = require('./server');
 
-let currentApp = app;
+let currentApp: Application;
+let server: http.Server;
 
-const server = http.createServer(app);
+async function startServer(creator: any, listen: boolean) {
+  const createdApp = await creator();
 
-server
-  .listen(process.env.PORT || 3000, () => {
-    console.log(
-      `🚀 server running at http://localhost:${process.env.PORT || 3000}`
-    );
+  if (listen) {
+    server = http.createServer(createdApp);
+    server
+      .listen(process.env.PORT || 3000, () => {
+        console.log(
+          `🚀 server running at http://localhost:${process.env.PORT || 3000}`
+        );
 
-    if (env === 'production') {
-      const gracefulShutdown = async (signal: NodeJS.Signals) => {
-        console.log(`Received signal ${signal}, shutting down gracefully`);
+        if (env === 'production') {
+          const gracefulShutdown = async (signal: NodeJS.Signals) => {
+            console.log(`Received signal ${signal}, shutting down gracefully`);
 
-        try {
-          await Promise.race([
-            new Promise((_, rej) =>
-              setTimeout(() => rej(new Error('Forced shutdown')), 10000)
-            ),
-            new Promise<void>((r) => server.close(() => r())),
-          ]);
+            try {
+              await Promise.race([
+                new Promise((_, rej) =>
+                  setTimeout(() => rej(new Error('Forced shutdown')), 10000)
+                ),
+                new Promise<void>((r) => server.close(() => r())),
+              ]);
 
-          process.exit(0);
-        } catch (e) {
-          console.log(e);
-          process.exit(1);
+              process.exit(0);
+            } catch (e) {
+              console.log(e);
+              process.exit(1);
+            }
+          };
+
+          process.on('SIGINT', gracefulShutdown);
+          process.on('SIGTERM', gracefulShutdown);
         }
-      };
+      })
+      .on('error', (error) => {
+        console.log(error);
+      });
+  }
 
-      process.on('SIGINT', gracefulShutdown);
-      process.on('SIGTERM', gracefulShutdown);
-    }
+  return createdApp;
+}
+
+startServer(createServer, true)
+  .then((a) => {
+    currentApp = a;
   })
-  .on('error', (error) => {
-    console.log(error);
-  });
+  .catch((e) => console.log(e));
 
 // @ts-ignore
 if (module.hot) {
   console.log('✅  Server-side HMR Enabled!');
 
   // @ts-ignore
-  module.hot.accept('./server', () => {
+  module.hot.accept('./server', async () => {
     console.log('🔁  HMR Reloading `./server`...');
 
     try {
-      app = require('./server').default;
+      createServer = require('./server').createServer;
+      const newApp = await startServer(createServer, false);
+
       server.removeListener('request', currentApp);
-      server.on('request', app);
-      currentApp = app;
+      server.on('request', newApp);
+      currentApp = newApp;
     } catch (error) {
       console.error(error);
     }
