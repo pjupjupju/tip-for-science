@@ -2,6 +2,9 @@
 
 _Fullstack javascript app with React-based responsive UI._
 
+<img width="1068" alt="Snímek obrazovky 2022-08-01 v 23 05 10" src="https://user-images.githubusercontent.com/373788/182246541-131a71f3-d87e-4074-99f7-55bab9a3b935.png">
+
+
 This project was bootstrapped with create-react-app and Razzle.
 It uses GraphQL for client-server communication and DynamoDB to store data.
 
