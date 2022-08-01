@@ -59,11 +59,7 @@ const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
           <ScoreChart currentTip={currentTip} correctAnswer={correctAnswer} />
         )}
       </Box>
-      <Button
-        mt="auto"
-        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
-        onClick={handleClickNext}
-      >
+      <Button mt="auto" onClick={handleClickNext}>
         Další
       </Button>
     </Container>

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Button, Image, Text, Box } from 'rebass';
+import { Button, Text, Box } from 'rebass';
 import { Container } from '../Container';
 import { ScoreChart } from '../ScoreChart';
 import { TutorialHeader } from '../TutorialHeader';
+import { getTutorialImageStyle } from '../commonStyleSheets';
 import jupiter from './../../assets/jupiterTut.jpg';
 import { SlideProps } from './types';
 import {
@@ -14,11 +15,7 @@ import {
   zeroScoreSentence,
 } from '../../helpers';
 
-const imageStyle = {
-  minHeight: '210px',
-  width: '100%',
-  alignSelf: 'center',
-};
+const imageStyle = getTutorialImageStyle(jupiter);
 
 const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
   const correctAnswer = 45583;
@@ -49,17 +46,13 @@ const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
             getScoreSentence(topScoreSentence)}
         </Text>
       </TutorialHeader>
-      <Image src={jupiter} sx={imageStyle} />
+      <Box sx={imageStyle} />
       <Box width="100%" height="200px">
         {typeof currentTip !== 'undefined' && (
           <ScoreChart currentTip={currentTip} correctAnswer={correctAnswer} />
         )}
       </Box>
-      <Button
-        mt="auto"
-        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
-        onClick={handleClickNext}
-      >
+      <Button mt="auto" onClick={handleClickNext}>
         Další
       </Button>
     </Container>

@@ -5,7 +5,7 @@ import { Heading, Flex } from 'rebass';
 import { MY_SCORE_QUERY, MY_USER_STATS_QUERY } from '../../gql';
 import { BackButton, Container, Spinner } from '../../components';
 
-const Stats = () => {
+const Profile = () => {
   const { loading, data } = useQuery(MY_USER_STATS_QUERY);
   const { loading: scoreLoading, data: getMyScoreData } = useQuery(
     MY_SCORE_QUERY
@@ -24,7 +24,6 @@ const Stats = () => {
       </Flex>
     );
   }
-
   const stats = data.getUserStats.days.map(
     (d: { day: string; score: number }) => ({
       x: d.day,
@@ -35,14 +34,11 @@ const Stats = () => {
   return (
     <Container>
       <Flex flexDirection="column" height="100%">
-        <Heading color="lightgray" my="3">
-          Stats
+        <Heading color="secondary" fontSize={[2, 3, 4]} my="4">
+          Tvoje skóre: {getMyScoreData.getMyScore}
         </Heading>
         <Heading color="secondary" fontSize={[2, 3, 4]} mb="2">
-          Your score: {getMyScoreData.getMyScore}
-        </Heading>
-        <Heading color="secondary" fontSize={[2, 3, 4]} mb="2">
-          Your progress
+          Vývoj tvého skóre:
         </Heading>
         <UserScoreCurve stats={stats} />
         <BackButton>domů</BackButton>
@@ -51,4 +47,4 @@ const Stats = () => {
   );
 };
 
-export { Stats };
+export { Profile };

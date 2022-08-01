@@ -6,6 +6,7 @@ import { PreviousTips } from '../Game/PreviousTips';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import { SlideProps } from './types';
+import { SubmitButton } from '../SubmitButton';
 
 const inputStyles = {
   '::placeholder': {
@@ -53,7 +54,7 @@ const Slide9 = ({ onSubmit = () => {} }: SlideProps) => {
       </TutorialHeader>
       <Image src={image} sx={imageStyle} />
       <PreviousTips previousTips={previousTips} />
-      <Flex justifyContent="center" alignItems="center" p={2}>
+      <Flex justifyContent="center" alignItems="baseline" p={2}>
         <Label htmlFor="tip" sx={labelStyle}>
           tip:
         </Label>
@@ -65,7 +66,7 @@ const Slide9 = ({ onSubmit = () => {} }: SlideProps) => {
           sx={inputStyles}
           onKeyDown={handleSubmit}
         />
-        <Text color="white">{unit}</Text>
+        <Text color="white" mr={2}>{unit}</Text> <SubmitButton />
       </Flex>
     </Container>
   );

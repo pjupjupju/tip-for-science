@@ -1,18 +1,12 @@
 import React from 'react';
 import { Box, Button, Text } from 'rebass';
+import { getTutorialImageStyle } from '../commonStyleSheets';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import elephant from './../../assets/elephantTut.jpg';
 import { SlideProps } from './types';
 
-const imageStyle = {
-  flexShrink: 1,
-  flexGrow: 1,
-  backgroundImage: `url(${elephant})`,
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  backgroundRepeat: 'no-repeat',
-};
+const imageStyle = getTutorialImageStyle(elephant);
 
 const Slide2 = ({ handleNextStep }: SlideProps) => {
   const handleClickNext = () => {
@@ -36,29 +30,26 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
       <Text
         fontSize={[3, 4, 4]}
         color="secondary"
-        textAlign="center" // shlm: zarovnat next button dolů
+        textAlign="center"
         py={4}
         px={3}
       >
-        Největší známý slon byl zastřelen v roce 1956 v Angole. Řekněme, že předchozí hráči
-        Tip for Science hádali, že toto obrovské zvíře vážilo{' '}
+        Největší známý slon byl zastřelen v roce 1956 v Angole. Řekněme, že
+        předchozí hráči Tip for Science hádali, že toto obrovské zvíře vážilo{' '}
         <Text color="accent" as="span">
-          8 300
+          8 300
         </Text>
         ,{' '}
         <Text color="accent" as="span">
-          9500
+          9 500
         </Text>
         , nebo{' '}
         <Text color="accent" as="span">
-          15 000{' '}
+          15 000{' '}
         </Text>
         kg.
       </Text>
-      <Button
-        sx={{ position: ['initial', 'initial', 'relative'], top: '-20px' }}
-        onClick={handleClickNext}
-      >
+      <Button mt="auto" onClick={handleClickNext}>
         Další
       </Button>
     </Container>

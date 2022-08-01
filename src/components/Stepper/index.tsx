@@ -30,7 +30,7 @@ export const Stepper = ({
 }: Pick<CommonTutorialProps, 'step' | 'length'>) => {
   const items = new Array(length).fill(0);
   return (
-    <Flex justifyContent="center" my={2}>
+    <Flex justifyContent="center" my={2} p={1}>
       {items.map((_, index) => (
         <Dot key={`dot-index-${index}`} isActive={step === index} />
       ))}

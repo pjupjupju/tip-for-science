@@ -24,11 +24,7 @@ const Slide7 = ({ handleNextStep }: SlideProps) => {
           A tvůj tip může vidět někdo další.
         </Text>
       </Box>
-      <Button
-        mt="auto"
-        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
-        onClick={handleClickNext}
-      >
+      <Button mt="auto" onClick={handleClickNext}>
         Další
       </Button>
     </Container>

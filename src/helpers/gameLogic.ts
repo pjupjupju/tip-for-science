@@ -3,12 +3,14 @@ const getScore = (currentTip: number, correctAnswer: number): number => {
     return 0;
   }
   if (currentTip === correctAnswer) {
-    return 1;
+    return 100;
   }
   if (currentTip > correctAnswer) {
-    return (2 * correctAnswer - currentTip) / correctAnswer;
+    return ((2 * correctAnswer - currentTip) / correctAnswer) * 100;
   }
-  return 1 - Math.pow((currentTip - correctAnswer) / (correctAnswer / 2), 2);
+  return (
+    (1 - Math.pow((currentTip - correctAnswer) / (correctAnswer / 2), 2)) * 100
+  );
 };
 
 export { getScore };

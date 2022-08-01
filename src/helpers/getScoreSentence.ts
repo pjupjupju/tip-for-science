@@ -1,5 +1,5 @@
 const topScoreSentence = ["Wow! 🥳", "Nepodvádíš? 👀", "Dechberoucí! 😮"];
-const highScoreSentence = ["Tady má někdo odhad 😳", "Dobře ty! 🤓", "Nepodvádíš? 👀", "Epické! 🥸"];
+const highScoreSentence = ["Tady má někdo odhad 😳", "Dobře ty! 🤓", "Epické! 🥸"];
 const lowScoreSentence = ["Skoro 😉", "Not great, not terrible 🙃", "Slušný, na amatéra 😏"];
 const zeroScoreSentence = ["Whoops 💩", "Tak tohle nevyšlo 🙃", "Snažíš se vůbec? 🧐", "Tak třeba příště 🤡"];
 
