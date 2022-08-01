@@ -47,7 +47,7 @@ const Slide15 = (props: SlideProps) => {
       <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" p={3}>
         Tip for Science bylo vytvořeno evolučními biology z Univerzity Karlovy.
       </Text>
-      <Flex>
+      <Flex marginTop={'auto'}>
         <Button
           onClick={handleClickHome}
           sx={{ flex: 1 }}

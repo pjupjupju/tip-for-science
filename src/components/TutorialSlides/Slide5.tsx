@@ -13,12 +13,7 @@ const Slide5 = ({ handleNextStep, currentTip }: SlideProps) => {
   return (
     <Container>
       <TutorialHeader>
-        <Text
-          fontSize={[3, 4, 5]}
-          color="secondary"
-          textAlign="center"
-          p={3}
-        >
+        <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" p={3}>
           Tvůj tip: {currentTip} kg
         </Text>
       </TutorialHeader>
@@ -34,13 +29,10 @@ const Slide5 = ({ handleNextStep, currentTip }: SlideProps) => {
         py={4}
         px={3}
       >
-        Na tomto grafu můžeš vidět svou odpověď, uvedené nápovědy a správnou odpověď.
+        Na tomto grafu můžeš vidět svou odpověď, uvedené nápovědy a správnou
+        odpověď.
       </Text>
-      <Button
-        mt="auto"
-        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
-        onClick={handleClickNext}
-      >
+      <Button mt="auto" onClick={handleClickNext}>
         Další
       </Button>
     </Container>

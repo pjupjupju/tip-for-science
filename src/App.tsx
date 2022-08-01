@@ -6,7 +6,7 @@ import './index.css';
 import { About } from './pages/About';
 import { Home } from './pages/Home';
 import { Play } from './pages/Play';
-import { Stats } from './pages/Stats';
+import { Profile } from './pages/Profile';
 import { SignIn } from './pages/SignIn';
 import { AuthQueryName, AUTH_QUERY, SIGN_OUT_MUTATION } from './gql';
 import { Spinner } from './components';
@@ -53,8 +53,8 @@ export const App = () => {
       <Route path="/play">
         <Play />
       </Route>
-      <Route path="/stats">
-        <Stats />
+      <Route path="/profile">
+        <Profile />
       </Route>
       <Route path="/signin">
         <SignIn />

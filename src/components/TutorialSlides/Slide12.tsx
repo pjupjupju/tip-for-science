@@ -22,11 +22,7 @@ const Slide12 = ({ handleNextStep }: SlideProps) => {
           strategii, když bude mít k dispozici pouze skupinovou inteligenci.
         </Text>
       </Box>
-      <Button
-        mt="auto"
-        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
-        onClick={handleClickNext}
-      >
+      <Button mt="auto" onClick={handleClickNext}>
         Další
       </Button>
     </Container>

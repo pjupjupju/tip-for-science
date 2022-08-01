@@ -53,7 +53,8 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
             p={4}
           >
             ...jak velká je hlava George Washingtona
-            <br />v sousoší Mount Rushmore?
+            <br />
+            v sousoší Mount Rushmore?
           </Text>
           <Image
             src={washington}
@@ -80,11 +81,7 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
           </Text>
         </Flex>
       </Flex>
-      <Button
-        mt="auto"
-        sx={{ position: ['initial', 'initial', 'relative'], top: '-30px' }}
-        onClick={handleClickNext}
-      >
+      <Button mt="auto" onClick={handleClickNext}>
         Další
       </Button>
     </Container>
