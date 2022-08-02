@@ -1,9 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
 import { hashSync } from 'bcryptjs';
 import { ulid } from 'ulid';
-import {
-  TABLE_USER, USERS_BY_EMAIL_INDEX
-} from '../src/config';
+import { TABLE_USER, USERS_BY_EMAIL_INDEX } from '../src/config';
 import { User, UserRole } from '../src/server/model/types';
 
 const db = new DynamoDB.DocumentClient(
@@ -12,7 +10,7 @@ const db = new DynamoDB.DocumentClient(
     : {
         endpoint: 'http://localhost:8000',
         region: 'eu-central-1',
-      },
+      }
 );
 
 async function createUser() {
@@ -35,8 +33,9 @@ async function createUser() {
     slug: id,
     updatedAt: new Date().toISOString(),
     score: 0,
+    lastQuestion: null,
+    bundle: [],
   };
-
 
   const dbUser = await db
     .query({
@@ -66,13 +65,13 @@ async function createUser() {
     .promise();
 
   console.log(
-    `✅ Admin user ${user.id} (${user.email}) has been created with password ${password} 🔑.`,
+    `✅ Admin user ${user.id} (${user.email}) has been created with password ${password} 🔑.`
   );
 }
 
 createUser()
   .then(() => process.exit(0))
-  .catch(e => {
+  .catch((e) => {
     console.log(e);
     process.exit(1);
   });

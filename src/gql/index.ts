@@ -1,5 +1,6 @@
 export * from './authQuery';
 export * from './getUserStats';
+export * from './highScoreQuery';
 export * from './questionQuery';
 export * from './onlineQuery';
 export * from './saveMutation';
