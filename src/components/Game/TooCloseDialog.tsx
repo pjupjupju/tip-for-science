@@ -1,13 +1,7 @@
 import React from 'react';
-import { Button, Flex, Text, Box } from 'rebass';
+import { Button, Flex, Text } from 'rebass';
 import { Container } from '../Container';
-
-const translucentBox = {
-  background: 'rgba(0,0,0,0.85)',
-  position: 'absolute',
-  top: 0,
-  left: 0,
-};
+import { TranslucentBox } from '../TranslucentBox';
 
 const TooCloseDialog = ({
   onGuessed,
@@ -24,7 +18,7 @@ const TooCloseDialog = ({
   };
 
   return (
-    <Box width="100%" height="100%" sx={translucentBox}>
+    <TranslucentBox>
       <Container>
         <Flex
           p={3}
@@ -47,7 +41,7 @@ const TooCloseDialog = ({
           </Flex>
         </Flex>
       </Container>
-    </Box>
+    </TranslucentBox>
   );
 };
 
