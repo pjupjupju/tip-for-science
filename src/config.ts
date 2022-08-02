@@ -7,6 +7,7 @@ export const AWS_REGION = 'eu-central-1';
 export const TABLE_USER = 'User';
 export const USERS_BY_EMAIL_INDEX = 'Tfs_userByEmail';
 export const USERS_BY_SLUG_INDEX = 'Tfs_userBySlug';
+export const PLAYERS_BY_HIGHSCORE = 'Tfs_userByHighScore';
 export const TABLE_TIP = 'Tip';
 export const TABLE_QUESTION = 'Question';
 

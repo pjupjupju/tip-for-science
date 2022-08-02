@@ -8,6 +8,7 @@ import {
   signUp,
 } from './mutation';
 import {
+  getHighScore,
   getMyScore,
   getOnlineStats,
   getNextQuestion,
@@ -52,12 +53,18 @@ export const typeDefs = /* GraphQL */ gql`
   }
 
   type OnlineStats {
-    onlineUsers: Int!
+    online: Int!
+  }
+
+  type HighScore {
+    slug: String!
+    score: Float
   }
 
   type Query {
-    getNextQuestion: Question
+    getHighScore: [HighScore!]!
     getMyScore: Float!
+    getNextQuestion: Question
     getOnlineStats: OnlineStats!
     getUserStats: Stats!
     viewer: Viewer!
@@ -94,7 +101,7 @@ export const typeDefs = /* GraphQL */ gql`
   type User {
     email: String!
     id: ID!
-    slug: String
+    slug: String!
     name: String
     role: UserRole!
     score: Float
@@ -141,6 +148,7 @@ export const resolvers = {
     signUp,
   },
   Query: {
+    getHighScore,
     getNextQuestion,
     getMyScore,
     getOnlineStats,
