@@ -19,5 +19,5 @@ export async function getMyScore(
     throw new ValidationError('User does not exist.');
   }
 
-  return userRecord.score.toFixed(3);
+  return userRecord.score.toFixed(2);
 }

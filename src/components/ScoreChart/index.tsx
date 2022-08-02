@@ -22,9 +22,9 @@ const ScoreChart = ({
         value: Number(currentTip),
         lineStyle: {
           stroke: '#5CC8F9',
-          strokeWidth: 1,
+          strokeWidth: 2,
           transform: `translateY(calc(${(1 - score).toFixed(0)}% - ${(
-            -score - 100
+            -score - 99
           ).toFixed(0)}px))
                     scaleY(${(score / 100).toFixed(2)})`,
         },
@@ -32,12 +32,12 @@ const ScoreChart = ({
       {
         axis: 'x',
         value: correctAnswer,
-        lineStyle: { stroke: '#fff', strokeWidth: 1 },
+        lineStyle: { stroke: '#fff', strokeWidth: 2 },
       },
       {
         axis: 'y',
         value: score,
-        legend: `+${score.toFixed(3)}`,
+        legend: `+${score.toFixed(2)}`,
         textStyle: {
           fill: '#feff00',
           transform: `scale(2, 2) translate(50px, -10px)`,
@@ -62,14 +62,14 @@ const ScoreChart = ({
           strokeWidth: 1,
           transform:
             previousScore[index] > 0
-              ? `translateY(calc(${(100 * (100 - previousScore[index])).toFixed(
-                  0
-                )}% - ${(100 * (100 - previousScore[index])).toFixed(0)}px))
-          scaleY(${previousScore[index].toFixed(2)})`
+              ? `translateY(calc(${(1 - previousScore[index]).toFixed(0)}% - ${(
+                  -previousScore[index] - 99
+                ).toFixed(0)}px))
+                        scaleY(${(previousScore[index] / 100).toFixed(2)})`
               : `translateY(calc(${(100 * 1).toFixed(0)}% - ${(100 * 1).toFixed(
                   0
                 )}px))
-                    scaleY(0.05)`,
+                    scaleY(0.1)`,
         },
       })
     );
