@@ -16,9 +16,12 @@ const Slide6 = ({ handleNextStep, currentTip }: SlideProps) => {
       <TutorialHeader>
         <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" p={3}>
           Za svou odpověď bys dostal*a{' '}
-          {typeof currentTip !== 'undefined'
-            ? getScore(currentTip, 11000).toFixed(3)
-            : 0}{' '}
+          <Text color="accent" as="span">
+            {' '}
+            {typeof currentTip !== 'undefined'
+              ? getScore(currentTip, 11000).toFixed(2)
+              : 0}{' '}
+          </Text>
           bodu.
         </Text>
       </TutorialHeader>
@@ -28,7 +31,7 @@ const Slide6 = ({ handleNextStep, currentTip }: SlideProps) => {
         )}
       </Box>
       <Text
-        fontSize={[3, 4, 5]}
+        fontSize={[3, 4, 4]}
         color="secondary"
         textAlign="center"
         py={4}

@@ -36,15 +36,15 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
       >
         Největší známý slon byl zastřelen v roce 1956 v Angole. Řekněme, že
         předchozí hráči Tip for Science hádali, že toto obrovské zvíře vážilo{' '}
-        <Text color="accent" as="span">
+        <Text color="primary" as="span">
           8 300
         </Text>
         ,{' '}
-        <Text color="accent" as="span">
+        <Text color="primary" as="span">
           9 500
         </Text>
         , nebo{' '}
-        <Text color="accent" as="span">
+        <Text color="primary" as="span">
           15 000{' '}
         </Text>
         kg.
