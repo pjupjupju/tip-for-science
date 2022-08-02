@@ -1,7 +1,12 @@
 import { DynamoDB } from 'aws-sdk';
 import { ulid } from 'ulid';
 import * as yup from 'yup';
-import { TABLE_USER, TABLE_QUESTION, USERS_BY_EMAIL_INDEX } from '../../config';
+import {
+  TABLE_USER,
+  TABLE_QUESTION,
+  USERS_BY_EMAIL_INDEX,
+  PLAYERS_BY_HIGHSCORE,
+} from '../../config';
 import { generateQuestionBundle } from '../../helpers';
 import { User, UserRole } from './types';
 
@@ -19,7 +24,7 @@ export async function createUser(
 ) {
   const id = ulid();
 
-  const { Items: questions } = await getQuestionCorpus(dynamo);
+  const questions = await getQuestionCorpus(dynamo);
 
   const initialQuestions = questions
     .filter((q: any) => q.isInit)
@@ -39,7 +44,7 @@ export async function createUser(
     name: '',
     password: args.password,
     role: args.role,
-    slug: id, // use id by default as user's slug
+    slug: Date.now().toString(), // use timestamp converted to string for now
     updatedAt: new Date().toISOString(),
     score: 0,
   };
@@ -53,17 +58,17 @@ export async function createUser(
 
   await dynamo
     .transactWrite({
-      TransactItems: ([
-        // write user
-        {
-          Put: {
-            TableName: TABLE_USER,
-            Item: user,
+      TransactItems: (
+        [
+          // write user
+          {
+            Put: {
+              TableName: TABLE_USER,
+              Item: user,
+            },
           },
-        },
-      ] as (DynamoDB.DocumentClient.TransactWriteItem | undefined)[]).filter(
-        Boolean
-      ) as DynamoDB.DocumentClient.TransactWriteItem[],
+        ] as (DynamoDB.DocumentClient.TransactWriteItem | undefined)[]
+      ).filter(Boolean) as DynamoDB.DocumentClient.TransactWriteItem[],
     })
     .promise();
 
@@ -163,6 +168,28 @@ export async function updateScore(
   return dynamo.update(params).promise();
 }
 
+export async function getHighScorePlayers(
+  dynamo: DynamoDB.DocumentClient
+): Promise<any | null> {
+  const params = {
+    TableName: TABLE_USER,
+    IndexName: PLAYERS_BY_HIGHSCORE,
+    KeyConditionExpression: '#role = :role',
+    ExpressionAttributeNames: {
+      '#role': 'role',
+    },
+    ExpressionAttributeValues: {
+      ':role': 'player',
+    },
+    ScanIndexForward: false,
+    Limit: 100,
+  };
+
+  const result = await dynamo.query(params).promise();
+
+  return result.Items;
+}
+
 async function getQuestionCorpus(
   dynamo: DynamoDB.DocumentClient
 ): Promise<any | null> {
@@ -178,5 +205,7 @@ async function getQuestionCorpus(
     },
   };
 
-  return dynamo.query(params).promise();
+  const result = await dynamo.query(params).promise();
+
+  return result.Items;
 }
