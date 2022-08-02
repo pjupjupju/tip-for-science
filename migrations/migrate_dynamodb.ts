@@ -3,6 +3,7 @@ import {
   TABLE_QUESTION,
   TABLE_USER,
   USERS_BY_EMAIL_INDEX,
+  PLAYERS_BY_HIGHSCORE,
   USERS_BY_SLUG_INDEX,
 } from '../src/config';
 
@@ -27,7 +28,9 @@ async function migrate() {
         BillingMode: 'PAY_PER_REQUEST',
         AttributeDefinitions: [
           { AttributeName: 'id', AttributeType: 'S' },
+          { AttributeName: 'role', AttributeType: 'S' },
           { AttributeName: 'email', AttributeType: 'S' },
+          { AttributeName: 'score', AttributeType: 'N' },
           { AttributeName: 'slug', AttributeType: 'S' },
           { AttributeName: 'userskey', AttributeType: 'S' },
         ],
@@ -48,6 +51,17 @@ async function migrate() {
             KeySchema: [{ AttributeName: 'slug', KeyType: 'HASH' }],
             Projection: {
               ProjectionType: 'ALL',
+            },
+          },
+          {
+            IndexName: PLAYERS_BY_HIGHSCORE,
+            KeySchema: [
+              { AttributeName: 'role', KeyType: 'HASH' },
+              { AttributeName: 'score', KeyType: 'RANGE' },
+            ],
+            Projection: {
+              ProjectionType: 'INCLUDE',
+              NonKeyAttributes: ['score', 'slug'],
             },
           },
         ],

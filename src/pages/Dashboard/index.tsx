@@ -57,9 +57,13 @@ const Dashboard = () => {
         <Flex flexDirection="column">
           <Text color="white" fontFamily="Tahoma" mb={3}>
             <b>Online users: </b>
-            {data.getOnlineStats.onlineUsers}
+            {data.getOnlineStats.online}
           </Text>
-          <RouterLink to="/dashboard/user-list" component={Link} color="primary">
+          <RouterLink
+            to="/dashboard/user-list"
+            component={Link}
+            color="primary"
+          >
             Show user list
           </RouterLink>
         </Flex>
