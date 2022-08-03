@@ -1,10 +1,10 @@
 import { DynamoDB } from 'aws-sdk';
-import { Store } from 'express-session';
+import { Store, SessionData } from 'express-session';
 
 interface SessionItem {
   id: string;
   expires: number | null; // unix timestamp in seconds, null in case there is no default time
-  data: Express.SessionData;
+  data: SessionData;
 }
 
 interface Options {
@@ -28,7 +28,7 @@ function isExpired(item: SessionItem): boolean {
   return item.expires == null ? false : Number(item.expires) <= nowSeconds();
 }
 
-function prolongSessionExpiration(session: Express.SessionData): null | number {
+function prolongSessionExpiration(session: SessionData): null | number {
   const now = nowSeconds();
 
   if (session.cookie) {
@@ -63,7 +63,7 @@ export class DynamoSessionStore extends Store {
 
   get = async (
     sid: string,
-    callback: (err: any, session?: Express.SessionData | null) => void
+    callback: (err: any, session?: SessionData | null) => void
   ): Promise<void> => {
     try {
       const { Item } = await this.client
@@ -88,7 +88,7 @@ export class DynamoSessionStore extends Store {
 
   set = async (
     sid: string,
-    session: Express.SessionData,
+    session: SessionData,
     callback?: (err?: any) => void
   ): Promise<void> => {
     try {
@@ -138,7 +138,7 @@ export class DynamoSessionStore extends Store {
 
   touch = async (
     sid: string,
-    session: Express.SessionData,
+    session: SessionData,
     callback?: (err?: any) => void
   ): Promise<void> => {
     try {
