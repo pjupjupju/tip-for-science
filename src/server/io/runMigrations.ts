@@ -1,4 +1,6 @@
 import { DynamoDB } from 'aws-sdk';
+import { hashSync } from 'bcryptjs';
+import { ulid } from 'ulid';
 import {
   AWS_REGION,
   PLAYERS_BY_HIGHSCORE,
@@ -8,16 +10,19 @@ import {
   USERS_BY_EMAIL_INDEX,
   USERS_BY_SLUG_INDEX,
 } from '../../config';
+import { UserRole } from '../model';
+
+const env = process.env.NODE_ENV;
 
 async function runMigrations() {
   const database = new DynamoDB(
-    process.env.NODE_ENV === 'production'
+    env === 'production'
       ? { region: AWS_REGION }
       : { endpoint: 'http://localhost:8000', region: AWS_REGION }
   );
   const { TableNames: tables } = await database.listTables().promise();
 
-  if (tables.length === 0) {
+  if (tables.length === 0 && env === 'production') {
     await migrate(database, tables);
   }
 
@@ -25,7 +30,7 @@ async function runMigrations() {
 }
 
 async function migrate(db, tables) {
-  if (tables.TableNames && !tables.TableNames.includes(TABLE_USER)) {
+  if (tables && !tables.includes(TABLE_USER)) {
     await db
       .createTable({
         TableName: TABLE_USER,
@@ -71,9 +76,31 @@ async function migrate(db, tables) {
         ],
       })
       .promise();
+
+    const id = ulid();
+    const user: any = {
+      createdAt: { S: new Date().toISOString() },
+      id: { S: id },
+      userskey: { S: `USER#${id}` },
+      email: { S: process.env.AUSER.toLowerCase() },
+      password: { S: hashSync(process.env.APASS, 10) },
+      role: { S: UserRole.admin },
+      slug: { S: Date.now().toString() },
+      updatedAt: { S: new Date().toISOString() },
+      score: { N: '0' },
+      lastQuestion: { NULL: true },
+      bundle: { L: [] },
+    };
+
+    await db
+      .putItem({
+        TableName: TABLE_USER,
+        Item: user,
+      })
+      .promise();
   }
 
-  if (tables.TableNames && !tables.TableNames.includes(TABLE_QUESTION)) {
+  if (tables && !tables.includes(TABLE_QUESTION)) {
     await db
       .createTable({
         TableName: TABLE_QUESTION,
@@ -104,7 +131,7 @@ async function migrate(db, tables) {
       .promise();
   }
 
-  if (tables.TableNames && !tables.TableNames.includes(TABLE_SESSION)) {
+  if (tables && !tables.includes(TABLE_SESSION)) {
     await db
       .createTable({
         TableName: TABLE_SESSION,
