@@ -4,13 +4,18 @@ import { TranslucentBox } from '../TranslucentBox';
 import { Container } from '../Container';
 import { useHistory } from 'react-router';
 
-const GameOverScreen = () => {
+interface GameOverScreenProps {
+  onContinue: Function,
+}
+
+const GameOverScreen = ({ onContinue }: GameOverScreenProps) => {
+
   const history = useHistory();
   const handleClickHome = () => {
     history.push('/');
   };
   const handleClickPlay = () => {
-    history.push('/play');
+    onContinue();
   };
 
   return (

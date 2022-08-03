@@ -25,6 +25,7 @@ const imageStyle = {
 
 const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
   const correctAnswer = 18.29;
+  const previousTips = [28, 105];
   const handleClickNext = () => {
     handleNextStep();
   };
@@ -36,7 +37,7 @@ const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
   return (
     <Container>
       <TutorialHeader>
-        <Text fontSize={[3, 4, 4]} color="accent" textAlign="center" p={3}>
+        <Text fontSize={[3, 4, 5]} color="accent" textAlign="center" p={3}>
           {currentTip} metrů?{' '}
           {questionScore === 0 && getScoreSentence(zeroScoreSentence)}
           {questionScore !== null &&
@@ -56,7 +57,11 @@ const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
       <Box sx={imageStyle} />
       <Box width="100%" height="200px">
         {typeof currentTip !== 'undefined' && (
-          <ScoreChart currentTip={currentTip} correctAnswer={correctAnswer} />
+          <ScoreChart
+            currentTip={currentTip}
+            correctAnswer={correctAnswer}
+            previousTips={previousTips}
+          />
         )}
       </Box>
       <Button mt="auto" onClick={handleClickNext}>

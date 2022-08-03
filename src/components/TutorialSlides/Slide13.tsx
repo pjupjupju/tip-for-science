@@ -1,5 +1,5 @@
 import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { Flex, Box, Text } from 'rebass';
+import { Flex, Image, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
 import jupiter from './../../assets/jupiterTut.jpg';
 import { PreviousTips } from '../Game';
@@ -7,9 +7,12 @@ import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import { SlideProps } from './types';
 import { SubmitButton } from '../SubmitButton';
-import { getTutorialImageStyle } from '../commonStyleSheets';
 
-const imageStyle = getTutorialImageStyle(jupiter);
+const imageStyle = {
+  maxWidth: '100%',
+  alignSelf: 'center',
+  objectFit: 'contain',
+};
 
 const inputStyles = {
   '::placeholder': {
@@ -69,7 +72,7 @@ const Slide13 = ({ onSubmit }: SlideProps) => {
           {question}
         </Text>
       </TutorialHeader>
-      <Box sx={imageStyle} />
+      <Image src={jupiter} sx={imageStyle} />
       <PreviousTips previousTips={previousTips} unit={unit} />
       <Flex justifyContent="center" alignItems="baseline" p={2}>
         <Label htmlFor="tip" sx={labelStyle}>

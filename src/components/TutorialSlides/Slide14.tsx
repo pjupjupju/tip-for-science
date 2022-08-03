@@ -19,6 +19,7 @@ const imageStyle = getTutorialImageStyle(jupiter);
 
 const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
   const correctAnswer = 45583;
+  const previousTips = [80000, 1000, 500, 20000];
   const handleClickNext = () => {
     handleNextStep();
   };
@@ -49,7 +50,11 @@ const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
       <Box sx={imageStyle} />
       <Box width="100%" height="200px">
         {typeof currentTip !== 'undefined' && (
-          <ScoreChart currentTip={currentTip} correctAnswer={correctAnswer} />
+          <ScoreChart
+            currentTip={currentTip}
+            correctAnswer={correctAnswer}
+            previousTips={previousTips}
+          />
         )}
       </Box>
       <Button mt="auto" onClick={handleClickNext}>
