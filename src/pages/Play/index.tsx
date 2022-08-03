@@ -140,7 +140,6 @@ const Play = () => {
       onHome={onHome}
       onSubmit={onSubmit}
       onFinish={() => {
-        // TODO: pokud neexistuje dalsi otazka?
         refetch();
         dispatch({
           type: ActionType.GAME_FINISH,

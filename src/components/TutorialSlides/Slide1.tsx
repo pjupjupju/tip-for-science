@@ -32,6 +32,7 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
             src={elephant}
             sx={{
               width: 'calc(20vh)',
+              height: 'calc(20vh)',
             }}
           />
           <Text
@@ -60,6 +61,7 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
             src={washington}
             sx={{
               width: 'calc(20vh)',
+              height: 'calc(20vh)',
             }}
           />
         </Flex>
@@ -68,6 +70,7 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
             src={jupiter}
             sx={{
               width: 'calc(20vh)',
+              height: 'calc(20vh)',
             }}
           />
           <Text

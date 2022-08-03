@@ -128,11 +128,11 @@ const Game = ({
           sx={inputStyles}
           onKeyDown={handleSubmit}
         />
-        <Text color="white">{unit}</Text>
-      </Flex>{' '}
-      <Flex py={2} justifyContent="flex-end">
+        <Text color="white" mr={4}>
+          {unit}
+        </Text>
         <SubmitButton onClick={handleClickSubmit} timeLimit={timeLimit} />
-      </Flex>
+      </Flex>{' '}
     </Container>
   ) : (
     <Container>
@@ -202,7 +202,7 @@ const Game = ({
             </Text>
           </>
         ) : (
-          <GameOverScreen />
+          <GameOverScreen onContinue={onFinish} />
         )}
       </Flex>
       <Flex justifyContent="space-between" mt={['auto', 'auto', 1]}>
