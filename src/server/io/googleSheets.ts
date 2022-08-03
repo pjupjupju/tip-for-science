@@ -1,6 +1,5 @@
 import { google } from 'googleapis';
 import { ImportedQuestionSettings } from '../model/types';
-
 import googleCredentials from './google-credentials.json';
 
 process.env.GOOGLE_APPLICATION_CREDENTIALS = './google-credentials.json';
