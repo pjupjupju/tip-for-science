@@ -5,9 +5,9 @@ import {
   USERS_BY_EMAIL_INDEX,
   PLAYERS_BY_HIGHSCORE,
   USERS_BY_SLUG_INDEX,
+  TABLE_SESSION,
 } from '../src/config';
 
-// create table if does not exist
 const config: DynamoDB.ClientConfiguration =
   process.env.NODE_ENV === 'production'
     ? {}
@@ -96,6 +96,17 @@ async function migrate() {
             },
           },
         ],
+      })
+      .promise();
+  }
+
+  if (tables.TableNames && !tables.TableNames.includes(TABLE_SESSION)) {
+    await db
+      .createTable({
+        TableName: TABLE_SESSION,
+        BillingMode: 'PAY_PER_REQUEST',
+        AttributeDefinitions: [{ AttributeName: 'id', AttributeType: 'S' }],
+        KeySchema: [{ AttributeName: 'id', KeyType: 'HASH' }],
       })
       .promise();
   }
