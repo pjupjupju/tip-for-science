@@ -18,21 +18,23 @@ import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import { resolve } from 'path';
 import { App } from '../App';
 import { Document } from './Document';
-import { RunCache, runMigrations } from './io';
+import { DynamoSessionStore, RunCache, runMigrations } from './io';
 import { createContext, typeDefs, resolvers, schema } from './schema';
 import { tipForScienceTheme } from '../theme';
-import { AWS_REGION } from '../config';
+import { AWS_REGION, TABLE_SESSION } from '../config';
 
 // eslint-disable-next-line import/no-dynamic-require
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
+const env = process.env.NODE_ENV;
 
 export async function createServer(): Promise<express.Application> {
   const server = express();
 
+  // DynamoDB bootstrapping tables
   await runMigrations();
 
   const dynamo = new DynamoDB.DocumentClient(
-    process.env.NODE_ENV === 'production'
+    env === 'production'
       ? { region: AWS_REGION }
       : {
           endpoint: 'http://localhost:8000',
@@ -43,14 +45,14 @@ export async function createServer(): Promise<express.Application> {
   const runCache = new RunCache(15, 5, { dynamo });
 
   const staticDir =
-    process.env.NODE_ENV === 'production'
+    env === 'production'
       ? resolve(__dirname, './public')
       : process.env.RAZZLE_PUBLIC_DIR;
 
   const app = new ApolloServer({
     context: createContext({ dynamo, runCache }),
-    debug: process.env.NODE_ENV !== 'production',
-    playground: process.env.NODE_ENV !== 'production',
+    debug: env !== 'production',
+    playground: env !== 'production',
     formatError(error) {
       // Sentry.captureException(error);
 
@@ -72,11 +74,14 @@ export async function createServer(): Promise<express.Application> {
     .set('trust proxy', true)
     .use(
       expressSession({
-        store: new (createSessionFileStore(expressSession as any))() as any,
+        store:
+          env !== 'production'
+            ? (new (createSessionFileStore(expressSession as any))() as any)
+            : new DynamoSessionStore({ dynamo, tableName: TABLE_SESSION }),
         cookie: {
           // set max age to 90 days in ms
           maxAge: 3 * 30 * 24 * 60 * 60 * 1000,
-          secure: process.env.NODE_ENV === 'production',
+          secure: env === 'production',
         },
         secret: [
           '78831e16-4064-4216-8ea3-ebbe646fd3ff',
