@@ -4,7 +4,7 @@ import { batchCreateQuestions } from '../../model';
 import { User } from '../../model/types';
 
 // Google spreadsheet ID
-const spreadsheetId = process.env.QUESTIONS_SPREADSHEET;
+const spreadsheetId = process.env.RAZZLE_QUESTIONS_SPREADSHEET;
 
 export async function importQuestions(
   parent: any,
