@@ -3,12 +3,6 @@ import { Application } from 'express';
 
 const env = process.env.NODE_ENV;
 
-if (env === 'production') {
-  /* Sentry.init({
-    dsn: ...
-  }); */
-}
-
 let { createServer } = require('./server');
 
 let currentApp: Application;
