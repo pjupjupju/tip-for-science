@@ -91,13 +91,15 @@ const Home = ({ user, onLogOut }: HomeProps) => {
           {isSignedIn && (
             <>
               {user && user.role === UserRole.admin && (
-                <MenuButton onClick={handleClickDashboard} mb="2">
+                <MenuButton onClick={handleClickDashboard} mb="2" primary>
                   Dashboard
                 </MenuButton>
               )}
-              <MenuButton onClick={handleClickPlay} mb="2" primary>
-                Hrát
-              </MenuButton>
+              {user && user.role !== UserRole.admin && (
+                <MenuButton onClick={handleClickPlay} mb="2" primary>
+                  Hrát
+                </MenuButton>
+              )}
               <MenuButton onClick={handleClickLogOut}>Odhlásit se</MenuButton>
             </>
           )}

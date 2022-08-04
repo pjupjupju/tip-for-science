@@ -18,9 +18,9 @@ const inputStyles = {
 };
 
 const imageStyle = {
-  minHeight: '210px',
-  width: '100%',
+  maxWidth: '100%',
   alignSelf: 'center',
+  objectFit: 'contain',
 };
 
 const labelStyle = {
