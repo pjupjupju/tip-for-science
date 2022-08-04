@@ -39,19 +39,21 @@ const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
       <TutorialHeader>
         <Text fontSize={[3, 4, 5]} color="accent" textAlign="center" p={3}>
           {currentTip} metrů?{' '}
-          {questionScore === 0 && getScoreSentence(zeroScoreSentence)}
-          {questionScore !== null &&
-            questionScore > 0 &&
-            questionScore < 0.4 &&
-            getScoreSentence(lowScoreSentence)}
-          {questionScore !== null &&
-            questionScore >= 0.4 &&
-            questionScore < 0.8 &&
-            getScoreSentence(highScoreSentence)}
-          {questionScore !== null &&
-            questionScore >= 0.8 &&
-            questionScore < 0.95 &&
-            getScoreSentence(topScoreSentence)}
+          <Text color="secondary" as="span">
+            {questionScore === 0 && getScoreSentence(zeroScoreSentence)}
+            {questionScore !== null &&
+              questionScore > 0 &&
+              questionScore < 0.4 &&
+              getScoreSentence(lowScoreSentence)}
+            {questionScore !== null &&
+              questionScore >= 0.4 &&
+              questionScore < 0.8 &&
+              getScoreSentence(highScoreSentence)}
+            {questionScore !== null &&
+              questionScore >= 0.8 &&
+              questionScore < 0.95 &&
+              getScoreSentence(topScoreSentence)}
+          </Text>
         </Text>
       </TutorialHeader>
       <Box sx={imageStyle} />
