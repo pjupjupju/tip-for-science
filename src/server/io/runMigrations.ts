@@ -1,6 +1,4 @@
 import { DynamoDB } from 'aws-sdk';
-import { hashSync } from 'bcryptjs';
-import { ulid } from 'ulid';
 import {
   AWS_REGION,
   PLAYERS_BY_HIGHSCORE,
@@ -10,7 +8,6 @@ import {
   USERS_BY_EMAIL_INDEX,
   USERS_BY_SLUG_INDEX,
 } from '../../config';
-import { UserRole } from '../model';
 
 const env = process.env.NODE_ENV;
 
@@ -116,31 +113,6 @@ async function migrate(db, tables) {
         BillingMode: 'PAY_PER_REQUEST',
         AttributeDefinitions: [{ AttributeName: 'id', AttributeType: 'S' }],
         KeySchema: [{ AttributeName: 'id', KeyType: 'HASH' }],
-      })
-      .promise();
-  }
-
-  if (tables) {
-    // create user
-    const id = ulid();
-    const user: any = {
-      createdAt: { S: new Date().toISOString() },
-      id: { S: id },
-      userskey: { S: `USER#${id}` },
-      email: { S: process.env.AUSER.toLowerCase() },
-      password: { S: hashSync(process.env.APASS, 10) },
-      role: { S: UserRole.admin },
-      slug: { S: Date.now().toString() },
-      updatedAt: { S: new Date().toISOString() },
-      score: { N: '0' },
-      lastQuestion: { NULL: true },
-      bundle: { L: [] },
-    };
-
-    await db
-      .putItem({
-        TableName: TABLE_USER,
-        Item: user,
       })
       .promise();
   }
