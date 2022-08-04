@@ -76,28 +76,6 @@ async function migrate(db, tables) {
         ],
       })
       .promise();
-
-    const id = ulid();
-    const user: any = {
-      createdAt: { S: new Date().toISOString() },
-      id: { S: id },
-      userskey: { S: `USER#${id}` },
-      email: { S: process.env.AUSER.toLowerCase() },
-      password: { S: hashSync(process.env.APASS, 10) },
-      role: { S: UserRole.admin },
-      slug: { S: Date.now().toString() },
-      updatedAt: { S: new Date().toISOString() },
-      score: { N: '0' },
-      lastQuestion: { NULL: true },
-      bundle: { L: [] },
-    };
-
-    await db
-      .putItem({
-        TableName: TABLE_USER,
-        Item: user,
-      })
-      .promise();
   }
 
   if (tables && !tables.includes(TABLE_QUESTION)) {
@@ -138,6 +116,31 @@ async function migrate(db, tables) {
         BillingMode: 'PAY_PER_REQUEST',
         AttributeDefinitions: [{ AttributeName: 'id', AttributeType: 'S' }],
         KeySchema: [{ AttributeName: 'id', KeyType: 'HASH' }],
+      })
+      .promise();
+  }
+
+  if (tables) {
+    // create user
+    const id = ulid();
+    const user: any = {
+      createdAt: { S: new Date().toISOString() },
+      id: { S: id },
+      userskey: { S: `USER#${id}` },
+      email: { S: process.env.AUSER.toLowerCase() },
+      password: { S: hashSync(process.env.APASS, 10) },
+      role: { S: UserRole.admin },
+      slug: { S: Date.now().toString() },
+      updatedAt: { S: new Date().toISOString() },
+      score: { N: '0' },
+      lastQuestion: { NULL: true },
+      bundle: { L: [] },
+    };
+
+    await db
+      .putItem({
+        TableName: TABLE_USER,
+        Item: user,
       })
       .promise();
   }
