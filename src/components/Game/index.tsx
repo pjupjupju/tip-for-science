@@ -23,6 +23,7 @@ export interface Settings {
   correctAnswer: number;
   timeLimit?: number;
   unit: string;
+  funfact: string;
 }
 
 interface GameProps {
@@ -45,9 +46,9 @@ const inputStyles = {
 };
 
 const imageStyle = {
-  height: '210px',
-  width: '100%',
+  maxWidth: '80%',
   alignSelf: 'center',
+  objectFit: 'contain',
 };
 
 const labelStyle = {
@@ -57,8 +58,10 @@ const labelStyle = {
   color: 'white',
 };
 
-const isTooClose = (score: number): boolean => score >= 0.95;
+const isTooClose = (score: number): boolean => score >= 95;
 
+const funfact =
+  'Ottův slovník naučný má {correct} dílů. Ve své době to byl nejkvalitnější encyklopedický počin v češtině. Celosvětově snad druhý po Encyclopædií Britannice. V roce 2011 ho v počtu hesel překonala česká Wikipedie.';
 const Game = ({
   settings: { question, image, previousTips, unit, timeLimit, correctAnswer },
   isSubmitted,
@@ -108,7 +111,7 @@ const Game = ({
         </Text>
       </Box>
       <Image
-        src="https://i.pinimg.com/originals/2d/9e/f7/2d9ef737d99df359187644338af83118.png"
+        src="https://tfsstorage.s3.eu-central-1.amazonaws.com/img/adopt.jpg"
         sx={imageStyle}
       />
       <PreviousTips previousTips={previousTips} unit={unit} />
@@ -125,26 +128,29 @@ const Game = ({
           sx={inputStyles}
           onKeyDown={handleSubmit}
         />
-        <Text color="white">{unit}</Text>
-      </Flex>{' '}
-      <Flex py={2} justifyContent="flex-end">
+        <Text color="white" mr={4}>
+          {unit}
+        </Text>
         <SubmitButton onClick={handleClickSubmit} timeLimit={timeLimit} />
-      </Flex>
+      </Flex>{' '}
     </Container>
   ) : (
     <Container>
-      <Box minHeight="80px">
+      <Box minHeight="60px">
         <Text
           fontSize={[3, 4, 5]}
           fontWeight="bold"
           color="secondary"
           textAlign="center"
-          p={3}
+          p={[1, 2, 3]}
         >
-          Score: {score.toFixed(3)}
+          Skóre: {score.toFixed(2)}
         </Text>
       </Box>
-      <Image src={image} sx={imageStyle} />
+      <Image
+        src="https://tfsstorage.s3.eu-central-1.amazonaws.com/img/adopt.jpg"
+        sx={imageStyle}
+      />
       <Flex justifyContent="center" alignItems="center" flexDirection="column">
         {typeof currentTip !== 'undefined' ? (
           <>
@@ -166,37 +172,40 @@ const Game = ({
               />
             )}
             {questionScore === 0 && (
-              <Text textAlign="center" color="white">
+              <Text textAlign="center" color="secondary" fontSize={3}>
                 {getScoreSentence(zeroScoreSentence)}
               </Text>
             )}
             {questionScore !== null &&
               questionScore > 0 &&
               questionScore < 0.4 && (
-                <Text textAlign="center" color="white">
+                <Text textAlign="center" color="secondary" fontSize={3}>
                   {getScoreSentence(lowScoreSentence)}
                 </Text>
               )}
             {questionScore !== null &&
               questionScore >= 0.4 &&
               questionScore < 0.8 && (
-                <Text textAlign="center" color="white">
+                <Text textAlign="center" color="secondary" fontSize={3}>
                   {getScoreSentence(highScoreSentence)}
                 </Text>
               )}
             {questionScore !== null &&
               questionScore >= 0.8 &&
               questionScore < 0.95 && (
-                <Text textAlign="center" color="white">
+                <Text textAlign="center" color="secondary" fontSize={3}>
                   {getScoreSentence(topScoreSentence)}
                 </Text>
               )}
+            <Text textAlign="center" color="secondary" fontSize={3}>
+              {funfact}
+            </Text>
           </>
         ) : (
-          <GameOverScreen />
+          <GameOverScreen onContinue={onFinish} />
         )}
       </Flex>
-      <Flex justifyContent="space-between" mt={['auto', 'auto', 3]}>
+      <Flex justifyContent="space-between" mt={['auto', 'auto', 1]}>
         <Button onClick={handleClickHome}>Domů</Button>
         <Button onClick={handleClickFinish}>Pokračovat</Button>
       </Flex>

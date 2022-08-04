@@ -7,6 +7,7 @@ import { ScoreChart } from '../ScoreChart';
 
 const Slide5 = ({ handleNextStep, currentTip }: SlideProps) => {
   const correctAnswer = 11000;
+  const previousTips = [8300, 9500, 15000];
   const handleClickNext = () => {
     handleNextStep();
   };
@@ -19,7 +20,11 @@ const Slide5 = ({ handleNextStep, currentTip }: SlideProps) => {
       </TutorialHeader>
       <Box width="100%" height="200px">
         {typeof currentTip !== 'undefined' && (
-          <ScoreChart currentTip={currentTip} correctAnswer={correctAnswer} />
+          <ScoreChart
+            currentTip={currentTip}
+            correctAnswer={correctAnswer}
+            previousTips={previousTips}
+          />
         )}
       </Box>
       <Text
@@ -29,8 +34,18 @@ const Slide5 = ({ handleNextStep, currentTip }: SlideProps) => {
         py={4}
         px={3}
       >
-        Na tomto grafu můžeš vidět svou odpověď, uvedené nápovědy a správnou
-        odpověď.
+        Na tomto grafu můžeš vidět{' '}
+        <Text color="accent" as="span">
+          svou odpověď
+        </Text>
+        ,{' '}
+        <Text color="primary" as="span">
+          uvedené nápovědy
+        </Text>{' '}
+        a 
+        <Text color="white" as="span">
+          správnou odpověď.
+        </Text>
       </Text>
       <Button mt="auto" onClick={handleClickNext}>
         Další

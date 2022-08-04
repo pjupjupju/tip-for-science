@@ -6,7 +6,6 @@ import { TutorialHeader } from '../TutorialHeader';
 import { Container } from '../Container';
 import { SlideProps } from './types';
 import { SubmitButton } from '../SubmitButton';
-import { getTutorialImageStyle } from '../commonStyleSheets';
 
 const inputStyles = {
   '::placeholder': {
@@ -17,7 +16,11 @@ const inputStyles = {
   mx: 3,
 };
 
-const imageStyle = getTutorialImageStyle(elephant);
+const imageStyle = {
+  maxWidth: '100%',
+  alignSelf: 'center',
+  objectFit: 'contain',
+};
 
 const labelStyle = {
   flexGrow: 0,

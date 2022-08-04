@@ -20,8 +20,8 @@ const Slide11 = ({ handleNextStep }: SlideProps) => {
           Vypilovali jsme sociální přenos téměř k dokonalosti.
         </Text>
         <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" mb="4">
-          Učíme se jeden od druhého, tvoříme, píšeme básně, inspirovaní tvůrci a
-          básníky minulosti.
+          Učíme se jeden od druhého, tvoříme, píšeme básně, inspirovaní
+          malířkami, vynálezci, vědkyněmi a básníky minulosti.
         </Text>
         <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" mb="4">
           Využíváme výhod tzv. kulturní dědičnosti.

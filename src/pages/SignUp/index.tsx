@@ -28,17 +28,17 @@ const labelStyles = {
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
-    .required('Email is mandatory')
-    .matches(emailRegex, 'Please provide a valid e-mail'),
+    .required('E-mail je povinný údaj')
+    .matches(emailRegex, 'Prosím, zadej platný e-mail'),
   password: Yup.string()
-    .required('Password is mendatory')
+    .required('Heslo je povinný údaj')
     .min(
       MIN_PASSWORD_LENGTH,
-      `Password must be at ${MIN_PASSWORD_LENGTH} char long`
+      `Heslo musí mít alespoň ${MIN_PASSWORD_LENGTH} znaků`
     ),
   confirmPassword: Yup.string()
-    .required('Please confirm password')
-    .oneOf([Yup.ref('password')], 'Passwords do not match'),
+    .required('Prosím, potvrď heslo')
+    .oneOf([Yup.ref('password')], 'Hesla se neshodují'),
 });
 
 const SignUp = () => {

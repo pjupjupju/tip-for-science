@@ -19,6 +19,7 @@ const imageStyle = getTutorialImageStyle(jupiter);
 
 const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
   const correctAnswer = 45583;
+  const previousTips = [80000, 1000, 500, 20000];
   const handleClickNext = () => {
     handleNextStep();
   };
@@ -31,25 +32,31 @@ const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
       <TutorialHeader>
         <Text fontSize={[3, 4, 5]} color="accent" textAlign="center" p={3}>
           {currentTip} km/h?{' '}
-          {questionScore === 0 && getScoreSentence(zeroScoreSentence)}
-          {questionScore !== null &&
-            questionScore > 0 &&
-            questionScore < 0.4 &&
-            getScoreSentence(lowScoreSentence)}
-          {questionScore !== null &&
-            questionScore >= 0.4 &&
-            questionScore < 0.8 &&
-            getScoreSentence(highScoreSentence)}
-          {questionScore !== null &&
-            questionScore >= 0.8 &&
-            questionScore < 0.95 &&
-            getScoreSentence(topScoreSentence)}
+          <Text color="secondary" as="span">
+            {questionScore === 0 && getScoreSentence(zeroScoreSentence)}
+            {questionScore !== null &&
+              questionScore > 0 &&
+              questionScore < 0.4 &&
+              getScoreSentence(lowScoreSentence)}
+            {questionScore !== null &&
+              questionScore >= 0.4 &&
+              questionScore < 0.8 &&
+              getScoreSentence(highScoreSentence)}
+            {questionScore !== null &&
+              questionScore >= 0.8 &&
+              questionScore < 0.95 &&
+              getScoreSentence(topScoreSentence)}
+          </Text>
         </Text>
       </TutorialHeader>
       <Box sx={imageStyle} />
       <Box width="100%" height="200px">
         {typeof currentTip !== 'undefined' && (
-          <ScoreChart currentTip={currentTip} correctAnswer={correctAnswer} />
+          <ScoreChart
+            currentTip={currentTip}
+            correctAnswer={correctAnswer}
+            previousTips={previousTips}
+          />
         )}
       </Box>
       <Button mt="auto" onClick={handleClickNext}>
