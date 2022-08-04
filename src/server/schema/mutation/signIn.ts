@@ -18,9 +18,9 @@ export async function signIn(
       email: yup
         .string()
         .lowercase()
-        .email()
-        .required(),
-      password: yup.string().required(),
+        .email('Prosím, zadej platný e-mail')
+        .required('Prosím, zadej e-mail'),
+      password: yup.string().required('Prosím, zadej heslo'),
     })
     .required();
 
@@ -31,7 +31,7 @@ export async function signIn(
     const user = await findUserByEmail(email, context);
 
     if (user == null || !compareSync(password, user.password)) {
-      throw new yup.ValidationError('Invalid credentials provided', null, '');
+      throw new yup.ValidationError('Nesprávné přihlašovací údaje', null, '');
     }
 
     const token = sign(
