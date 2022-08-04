@@ -41,7 +41,6 @@ export async function createUser(
     id,
     lastQuestion: null,
     userskey: `USER#${id}`,
-    name: '',
     password: args.password,
     role: args.role,
     slug: Date.now().toString(), // use timestamp converted to string for now
