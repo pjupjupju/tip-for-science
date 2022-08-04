@@ -18,7 +18,7 @@ import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import { resolve } from 'path';
 import { App } from '../App';
 import { Document } from './Document';
-import { createAdmin, DynamoSessionStore, RunCache, runMigrations } from './io';
+import { DynamoSessionStore, RunCache, runMigrations } from './io';
 import { createContext, typeDefs, resolvers, schema } from './schema';
 import { tipForScienceTheme } from '../theme';
 import { AWS_REGION, TABLE_SESSION } from '../config';
@@ -31,7 +31,7 @@ export async function createServer(): Promise<express.Application> {
   const server = express();
 
   // DynamoDB bootstrapping tables
-  const tables = await runMigrations();
+  await runMigrations();
 
   const dynamo = new DynamoDB.DocumentClient(
     env === 'production'
@@ -41,10 +41,6 @@ export async function createServer(): Promise<express.Application> {
           region: AWS_REGION,
         }
   );
-
-  if (env === 'production' && tables.length === 0) {
-    await createAdmin(dynamo);
-  }
 
   const runCache = new RunCache(15, 5, { dynamo });
 
