@@ -15,5 +15,6 @@
     "target": "esnext",
     "typeRoots": ["node_modules/@types", "./@typed"]
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["**/**.stories.tsx"]
 }
