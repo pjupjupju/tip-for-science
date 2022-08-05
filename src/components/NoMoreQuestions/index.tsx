@@ -2,7 +2,6 @@ import { Flex, Text, Button } from 'rebass';
 import React from 'react';
 import { Container } from '..';
 import { useHistory } from 'react-router';
-import { TranslucentBox } from '../TranslucentBox';
 import { Link } from 'react-router-dom';
 
 interface NoMoreQuestionsProps {
