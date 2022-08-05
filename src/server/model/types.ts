@@ -42,6 +42,7 @@ type QuestionStrategy = {
   initialTips: number[][];
   selectionPressure: number[];
   tipsPerGeneration: number[];
+  numTipsToShow: number[];
 };
 
 /**
@@ -71,6 +72,7 @@ export interface DynamoTip {
 export type RunStrategy = {
   selectionPressure: number;
   tipsPerGeneration: number;
+  numTipsToShow: number;
 };
 
 export interface DynamoRun {
@@ -89,12 +91,17 @@ export interface DynamoRun {
  * Question from IMPORT
  */
 export type ImportedQuestionSettings = {
+  qIdInSheet: string;
   question: string;
   image: string;
   correctAnswer: number;
   timeLimit?: number;
   unit: string;
   isInit: boolean;
+  selectionPressure: number[];
+  tipsPerGeneration: number[];
+  initialTips: number[][];
+  numTipsToShow: number[];
 };
 
 /**

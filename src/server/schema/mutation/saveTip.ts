@@ -36,6 +36,8 @@ export async function saveTip(
       run: rId,
       correctAnswer: settings.correctAnswer,
       strategy: {
+        numTipsToShow:
+          strategy.numTipsToShow[runIndex % strategy.numTipsToShow.length],
         selectionPressure:
           strategy.selectionPressure[
             runIndex % strategy.selectionPressure.length

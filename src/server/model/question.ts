@@ -39,6 +39,10 @@ export async function batchCreateQuestions(
           correctAnswer,
           timeLimit,
           unit,
+          selectionPressure,
+          tipsPerGeneration,
+          initialTips,
+          numTipsToShow,
         }: ImportedQuestionSettings) => {
           const id = ulid();
 
@@ -61,9 +65,10 @@ export async function batchCreateQuestions(
                   unit,
                 },
                 strategy: {
-                  initialTips: [[155, 410, 2900, 4555]],
-                  selectionPressure: [0.2],
-                  tipsPerGeneration: [5],
+                  selectionPressure,
+                  tipsPerGeneration,
+                  initialTips,
+                  numTipsToShow,
                 },
                 isInit,
                 qsk: `QDATA#${id}`,
@@ -144,6 +149,10 @@ export async function createQuestionRun(
     run: runId,
     settings: question.settings,
     strategy: {
+      numTipsToShow:
+        question.strategy.numTipsToShow[
+          runIndex % question.strategy.numTipsToShow.length
+        ],
       selectionPressure:
         question.strategy.selectionPressure[
           runIndex % question.strategy.selectionPressure.length
@@ -565,6 +574,7 @@ function getNewPreviousTips(
   { selectionPressure }: RunStrategy
 ): number[] {
   // TODO: do we want to use Math.floor? How do we make sure, we never create FLOAT? This is probably not app's job
+  // TODO: apply numTipsToShow if it differs from how many we have after applying selection
   const numTipsToRemove = Math.floor(selectionPressure * tips.length);
   return tips
     .sort((a, b) => Math.abs(correctAnswer - a) - Math.abs(correctAnswer - b))
