@@ -13,7 +13,7 @@ export async function importQuestions(
 ) {
   // only allow user who is admin, so first load user role
 
-  const questions = await getQuestionBatch(spreadsheetId, 'import');
+  const questions = await getQuestionBatch(spreadsheetId, 'import', 'import-strategy');
 
   if (questions.length === 0) {
     // return true but log, that nothing was found to be imported
