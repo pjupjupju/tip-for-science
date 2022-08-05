@@ -1,4 +1,4 @@
-import React, { KeyboardEvent } from 'react';
+import React, { KeyboardEvent, useRef } from 'react';
 import { Flex, Image, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
 import washington from './../../assets/washingtonTut.jpg';
@@ -37,7 +37,34 @@ const unit = 'm';
 const previousTips = [28, 105];
 
 const Slide9 = ({ onSubmit = () => {} }: SlideProps) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const handleClickSubmit = () => {
+    onSubmit(Number(inputRef.current!.value));
+  };
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (
+      ![
+        'Shift',
+        'ArrowLeft',
+        'ArrowRight',
+        'Backspace',
+        'Enter',
+        '.',
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+      ].includes(event.key)
+    ) {
+      event.preventDefault();
+    }
+
     if (event.key === 'Enter') {
       onSubmit(Number(event.currentTarget.value));
     }
@@ -65,8 +92,12 @@ const Slide9 = ({ onSubmit = () => {} }: SlideProps) => {
           placeholder="tvůj tip"
           sx={inputStyles}
           onKeyDown={handleSubmit}
+          ref={inputRef}
         />
-        <Text color="white" mr={2}>{unit}</Text> <SubmitButton />
+        <Text color="white" mr={2}>
+          {unit}
+        </Text>{' '}
+        <SubmitButton onClick={handleClickSubmit} />
       </Flex>
     </Container>
   );

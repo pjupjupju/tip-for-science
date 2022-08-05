@@ -86,6 +86,29 @@ const Game = ({
   };
 
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (
+      ![
+        'Shift',
+        'ArrowLeft',
+        'ArrowRight',
+        'Backspace',
+        'Enter',
+        '.',
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+      ].includes(event.key)
+    ) {
+      event.preventDefault();
+    }
+
     if (event.key === 'Enter' && onSubmit) {
       onSubmit(Number(event.currentTarget.value));
     }
