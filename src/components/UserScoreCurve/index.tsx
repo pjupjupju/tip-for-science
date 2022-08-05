@@ -29,7 +29,7 @@ const UserScoreCurve = ({ stats }: UserScoreCurveProps) => {
   ];
 
   const commonProperties = {
-    height: 400,
+    maxHeight: 400,
     margin: { top: 20, right: 20, bottom: 60, left: 80 },
     data,
     pointSize: 8,
