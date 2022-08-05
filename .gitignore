@@ -16,6 +16,7 @@ sessions
 
 # development
 export-tipdata**.csv
+/migrations/**.txt
 
 # production
 /build
