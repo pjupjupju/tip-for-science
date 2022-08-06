@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Box, Text, Flex } from 'rebass';
+import NumberFormat from 'react-number-format';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import { SlideProps } from './types';
@@ -20,7 +21,13 @@ const Slide5 = ({ handleNextStep, currentTip }: SlideProps) => {
     <Container>
       <TutorialHeader>
         <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" p={3}>
-          Tvůj tip: {currentTip} kg
+          Tvůj tip:{' '}
+          <NumberFormat
+            value={currentTip}
+            displayType={'text'}
+            thousandSeparator={' '}
+          />{' '}
+          kg
         </Text>
       </TutorialHeader>
       <Box width="100%" height="200px">
