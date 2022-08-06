@@ -6,9 +6,14 @@ import jupiter from './../../assets/jupiterTutF.jpg';
 import { SlideProps } from './types';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
+import { useHistory } from 'react-router';
 
 const Slide1 = ({ handleNextStep }: SlideProps) => {
   // obsah () se pak muze smazat, je to tu pro hloupe lidi
+  const history = useHistory();
+  const handleClickHome = () => {
+    history.push('/');
+  };
   const handleClickNext = () => {
     handleNextStep();
   };
@@ -26,13 +31,14 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
           Zajímalo by tě...
         </Text>
       </TutorialHeader>
-      <Flex flexDirection="column">
-        <Flex justifyContent="flex-start">
+      <Flex flexDirection="column" pt={3} pb={4}>
+        <Flex justifyContent="center" alignItems="center">
           <Image
             src={elephant}
             sx={{
               width: 'calc(20vh)',
               height: 'calc(20vh)',
+              borderRadius: 100,
             }}
           />
           <Text
@@ -45,7 +51,7 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
             ...kolik vážil nejtěžší slon v historii?
           </Text>
         </Flex>
-        <Flex justifyContent="flex-end">
+        <Flex justifyContent="center" alignItems="center">
           <Text
             fontSize={[3, 4, 4]}
             color="secondary"
@@ -62,15 +68,17 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
             sx={{
               width: 'calc(20vh)',
               height: 'calc(20vh)',
+              borderRadius: 100,
             }}
           />
         </Flex>
-        <Flex justifyContent="flex-start">
+        <Flex justifyContent="center" alignItems="center">
           <Image
             src={jupiter}
             sx={{
               width: 'calc(20vh)',
               height: 'calc(20vh)',
+              borderRadius: 100,
             }}
           />
           <Text
@@ -84,9 +92,19 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
           </Text>
         </Flex>
       </Flex>
-      <Button mt="auto" onClick={handleClickNext}>
-        Další
-      </Button>
+      <Flex mt="auto" justifyContent="space-between" width="100%">
+        <Button
+          onClick={handleClickHome}
+          backgroundColor={'#414141'}
+          sx={{ flex: 1 }}
+          mr="1"
+        >
+          Domů
+        </Button>
+        <Button onClick={handleClickNext} sx={{ flex: 5 }}>
+          Další ▶
+        </Button>
+      </Flex>
     </Container>
   );
 };

@@ -1,13 +1,18 @@
 import React from 'react';
-import { Button, Text, Box } from 'rebass';
+import { Button, Text, Box, Flex } from 'rebass';
 import { getScore } from '../../helpers';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import { SlideProps } from './types';
 import { ScoreChart } from '../ScoreChart';
+import { useHistory } from 'react-router';
 
 const Slide6 = ({ handleNextStep, currentTip }: SlideProps) => {
   const correctAnswer = 11000;
+  const history = useHistory();
+  const handleClickHome = () => {
+    history.push('/');
+  };
   const handleClickNext = () => {
     handleNextStep();
   };
@@ -39,9 +44,19 @@ const Slide6 = ({ handleNextStep, currentTip }: SlideProps) => {
       >
         Body získáš, pokud se trefíš mezi 50 - 200 % hodnoty správné odpovědi.
       </Text>
-      <Button mt="auto" onClick={handleClickNext}>
-        Další
-      </Button>
+      <Flex mt="auto" justifyContent="space-between" width="100%">
+        <Button
+          onClick={handleClickHome}
+          backgroundColor={'#414141'}
+          sx={{ flex: 1 }}
+          mr="1"
+        >
+          Domů
+        </Button>
+        <Button onClick={handleClickNext} sx={{ flex: 5 }}>
+          Další ▶
+        </Button>
+      </Flex>
     </Container>
   );
 };

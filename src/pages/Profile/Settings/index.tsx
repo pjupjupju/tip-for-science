@@ -66,7 +66,7 @@ const Settings = () => {
           </Box>
         </Text>
         <Text color="secondary" fontSize={3} mt="2">
-          Je mi:
+          Věk:
           <Input placeholder="..." color="white" my="2" />
         </Text>
         <BackButton mt="2">domů</BackButton>
