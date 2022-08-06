@@ -34,6 +34,7 @@ export async function batchCreateQuestions(
       [TABLE_QUESTION]: chunk.map(
         ({
           question,
+          fact,
           image,
           isInit,
           correctAnswer,
@@ -58,6 +59,7 @@ export async function batchCreateQuestions(
                 id: `Q#${id}`,
                 run: 0,
                 settings: {
+                  fact,
                   question,
                   image,
                   correctAnswer,

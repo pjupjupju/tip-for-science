@@ -6,6 +6,7 @@ export const QUESTION_QUERY = gql`
       id
       rId
       gId
+      fact
       question
       image
       previousTips
