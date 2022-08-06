@@ -26,6 +26,7 @@ export const typeDefs = /* GraphQL */ gql`
     id: String!
     rId: Int!
     gId: Int!
+    fact: String!
     question: String!
     image: String
     previousTips: [Float]

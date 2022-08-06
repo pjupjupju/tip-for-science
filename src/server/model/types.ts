@@ -20,6 +20,7 @@ export interface User {
 }
 
 export type QuestionSettings = {
+  fact: string;
   question: string;
   image: string;
   correctAnswer: number;
@@ -96,6 +97,7 @@ export type ImportedQuestionSettings = {
   image: string;
   correctAnswer: number;
   timeLimit?: number;
+  fact: string;
   unit: string;
   isInit: boolean;
   selectionPressure: number[];

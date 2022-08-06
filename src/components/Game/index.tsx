@@ -15,6 +15,7 @@ import {
   lowScoreSentence,
   zeroScoreSentence,
 } from '../../helpers';
+import { FunFact } from './FunFact';
 
 export interface Settings {
   question: string;
@@ -23,7 +24,7 @@ export interface Settings {
   correctAnswer: number;
   timeLimit?: number;
   unit: string;
-  funfact: string;
+  fact: string;
 }
 
 interface GameProps {
@@ -60,10 +61,16 @@ const labelStyle = {
 
 const isTooClose = (score: number): boolean => score >= 95;
 
-const funfact =
-  'Ottův slovník naučný má {correct} dílů. Ve své době to byl nejkvalitnější encyklopedický počin v češtině. Celosvětově snad druhý po Encyclopædií Britannice. V roce 2011 ho v počtu hesel překonala česká Wikipedie.';
 const Game = ({
-  settings: { question, image, previousTips, unit, timeLimit, correctAnswer },
+  settings: {
+    question,
+    image,
+    fact,
+    previousTips,
+    unit,
+    timeLimit,
+    correctAnswer,
+  },
   isSubmitted,
   onHome,
   onSubmit,
@@ -110,10 +117,7 @@ const Game = ({
           {question}
         </Text>
       </Box>
-      <Image
-        src="https://tfsstorage.s3.eu-central-1.amazonaws.com/img/adopt.jpg"
-        sx={imageStyle}
-      />
+      <Image src={image} sx={imageStyle} />
       <PreviousTips previousTips={previousTips} unit={unit} />
       <Flex justifyContent="center" alignItems="center" p={2}>
         <Label htmlFor="tip" sx={labelStyle}>
@@ -147,11 +151,14 @@ const Game = ({
           Skóre: {score.toFixed(2)}
         </Text>
       </Box>
-      <Image
-        src="https://tfsstorage.s3.eu-central-1.amazonaws.com/img/adopt.jpg"
-        sx={imageStyle}
-      />
-      <Flex justifyContent="center" alignItems="center" flexDirection="column">
+      <Image src={image} sx={imageStyle} />
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        flexDirection="column"
+        flexGrow={1}
+        flexShrink={1}
+      >
         {typeof currentTip !== 'undefined' ? (
           <>
             <Box width="100%" height="200px">
@@ -171,43 +178,51 @@ const Game = ({
                 }}
               />
             )}
-            {questionScore === 0 && (
-              <Text textAlign="center" color="secondary" fontSize={3}>
-                {getScoreSentence(zeroScoreSentence)}
+            <Flex
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
+              flexGrow={1}
+              flexShrink={1}
+            >
+              <Text textAlign="center" color="graphScore" fontSize={3} mb={3}>
+                {questionScore === 0 && getScoreSentence(zeroScoreSentence)}
+                {questionScore !== null &&
+                  questionScore > 0 &&
+                  questionScore < 40 &&
+                  getScoreSentence(lowScoreSentence)}
+                {questionScore !== null &&
+                  questionScore >= 40 &&
+                  questionScore < 80 &&
+                  getScoreSentence(highScoreSentence)}
+                {questionScore !== null &&
+                  questionScore >= 80 &&
+                  questionScore < 95 &&
+                  getScoreSentence(topScoreSentence)}
               </Text>
-            )}
-            {questionScore !== null &&
-              questionScore > 0 &&
-              questionScore < 0.4 && (
-                <Text textAlign="center" color="secondary" fontSize={3}>
-                  {getScoreSentence(lowScoreSentence)}
-                </Text>
-              )}
-            {questionScore !== null &&
-              questionScore >= 0.4 &&
-              questionScore < 0.8 && (
-                <Text textAlign="center" color="secondary" fontSize={3}>
-                  {getScoreSentence(highScoreSentence)}
-                </Text>
-              )}
-            {questionScore !== null &&
-              questionScore >= 0.8 &&
-              questionScore < 0.95 && (
-                <Text textAlign="center" color="secondary" fontSize={3}>
-                  {getScoreSentence(topScoreSentence)}
-                </Text>
-              )}
-            <Text textAlign="center" color="secondary" fontSize={3}>
-              {funfact}
-            </Text>
+              <FunFact correctAnswer={correctAnswer} fact={fact} />
+            </Flex>
           </>
         ) : (
           <GameOverScreen onContinue={onFinish} />
         )}
       </Flex>
-      <Flex justifyContent="space-between" mt={['auto', 'auto', 1]}>
-        <Button onClick={handleClickHome}>Domů</Button>
-        <Button onClick={handleClickFinish}>Pokračovat</Button>
+      <Flex
+        justifyContent="space-between"
+        mt={['auto', 'auto', 1]}
+        mb={[0, 0, 4]}
+      >
+        <Button
+          sx={{ flex: 1 }}
+          mr="1"
+          backgroundColor="neutralFade"
+          onClick={handleClickHome}
+        >
+          Domů
+        </Button>
+        <Button sx={{ flex: 5 }} onClick={handleClickFinish}>
+          Pokračovat ▶
+        </Button>
       </Flex>
     </Container>
   );

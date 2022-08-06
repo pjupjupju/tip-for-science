@@ -65,9 +65,10 @@ async function getQuestionBatch(
     return rows.map((r, index) => ({
       qIdInSheet: r[0],
       question: r[1],
-      correctAnswer: r[2],
       unit: r[3],
       image: r[4],
+      fact: r[5],
+      correctAnswer: Number(r[2].replace(',', '.')),
       timeLimit: isNaN(parseInt(r[6])) ? undefined : parseInt(r[6]),
       isInit: r[7].toLowerCase() === 'true',
       selectionPressure: JSON.parse(strategyRows[index][1]),
