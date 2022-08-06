@@ -10,6 +10,7 @@ type Question = {
   id: string;
   rId: number;
   gId: number;
+  fact: string;
   question: string;
   image?: string;
   previousTips: number[];
@@ -64,6 +65,7 @@ export async function getNextQuestion(
     id: runRecord.id,
     gId: runRecord.generation,
     rId: runRecord.run,
+    fact: runRecord.settings.fact,
     question: runRecord.settings.question,
     image: runRecord.settings.image,
     previousTips: runRecord.previousTips,
