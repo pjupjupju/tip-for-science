@@ -2,8 +2,6 @@ import { Flex, Text, Button } from 'rebass';
 import React from 'react';
 import { Container } from '..';
 import { useHistory } from 'react-router';
-import { TranslucentBox } from '../TranslucentBox';
-import { Link } from 'react-router-dom';
 
 interface NoMoreQuestionsProps {
   score: Number;
@@ -14,8 +12,8 @@ const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => {
   const handleClickHome = () => {
     history.push('/');
   };
-  const handleClickProfile = () => {
-    history.push('/profile');
+  const handleClickSettings = () => {
+    history.push('/profile/settings');
   };
 
   return (
@@ -45,13 +43,8 @@ const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => {
         <Text fontWeight={500} textAlign="center" my={5} color="secondary">
           Až budou k dispozici další, dáme ti vědět na registrační e-mail.
           <br />
-          Zkontrolovat nebo opravit jej můžeš v sekci{' '}
-          <Link to="/profile" style={{ color: '#FF0070' }}>
-            Profil
-          </Link>
-          .
+          Zkontrolovat nebo opravit jej můžeš v sekci Nastavení
         </Text>
-
         <Flex justifyContent="space-between" width="100%" mt={6}>
           <Button
             onClick={handleClickHome}
@@ -61,8 +54,8 @@ const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => {
           >
             Domů
           </Button>
-          <Button onClick={handleClickProfile} sx={{ flex: 2 }}>
-            Profil
+          <Button onClick={handleClickSettings} sx={{ flex: 2 }}>
+            Nastavení
           </Button>
         </Flex>
       </Flex>

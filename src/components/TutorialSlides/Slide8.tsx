@@ -1,9 +1,14 @@
 import React from 'react';
-import { Box, Button, Text } from 'rebass';
+import { useHistory } from 'react-router-dom';
+import { Box, Button, Text, Flex } from 'rebass';
 import { Container } from '../Container';
 import { SlideProps } from './types';
 
 const Slide8 = ({ handleNextStep }: SlideProps) => {
+  const history = useHistory();
+  const handleClickHome = () => {
+    history.push('/');
+  };
   const handleClickNext = () => {
     handleNextStep();
   };
@@ -14,9 +19,19 @@ const Slide8 = ({ handleNextStep }: SlideProps) => {
           V této hře jsi nepostradatelnou hybnou silou dědičnosti!
         </Text>
       </Box>
-      <Button mt="auto" onClick={handleClickNext}>
-        Další
-      </Button>
+      <Flex mt="auto" justifyContent="space-between" width="100%">
+        <Button
+          onClick={handleClickHome}
+          backgroundColor={'#414141'}
+          sx={{ flex: 1 }}
+          mr="1"
+        >
+          Domů
+        </Button>
+        <Button onClick={handleClickNext} sx={{ flex: 5 }}>
+          Další ▶
+        </Button>
+      </Flex>
     </Container>
   );
 };
