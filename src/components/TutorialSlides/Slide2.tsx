@@ -1,14 +1,19 @@
 import React from 'react';
-import { Box, Button, Text } from 'rebass';
+import { Box, Button, Text, Flex } from 'rebass';
 import { getTutorialImageStyle } from '../commonStyleSheets';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import elephant from './../../assets/elephantTut.jpg';
 import { SlideProps } from './types';
+import { useHistory } from 'react-router';
 
 const imageStyle = getTutorialImageStyle(elephant);
 
 const Slide2 = ({ handleNextStep }: SlideProps) => {
+  const history = useHistory();
+  const handleClickHome = () => {
+    history.push('/');
+  };
   const handleClickNext = () => {
     handleNextStep();
   };
@@ -49,9 +54,19 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
         </Text>
         kg.
       </Text>
-      <Button mt="auto" onClick={handleClickNext}>
-        Další
-      </Button>
+      <Flex mt="auto" justifyContent="space-between" width="100%">
+        <Button
+          onClick={handleClickHome}
+          backgroundColor={'#414141'}
+          sx={{ flex: 1 }}
+          mr="1"
+        >
+          Domů
+        </Button>
+        <Button onClick={handleClickNext} sx={{ flex: 5 }}>
+          Další ▶
+        </Button>
+      </Flex>
     </Container>
   );
 };

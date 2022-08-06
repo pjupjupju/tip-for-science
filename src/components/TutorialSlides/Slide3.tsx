@@ -1,4 +1,4 @@
-import React, { KeyboardEvent } from 'react';
+import React, { KeyboardEvent, useRef } from 'react';
 import { Flex, Image, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
 import elephant from './../../assets/elephantTut.jpg';
@@ -34,8 +34,12 @@ const image = elephant;
 const unit = 'kg';
 
 const Slide3 = ({ onSubmit }: SlideProps) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const handleClickSubmit = () => {
+    onSubmit(Number(inputRef.current!.value));
+  };
+
   const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
-    console.log(event.key);
     if (
       ![
         'Shift',
@@ -85,11 +89,12 @@ const Slide3 = ({ onSubmit }: SlideProps) => {
           placeholder="tvůj tip"
           sx={inputStyles}
           onKeyDown={handleSubmit}
+          ref={inputRef}
         />
         <Text color="white" mr={4}>
           {unit}
         </Text>{' '}
-        <SubmitButton />
+        <SubmitButton onClick={handleClickSubmit} />
       </Flex>
     </Container>
   );

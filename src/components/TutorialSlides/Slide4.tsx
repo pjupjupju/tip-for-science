@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Box, Text } from 'rebass';
+import { Button, Box, Text, Flex } from 'rebass';
+import { useHistory } from 'react-router';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import elephant from './../../assets/elephantTut.jpg';
@@ -17,6 +18,10 @@ import { getTutorialImageStyle } from '../commonStyleSheets';
 const imageStyle = getTutorialImageStyle(elephant);
 
 const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
+  const history = useHistory();
+  const handleClickHome = () => {
+    history.push('/');
+  };
   const handleClickNext = () => {
     handleNextStep();
   };
@@ -34,15 +39,15 @@ const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
             {questionScore === 0 && getScoreSentence(zeroScoreSentence)}
             {questionScore !== null &&
               questionScore > 0 &&
-              questionScore < 0.4 &&
+              questionScore < 40 &&
               getScoreSentence(lowScoreSentence)}
             {questionScore !== null &&
-              questionScore >= 0.4 &&
-              questionScore < 0.8 &&
+              questionScore >= 40 &&
+              questionScore < 80 &&
               getScoreSentence(highScoreSentence)}
             {questionScore !== null &&
-              questionScore >= 0.8 &&
-              questionScore < 0.95 &&
+              questionScore >= 80 &&
+              questionScore < 95 &&
               getScoreSentence(topScoreSentence)}
           </Text>
         </Text>
@@ -55,13 +60,23 @@ const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
         py={4}
         px={3}
       >
-        Největší samec slona, jehož váhu se podařilo zaznamenat, vážil 10 886 kg
-        a v kohoutku měřil 3,96 metru. Byl tedy téměř o metr vyšší než průměrný
+        Největší samec slona, jehož váhu se podařilo zaznamenat, vážil 10 886 kg
+        a v kohoutku měřil 3,96 metru. Byl tedy téměř o metr vyšší než průměrný
         slon africký.
       </Text>
-      <Button mt="auto" onClick={handleClickNext}>
-        Další
-      </Button>
+      <Flex mt="auto" justifyContent="space-between" width="100%">
+        <Button
+          onClick={handleClickHome}
+          backgroundColor={'#414141'}
+          sx={{ flex: 1 }}
+          mr="1"
+        >
+          Domů
+        </Button>
+        <Button onClick={handleClickNext} sx={{ flex: 5 }}>
+          Další ▶
+        </Button>
+      </Flex>
     </Container>
   );
 };

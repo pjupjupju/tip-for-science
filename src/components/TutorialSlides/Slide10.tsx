@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text, Box } from 'rebass';
+import { Button, Text, Box, Flex } from 'rebass';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import washington from './../../assets/washingtonTut.jpg';
@@ -13,6 +13,7 @@ import {
   lowScoreSentence,
   zeroScoreSentence,
 } from '../../helpers';
+import { useHistory } from 'react-router-dom';
 
 const imageStyle = {
   flexShrink: 1,
@@ -26,6 +27,10 @@ const imageStyle = {
 const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
   const correctAnswer = 18.29;
   const previousTips = [28, 105];
+  const history = useHistory();
+  const handleClickHome = () => {
+    history.push('/');
+  };
   const handleClickNext = () => {
     handleNextStep();
   };
@@ -43,15 +48,15 @@ const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
             {questionScore === 0 && getScoreSentence(zeroScoreSentence)}
             {questionScore !== null &&
               questionScore > 0 &&
-              questionScore < 0.4 &&
+              questionScore < 40 &&
               getScoreSentence(lowScoreSentence)}
             {questionScore !== null &&
-              questionScore >= 0.4 &&
-              questionScore < 0.8 &&
+              questionScore >= 40 &&
+              questionScore < 80 &&
               getScoreSentence(highScoreSentence)}
             {questionScore !== null &&
-              questionScore >= 0.8 &&
-              questionScore < 0.95 &&
+              questionScore >= 80 &&
+              questionScore < 95 &&
               getScoreSentence(topScoreSentence)}
           </Text>
         </Text>
@@ -66,9 +71,19 @@ const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
           />
         )}
       </Box>
-      <Button mt="auto" onClick={handleClickNext}>
-        Další
-      </Button>
+      <Flex mt="auto" justifyContent="space-between" width="100%">
+        <Button
+          onClick={handleClickHome}
+          backgroundColor={'#414141'}
+          sx={{ flex: 1 }}
+          mr="1"
+        >
+          Domů
+        </Button>
+        <Button onClick={handleClickNext} sx={{ flex: 5 }}>
+          Další ▶
+        </Button>
+      </Flex>
     </Container>
   );
 };
