@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Text, Box, Flex } from 'rebass';
+import NumberFormat from 'react-number-format';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import washington from './../../assets/washingtonTut.jpg';
@@ -43,7 +44,12 @@ const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
     <Container>
       <TutorialHeader>
         <Text fontSize={[3, 4, 5]} color="accent" textAlign="center" p={3}>
-          {currentTip} metrů?{' '}
+          <NumberFormat
+            value={currentTip}
+            displayType={'text'}
+            thousandSeparator={' '}
+          />{' '}
+          metrů?{' '}
           <Text color="secondary" as="span">
             {questionScore === 0 && getScoreSentence(zeroScoreSentence)}
             {questionScore !== null &&
