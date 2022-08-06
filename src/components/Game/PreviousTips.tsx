@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, Flex } from 'rebass';
+import NumberFormat from 'react-number-format';
 
 interface PreviousTipsProps {
   previousTips?: number[];
@@ -21,7 +22,11 @@ const PreviousTips = ({ previousTips, unit }: PreviousTipsProps) =>
       <Flex justifyContent="center">
         {previousTips.map((previousTip) => (
           <Text sx={previousTipStyle} key={`previous-tip-${previousTip}`}>
-            {previousTip}
+            <NumberFormat
+              value={previousTip}
+              displayType={'text'}
+              thousandSeparator={' '}
+            />
           </Text>
         ))}
       </Flex>
