@@ -1,9 +1,14 @@
 import React from 'react';
-import { Button, Text, Box } from 'rebass';
+import { useHistory } from 'react-router-dom';
+import { Button, Text, Box, Flex } from 'rebass';
 import { Container } from '../Container';
 import { SlideProps } from './types';
 
 const Slide12 = ({ handleNextStep }: SlideProps) => {
+  const history = useHistory();
+  const handleClickHome = () => {
+    history.push('/');
+  };
   const handleClickNext = () => {
     handleNextStep();
   };
@@ -22,9 +27,19 @@ const Slide12 = ({ handleNextStep }: SlideProps) => {
           strategii, když bude mít k dispozici pouze skupinovou inteligenci.
         </Text>
       </Box>
-      <Button mt="auto" onClick={handleClickNext}>
-        Další
-      </Button>
+      <Flex mt="auto" justifyContent="space-between" width="100%">
+        <Button
+          onClick={handleClickHome}
+          backgroundColor={'#414141'}
+          sx={{ flex: 1 }}
+          mr="1"
+        >
+          Domů
+        </Button>
+        <Button onClick={handleClickNext} sx={{ flex: 5 }}>
+          Další ▶
+        </Button>
+      </Flex>
     </Container>
   );
 };
