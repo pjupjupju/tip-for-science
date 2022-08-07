@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import { Box, Button, Flex, Heading, Text } from 'rebass';
 import { BackButton, Container } from '../../components';
 import {
@@ -7,6 +8,7 @@ import {
   IMPORT_MUTATION,
   ONLINE_STATS_QUERY,
 } from '../../gql';
+import { User, UserRole } from '../../types';
 
 const consoleStyle = {
   px: 2,
@@ -20,7 +22,11 @@ const consoleStyle = {
   overflowY: 'scroll',
 };
 
-const Dashboard = () => {
+interface DashboardProps {
+  user: User | null;
+}
+
+const Dashboard = ({ user }: DashboardProps) => {
   const [log, setLog] = useState<string[]>([]);
   const { loading, data } = useQuery(ONLINE_STATS_QUERY);
 
@@ -62,6 +68,10 @@ const Dashboard = () => {
   const handleClickImport = () => {
     importQuestions();
   };
+
+  if (!user || user.role !== UserRole.admin) {
+    return <Redirect to="/" />;
+  }
 
   if (loading) {
     return <div>loading</div>;
