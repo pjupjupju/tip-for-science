@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useQuery } from '@apollo/client';
 import { UserScoreCurve } from '../../../components/UserScoreCurve';
-import { Heading, Flex, Text, Box, Button } from 'rebass';
-import { useHistory } from 'react-router';
+import { Heading, Flex, Text, Box, Link } from 'rebass';
+import { Link as RouterLink } from 'react-router-dom';
 
 import {
   HIGH_SCORE_QUERY,
@@ -11,16 +11,19 @@ import {
 } from '../../../gql';
 import { BackButton, Container, Spinner } from '../../../components';
 
+const NavbarLink = ({
+  children,
+  ...rest
+}: {
+  children: ReactNode;
+  [key: string]: any;
+}) => (
+  <Link variant="nav" as={RouterLink} {...rest}>
+    {children}
+  </Link>
+);
+
 const Stats = () => {
-  const history = useHistory();
-  const handleClickStats = () => {
-    history.push('/profile/stats');
-  };
-
-  const handleClickSettings = () => {
-    history.push('/profile/settings');
-  };
-
   const { loading, data } = useQuery(MY_USER_STATS_QUERY);
   const { loading: highScoreLoading, data: highScoreData } = useQuery(
     HIGH_SCORE_QUERY
@@ -54,18 +57,16 @@ const Stats = () => {
   return (
     <Container>
       <Flex flexDirection="column" height="100%">
-        <Flex justifyContent="space-between" width="100%" mt={4}>
-          <Button
-            onClick={handleClickStats}
-            sx={{ flex: 2 }}
-            mr={1}
-            backgroundColor={'#414141'}
-          >
+        <Flex px={2} color="white" bg="secondary" alignItems="center">
+          <Text p={2} fontWeight="bold">
+            Profil
+          </Text>
+          <Box mx="auto" />
+          <NavbarLink to="/profile/stats" color="black">
             Stats
-          </Button>
-          <Button onClick={handleClickSettings} sx={{ flex: 2 }}>
-            Nastavení
-          </Button>
+          </NavbarLink>
+          <NavbarLink to="/profile/settings">Nastavení</NavbarLink>
+          <NavbarLink to="/">Domů</NavbarLink>
         </Flex>
         <Heading color="secondary" fontSize={[2, 3, 4]} my="4" mx="3">
           Tvoje skóre: {getMyScoreData.getMyScore}
@@ -93,7 +94,6 @@ const Stats = () => {
               </Text>
             )
           )}
-        <BackButton>domů</BackButton>
       </Flex>
     </Container>
   );
