@@ -3,14 +3,8 @@ import { Flex, Heading } from 'rebass';
 import { useHistory } from 'react-router-dom';
 import { MenuButton, Container } from '../../components';
 import { TargetImage } from '../../components/TargetImage';
+import { User, UserRole } from '../../types';
 
-enum UserRole {
-  admin = 'admin',
-  player = 'player',
-}
-interface User {
-  role: UserRole;
-}
 interface HomeProps {
   user: User | null;
   onLogOut: Function;
