@@ -1,9 +1,15 @@
 import React, { useEffect, useRef, useReducer } from 'react';
+import { Redirect } from 'react-router-dom';
 import { useQuery, useMutation, NetworkStatus } from '@apollo/client';
-import { Container, Game, NoMoreQuestions, Spinner } from './../../components';
-import { MY_SCORE_QUERY, QUESTION_QUERY, SAVE_MUTATION } from '../../gql';
 import { useHistory } from 'react-router';
 import { Flex } from 'rebass';
+import { Container, Game, NoMoreQuestions, Spinner } from './../../components';
+import { MY_SCORE_QUERY, QUESTION_QUERY, SAVE_MUTATION } from '../../gql';
+import { User } from '../../types';
+
+interface PlayProps {
+  user: User | null;
+}
 
 type GameState = {
   isSubmitted: boolean;
@@ -41,7 +47,7 @@ const initState = {
   isSubmitted: false,
 };
 
-const Play = () => {
+const Play = ({ user }: PlayProps) => {
   const [{ currentTip, isSubmitted }, dispatch] = useReducer(
     gameReducer,
     initState
@@ -84,9 +90,8 @@ const Play = () => {
       ? data.getNextQuestion || { id: null, timeLimit: null }
       : { id: null, timeLimit: null };
 
-  const { loading: scoreLoading, data: getMyScoreData } = useQuery(
-    MY_SCORE_QUERY
-  );
+  const { loading: scoreLoading, data: getMyScoreData } =
+    useQuery(MY_SCORE_QUERY);
 
   const [saveTip] = useMutation(SAVE_MUTATION, {
     onCompleted: ({ saveTip: { __typename, ...data } }) => {
@@ -111,6 +116,10 @@ const Play = () => {
       }, timeLimit * 1000);
     }
   }, [questionId]);
+
+  if (!user) {
+    return <Redirect to="/" />;
+  }
 
   if (loading || scoreLoading || networkStatus === NetworkStatus.refetch) {
     return (
