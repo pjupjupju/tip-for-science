@@ -8,6 +8,7 @@ import { Home } from './pages/Home';
 import { Play } from './pages/Play';
 import { Profile } from './pages/Profile';
 import { SignIn } from './pages/SignIn';
+import { Consent } from './pages/Consent';
 import { AuthQueryName, AUTH_QUERY, SIGN_OUT_MUTATION } from './gql';
 import { Spinner } from './components';
 import { SignUp } from './pages/SignUp';
@@ -61,6 +62,9 @@ export const App = () => {
       </Route>
       <Route path="/signup">
         <SignUp />
+      </Route>
+      <Route path="/consent">
+        <Consent />
       </Route>
       {user && user.role === 'admin' && (
         <Route path="/dashboard">

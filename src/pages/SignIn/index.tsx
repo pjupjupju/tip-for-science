@@ -93,7 +93,17 @@ const SignIn = () => {
         )}
         <Flex justifyContent="center">
           <Text color="white" fontSize="1">
-            Nemáš účet? <Link to="/signup" style={{color: "#FF0070"}}>Vytvořit účet</Link>
+            Nemáš účet?{' '}
+            <Link to="/signup" style={{ color: '#FF0070' }}>
+              Vytvořit účet
+            </Link>
+          </Text>
+        </Flex>
+        <Flex justifyContent="center" my="2">
+          <Text color="white" fontSize="1">
+            <Link to="/" style={{ color: '#D76B90' }}>
+              Domů
+            </Link>
           </Text>
         </Flex>
       </Flex>
