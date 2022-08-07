@@ -92,7 +92,7 @@ const Game = ({
     onHome();
   };
 
-  const handleSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (
       ![
         'Shift',
@@ -153,7 +153,7 @@ const Game = ({
           type="number"
           placeholder="tvůj tip"
           sx={inputStyles}
-          onKeyDown={handleSubmit}
+          onKeyDown={handleKeyDown}
         />
         <Text color="white" mr={4}>
           {unit}

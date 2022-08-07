@@ -1,16 +1,67 @@
-import { useQuery } from '@apollo/client';
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { Button, Flex, Heading, Link, Text } from 'rebass';
+import { useMutation, useQuery } from '@apollo/client';
+import React, { useState } from 'react';
+import { Box, Button, Flex, Heading, Text } from 'rebass';
 import { BackButton, Container } from '../../components';
-import { ONLINE_STATS_QUERY } from '../../gql';
+import {
+  EXPORT_MUTATION,
+  IMPORT_MUTATION,
+  ONLINE_STATS_QUERY,
+} from '../../gql';
 
-const handleClickDashboard = () => {
-  // console.log('Si kliknul!');
+const consoleStyle = {
+  px: 2,
+  py: 2,
+  border: '1px solid #cacaca',
+  background: 'black',
+  color: 'white',
+  my: 2,
+  minHeight: '160px',
+  maxHeight: '200px',
+  overflowY: 'scroll',
 };
 
 const Dashboard = () => {
+  const [log, setLog] = useState<string[]>([]);
   const { loading, data } = useQuery(ONLINE_STATS_QUERY);
+
+  const [importQuestions, { loading: importLoading }] = useMutation(
+    IMPORT_MUTATION,
+    {
+      onCompleted: ({ importQuestions }) => {
+        setLog([
+          ...log,
+          JSON.stringify(
+            importQuestions
+              ? 'All available questions imported.'
+              : 'Some questions were not imported.'
+          ),
+        ]);
+      },
+    }
+  );
+
+  const [exportData, { loading: exportLoading }] = useMutation(
+    EXPORT_MUTATION,
+    {
+      onCompleted: ({ exportData }) => {
+        setLog([
+          ...log,
+          JSON.stringify(
+            exportData === 'local'
+              ? 'Local file created.'
+              : `Download link: ${exportData}`
+          ),
+        ]);
+      },
+    }
+  );
+
+  const handleClickExport = () => {
+    exportData();
+  };
+  const handleClickImport = () => {
+    importQuestions();
+  };
 
   if (loading) {
     return <div>loading</div>;
@@ -26,46 +77,43 @@ const Dashboard = () => {
           Actions
         </Heading>
         <Flex justifyContent="space-between" alignItems="center">
-          <Flex flexDirection="column">
+          <Flex flex={1} flexDirection="column" mr={1}>
             <Text color="white" fontFamily="Tahoma">
-              Export .csv
+              Export .csv to S3
             </Text>
-            <Button my={2} onClick={handleClickDashboard}>
-              Download
+            <Button width="50%" my={2} onClick={handleClickExport}>
+              {exportLoading ? '... generating' : 'Download'}
             </Button>
           </Flex>
-          <Flex flexDirection="column">
+          <Flex flex={1} flexDirection="column">
             <Text color="white" fontFamily="Tahoma">
-              Import .csv
+              Import from Spreadsheet
             </Text>
-            <Button my={2} onClick={handleClickDashboard}>
-              Upload
-            </Button>
-          </Flex>
-          <Flex flexDirection="column">
-            <Text color="white" fontFamily="Tahoma">
-              Import GDocs
-            </Text>
-            <Button my={2} onClick={handleClickDashboard}>
-              Upload
+            <Button
+              disabled={importLoading}
+              width="50%"
+              my={2}
+              onClick={handleClickImport}
+            >
+              {importLoading ? '... importing' : 'Import'}
             </Button>
           </Flex>
         </Flex>
+        <Box sx={consoleStyle}>
+          {log.map((line, index) => (
+            <Text key={`line-${index}`} fontFamily="monospace">
+              $: {line}
+            </Text>
+          ))}
+        </Box>
         <Heading fontSize={3} color="white" mb={3}>
           Stats
         </Heading>
         <Flex flexDirection="column">
           <Text color="white" fontFamily="Tahoma" mb={3}>
-            <b>Online users: </b>
+            <b>Online users playing: </b>
             {data.getOnlineStats.online}
           </Text>
-          <RouterLink
-            to="/dashboard/user-list"
-            component={Link}
-            color="primary"
-          >
-            Show user list
-          </RouterLink>
         </Flex>
       </Flex>
       <BackButton>domů</BackButton>
