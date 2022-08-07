@@ -37,13 +37,13 @@ class RunCache {
     this.online = new Map();
     this.timeouts = new Map();
 
-    this.getRunId = this.getRunId.bind(this);
+    this.getRun = this.getRun.bind(this);
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
     this.getOnlineData = this.getOnlineData.bind(this);
   }
 
-  async getRunId(questionId: string, runs: DynamoRun[]): Promise<DynamoRun> {
+  async getRun(questionId: string, runs: DynamoRun[]): Promise<DynamoRun> {
     // We simplify run objects, sort them and filter out the full ones
     const sortedRuns = (runs.map((r: DynamoRun) => {
       const key = `${r.id}#R#${r.run}`;
@@ -58,7 +58,7 @@ class RunCache {
 
       return [r.run, cachedItem];
     }) as [number, number][])
-      .sort((a: [number, number], b: [number, number]) => a[1] - b[1])
+      .sort((a: [number, number], b: [number, number]) => a[0] - b[0])
       .filter((r) => r[1] < MAX_ONLINE_PER_RUN);
 
     // If no runs are available, we create a new run
