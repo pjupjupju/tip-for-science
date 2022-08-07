@@ -9,7 +9,7 @@ import {
   MY_SCORE_QUERY,
   MY_USER_STATS_QUERY,
 } from '../../../gql';
-import { BackButton, Container, Spinner } from '../../../components';
+import { Container, Spinner } from '../../../components';
 
 const NavbarLink = ({
   children,
