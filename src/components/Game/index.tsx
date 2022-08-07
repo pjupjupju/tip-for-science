@@ -28,10 +28,12 @@ export interface Settings {
 }
 
 interface GameProps {
+  isKnewItDialogOpen: boolean;
   isSubmitted: boolean;
   onFinish: Function;
   onHome: Function;
-  onSubmit?: (tip: number) => void;
+  onIsTooClose: Function;
+  onSubmit?: (tip: number, knewIt?: boolean) => void;
   settings: Settings;
   currentTip?: number;
   score: number;
@@ -71,10 +73,12 @@ const Game = ({
     timeLimit,
     correctAnswer,
   },
+  isKnewItDialogOpen,
   isSubmitted,
   onHome,
   onSubmit,
   onFinish,
+  onIsTooClose,
   currentTip,
   score,
 }: GameProps) => {
@@ -117,14 +121,36 @@ const Game = ({
     }
 
     if (event.key === 'Enter' && onSubmit) {
-      onSubmit(Number(event.currentTarget.value));
+      const anticipatedScore = getScore(
+        Number(event.currentTarget.value),
+        correctAnswer
+      );
+
+      if (anticipatedScore !== null && isTooClose(anticipatedScore)) {
+        onIsTooClose();
+      } else {
+        onSubmit(Number(event.currentTarget.value));
+      }
     }
   };
 
   const handleClickSubmit = () => {
     if (inputRef.current && onSubmit) {
-      onSubmit(Number(inputRef.current.value));
+      const anticipatedScore = getScore(
+        Number(inputRef.current.value),
+        correctAnswer
+      );
+
+      if (anticipatedScore !== null && isTooClose(anticipatedScore)) {
+        onIsTooClose();
+      } else {
+        onSubmit(Number(inputRef.current.value));
+      }
     }
+  };
+
+  const handleTooCloseDialogClick = (knewIt: boolean) => () => {
+    onSubmit(Number(inputRef.current.value), knewIt);
   };
 
   return !isSubmitted ? (
@@ -160,6 +186,12 @@ const Game = ({
         </Text>
         <SubmitButton onClick={handleClickSubmit} timeLimit={timeLimit} />
       </Flex>{' '}
+      {isKnewItDialogOpen && (
+        <TooCloseDialog
+          onGuessed={handleTooCloseDialogClick(false)}
+          onKnewIt={handleTooCloseDialogClick(true)}
+        />
+      )}
     </Container>
   ) : (
     <Container>
@@ -191,16 +223,6 @@ const Game = ({
                 previousTips={previousTips}
               />
             </Box>
-            {questionScore !== null && isTooClose(questionScore) && (
-              <TooCloseDialog
-                onGuessed={() => {
-                  console.log('Tip marked as guessed.');
-                }}
-                onKnewIt={() => {
-                  console.log('Tip marked as knew-answer.');
-                }}
-              />
-            )}
             <Flex
               justifyContent="center"
               alignItems="center"
