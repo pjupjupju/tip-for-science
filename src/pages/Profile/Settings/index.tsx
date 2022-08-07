@@ -1,75 +1,105 @@
-import React from 'react';
-import { useHistory } from 'react-router';
+import React, { ReactNode } from 'react';
 import { Input, Label, Radio } from '@rebass/forms';
-import { Flex, Button, Heading, Text, Box } from 'rebass';
-import { Container, BackButton } from '../../../components';
+import { Flex, Button, Heading, Text, Box, Link } from 'rebass';
+import { Link as RouterLink } from 'react-router-dom';
+import { Container } from '../../../components';
+
+const NavbarLink = ({
+  children,
+  ...rest
+}: {
+  children: ReactNode;
+  [key: string]: any;
+}) => (
+  <Link variant="nav" as={RouterLink} {...rest}>
+    {children}
+  </Link>
+);
 
 const Settings = () => {
-  const history = useHistory();
-  const handleClickStats = () => {
-    history.push('/profile/stats');
-  };
-
-  const handleClickSettings = () => {
-    history.push('/profile/settings');
-  };
-
   return (
     <Container>
       <Flex flexDirection="column" height="100%">
-        <Flex justifyContent="space-between" width="100%" my={4}>
-          <Button
-            onClick={handleClickStats}
-            sx={{ flex: 2 }}
-            mr={1}
-            backgroundColor={'#414141'}
-          >
-            Stats
-          </Button>
-          <Button onClick={handleClickSettings} sx={{ flex: 2 }}>
+        <Flex px={2} color="white" bg="secondary" alignItems="center">
+          <Text p={2} fontWeight="bold">
+            Profil
+          </Text>
+          <Box mx="auto" />
+          <NavbarLink to="/profile/stats">Stats</NavbarLink>
+          <NavbarLink to="/profile/settings" color="black">
             Nastavení
-          </Button>
+          </NavbarLink>
+          <NavbarLink to="/">Domů</NavbarLink>
         </Flex>
-        <Heading color="secondary" fontSize={[2, 3, 4]} my="2" mx="3">
+        <Text color="secondary" my="2" ml="2">
+          Všechny údaje budou před vyhodnocením anonymizovány.
+        </Text>
+        <Heading color="secondary" fontSize={[3, 3, 4]} mt="4" mb="2" mx="3">
           Přihlašovací údaje:
         </Heading>
-        <Input placeholder="mail" color="white" mt="2" />
-        <Input placeholder="heslo (a znovu a tak)" color="white" mt="2" />
-        <Heading color="secondary" fontSize={[2, 3, 4]} mt="4" mx="3">
+
+        <Input
+          placeholder="tady zobrazit registrační mail"
+          color="white"
+          mt="2"
+          ml="2"
+        />
+        <Flex mt="2" justifyContent="space-between" width="100%">
+          <Button
+            backgroundColor="#414141"
+            sx={{ flex: 1, color: 'white' }}
+            mr="1"
+          >
+            Změnit e-mail
+          </Button>
+          <Button backgroundColor="#414141" sx={{ flex: 1, color: 'white' }}>
+            Změnit heslo
+          </Button>
+        </Flex>
+        <Heading color="secondary" fontSize={[3, 3, 4]} mt="4" mx="3">
           Nepovinné údaje:
         </Heading>
-        <Text color="secondary" mt="2">
-          Tyto údaje budou před vyhodnocením anonymizovány.
-        </Text>
-        <Text color="secondary" fontSize={3} mt="2">
+        <Text color="secondary" fontSize={3} my="2" ml="2">
           Jsem:
         </Text>
-        <Text color="secondary" fontSize={2}>
-          <Box>
-            <Label>
-              <Radio name="gender" id="žena" value="red" />
+        <Text color="secondary" fontSize={2} ml="2">
+          <Box ml="2">
+            <Label color="white">
+              <Radio name="gender" id="woman" value="woman" />
               Žena
             </Label>
-            <Label>
-              <Radio name="gender" id="green" value="green" />
+            <Label color="white">
+              <Radio name="gender" id="man" value="man" />
               Muž
             </Label>
-            <Label>
-              <Radio name="gender" id="blue" value="blue" />
+            <Label color="white">
+              <Radio name="gender" id="enby" value="enby" />
               Nebinární
             </Label>
-            <Label>
-              <Radio name="gender" id="blue" value="blue" />
+            <Label color="white">
+              <Radio name="gender" id="other" value="other" />
               Jiné (můžeš uvést):
             </Label>
-            <Input placeholder="..." color="white" my="2" />
+            <Input placeholder="..." color="white" width="calc(40vh)" my="2" />
           </Box>
         </Text>
-        <Text color="secondary" fontSize={3} mt="2">
+        <Text color="secondary" fontSize={3} my="2" ml="2">
           Věk:
-          <Input placeholder="..." color="white" my="2" />
         </Text>
-        <BackButton mt="2">domů</BackButton>
+        <Input
+          type="number"
+          name="age"
+          placeholder="..."
+          min="18"
+          max="120"
+          color="white"
+          width="calc(20vh)"
+          my="2"
+        />
+
+        <Flex mt="auto" justifyContent="space-between" width="100%" mb="2">
+          <Button sx={{ flex: 1, color: 'white' }}>Uložit</Button>
+        </Flex>
       </Flex>
     </Container>
   );
