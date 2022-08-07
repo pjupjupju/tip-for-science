@@ -51,7 +51,7 @@ export const App = () => {
         <About />
       </Route>
       <Route path="/play">
-        <Play />
+        <Play user={user} />
       </Route>
       <Route path="/profile">
         <Profile />
@@ -64,7 +64,7 @@ export const App = () => {
       </Route>
       {user && user.role === 'admin' && (
         <Route path="/dashboard">
-          <Dashboard />
+          <Dashboard user={user} />
         </Route>
       )}
       <Route path="*">

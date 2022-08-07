@@ -13,11 +13,13 @@ interface PlayProps {
 
 type GameState = {
   isSubmitted: boolean;
+  knewItDialog: boolean;
   currentTip?: number;
 };
 
 enum ActionType {
   GAME_INIT = 'GAME_INIT',
+  GAME_KNEW_IT_DIALOG = 'GAME_KNEW_IT_DIALOG',
   GAME_SUBMIT = 'GAME_SUBMIT',
   GAME_FINISH = 'GAME_FINISH',
 }
@@ -30,8 +32,15 @@ const gameReducer = (state: GameState, action: GameAction) => {
   switch (action.type) {
     case 'GAME_INIT':
       return { ...state, isSubmitted: false, currentTip: undefined };
+    case 'GAME_KNEW_IT_DIALOG':
+      return { ...state, knewItDialog: true };
     case 'GAME_SUBMIT':
-      return { ...state, isSubmitted: true, currentTip: action.payload?.tip };
+      return {
+        ...state,
+        isSubmitted: true,
+        currentTip: action.payload?.tip,
+        knewItDialog: false,
+      };
     case 'GAME_FINISH':
       return {
         ...state,
@@ -45,21 +54,32 @@ const gameReducer = (state: GameState, action: GameAction) => {
 
 const initState = {
   isSubmitted: false,
+  knewItDialog: false,
 };
 
 const Play = ({ user }: PlayProps) => {
-  const [{ currentTip, isSubmitted }, dispatch] = useReducer(
+  const [{ currentTip, knewItDialog, isSubmitted }, dispatch] = useReducer(
     gameReducer,
     initState
   );
 
   const history = useHistory();
   const onHome = () => history.push('/');
-  const onSubmit = (myTip: number) => {
+  const onIsTooClose = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    const msElapsed = new Date().getTime() - gameStart.current;
+    elapsedTimeInMs.current = new Date().getTime() - gameStart.current;
+
+    dispatch({ type: ActionType.GAME_KNEW_IT_DIALOG });
+  };
+  const onSubmit = (myTip: number, knewAnswer: boolean = false) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    const msElapsed =
+      elapsedTimeInMs.current || new Date().getTime() - gameStart.current;
+    elapsedTimeInMs.current = null;
     saveTip({
       variables: {
         id: questionId,
@@ -67,9 +87,7 @@ const Play = ({ user }: PlayProps) => {
         rId: data.getNextQuestion.rId,
         gId: data.getNextQuestion.gId,
         previousTips: data.getNextQuestion.previousTips,
-        // TODO: move saveTip call after we find out whether he was too close and knew it
-        knewAnswer: false,
-        // TODO: get msElapsed from timeoutref before we clear timeout
+        knewAnswer,
         msElapsed,
       },
     });
@@ -77,6 +95,8 @@ const Play = ({ user }: PlayProps) => {
   };
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
   const gameStart = useRef<number>(new Date().getTime());
+  // a reference to time elapsed if we open a TooCloseDialog
+  const elapsedTimeInMs = useRef<number | null>(null);
 
   const { loading, data, networkStatus, refetch } = useQuery(QUESTION_QUERY, {
     notifyOnNetworkStatusChange: true,
@@ -146,6 +166,8 @@ const Play = ({ user }: PlayProps) => {
       settings={data.getNextQuestion}
       score={getMyScoreData.getMyScore || 0}
       isSubmitted={isSubmitted}
+      isKnewItDialogOpen={knewItDialog}
+      onIsTooClose={onIsTooClose}
       onHome={onHome}
       onSubmit={onSubmit}
       onFinish={() => {
