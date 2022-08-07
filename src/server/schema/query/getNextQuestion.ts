@@ -57,7 +57,7 @@ export async function getNextQuestion(
   });
 
   // get the preferred run from cache
-  const runRecord = await runCache.getRunId(nextQuestionId, nextQuestionRuns);
+  const runRecord = await runCache.getRun(nextQuestionId, nextQuestionRuns);
 
   await updateLastQuestion(user.id, nextQuestionId, { dynamo });
 
