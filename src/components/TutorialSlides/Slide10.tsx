@@ -15,15 +15,9 @@ import {
   zeroScoreSentence,
 } from '../../helpers';
 import { useHistory } from 'react-router-dom';
+import { getTutorialImageStyle } from '../commonStyleSheets';
 
-const imageStyle = {
-  flexShrink: 1,
-  flexGrow: 1,
-  backgroundImage: `url(${washington})`,
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  backgroundRepeat: 'no-repeat',
-};
+const imageStyle = getTutorialImageStyle(washington);
 
 const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
   const correctAnswer = 18.29;
