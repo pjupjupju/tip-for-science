@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flex, Button, Box, Text } from 'rebass';
+import { Flex, Link as HrefLink, Button, Box, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -116,9 +116,13 @@ const SignUp = () => {
         <Flex justifyContent="center" my={2}>
           <Text color="white" fontSize="1">
             Kliknutím na "Vytvořit" vyjadřuješ souhlas se{' '}
-            <Link to="/consent" style={{ color: '#D76B90' }}>
+            <HrefLink
+              href="/consent"
+              target="_blank"
+              style={{ color: '#D76B90' }}
+            >
               zpracováním osobních údajů
-            </Link>
+            </HrefLink>
             .
           </Text>
         </Flex>

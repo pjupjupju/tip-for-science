@@ -41,17 +41,12 @@ async function parsePrevTips() {
   for await (const record of parser) {
     const id = record.qID;
     const initialTips = [record.p1, record.p2, record.p3, record.p4, record.p5]
-      /*
       .filter(
         (t: string) =>
           !['NA', 'N/A', 'NaN', '', ' ', null].includes(t) &&
           typeof t !== 'undefined'
       )
-      */
-      .map((t) => parseInt(t))
-      .map((t, index) => index * 100 + Math.floor(Math.random() * 50));
-
-    console.log('initial: ', initialTips);
+      .map((t) => parseInt(t));
 
     // collect a map of questions with their settings collapsed into arrays (from individual rows)
     const q = questionMap.get(id);
@@ -126,7 +121,6 @@ async function parsePrevTips() {
   });
 
   console.log(JSON.stringify(rows));
-
 
   // @ts-ignore
   writeToPath(outputFileName, rows);
