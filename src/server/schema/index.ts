@@ -6,6 +6,7 @@ import {
   signIn,
   signOut,
   signUp,
+  updateUser,
 } from './mutation';
 import {
   getHighScore,
@@ -86,6 +87,13 @@ export const typeDefs = /* GraphQL */ gql`
     signIn(email: String!, password: String!): SignInResult!
     signOut: SignOutResult!
     signUp(email: String!, password: String!): SignUpResult!
+    updateUser(
+      email: String
+      newPassword: String
+      oldPassword: String
+      age: Int
+      gender: String
+    ): Boolean!
   }
 
   union SignUpResult = SignInSuccess | ValidationError
@@ -103,7 +111,8 @@ export const typeDefs = /* GraphQL */ gql`
     email: String!
     id: ID!
     slug: String!
-    name: String
+    age: Int
+    gender: String
     role: UserRole!
     score: Float
     createdAt: DateTime!
@@ -147,6 +156,7 @@ export const resolvers = {
     signIn,
     signOut,
     signUp,
+    updateUser,
   },
   Query: {
     getHighScore,

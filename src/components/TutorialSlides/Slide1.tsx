@@ -9,7 +9,6 @@ import { TutorialHeader } from '../TutorialHeader';
 import { useHistory } from 'react-router';
 
 const Slide1 = ({ handleNextStep }: SlideProps) => {
-  // obsah () se pak muze smazat, je to tu pro hloupe lidi
   const history = useHistory();
   const handleClickHome = () => {
     history.push('/');

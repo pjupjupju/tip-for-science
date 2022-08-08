@@ -9,11 +9,12 @@ export const AUTH_QUERY = gql`
         email
         id
         slug
-        name
         role
         score
         createdAt
         updatedAt
+        age
+        gender
       }
     }
   }
