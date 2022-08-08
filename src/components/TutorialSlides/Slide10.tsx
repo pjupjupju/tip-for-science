@@ -16,8 +16,12 @@ import {
 } from '../../helpers';
 import { useHistory } from 'react-router-dom';
 import { getTutorialImageStyle } from '../commonStyleSheets';
+import { FunFact } from './../Game/FunFact';
 
 const imageStyle = getTutorialImageStyle(washington);
+
+const fact =
+  'Washingtonova hlava měří {correct} metrů. Prvotní plán sousoší měl zobrazit váznamné postavy amerického Západu včetně původních obyvatel. Prezidenti nakonec byli zobrazeni, aby sousoší mělo "širší význam".';
 
 const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
   const correctAnswer = 18.29;
@@ -71,6 +75,7 @@ const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
           />
         )}
       </Box>
+      <FunFact correctAnswer={correctAnswer} fact={fact} />
       <Flex mt="auto" justifyContent="space-between" width="100%">
         <Button
           onClick={handleClickHome}
