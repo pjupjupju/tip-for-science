@@ -16,8 +16,12 @@ import {
   zeroScoreSentence,
 } from '../../helpers';
 import { useHistory } from 'react-router-dom';
+import { FunFact } from './../Game/FunFact';
 
 const imageStyle = getTutorialImageStyle(jupiter);
+
+const fact =
+  'Tento plynný obr se (na rovníku) otáčí rychlostí {correct} km/h. Jeden den na Jupiteru trvá necelých 10 hodin. Slunce oběhne za zhruba 12 pozemských let.';
 
 const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
   const correctAnswer = 45583;
@@ -70,6 +74,7 @@ const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
           />
         )}
       </Box>
+      <FunFact correctAnswer={correctAnswer} fact={fact} />
       <Flex mt="auto" justifyContent="space-between" width="100%">
         <Button
           onClick={handleClickHome}
