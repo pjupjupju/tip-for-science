@@ -36,9 +36,10 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
           <Image
             src={elephant}
             sx={{
-              width: 'calc(20vh)',
-              height: 'calc(20vh)',
-              borderRadius: 100,
+              width: ['calc(15vh)', 'calc(20vh)'],
+              height: ['calc(15vh)', 'calc(20vh)'],
+              borderRadius: '50%',
+              flexShrink: 0,
             }}
           />
           <Text
@@ -66,9 +67,10 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
           <Image
             src={washington}
             sx={{
-              width: 'calc(20vh)',
-              height: 'calc(20vh)',
-              borderRadius: 100,
+              width: ['calc(15vh)', 'calc(20vh)'],
+              height: ['calc(15vh)', 'calc(20vh)'],
+              borderRadius: '50%',
+              flexShrink: 0,
             }}
           />
         </Flex>
@@ -76,9 +78,10 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
           <Image
             src={jupiter}
             sx={{
-              width: 'calc(20vh)',
-              height: 'calc(20vh)',
-              borderRadius: 100,
+              width: ['calc(15vh)', 'calc(20vh)'],
+              height: ['calc(15vh)', 'calc(20vh)'],
+              borderRadius: '50%',
+              flexShrink: 0,
             }}
           />
           <Text
