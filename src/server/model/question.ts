@@ -465,9 +465,13 @@ async function updateUserBatches(
   questionIds: string[],
   { dynamo }: UserModelContext
 ): Promise<any> {
-  // TODO: add GSI which marks USER as USER (sort key does not matter, but it might be created date or score, or we might create another GSI for score too)
   const params = {
     TableName: TABLE_USER,
+    FilterExpression: '#role <> :adminrole',
+    ExpressionAttributeNames: { '#role': 'role' },
+    ExpressionAttributeValues: {
+      ':adminrole': 'admin',
+    },
   };
 
   // get last item of both sets of question ids, just to check whether the user already has it
@@ -505,10 +509,10 @@ async function updateUserBatches(
           }))
         );
 
-        const allPromises = paramsForEachChunk.map((params) =>
+        const allPromises = paramsForEachChunk.map((paramsForChunk) =>
           dynamo
             .transactWrite({
-              TransactItems: params,
+              TransactItems: paramsForChunk,
             })
             .promise()
         );
