@@ -8,7 +8,6 @@ export interface User {
   userskey: string;
   email: string;
   lastQuestion: string | null;
-  name?: string | void;
   gender?: string | void;
   age?: number | void;
   password: string;
