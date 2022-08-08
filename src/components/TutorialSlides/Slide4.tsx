@@ -60,9 +60,12 @@ const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
         py={4}
         px={3}
       >
-        Největší samec slona, jehož váhu se podařilo zaznamenat, vážil 10 886 kg
-        a v kohoutku měřil 3,96 metru. Byl tedy téměř o metr vyšší než průměrný
-        slon africký.
+        Největší samec slona, jehož váhu se podařilo zaznamenat, vážil{' '}
+        <Text color="white" as="span">
+          10 886
+        </Text>
+         kg a v kohoutku měřil 3,96 metru. Byl tedy téměř o metr vyšší než
+        průměrný slon africký.
       </Text>
       <Flex mt="auto" justifyContent="space-between" width="100%">
         <Button

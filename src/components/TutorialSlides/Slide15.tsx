@@ -39,13 +39,15 @@ const Slide15 = (props: SlideProps) => {
   return (
     <Container>
       <TutorialHeader>
-        <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" p={4}>
+        <Text fontSize={[4, 4, 5]} color="secondary" textAlign="center" p={4}>
           To je vše, nyní jsi připraven*a na hru naostro!
         </Text>
       </TutorialHeader>
       <Image src={logo} sx={imageStyle} />
-      <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" p={3}>
-        Tip for Science bylo vytvořeno evolučními biology z Univerzity Karlovy.
+      <Text fontSize={[2, 3, 4]} color="secondary" textAlign="center" p={3}>
+        Tip for Science bylo vytvořeno evolučními biology
+        <br />
+        z Univerzity Karlovy.
       </Text>
       <Flex marginTop={'auto'}>
         <Button
