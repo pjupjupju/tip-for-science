@@ -9,6 +9,8 @@ export interface User {
   email: string;
   lastQuestion: string | null;
   name?: string | void;
+  gender?: string | void;
+  age?: number | void;
   password: string;
   role: UserRole;
   slug: string;
@@ -17,6 +19,13 @@ export interface User {
    * ISO 8601 DateTime
    */
   updatedAt: string;
+}
+
+export interface UserSettings {
+  email?: string;
+  password?: string;
+  gender?: string | void;
+  age?: number | void;
 }
 
 export type QuestionSettings = {

@@ -8,7 +8,7 @@ import {
   PLAYERS_BY_HIGHSCORE,
 } from '../../config';
 import { generateQuestionBundle } from '../../helpers';
-import { User, UserRole } from './types';
+import { User, UserRole, UserSettings } from './types';
 
 interface UserModelContext {
   dynamo: DynamoDB.DocumentClient;
@@ -108,6 +108,59 @@ export async function findUserByEmail(
   }
 
   return (Items[0] as User) || null;
+}
+
+export async function updateUserSettings(
+  userId: string,
+  settings: UserSettings,
+  { dynamo }: UserModelContext
+): Promise<any> {
+  if (Object.keys(settings).length === 0) {
+    return new Promise(null);
+  }
+
+  const changeSet = Object.entries(settings).reduce(
+    (
+      acc: {
+        expression: string;
+        values: { [k: string]: string };
+        names: { [k: string]: string };
+      },
+      property: [string, string | number],
+      index,
+      arr
+    ) => {
+      const key = `${property[0]}`;
+      return {
+        expression: `${acc.expression} #${key} = :${key}${
+          arr.length !== 1 && index + 1 !== arr.length ? ', ' : ''
+        }`,
+        values: {
+          ...acc.values,
+          [`:${key}`]: property[1],
+        },
+        names: {
+          ...acc.names,
+          [`#${key}`]: key,
+        },
+      };
+    },
+    { values: {}, names: {}, expression: 'set ' }
+  );
+
+  const params = {
+    TableName: TABLE_USER,
+    Key: { id: userId, userskey: `USER#${userId}` },
+    UpdateExpression: changeSet.expression,
+    ExpressionAttributeValues: {
+      ...changeSet.values,
+    },
+    ExpressionAttributeNames: {
+      ...changeSet.names,
+    },
+  };
+
+  return dynamo.update(params).promise();
 }
 
 export async function updateQuestionBundle(

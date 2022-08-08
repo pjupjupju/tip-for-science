@@ -9,11 +9,12 @@ export const SIGN_IN_MUTATION = gql`
             email
             id
             slug
-            name
             role
             score
             createdAt
             updatedAt
+            age
+            gender
           }
         }
       }

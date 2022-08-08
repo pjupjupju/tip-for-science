@@ -13,18 +13,7 @@ import {
   emailRegex,
   useYupValidationResolver,
 } from '../../helpers';
-
-const inputStyles = {
-  '::placeholder': {
-    color: 'white',
-  },
-  color: 'white',
-};
-
-const labelStyles = {
-  color: 'white',
-  fontWeight: 600,
-};
+import { inputStyles, labelStyles } from '../../components/commonStyleSheets';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
