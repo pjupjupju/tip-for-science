@@ -55,7 +55,7 @@ export const App = () => {
         <Play user={user} />
       </Route>
       <Route path="/profile">
-        <Profile />
+        <Profile user={user} />
       </Route>
       <Route path="/signin">
         <SignIn />
