@@ -9,7 +9,8 @@ export const SIGN_UP_MUTATION = gql`
             email
             id
             slug
-            name
+            age
+            gender
             role
             score
             createdAt
