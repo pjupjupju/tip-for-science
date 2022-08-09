@@ -7,6 +7,7 @@ export async function exportData(
   _: any,
   { dynamo, user }: { dynamo: DynamoDB.DocumentClient; user: User }
 ) {
+  // TODO: check if user is authed and role is admin
   const downloadUrl = await exportTipData({ dynamo });
 
   return downloadUrl;

@@ -368,7 +368,7 @@ export async function exportTipData({
 
   const stream = format({ headers });
 
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     const writableStream = fs.createWriteStream(
       `export-tipdata-${Date.now()}.csv`
     );
@@ -378,7 +378,6 @@ export async function exportTipData({
   }
 
   const onScanTips = (err: AWSError, data: ScanOutput) => {
-    console.log('on SCAN');
     if (err) {
       console.error('Unable to scan the table. Error:', JSON.stringify(err));
     } else {
@@ -421,7 +420,7 @@ export async function exportTipData({
           onScanTips
         );
       } else {
-        if (process.env.NODE_ENV !== 'production') {
+        if (process.env.NODE_ENV === 'production') {
           downloadUrl = uploadCsvToS3(stream, `export-tipdata-${Date.now()}`);
         } else {
           downloadUrl = 'local';
