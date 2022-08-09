@@ -24,6 +24,7 @@ const Slide15 = (props: SlideProps) => {
   });
 
   const isLoggedIn = !!data?.viewer?.user;
+  const isAdmin = data?.viewer?.user?.role === 'admin'; 
 
   const history = useHistory();
   const handleClickHome = () => {
@@ -63,7 +64,7 @@ const Slide15 = (props: SlideProps) => {
             <Spinner />
           </Flex>
         )}
-        {!loading && isLoggedIn && (
+        {!loading && isLoggedIn && !isAdmin && (
           <Button onClick={handleClickPlay} sx={{ flex: 3 }}>
             Začít hrát
           </Button>
