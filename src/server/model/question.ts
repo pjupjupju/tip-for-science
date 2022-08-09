@@ -581,7 +581,8 @@ function getNewPreviousTips(
   const numTipsToRemove = Math.floor(selectionPressure * tips.length);
   return tips
     .sort((a, b) => Math.abs(correctAnswer - a) - Math.abs(correctAnswer - b))
-    .slice(0, -numTipsToRemove);
+    .slice(0, numTipsToRemove >= 1 ? -numTipsToRemove : tips.length)
+    .sort(() => Math.random() - 0.5);
 }
 
 // TODO: get rid of this ANY
