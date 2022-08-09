@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Heading } from 'rebass';
+import { Flex, Heading, Text } from 'rebass';
 import { useHistory } from 'react-router-dom';
 import { MenuButton, Container } from '../../components';
 import { TargetImage } from '../../components/TargetImage';
@@ -104,6 +104,12 @@ const Home = ({ user, onLogOut }: HomeProps) => {
           )}
         </Flex>
       </Flex>
+        <Text mt="auto" mb={4} color="neutralFade" textAlign="center" fontSize={1}>
+          Toto je betaverze. Pokud narazíš na nějaký problém nebo máš nějakou
+          připomínku,
+          <br />
+          napiš nám na tipforscience@protonmail.com, díky :)
+        </Text>
     </Container>
   );
 };
