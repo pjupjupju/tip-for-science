@@ -206,18 +206,26 @@ export async function updateScore(
   scoreAddition: number,
   { dynamo }: UserModelContext
 ): Promise<any> {
-  const params = {
-    TableName: TABLE_USER,
-    Key: { id: userId, userskey: `USER#${userId}` },
-    UpdateExpression:
-      'set score = if_not_exists(score, :start) + :scoreAddition',
-    ExpressionAttributeValues: {
-      ':scoreAddition': scoreAddition,
-      ':start': 0,
+  const updateAndInsertParams = [
+    {
+      Update: {
+        TableName: TABLE_USER,
+        Key: { id: userId, userskey: `USER#${userId}` },
+        UpdateExpression:
+          'set score = if_not_exists(score, :start) + :scoreAddition',
+        ExpressionAttributeValues: {
+          ':scoreAddition': scoreAddition,
+          ':start': 0,
+        },
+      },
     },
-  };
+  ];
 
-  return dynamo.update(params).promise();
+  return dynamo
+    .transactWrite({
+      TransactItems: updateAndInsertParams,
+    })
+    .promise();
 }
 
 export async function getHighScorePlayers(
