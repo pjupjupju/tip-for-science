@@ -11,7 +11,7 @@ const highScoreSentence = [
   'Dobře ty! 🤓',
   'Epické! 🥸',
   'Super!',
-  'Hmmm!',
+  'Výtečně!',
 ];
 const lowScoreSentence = [
   'Skoro 😉',
