@@ -24,7 +24,7 @@ const FunFact = ({
             <NumberFormat
               value={correctAnswer}
               displayType={'text'}
-              thousandSeparator={' '}
+              thousandSeparator={' '}
             />
           </Text>
           {factPieces[1]}

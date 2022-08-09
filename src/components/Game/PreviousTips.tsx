@@ -10,7 +10,8 @@ interface PreviousTipsProps {
 const previousTipStyle = {
   background: '#FF0070',
   mr: 1,
-  p: 1,
+  px: 1,
+  py: 2,
 };
 
 const PreviousTips = ({ previousTips, unit }: PreviousTipsProps) =>
