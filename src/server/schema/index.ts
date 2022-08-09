@@ -77,10 +77,10 @@ export const typeDefs = /* GraphQL */ gql`
     importQuestions: Boolean
     saveTip(
       id: String!
-      tip: Int!
+      tip: Float!
       rId: Int!
       gId: Int!
-      previousTips: [Int!]!
+      previousTips: [Float!]!
       knewAnswer: Boolean
       msElapsed: Int!
     ): String
