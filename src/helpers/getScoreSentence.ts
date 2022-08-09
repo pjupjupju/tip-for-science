@@ -21,12 +21,13 @@ const lowScoreSentence = [
   'Jakože... jo, ale úplně ne.',
 ];
 const zeroScoreSentence = [
-  'Whoops 💩',
+  'Whoops 🙈',
   'Tak tohle nevyšlo 🙃',
   'Snažíš se vůbec? 🧐',
   'Tak třeba příště.',
   '🤏 Takhle blízko... se třeba trefíš příště.',
   'Hmmm 🤡',
+  'Tohle se moc nepovedlo.',
 ];
 
 const getScoreSentence = (sentences: string[]) => {
