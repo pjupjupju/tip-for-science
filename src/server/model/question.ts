@@ -331,8 +331,8 @@ async function updateCurrentHighestRun(
 
 export async function exportTipData({
   dynamo,
-}: UserModelContext): Promise<any> {
-  let downloadUrl = '';
+}: UserModelContext): Promise<string> {
+  let downloadUrl;
 
   const params = {
     TableName: TABLE_QUESTION,
@@ -377,7 +377,7 @@ export async function exportTipData({
     stream.pipe(writableStream);
   }
 
-  const onScanTips = async (err: AWSError, data: ScanOutput): Promise<void> => {
+  const onScanTips = (err: AWSError, data: ScanOutput) => {
     if (err) {
       console.error('Unable to scan the table. Error:', JSON.stringify(err));
     } else {
@@ -421,10 +421,7 @@ export async function exportTipData({
         );
       } else {
         if (process.env.NODE_ENV === 'production') {
-          downloadUrl = await uploadCsvToS3(
-            stream,
-            `export-tipdata-${Date.now()}`
-          );
+          downloadUrl = uploadCsvToS3(stream, `export-tipdata-${Date.now()}`);
         } else {
           downloadUrl = 'local';
         }
@@ -434,7 +431,7 @@ export async function exportTipData({
     }
   };
 
-  await dynamo.scan(params, onScanTips).promise();
+  dynamo.scan(params, onScanTips);
 
   return downloadUrl;
 }
