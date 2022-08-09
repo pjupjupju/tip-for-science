@@ -14,7 +14,7 @@ const FunFact = ({
     : [fact];
 
   return (
-    <Text textAlign="center" color="secondary" fontSize={4} mb={4}>
+    <Text textAlign="center" color="secondary" fontSize={[2, 3, 3]} mb={4}>
       {factPieces.length < 2 ? (
         <>{factPieces[0]}</>
       ) : (
