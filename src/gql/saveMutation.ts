@@ -3,10 +3,10 @@ import { gql } from '@apollo/client';
 export const SAVE_MUTATION = gql`
   mutation SaveTipMutation(
     $id: String!
-    $tip: Int!
+    $tip: Float!
     $rId: Int!
     $gId: Int!
-    $previousTips: [Int!]!
+    $previousTips: [Float!]!
     $knewAnswer: Boolean
     $msElapsed: Int!
   ) {
