@@ -431,7 +431,7 @@ export async function exportTipData({
     }
   };
 
-  dynamo.scan(params, onScanTips);
+  await dynamo.scan(params, onScanTips).promise();
 
   return downloadUrl;
 }
