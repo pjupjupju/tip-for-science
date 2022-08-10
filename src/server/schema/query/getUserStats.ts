@@ -1,23 +1,45 @@
-import { DynamoDB } from 'aws-sdk';
-// import { TABLE_QUESTION, TABLE_TIP } from './../../../config';
+import { ValidationError } from 'yup';
+import { getUserProgress } from '../../model';
+import { GraphQLContext } from '../context';
 
 export async function getUserStats(
   parent: any,
   _: {},
-  { dynamo }: { dynamo: DynamoDB.DocumentClient }
+  { dynamo, user }: GraphQLContext
 ) {
-  const today = new Date();
-  let score = Math.random();
-  const days = new Array(60).fill(null).map((d, index) => {
-    const newDate = new Date();
-    score = score + Math.random();
-    return {
-      day: newDate.setDate(today.getDate() - (60 - index)),
-      score: parseFloat(score.toFixed(2)),
-    };
-  });
+  if (user == null) {
+    throw new ValidationError('Unauthorized.');
+  }
 
-  console.log(days);
+  const records = await getUserProgress(user.id, dynamo);
 
-  return { days };
+  const days = Object.entries(
+    records.reduce((acc, r) => {
+      const parsedDay = new Date(Date.parse(r.createdAt)).setHours(0, 0, 0, 0);
+      return {
+        ...acc,
+        [parsedDay]:
+          typeof acc[parsedDay] !== 'undefined'
+            ? acc[parsedDay] + r.score
+            : r.score,
+      };
+    }, {})
+  ).map((e: [string, number]) => ({
+    day: Number(e[0]),
+    score: parseFloat(e[1].toFixed(1)),
+  }));
+
+  if (days.length === 1) {
+    const today = new Date().setHours(0, 0, 0, 0);
+    const firstDay = new Date(days[0].day);
+    days.unshift({ day: firstDay.setDate(firstDay.getDate() - 1), score: 0 });
+
+    if (!days.find((d) => d.day === today)) {
+      days.push({ day: today, score: days[days.length - 1].score });
+    }
+  }
+
+  return {
+    days,
+  };
 }

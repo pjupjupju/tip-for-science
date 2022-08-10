@@ -34,10 +34,10 @@ const Profile = ({ user }: { user: User | null }) => (
       </Flex>
       <Switch>
         <Route path=".">
-          <Stats />
+          <Stats user={user} />
         </Route>
         <Route path="/profile/stats">
-          <Stats />
+          <Stats user={user} />
         </Route>
         <Route path="/profile/settings">
           <Settings user={user} />
