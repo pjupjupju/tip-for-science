@@ -77,14 +77,28 @@ const Stats = ({ user }: { user: User | null }) => {
         Top skóre:
       </Heading>
       {highScore &&
-        highScore.map(
-          (player: { score: number; slug: string }, index: number) => (
-            <Text color="secondary">
+        highScore
+          .slice(0, 5)
+          .map((player: { score: number; slug: string }, index: number) => (
+            <Text key={`player-${player.slug}`} color="secondary">
               <Text fontWeight="bold" as="span" color="accent" ml="5">
+                {/* eslint-disable jsx-a11y/accessible-emoji */}
+                {index === 0 && (
+                  <Text
+                    as="span"
+                    ml="-24px"
+                    aria-label="champion"
+                    role="img"
+                    sx={{ position: 'absolute' }}
+                  >
+                    🏆
+                  </Text>
+                )}{' '}
                 {index + 1}.
               </Text>{' '}
               <Text
                 as="span"
+                color={player.slug === user.slug ? 'primary' : 'secondary'}
                 fontWeight={player.slug === user.slug ? 'bold' : 'normal'}
               >
                 {player.slug}
@@ -98,8 +112,7 @@ const Stats = ({ user }: { user: User | null }) => {
                 {player.score.toFixed(2)}
               </Text>
             </Text>
-          )
-        )}
+          ))}
     </>
   );
 };

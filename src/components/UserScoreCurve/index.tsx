@@ -8,23 +8,13 @@ interface UserScoreCurveProps {
 }
 
 const UserScoreCurve = ({ stats }: UserScoreCurveProps) => {
-
   const data = [
     {
       id: 'userScoreCurve',
-        /*
-      data: [
-        { x: '2021-01-01', y: 1.5 },
-        { x: '2021-01-02', y: 4 },
-        { x: '2021-01-03', y: 5 },
-        { x: '2021-01-04', y: 12 },
-        { x: '2021-01-05', y: 14 },
-        { x: '2021-01-06', y: 16 },
-        { x: '2021-01-07', y: 16 },
-        { x: '2021-01-08', y: 18 },
-      ],
-      */
-     data: stats.map(({x,y}: StatsData) => ({y,x: moment(x).format("YYYY-MM-DD")})),
+      data: stats.map(({ x, y }: StatsData) => ({
+        y,
+        x: moment(x).format('YYYY-MM-DD'),
+      })),
     },
   ];
 
