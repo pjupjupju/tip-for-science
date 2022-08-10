@@ -332,6 +332,10 @@ async function updateCurrentHighestRun(
 export async function exportTipData({
   dynamo,
 }: UserModelContext): Promise<string> {
+  /*
+
+  // OLD IMPLEMENTATION 
+
   let downloadUrl;
 
   const params = {
@@ -432,6 +436,109 @@ export async function exportTipData({
   };
 
   await dynamo.scan(params, onScanTips).promise();
+
+  */
+
+  let downloadUrl;
+
+  const baseParams = {
+    TableName: TABLE_QUESTION,
+    FilterExpression: 'begins_with(qsk, :qsk)',
+    ExpressionAttributeValues: {
+      ':qsk': 'T#',
+    },
+  };
+
+  const headers = [
+    'time',
+    'date',
+    'itemID',
+    'participantID',
+    'questionID',
+    'runID',
+    'generationID',
+    'correct',
+    'nparents',
+    'parent1',
+    'parent2',
+    'parent3',
+    'parent4',
+    'parent5',
+    'answered',
+    'answertime',
+    'limit',
+    'tip',
+  ];
+
+  const returnValueOrEmptyString = (value: any) =>
+    typeof value === 'undefined' ? '' : value;
+
+  const stream = format({ headers });
+
+  if (process.env.NODE_ENV !== 'production') {
+    const writableStream = fs.createWriteStream(
+      `export-tipdata-${Date.now()}.csv`
+    );
+
+    // @ts-ignore
+    stream.pipe(writableStream);
+  }
+
+  const writeTipsToStream = (tipsArray, anyWritableStream) => {
+    if (tipsArray.length > 0) {
+      tipsArray.forEach((row: DynamoTip) => {
+        anyWritableStream.write({
+          time: new Date(Date.parse(row.data.createdAt))
+            .toTimeString()
+            .split('(')[0]
+            .trim(),
+          date: row.data.createdAt.substring(0, 10),
+          itemID: row.qsk,
+          participantID: row.data.createdBy,
+          questionID: row.id,
+          runID: row.run,
+          generationID: row.generation,
+          correct: row.data.correctAnswer,
+          nparents: row.data.previousTips.length,
+          parent1: returnValueOrEmptyString(row.data.previousTips[0]),
+          parent2: returnValueOrEmptyString(row.data.previousTips[1]),
+          parent3: returnValueOrEmptyString(row.data.previousTips[2]),
+          parent4: returnValueOrEmptyString(row.data.previousTips[3]),
+          parent5: returnValueOrEmptyString(row.data.previousTips[4]),
+          answered: row.data.tip !== null ? 'true' : 'false',
+          answertime: row.data.msElapsed,
+          limit:
+            typeof row.data.timeLimit === 'undefined'
+              ? 'false'
+              : row.data.timeLimit * 1000,
+          tip: row.data.tip,
+        });
+      });
+    }
+  };
+
+  let data = await dynamo.scan(baseParams).promise();
+
+  writeTipsToStream(data.Items, stream);
+
+  // scan recursively
+  while (typeof data.LastEvaluatedKey !== 'undefined') {
+    const params = {
+      ...baseParams,
+      ExclusiveStartKey: data.LastEvaluatedKey,
+    };
+    data = await dynamo.scan(params).promise();
+
+    writeTipsToStream(data.Items, stream);
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    downloadUrl = uploadCsvToS3(stream, `export-tipdata-${Date.now()}`);
+  } else {
+    downloadUrl = 'local';
+  }
+
+  stream.end();
 
   return downloadUrl;
 }
