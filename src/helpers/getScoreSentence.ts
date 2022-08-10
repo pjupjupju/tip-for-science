@@ -28,6 +28,8 @@ const zeroScoreSentence = [
   '🤏 Takhle blízko... se třeba trefíš příště.',
   'Hmmm 🤡',
   'Tohle se moc nepovedlo.',
+  '🤨',
+  '🥴',
 ];
 
 const getScoreSentence = (sentences: string[]) => {
