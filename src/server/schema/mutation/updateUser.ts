@@ -1,8 +1,7 @@
-import { DynamoDB } from 'aws-sdk';
 import { compareSync, hashSync } from 'bcryptjs';
 import { ValidationError } from 'yup';
 import { findUserById, updateUserSettings } from '../../model';
-import { User } from '../../model/types';
+import { GraphQLContext } from '../context';
 
 type ChangeSet = {
   email?: string;
@@ -20,7 +19,7 @@ export async function updateUser(
     age?: number;
     gender?: string;
   },
-  { dynamo, user }: { dynamo: DynamoDB.DocumentClient; user: User }
+  { dynamo, user }: GraphQLContext
 ) {
   if (user == null) {
     throw new ValidationError('Unauthorized.');

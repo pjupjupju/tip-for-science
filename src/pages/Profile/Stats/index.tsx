@@ -1,34 +1,30 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/client';
 import { UserScoreCurve } from '../../../components/UserScoreCurve';
-import { Heading, Flex, Text, Box, Link } from 'rebass';
-import { Link as RouterLink } from 'react-router-dom';
+import { Heading, Flex, Text, Box } from 'rebass';
 
 import {
   HIGH_SCORE_QUERY,
   MY_SCORE_QUERY,
   MY_USER_STATS_QUERY,
 } from '../../../gql';
-import { Container, Spinner } from '../../../components';
+import { Spinner } from '../../../components';
+import { User } from '../../../types';
 
-const NavbarLink = ({
-  children,
-  ...rest
-}: {
-  children: ReactNode;
-  [key: string]: any;
-}) => (
-  <Link variant="nav" as={RouterLink} {...rest}>
-    {children}
-  </Link>
-);
-
-const Stats = () => {
-  const { loading, data } = useQuery(MY_USER_STATS_QUERY);
+const Stats = ({ user }: { user: User | null }) => {
+  const { loading, data } = useQuery(MY_USER_STATS_QUERY, {
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'network-only',
+  });
   const { loading: highScoreLoading, data: highScoreData } =
     useQuery(HIGH_SCORE_QUERY);
-  const { loading: scoreLoading, data: getMyScoreData } =
-    useQuery(MY_SCORE_QUERY);
+  const { loading: scoreLoading, data: getMyScoreData } = useQuery(
+    MY_SCORE_QUERY,
+    {
+      notifyOnNetworkStatusChange: true,
+      fetchPolicy: 'network-only',
+    }
+  );
 
   if (loading || scoreLoading || highScoreLoading) {
     return (
@@ -61,7 +57,21 @@ const Stats = () => {
         Vývoj tvého skóre:
       </Heading>
       <Box sx={{ flexGrow: 1, maxHeight: 400 }}>
-        <UserScoreCurve stats={stats} />
+        {stats.length > 0 ? (
+          <UserScoreCurve stats={stats} />
+        ) : (
+          <Flex
+            width="100%"
+            height="100%"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Text color="white" textAlign="center">
+              Zatím tady nic není. Až začneš hrát, objeví se tady graf tvého
+              postupu.
+            </Text>
+          </Flex>
+        )}
       </Box>
       <Heading color="secondary" fontSize={[2, 3, 4]} mb="2" mx="3">
         Top skóre:
@@ -73,8 +83,18 @@ const Stats = () => {
               <Text fontWeight="bold" as="span" color="accent" ml="5">
                 {index + 1}.
               </Text>{' '}
-              {player.slug}:{' '}
-              <Text as="span" color="accent">
+              <Text
+                as="span"
+                fontWeight={player.slug === user.slug ? 'bold' : 'normal'}
+              >
+                {player.slug}
+              </Text>
+              :{' '}
+              <Text
+                as="span"
+                color="accent"
+                fontWeight={player.slug === user.slug ? 'bold' : 'normal'}
+              >
                 {player.score.toFixed(2)}
               </Text>
             </Text>

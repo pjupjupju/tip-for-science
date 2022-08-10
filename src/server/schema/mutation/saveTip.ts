@@ -1,4 +1,5 @@
 import { DynamoDB } from 'aws-sdk';
+import { ulid } from 'ulid';
 import { getScore } from '../../../helpers';
 import { createQuestionTip, getQuestion, updateScore } from '../../model';
 import { User } from '../../model/types';
@@ -29,8 +30,11 @@ export async function saveTip(
 
   const runIndex = rId - 1;
 
+  const tipId = ulid();
+
   await createQuestionTip(
     {
+      tipId,
       id,
       tip,
       run: rId,
@@ -59,23 +63,12 @@ export async function saveTip(
 
   const questionScore = getScore(tip, settings.correctAnswer);
 
-  await updateScore(user.id, questionScore, { dynamo });
-
-  //
-  /*s
-  Update user question-score progress
-
-  await dynamo.put({
-    TableName: TABLE_USER,
-    Item: {
-      id: "01FGFWT7TPF5G3CEEGQHH7BAGX",
-      question_id: id,
-      userskey: `TIP#${tipId}`,
-      tip,
-      created_at: new Date(),
-    },
-  });
-  */
+  await updateScore(
+    user.id,
+    questionScore,
+    { questionId: id, tipId },
+    { dynamo }
+  );
 
   return 'ok';
 }

@@ -8,7 +8,7 @@ import {
   PLAYERS_BY_HIGHSCORE,
 } from '../../config';
 import { generateQuestionBundle } from '../../helpers';
-import { User, UserRole, UserSettings } from './types';
+import { ProgressItem, User, UserRole, UserSettings } from './types';
 
 interface UserModelContext {
   dynamo: DynamoDB.DocumentClient;
@@ -204,6 +204,7 @@ export async function updateLastQuestion(
 export async function updateScore(
   userId: string,
   scoreAddition: number,
+  { tipId, questionId }: ProgressItem,
   { dynamo }: UserModelContext
 ): Promise<any> {
   const updateAndInsertParams = [
@@ -216,6 +217,18 @@ export async function updateScore(
         ExpressionAttributeValues: {
           ':scoreAddition': scoreAddition,
           ':start': 0,
+        },
+      },
+    },
+    {
+      Put: {
+        TableName: TABLE_USER,
+        Item: {
+          id: userId,
+          qId: questionId,
+          userskey: `T#${tipId}`,
+          score: scoreAddition,
+          createdAt: new Date().toISOString(),
         },
       },
     },
@@ -242,7 +255,29 @@ export async function getHighScorePlayers(
       ':role': 'player',
     },
     ScanIndexForward: false,
-    Limit: 100,
+    Limit: 10,
+  };
+
+  const result = await dynamo.query(params).promise();
+
+  return result.Items;
+}
+
+export async function getUserProgress(
+  id: string,
+  dynamo: DynamoDB.DocumentClient
+): Promise<any | null> {
+  const params = {
+    TableName: TABLE_USER,
+    KeyConditionExpression: '#id = :id and begins_with(#userskey, :userskey)',
+    ExpressionAttributeNames: {
+      '#id': 'id',
+      '#userskey': 'userskey',
+    },
+    ExpressionAttributeValues: {
+      ':id': id,
+      ':userskey': `T`,
+    },
   };
 
   const result = await dynamo.query(params).promise();
