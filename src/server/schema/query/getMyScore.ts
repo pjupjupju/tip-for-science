@@ -2,7 +2,6 @@ import { DynamoDB } from 'aws-sdk';
 import { ValidationError } from 'yup';
 import { findUserById } from '../../model';
 import { User } from '../../model/types';
-// import { TABLE_QUESTION, TABLE_TIP } from './../../../config';
 
 export async function getMyScore(
   parent: any,

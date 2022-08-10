@@ -1,7 +1,7 @@
-import { DynamoDB } from 'aws-sdk';
+import { ValidationError } from 'yup';
 import { getQuestionBatch } from '../../io';
 import { batchCreateQuestions } from '../../model';
-import { User } from '../../model/types';
+import { GraphQLContext } from '../context';
 
 // Google spreadsheet ID
 const spreadsheetId = process.env.RAZZLE_QUESTIONS_SPREADSHEET;
@@ -9,11 +9,19 @@ const spreadsheetId = process.env.RAZZLE_QUESTIONS_SPREADSHEET;
 export async function importQuestions(
   parent: any,
   _: any,
-  { dynamo, user }: { dynamo: DynamoDB.DocumentClient; user: User }
+  { dynamo, user }: GraphQLContext
 ) {
+  if (user == null) {
+    throw new ValidationError('Unauthorized.');
+  }
+
   // only allow user who is admin, so first load user role
 
-  const questions = await getQuestionBatch(spreadsheetId, 'import', 'import-strategy');
+  const questions = await getQuestionBatch(
+    spreadsheetId,
+    'import',
+    'import-strategy'
+  );
 
   if (questions.length === 0) {
     // return true but log, that nothing was found to be imported

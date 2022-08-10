@@ -189,6 +189,7 @@ export async function createQuestionRun(
 
 export async function createQuestionTip(
   {
+    tipId,
     id,
     tip,
     run,
@@ -201,6 +202,7 @@ export async function createQuestionTip(
     msElapsed,
     userId,
   }: {
+    tipId: string;
     id: string;
     tip: number;
     run: number;
@@ -215,8 +217,6 @@ export async function createQuestionTip(
   },
   { dynamo }: UserModelContext
 ) {
-  const tipId = ulid();
-
   const currentTips = await getCurrentGenerationTips(id, run, generation, {
     dynamo,
   });
@@ -581,7 +581,8 @@ function getNewPreviousTips(
   const numTipsToRemove = Math.floor(selectionPressure * tips.length);
   return tips
     .sort((a, b) => Math.abs(correctAnswer - a) - Math.abs(correctAnswer - b))
-    .slice(0, -numTipsToRemove);
+    .slice(0, numTipsToRemove >= 1 ? -numTipsToRemove : tips.length)
+    .sort(() => Math.random() - 0.5);
 }
 
 // TODO: get rid of this ANY
