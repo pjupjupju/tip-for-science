@@ -262,10 +262,6 @@ export async function createQuestionTip(
 
         // If we hit tips per generation threshold, start new generation by updating RUN
         if (currentTipsWithAnswer.length + 1 === strategy.tipsPerGeneration) {
-          console.log(
-            'ALL GEN TIPS: ',
-            JSON.stringify([...currentTipsWithAnswer])
-          );
           const allGenerationTips = [
             ...currentTipsWithAnswer
               .filter(

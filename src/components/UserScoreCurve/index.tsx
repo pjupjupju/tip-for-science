@@ -18,8 +18,6 @@ const UserScoreCurve = ({ stats }: UserScoreCurveProps) => {
     },
   ];
 
-  console.log('data: ', JSON.stringify(data));
-
   const commonProperties = {
     maxHeight: 400,
     margin: { top: 20, right: 20, bottom: 60, left: 80 },
