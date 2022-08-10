@@ -262,10 +262,18 @@ export async function createQuestionTip(
 
         // If we hit tips per generation threshold, start new generation by updating RUN
         if (currentTipsWithAnswer.length + 1 === strategy.tipsPerGeneration) {
+          console.log(
+            'ALL GEN TIPS: ',
+            JSON.stringify([...currentTipsWithAnswer])
+          );
           const allGenerationTips = [
-            ...currentTipsWithAnswer.map((t: any) => t.data.tip),
+            ...currentTipsWithAnswer
+              .filter(
+                (t) => t.data.answered !== false && t.data.knewAnswer !== true
+              )
+              .map((t: any) => t.data.tip),
             tip,
-          ].filter(t => t.data.answered !== false && t.data.knewAnswer !== true);
+          ];
           // If we hit correct answer for too many people in generation, we disable this RUN
           if (
             isGenerationTooCloseToCorrectAnswer(
