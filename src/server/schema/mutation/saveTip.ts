@@ -13,6 +13,7 @@ export async function saveTip(
     gId,
     previousTips,
     knewAnswer,
+    answered,
     msElapsed,
   }: {
     id: string;
@@ -21,6 +22,7 @@ export async function saveTip(
     gId: number;
     previousTips: number[];
     knewAnswer: boolean;
+    answered: boolean;
     msElapsed: number;
   },
   { dynamo, user }: { dynamo: DynamoDB.DocumentClient; user: User }
@@ -55,6 +57,7 @@ export async function saveTip(
       previousTips,
       timeLimit: settings.timeLimit,
       knewAnswer,
+      answered,
       msElapsed,
       userId: user.id,
     },

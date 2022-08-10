@@ -199,6 +199,7 @@ export async function createQuestionTip(
     previousTips,
     timeLimit,
     knewAnswer,
+    answered,
     msElapsed,
     userId,
   }: {
@@ -212,6 +213,7 @@ export async function createQuestionTip(
     previousTips: number[];
     timeLimit?: number;
     knewAnswer: boolean;
+    answered: boolean;
     msElapsed: number;
     userId: string;
   },
@@ -241,6 +243,7 @@ export async function createQuestionTip(
       correctAnswer,
       timeLimit,
       knewAnswer,
+      answered,
     },
   };
 
@@ -262,7 +265,7 @@ export async function createQuestionTip(
           const allGenerationTips = [
             ...currentTipsWithAnswer.map((t: any) => t.data.tip),
             tip,
-          ];
+          ].filter(t => t.data.answered !== false && t.data.knewAnswer !== true);
           // If we hit correct answer for too many people in generation, we disable this RUN
           if (
             isGenerationTooCloseToCorrectAnswer(

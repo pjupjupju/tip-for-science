@@ -27,7 +27,7 @@ class RunCache {
   dynamo: DynamoDB.DocumentClient;
 
   constructor(
-    secondsToLive = 15,
+    secondsToLive = 10,
     onlineThreshold = 5,
     { dynamo }: ServerContext
   ) {
