@@ -8,6 +8,7 @@ export const SAVE_MUTATION = gql`
     $gId: Int!
     $previousTips: [Float!]!
     $knewAnswer: Boolean
+    $answered: Boolean
     $msElapsed: Int!
   ) {
     saveTip(
@@ -17,6 +18,7 @@ export const SAVE_MUTATION = gql`
       gId: $gId
       previousTips: $previousTips
       knewAnswer: $knewAnswer
+      answered: $answered
       msElapsed: $msElapsed
     )
   }

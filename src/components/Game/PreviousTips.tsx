@@ -21,8 +21,11 @@ const PreviousTips = ({ previousTips, unit }: PreviousTipsProps) =>
         Předchozí tipy:{' '}
       </Text>
       <Flex justifyContent="center">
-        {previousTips.map((previousTip) => (
-          <Text sx={previousTipStyle} key={`previous-tip-${previousTip}`}>
+        {previousTips.map((previousTip, index) => (
+          <Text
+            sx={previousTipStyle}
+            key={`previous-tip-${index}-${previousTip}`}
+          >
             <NumberFormat
               value={previousTip}
               displayType={'text'}

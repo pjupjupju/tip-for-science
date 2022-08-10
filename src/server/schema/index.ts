@@ -82,6 +82,7 @@ export const typeDefs = /* GraphQL */ gql`
       gId: Int!
       previousTips: [Float!]!
       knewAnswer: Boolean
+      answered: Boolean
       msElapsed: Int!
     ): String
     signIn(email: String!, password: String!): SignInResult!
