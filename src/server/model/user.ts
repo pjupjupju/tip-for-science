@@ -52,7 +52,7 @@ export async function createUser(
   const foundUser = await findUserByEmail(user.email, { dynamo });
 
   if (foundUser) {
-    throw new yup.ValidationError('Email already exists', null, 'email');
+    throw new yup.ValidationError('Tento email už existuje', null, 'email');
   }
 
   await dynamo
