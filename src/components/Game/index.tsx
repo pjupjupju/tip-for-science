@@ -39,6 +39,15 @@ interface GameProps {
   score: number;
 }
 
+const headerStyles = {
+  minHeight: 60,
+  width: '100%',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexShrink: 0,
+  flexGrow: 0,
+};
+
 const inputStyles = {
   '::placeholder': {
     color: 'white',
@@ -155,7 +164,7 @@ const Game = ({
 
   return !isSubmitted ? (
     <Container>
-      <Box minHeight="80px">
+      <Flex sx={headerStyles}>
         <Text
           fontSize={[3, 4, 5]}
           fontWeight="bold"
@@ -165,7 +174,7 @@ const Game = ({
         >
           {question}
         </Text>
-      </Box>
+      </Flex>
       <Image src={image} sx={imageStyle} />
       <PreviousTips previousTips={previousTips} unit={unit} />
       <Flex justifyContent="center" alignItems="center" p={2}>
@@ -195,9 +204,9 @@ const Game = ({
     </Container>
   ) : (
     <Container>
-      <Box minHeight="60px">
+      <Flex sx={headerStyles}>
         <Text
-          fontSize={[3, 4, 5]}
+          fontSize={[3, 4, 4]}
           fontWeight="bold"
           color="secondary"
           textAlign="center"
@@ -205,7 +214,7 @@ const Game = ({
         >
           Skóre: {score.toFixed(2)}
         </Text>
-      </Box>
+      </Flex>
       <Image src={image} sx={imageStyle} />
       <Flex
         justifyContent="center"
@@ -230,7 +239,12 @@ const Game = ({
               flexGrow={1}
               flexShrink={1}
             >
-              <Text textAlign="center" color="graphScore" fontSize={3} mb={3}>
+              <Text
+                textAlign="center"
+                color="graphScore"
+                fontSize={[2, 3, 3]}
+                mb={3}
+              >
                 {questionScore === 0 && getScoreSentence(zeroScoreSentence)}
                 {questionScore !== null &&
                   questionScore > 0 &&
@@ -266,7 +280,7 @@ const Game = ({
           Domů
         </Button>
         <Button sx={{ flex: 5 }} onClick={handleClickFinish}>
-          Pokračovat ▶
+          Pokračovat
         </Button>
       </Flex>
     </Container>
