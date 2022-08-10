@@ -64,7 +64,7 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
           Domů
         </Button>
         <Button onClick={handleClickNext} sx={{ flex: 5 }}>
-          Další ▶
+          Další
         </Button>
       </Flex>
     </Container>
