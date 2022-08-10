@@ -41,7 +41,7 @@ const labelStyle = {
 const question = 'Jak rychle se otáčí Jupiter? A pozor, běží ti čas!';
 const unit = 'km/h';
 const previousTips = [80000, 1000, 500, 20000];
-const timeLimit = 10;
+const timeLimit = 20;
 
 const Slide13 = ({ onSubmit }: SlideProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -101,7 +101,7 @@ const Slide13 = ({ onSubmit }: SlideProps) => {
       </TutorialHeader>
       <Image src={jupiter} sx={imageStyle} />
       <PreviousTips previousTips={previousTips} unit={unit} />
-      <Flex justifyContent="center" alignItems="baseline" p={2}>
+      <Flex justifyContent="center" alignItems="center" p={2}>
         <Label htmlFor="tip" sx={labelStyle}>
           tip:
         </Label>
@@ -117,7 +117,7 @@ const Slide13 = ({ onSubmit }: SlideProps) => {
         <Text color="white" mr={2}>
           {unit}
         </Text>{' '}
-        <SubmitButton onClick={handleClickSubmit} />
+        <SubmitButton onClick={handleClickSubmit} timeLimit={timeLimit} />
       </Flex>
       {timeLimitEnded && (
         <Flex
