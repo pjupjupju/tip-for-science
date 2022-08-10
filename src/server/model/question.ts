@@ -402,7 +402,7 @@ export async function exportTipData({
           parent3: returnValueOrEmptyString(row.data.previousTips[2]),
           parent4: returnValueOrEmptyString(row.data.previousTips[3]),
           parent5: returnValueOrEmptyString(row.data.previousTips[4]),
-          answered: row.data.tip !== null ? 'true' : 'false',
+          answered: row.data.answered.toString(),
           knewAnswer: row.data.knewAnswer.toString(),
           answertime: row.data.msElapsed,
           limit:

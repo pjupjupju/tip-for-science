@@ -44,6 +44,7 @@ type TipSettings = {
   msElapsed: number;
   createdBy: string;
   knewAnswer: boolean;
+  answered: boolean;
   createdAt: string;
 };
 
