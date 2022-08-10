@@ -73,7 +73,11 @@ const Play = ({ user }: PlayProps) => {
 
     dispatch({ type: ActionType.GAME_KNEW_IT_DIALOG });
   };
-  const onSubmit = (myTip: number, knewAnswer: boolean = false) => {
+  const onSubmit = (
+    myTip: number,
+    knewAnswer: boolean = false,
+    answered: boolean = true
+  ) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -88,7 +92,8 @@ const Play = ({ user }: PlayProps) => {
         gId: data.getNextQuestion.gId,
         previousTips: data.getNextQuestion.previousTips,
         knewAnswer,
-        msElapsed,
+        answered,
+        msElapsed: answered ? msElapsed : timeLimit * 1000,
       },
     });
     dispatch({ type: ActionType.GAME_SUBMIT, payload: { tip: myTip } });
@@ -131,6 +136,7 @@ const Play = ({ user }: PlayProps) => {
       timeoutRef.current = setTimeout(() => {
         if (!isSubmitted) {
           // TODO: implement forced saveTip here if we want to save also unanswered questions
+          onSubmit(0, false, false);
           dispatch({ type: ActionType.GAME_SUBMIT });
         }
       }, timeLimit * 1000);
