@@ -78,6 +78,11 @@ export interface DynamoTip {
   data: TipSettings;
 }
 
+export type ProgressItem = {
+  tipId: string;
+  questionId: string;
+};
+
 export type RunStrategy = {
   selectionPressure: number;
   tipsPerGeneration: number;
