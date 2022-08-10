@@ -28,6 +28,9 @@ const Slide7 = ({ handleNextStep }: SlideProps) => {
         <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center">
           A tvůj tip může vidět někdo další.
         </Text>
+        <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center">
+          ...a občas žádný tip neuvidíš.
+        </Text>
       </Box>
       <Flex mt="auto" justifyContent="space-between" width="100%">
         <Button
