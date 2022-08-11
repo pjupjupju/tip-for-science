@@ -166,7 +166,6 @@ export async function createQuestionRun(
     },
   };
 
-
   // TODO: add transaction Put and Update!
   await dynamo
     .put(
@@ -279,7 +278,6 @@ export async function createQuestionTip(
               correctAnswer
             )
           ) {
-            console.log('disabling run');
             return disableRun(id, run, { dynamo });
           }
 
@@ -342,7 +340,7 @@ async function updateCurrentHighestRun(
 export async function exportTipData({
   dynamo,
 }: UserModelContext): Promise<string> {
-  let downloadUrl;
+  let downloadUrl: Promise<string> | string;
 
   const baseParams = {
     TableName: TABLE_QUESTION,
@@ -409,8 +407,8 @@ export async function exportTipData({
           parent3: returnValueOrEmptyString(row.data.previousTips[2]),
           parent4: returnValueOrEmptyString(row.data.previousTips[3]),
           parent5: returnValueOrEmptyString(row.data.previousTips[4]),
-          answered: row.data.answered.toString(),
-          knewAnswer: row.data.knewAnswer.toString(),
+          answered: returnValueOrEmptyString(row.data.answered).toString(),
+          knewAnswer: returnValueOrEmptyString(row.data.knewAnswer).toString(),
           answertime: row.data.msElapsed,
           limit:
             typeof row.data.timeLimit === 'undefined'
@@ -465,8 +463,6 @@ async function updateCurrentGeneration(
       ':previousTips': newPreviousTips,
     },
   };
-
-  console.log(`updating generation for ${questionId}#true#R#${runId}`);
 
   return dynamo.update(params).promise();
 }

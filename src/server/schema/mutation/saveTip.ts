@@ -66,15 +66,12 @@ export async function saveTip(
 
   const questionScore = getScore(tip, settings.correctAnswer);
 
-  console.log(`updating score for `, user.id);
   await updateScore(
     user.id,
     questionScore,
     { questionId: id, tipId },
     { dynamo }
   );
-
-  console.log(`updated score for `, user.id);
 
   return 'ok';
 }
