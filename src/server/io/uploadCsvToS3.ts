@@ -27,4 +27,4 @@ const uploadCsvToS3 = async (stream: Stream, filename: string) => {
   return `https://${S3_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/` + key;
 };
 
-export default uploadCsvToS3;
+export { uploadCsvToS3 };

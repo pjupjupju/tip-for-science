@@ -18,7 +18,7 @@ import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import { resolve } from 'path';
 import { App } from '../App';
 import { Document } from './Document';
-import { DynamoSessionStore, RunCache, runMigrations } from './io';
+import { DynamoSessionStore, RunCache, RunLock, runMigrations } from './io';
 import { createContext, typeDefs, resolvers, schema } from './schema';
 import { tipForScienceTheme } from '../theme';
 import { AWS_REGION, TABLE_SESSION } from '../config';
@@ -43,6 +43,7 @@ export async function createServer(): Promise<express.Application> {
   );
 
   const runCache = new RunCache(15, 5, { dynamo });
+  const runLock = new RunLock();
 
   const staticDir =
     env === 'production'
@@ -50,7 +51,7 @@ export async function createServer(): Promise<express.Application> {
       : process.env.RAZZLE_PUBLIC_DIR;
 
   const app = new ApolloServer({
-    context: createContext({ dynamo, runCache }),
+    context: createContext({ dynamo, runCache, runLock }),
     debug: env !== 'production',
     playground: env !== 'production',
     formatError(error) {
