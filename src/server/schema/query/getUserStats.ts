@@ -67,7 +67,7 @@ export async function getUserStats(
     await new Promise((r) =>
       setTimeout(r, 1000 * Math.floor(Math.random() * 9))
     );
-    return getNextQuestion(parent, _, { dynamo, runCache, user, request });
+    return getNextQuestion(parent, _, { dynamo, runCache, user: u, request });
   });
 
   const questionsFirstRound = await Promise.all(firstRound);
@@ -88,7 +88,7 @@ export async function getUserStats(
         answered: i % 13 === 0 ? false : true,
         msElapsed: 5000,
       },
-      { dynamo, user: user as any }
+      { dynamo, user: users[i] as any }
     );
   });
 
