@@ -63,6 +63,12 @@ class RunCache {
 
     // If no runs are available, we create a new run
     if (sortedRuns.length === 0) {
+
+      // TODO: maybe add new map here isUpdating[question] = true
+      // and after await result set it to isUpdating[question] = false
+      // if isUpdating question is true, recursively call get fresh run
+      // which will somehow fetch the new run created
+
       const run = await createQuestionRun(questionId, {
         dynamo: this.dynamo,
       });
