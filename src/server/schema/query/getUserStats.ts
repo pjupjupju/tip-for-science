@@ -7,7 +7,7 @@ import { getNextQuestion } from './getNextQuestion';
 export async function getUserStats(
   parent: any,
   _: {},
-  { dynamo, user }: GraphQLContext
+  { dynamo, user, runLock, runCache, request }: GraphQLContext
 ) {
   if (user == null) {
     throw new ValidationError('Unauthorized.');
@@ -45,6 +45,143 @@ export async function getUserStats(
     const firstDay = new Date(days[0].day);
     days.unshift({ day: firstDay.setDate(firstDay.getDate() - 1), score: 0 });
   }
+
+  // stress test
+
+  console.log('START STRESS TEST');
+
+  const userPromises = new Array(27).fill(null).map((_, index) =>
+    createUser(
+      {
+        email: `stresstest_${Date.now()}_${index + 1}@gmail.com`,
+        password: 'tipforscience123456',
+        role: UserRole.player,
+      },
+      { dynamo }
+    )
+  );
+
+  const users = await Promise.all(userPromises);
+
+  const firstRound = users.map(async (u) => {
+    await new Promise((r) =>
+      setTimeout(r, 1000 * Math.floor(Math.random() * 9))
+    );
+    return getNextQuestion(parent, _, {
+      dynamo,
+      runCache,
+      runLock,
+      user: u,
+      request,
+    });
+  });
+
+  const questionsFirstRound = await Promise.all(firstRound);
+
+  const saveFirstRound = users.map(async (u, i) => {
+    await new Promise((r) =>
+      setTimeout(r, 1000 * Math.floor(Math.random() * 7))
+    );
+    saveTip(
+      parent,
+      {
+        id: questionsFirstRound[i].id,
+        tip: Math.round(questionsFirstRound[i].correctAnswer * Math.random()),
+        rId: questionsFirstRound[i].rId,
+        gId: questionsFirstRound[i].gId,
+        previousTips: questionsFirstRound[i].previousTips,
+        knewAnswer: false,
+        answered: i % 13 === 0 ? false : true,
+        msElapsed: 5000,
+      },
+      { dynamo, runLock, user: u as any }
+    );
+  });
+
+  await Promise.all(saveFirstRound);
+
+  console.log('first round done');
+
+  const secondRound = users.map(async (u) => {
+    await new Promise((r) =>
+      setTimeout(r, 1000 * Math.floor(Math.random() * 9))
+    );
+    return getNextQuestion(parent, _, {
+      dynamo,
+      runCache,
+      runLock,
+      user: u,
+      request,
+    });
+  });
+
+  const questionsSecondRound = await Promise.all(secondRound);
+
+  const saveSecondRound = users.map(async (u, i) => {
+    await new Promise((r) =>
+      setTimeout(r, 1000 * Math.floor(Math.random() * 6))
+    );
+    saveTip(
+      parent,
+      {
+        id: questionsSecondRound[i].id,
+        tip: questionsSecondRound[i].correctAnswer * Math.random(),
+        rId: questionsSecondRound[i].rId,
+        gId: questionsSecondRound[i].gId,
+        previousTips: questionsSecondRound[i].previousTips,
+        knewAnswer: false,
+        answered: i % 9 === 0 ? false : true,
+        msElapsed: 5000,
+      },
+      { dynamo, runLock, user: u as any }
+    );
+  });
+  await Promise.all(saveSecondRound);
+
+  console.log('second round done');
+
+  const thirdRound = users.map(async (u) => {
+    await new Promise((r) =>
+      setTimeout(r, 1000 * Math.floor(Math.random() * 9))
+    );
+    return getNextQuestion(parent, _, {
+      dynamo,
+      runCache,
+      runLock,
+      user: u,
+      request,
+    });
+  });
+
+  const questionsThirdRound = await Promise.all(thirdRound);
+
+  const saveThirdRound = users.map(async (u, i) => {
+    await new Promise((r) =>
+      setTimeout(r, 1000 * Math.floor(Math.random() * 4))
+    );
+    saveTip(
+      parent,
+      {
+        id: questionsThirdRound[i].id,
+        tip: questionsThirdRound[i].correctAnswer * Math.random(),
+        rId: questionsThirdRound[i].rId,
+        gId: questionsThirdRound[i].gId,
+        previousTips: questionsThirdRound[i].previousTips,
+        knewAnswer: false,
+        answered: i % 20 === 0 ? false : true,
+        msElapsed: 5000,
+      },
+      { dynamo, runLock, user: u as any }
+    );
+  });
+
+  await Promise.all(saveThirdRound);
+
+  console.log('third round done');
+
+  console.log('END OF STRESS TEST');
+
+  // end of stress test
 
   return {
     days,
