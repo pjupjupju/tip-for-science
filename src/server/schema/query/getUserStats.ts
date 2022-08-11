@@ -72,6 +72,7 @@ export async function getUserStats(
 
   const questionsFirstRound = await Promise.all(firstRound);
 
+  /*
   const saveFirstRound = users.map(async (u, i) => {
     await new Promise((r) =>
       setTimeout(r, 1000 * Math.floor(Math.random() * 5))
@@ -94,6 +95,8 @@ export async function getUserStats(
 
   await Promise.all(saveFirstRound);
 
+  */
+
   console.log('first round done');
 
   const secondRound = users.map(async (u) => {
@@ -105,6 +108,7 @@ export async function getUserStats(
 
   const questionsSecondRound = await Promise.all(secondRound);
 
+  /*
   const saveSecondRound = users.map(async (u, i) => {
     await new Promise((r) =>
       setTimeout(r, 1000 * Math.floor(Math.random() * 6))
@@ -127,6 +131,8 @@ export async function getUserStats(
 
   await Promise.all(saveSecondRound);
 
+  */
+
   console.log('second round done');
 
   const thirdRound = users.map(async (u) => {
@@ -138,6 +144,7 @@ export async function getUserStats(
 
   const questionsThirdRound = await Promise.all(thirdRound);
 
+  /*
   const saveThirdRound = users.map(async (u, i) => {
     await new Promise((r) =>
       setTimeout(r, 1000 * Math.floor(Math.random() * 4))
@@ -160,6 +167,7 @@ export async function getUserStats(
 
   await Promise.all(saveThirdRound);
 
+  */
   console.log('third round done');
 
   console.log('END OF STRESS TEST');
