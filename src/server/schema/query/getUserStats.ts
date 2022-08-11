@@ -72,7 +72,6 @@ export async function getUserStats(
 
   const questionsFirstRound = await Promise.all(firstRound);
 
-  /*
   const saveFirstRound = users.map(async (u, i) => {
     await new Promise((r) =>
       setTimeout(r, 1000 * Math.floor(Math.random() * 5))
@@ -95,7 +94,6 @@ export async function getUserStats(
 
   await Promise.all(saveFirstRound);
 
-  */
 
   console.log('first round done');
 
