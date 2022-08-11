@@ -279,6 +279,7 @@ export async function createQuestionTip(
               correctAnswer
             )
           ) {
+            console.log('disabling run');
             return disableRun(id, run, { dynamo });
           }
 
@@ -464,6 +465,8 @@ async function updateCurrentGeneration(
       ':previousTips': newPreviousTips,
     },
   };
+
+  console.log(`updating generation for ${questionId}#true#R#${runId}`);
 
   return dynamo.update(params).promise();
 }
