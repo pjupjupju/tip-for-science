@@ -3,7 +3,7 @@ import { DynamoDB } from 'aws-sdk';
 import { Request } from 'express';
 import { verify } from 'jsonwebtoken';
 import { JWT_SECRET } from '../../config';
-import { RunCache } from '../io';
+import { RunCache, RunLock } from '../io';
 
 export interface UserTokenData {
   /** User ulid */
@@ -14,17 +14,20 @@ export interface GraphQLContext {
   dynamo: DynamoDB.DocumentClient;
   request: Request;
   runCache: RunCache;
+  runLock: RunLock;
   user?: UserTokenData;
 }
 
 interface ContextOptions {
   dynamo: DynamoDB.DocumentClient;
   runCache: RunCache;
+  runLock: RunLock;
 }
 
 export function createContext({
   dynamo,
   runCache,
+  runLock,
 }: ContextOptions): (apolloContext: ExpressContext) => Promise<GraphQLContext> {
   return async (apolloContext): Promise<GraphQLContext> => {
     let user: UserTokenData | undefined;
@@ -39,7 +42,7 @@ export function createContext({
             if (err) {
               resolve(undefined);
             } else {
-              resolve((decoded as unknown) as UserTokenData);
+              resolve(decoded as unknown as UserTokenData);
             }
           }
         );
@@ -50,6 +53,7 @@ export function createContext({
       dynamo,
       request: apolloContext.req,
       runCache,
+      runLock,
       user,
     };
   };

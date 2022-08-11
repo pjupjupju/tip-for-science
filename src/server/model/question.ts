@@ -16,7 +16,7 @@ import {
   ImportedQuestionSettings,
   RunStrategy,
 } from './types';
-import uploadCsvToS3 from '../io/uploadCsvToS3';
+import { uploadCsvToS3, RunLock } from '../io';
 interface UserModelContext {
   dynamo: DynamoDB.DocumentClient;
 }
@@ -218,7 +218,7 @@ export async function createQuestionTip(
     msElapsed: number;
     userId: string;
   },
-  { dynamo }: UserModelContext
+  { dynamo, runLock }: { dynamo: DynamoDB.DocumentClient; runLock: RunLock }
 ) {
   const currentTips = await getCurrentGenerationTips(id, run, generation, {
     dynamo,
@@ -262,7 +262,14 @@ export async function createQuestionTip(
         }
 
         // If we hit tips per generation threshold, start new generation by updating RUN
-        if (currentTipsWithAnswer.length + 1 === strategy.tipsPerGeneration) {
+        if (
+          currentTipsWithAnswer.length + 1 >= strategy.tipsPerGeneration &&
+          !runLock.getLock(`${id}#${run}#${generation}`)
+        ) {
+          // Lock current Q#RUN#GEN to prevent creating multiple generations
+          // we release current generation when we create next generation in future
+          runLock.lock(`${id}#${run}#${generation}`);
+
           const allGenerationTips = [
             ...currentTipsWithAnswer
               .filter(
@@ -287,7 +294,7 @@ export async function createQuestionTip(
             run,
             generation + 1,
             getNewPreviousTips(allGenerationTips, correctAnswer, strategy),
-            { dynamo }
+            { dynamo, runLock }
           );
         }
       }
@@ -451,7 +458,7 @@ async function updateCurrentGeneration(
   runId: string | number,
   newCurrentGeneration: number,
   newPreviousTips: number[],
-  { dynamo }: UserModelContext
+  { dynamo, runLock }: UserModelContext & { runLock: RunLock }
 ): Promise<any> {
   const params = {
     TableName: TABLE_QUESTION,
@@ -464,7 +471,13 @@ async function updateCurrentGeneration(
     },
   };
 
-  return dynamo.update(params).promise();
+  try {
+    await dynamo.update(params).promise();
+  } catch (e) {
+    console.error('Update DynamoDB generation failed: ', e);
+  } finally {
+    runLock.unlock(`${questionId}#${runId}#${newCurrentGeneration - 1}`);
+  }
 }
 
 async function updateUserBatches(

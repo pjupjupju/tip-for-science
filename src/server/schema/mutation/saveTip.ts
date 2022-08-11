@@ -1,6 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
 import { ulid } from 'ulid';
 import { getScore } from '../../../helpers';
+import { RunLock } from '../../io';
 import { createQuestionTip, getQuestion, updateScore } from '../../model';
 import { User } from '../../model/types';
 
@@ -25,7 +26,11 @@ export async function saveTip(
     answered: boolean;
     msElapsed: number;
   },
-  { dynamo, user }: { dynamo: DynamoDB.DocumentClient; user: User }
+  {
+    dynamo,
+    user,
+    runLock,
+  }: { dynamo: DynamoDB.DocumentClient; user: User; runLock: RunLock }
 ) {
   const question = await getQuestion(id, { dynamo });
   const { strategy, settings } = question;
@@ -61,7 +66,7 @@ export async function saveTip(
       msElapsed,
       userId: user.id,
     },
-    { dynamo }
+    { dynamo, runLock }
   );
 
   const questionScore = getScore(tip, settings.correctAnswer);
