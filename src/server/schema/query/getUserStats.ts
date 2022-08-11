@@ -53,7 +53,7 @@ export async function getUserStats(
   const userPromises = new Array(27).fill(null).map((_, index) =>
     createUser(
       {
-        email: `stresstest_4_${index + 1}@gmail.com`,
+        email: `stresstest_${Date.now()}_${index + 1}@gmail.com`,
         password: 'tipforscience123456',
         role: UserRole.player,
       },
@@ -72,7 +72,10 @@ export async function getUserStats(
 
   const questionsFirstRound = await Promise.all(firstRound);
 
-  const saveFirstRound = users.map((u, i) => {
+  const saveFirstRound = users.map(async (u, i) => {
+    await new Promise((r) =>
+      setTimeout(r, 1000 * Math.floor(Math.random() * 5))
+    );
     saveTip(
       parent,
       {
@@ -93,7 +96,6 @@ export async function getUserStats(
 
   console.log('first round done');
 
-
   const secondRound = users.map(async (u) => {
     await new Promise((r) =>
       setTimeout(r, 1000 * Math.floor(Math.random() * 9))
@@ -101,10 +103,12 @@ export async function getUserStats(
     return getNextQuestion(parent, _, { dynamo, runCache, user, request });
   });
 
-
   const questionsSecondRound = await Promise.all(secondRound);
 
-  const saveSecondRound = users.map((u, i) => {
+  const saveSecondRound = users.map(async (u, i) => {
+    await new Promise((r) =>
+      setTimeout(r, 1000 * Math.floor(Math.random() * 6))
+    );
     saveTip(
       parent,
       {
@@ -134,7 +138,10 @@ export async function getUserStats(
 
   const questionsThirdRound = await Promise.all(thirdRound);
 
-  const saveThirdRound = users.map((u, i) => {
+  const saveThirdRound = users.map(async (u, i) => {
+    await new Promise((r) =>
+      setTimeout(r, 1000 * Math.floor(Math.random() * 4))
+    );
     saveTip(
       parent,
       {
@@ -154,36 +161,6 @@ export async function getUserStats(
   await Promise.all(saveThirdRound);
 
   console.log('third round done');
-
-  const fourthRound = users.map(async (u) => {
-    await new Promise((r) =>
-      setTimeout(r, 1000 * Math.floor(Math.random() * 9))
-    );
-    return getNextQuestion(parent, _, { dynamo, runCache, user, request });
-  });
-
-  const questionsFourthRound = await Promise.all(fourthRound);
-
-  const saveFourthRound = users.map((u, i) => {
-    saveTip(
-      parent,
-      {
-        id: questionsFourthRound[i].id,
-        tip: questionsFourthRound[i].correctAnswer * Math.random(),
-        rId: questionsFourthRound[i].rId,
-        gId: questionsFourthRound[i].gId,
-        previousTips: questionsFourthRound[i].previousTips,
-        knewAnswer: false,
-        answered: i % 8 === 0 ? false : true,
-        msElapsed: 5000,
-      },
-      { dynamo, user: user as any }
-    );
-  });
-
-  await Promise.all(saveFourthRound);
-
-  console.log('fourth round done');
 
   console.log('END OF STRESS TEST');
 
