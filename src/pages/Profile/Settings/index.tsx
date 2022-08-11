@@ -97,6 +97,7 @@ const Settings = ({ user }: { user: User | null }) => {
     refetchQueries: [AuthQueryName],
     onCompleted: ({ updateUser }) => {
       setLog(updateUser);
+      setTimeout(() => setLog(false), 5000);
     },
   });
 
@@ -108,7 +109,6 @@ const Settings = ({ user }: { user: User | null }) => {
     gender: string;
   }) => {
     setErrors([]);
-    console.log('val: ', values);
     let changeSet = {};
 
     if (values.email != null) {
@@ -267,7 +267,18 @@ const Settings = ({ user }: { user: User | null }) => {
         </Box>
       )}
 
-      <Flex mt="auto" justifyContent="space-between" width="100%" mb="2">
+      <Flex mt="auto" flexDirection="column" width="100%" mb="2">
+        {log === true && (
+          <Flex
+            px={3}
+            mb={2}
+            height="39px"
+            backgroundColor="#15de46"
+            alignItems="center"
+          >
+            <Text>✓ Nastavení uloženo</Text>
+          </Flex>
+        )}
         <Button sx={{ flex: 1, color: 'white' }}>Uložit</Button>
       </Flex>
     </Flex>
