@@ -14,6 +14,7 @@ import { Spinner } from './components';
 import { SignUp } from './pages/SignUp';
 import { Dashboard } from './pages/Dashboard';
 import { Page404 } from './pages/Page404';
+import Helmet from 'react-helmet';
 
 export const App = () => {
   const { loading, data } = useQuery(AUTH_QUERY);
@@ -38,42 +39,46 @@ export const App = () => {
         width="100%"
         p="3"
       >
+        <Helmet titleTemplate="Loading..."></Helmet>
         <Spinner />
       </Flex>
     );
   }
 
   return (
-    <Switch>
-      <Route path="/" exact>
-        <Home user={user} onLogOut={handleLogOut} />
-      </Route>
-      <Route path="/about">
-        <About />
-      </Route>
-      <Route path="/play">
-        <Play user={user} />
-      </Route>
-      <Route path="/profile">
-        <Profile user={user} />
-      </Route>
-      <Route path="/signin">
-        <SignIn />
-      </Route>
-      <Route path="/signup">
-        <SignUp />
-      </Route>
-      <Route path="/consent">
-        <Consent />
-      </Route>
-      {user && user.role === 'admin' && (
-        <Route path="/dashboard">
-          <Dashboard user={user} />
+    <>
+      <Helmet titleTemplate="%s | TipForScience.org"></Helmet>
+      <Switch>
+        <Route path="/" exact>
+          <Home user={user} onLogOut={handleLogOut} />
         </Route>
-      )}
-      <Route path="*">
-        <Page404 />
-      </Route>
-    </Switch>
+        <Route path="/about">
+          <About />
+        </Route>
+        <Route path="/play">
+          <Play user={user} />
+        </Route>
+        <Route path="/profile">
+          <Profile user={user} />
+        </Route>
+        <Route path="/signin">
+          <SignIn />
+        </Route>
+        <Route path="/signup">
+          <SignUp />
+        </Route>
+        <Route path="/consent">
+          <Consent />
+        </Route>
+        {user && user.role === 'admin' && (
+          <Route path="/dashboard">
+            <Dashboard user={user} />
+          </Route>
+        )}
+        <Route path="*">
+          <Page404 />
+        </Route>
+      </Switch>
+    </>
   );
 };

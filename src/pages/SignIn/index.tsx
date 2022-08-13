@@ -7,6 +7,7 @@ import { Container } from '../../components';
 import { Link, useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { AuthQueryName, SIGN_IN_MUTATION } from '../../gql';
+import Helmet from 'react-helmet';
 
 const inputStyles = {
   '::placeholder': {
@@ -51,6 +52,7 @@ const SignIn = () => {
 
   return (
     <Container>
+      <Helmet title="Přihlášení"></Helmet>
       <Flex
         as="form"
         onSubmit={handleSubmit(onSubmit)}

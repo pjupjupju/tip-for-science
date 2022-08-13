@@ -29,7 +29,15 @@ export async function getUserStats(
       day: Number(e[0]),
       score: parseFloat(e[1].toFixed(1)),
     }))
-    .sort((a, b) => a.day - b.day);
+    .sort((a, b) => a.day - b.day)
+    .map(({ day, score }, index, arr) => ({
+      day,
+      score:
+        score +
+        arr
+          .filter((i) => i.day < day)
+          .reduce((acc, item) => acc + item.score, 0),
+    }));
 
   if (days.length === 1) {
     const today = new Date().setHours(0, 0, 0, 0);
