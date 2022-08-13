@@ -1,8 +1,9 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
+import Helmet from 'react-helmet';
 import { Redirect } from 'react-router-dom';
 import { Box, Button, Flex, Heading, Text } from 'rebass';
-import { BackButton, Container } from '../../components';
+import { BackButton, Container, Spinner } from '../../components';
 import {
   EXPORT_MUTATION,
   IMPORT_MUTATION,
@@ -74,11 +75,23 @@ const Dashboard = ({ user }: DashboardProps) => {
   }
 
   if (loading) {
-    return <div>loading</div>;
+    return (
+      <Container>
+        <Flex
+          width="100%"
+          height="100%"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Spinner />
+        </Flex>
+      </Container>
+    );
   }
 
   return (
     <Container>
+      <Helmet title="Admin dashboard"></Helmet>
       <Heading color="primary" my={4}>
         Dashboard
       </Heading>

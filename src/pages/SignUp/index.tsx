@@ -14,6 +14,7 @@ import {
   useYupValidationResolver,
 } from '../../helpers';
 import { inputStyles, labelStyles } from '../../components/commonStyleSheets';
+import Helmet from 'react-helmet';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -62,6 +63,7 @@ const SignUp = () => {
 
   return (
     <Container>
+      <Helmet title="Vytvoření účtu"></Helmet>
       <Flex
         as="form"
         onSubmit={handleSubmit(onSubmit)}
