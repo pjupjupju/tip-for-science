@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { MenuButton, Container } from '../../components';
 import { TargetImage } from '../../components/TargetImage';
 import { User, UserRole } from '../../types';
+import Helmet from 'react-helmet';
 
 interface HomeProps {
   user: User | null;
@@ -40,6 +41,7 @@ const Home = ({ user, onLogOut }: HomeProps) => {
 
   return (
     <Container>
+      <Helmet title="Home"></Helmet>
       <TargetImage />
       <Flex
         flexDirection="column"
@@ -104,12 +106,18 @@ const Home = ({ user, onLogOut }: HomeProps) => {
           )}
         </Flex>
       </Flex>
-        <Text mt="auto" mb={4} color="neutralFade" textAlign="center" fontSize={1}>
-          Toto je betaverze. Pokud narazíš na nějaký problém nebo máš nějakou
-          připomínku,
-          <br />
-          napiš nám na tipforscience@protonmail.com, díky :)
-        </Text>
+      <Text
+        mt="auto"
+        mb={4}
+        color="neutralFade"
+        textAlign="center"
+        fontSize={1}
+      >
+        Toto je betaverze. Pokud narazíš na nějaký problém nebo máš nějakou
+        připomínku,
+        <br />
+        napiš nám na tipforscience@protonmail.com, díky :)
+      </Text>
     </Container>
   );
 };
