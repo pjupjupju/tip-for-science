@@ -5,6 +5,7 @@ import { Stats } from './Stats';
 import { Settings } from './Settings';
 import { Container } from '../../components';
 import { User } from '../../types';
+import Helmet from 'react-helmet';
 
 const NavbarLink = ({
   children,
@@ -20,6 +21,7 @@ const NavbarLink = ({
 
 const Profile = ({ user }: { user: User | null }) => (
   <Container>
+    <Helmet title="Profil"></Helmet>
     <Flex flexDirection="column" height="100%">
       <Flex px={2} color="white" bg="secondary" alignItems="center">
         <Text p={2} fontWeight="bold">

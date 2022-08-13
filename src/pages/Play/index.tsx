@@ -6,6 +6,7 @@ import { Flex } from 'rebass';
 import { Container, Game, NoMoreQuestions, Spinner } from './../../components';
 import { MY_SCORE_QUERY, QUESTION_QUERY, SAVE_MUTATION } from '../../gql';
 import { User } from '../../types';
+import Helmet from 'react-helmet';
 
 interface PlayProps {
   user: User | null;
@@ -167,22 +168,25 @@ const Play = ({ user }: PlayProps) => {
   }
 
   return (
-    <Game
-      currentTip={currentTip}
-      settings={data.getNextQuestion}
-      score={getMyScoreData.getMyScore || 0}
-      isSubmitted={isSubmitted}
-      isKnewItDialogOpen={knewItDialog}
-      onIsTooClose={onIsTooClose}
-      onHome={onHome}
-      onSubmit={onSubmit}
-      onFinish={() => {
-        refetch();
-        dispatch({
-          type: ActionType.GAME_FINISH,
-        });
-      }}
-    />
+    <>
+      <Helmet defaultTitle="TipForScience.org"></Helmet>
+      <Game
+        currentTip={currentTip}
+        settings={data.getNextQuestion}
+        score={getMyScoreData.getMyScore || 0}
+        isSubmitted={isSubmitted}
+        isKnewItDialogOpen={knewItDialog}
+        onIsTooClose={onIsTooClose}
+        onHome={onHome}
+        onSubmit={onSubmit}
+        onFinish={() => {
+          refetch();
+          dispatch({
+            type: ActionType.GAME_FINISH,
+          });
+        }}
+      />
+    </>
   );
 };
 

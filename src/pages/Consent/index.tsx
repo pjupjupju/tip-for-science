@@ -1,12 +1,15 @@
 import React from 'react';
+import Helmet from 'react-helmet';
 import { Text } from 'rebass';
 import { Container } from './../../components/Container';
 
 const Consent = () => (
   <Container>
+    <Helmet title="Souhlas s podmínkami"></Helmet>
     <Text color="secondary" my="6">
-      Tímto uděluji souhlas Bc. Pavlíně Hillerové (hillerovap@natur.cuni.cz), která
-      je správcem osobních údajů, se zpracováním svých osobních údajů v rozsahu
+      Tímto uděluji souhlas Bc. Pavlíně Hillerové (hillerovap@natur.cuni.cz),
+      která je správcem osobních údajů, se zpracováním svých osobních údajů
+      v rozsahu
       <br />
       -  emailová adresa
       <br />
