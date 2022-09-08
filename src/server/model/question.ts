@@ -225,7 +225,10 @@ export async function createQuestionTip(
   });
 
   const currentTipsWithAnswer = currentTips.filter(
-    (t: DynamoTip) => !['undefined', 'null'].includes(typeof t.data.tip)
+    (t: DynamoTip) =>
+      !['undefined', 'null'].includes(typeof t.data.tip) &&
+      t.data.answered !== false &&
+      t.data.knewAnswer !== true
   );
 
   const params = {
@@ -263,6 +266,8 @@ export async function createQuestionTip(
 
         // If we hit tips per generation threshold, start new generation by updating RUN
         if (
+          answered !== false &&
+          knewAnswer !== true &&
           currentTipsWithAnswer.length + 1 >= strategy.tipsPerGeneration &&
           !runLock.getLock(`${id}#${run}#${generation}`)
         ) {
@@ -271,11 +276,7 @@ export async function createQuestionTip(
           runLock.lock(`${id}#${run}#${generation}`);
 
           const allGenerationTips = [
-            ...currentTipsWithAnswer
-              .filter(
-                (t) => t.data.answered !== false && t.data.knewAnswer !== true
-              )
-              .map((t: any) => t.data.tip),
+            ...currentTipsWithAnswer.map((t: any) => t.data.tip),
             tip,
           ];
           // If we hit correct answer for too many people in generation, we disable this RUN
