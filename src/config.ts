@@ -14,5 +14,6 @@ export const PLAYERS_BY_HIGHSCORE = 'Tfs_userByHighScore';
 export const JWT_SECRET = 'd3860b4c-6df7-4fa4-bd34-4de82b437608';
 
 // Statistical and game constants
+export const INITIAL_GENERATION_NUMBER = 1;
 export const MAX_PERCENT_TOO_CLOSE_ANSWERS_PER_GEN = 50;
 export const PERCENTAGE_CONSIDERED_TOO_CLOSE = 5;
