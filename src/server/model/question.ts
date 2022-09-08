@@ -4,6 +4,7 @@ import { ScanOutput } from 'aws-sdk/clients/dynamodb';
 import { format } from '@fast-csv/format';
 import { ulid } from 'ulid';
 import {
+  INITIAL_GENERATION_NUMBER,
   MAX_PERCENT_TOO_CLOSE_ANSWERS_PER_GEN,
   PERCENTAGE_CONSIDERED_TOO_CLOSE,
   TABLE_QUESTION,
@@ -12,6 +13,7 @@ import {
 import { generateQuestionBundle, sliceIntoChunks } from '../../helpers';
 import {
   DynamoQuestion,
+  DynamoRun,
   DynamoTip,
   ImportedQuestionSettings,
   RunStrategy,
@@ -107,6 +109,21 @@ export async function getQuestion(id: string, { dynamo }: UserModelContext) {
   return Item as DynamoQuestion;
 }
 
+export async function getQuestionRun(
+  id: string,
+  run: number,
+  { dynamo }: UserModelContext
+) {
+  const { Item } = await dynamo
+    .get({
+      TableName: TABLE_QUESTION,
+      Key: { id, qsk: `${id}#true#R#${run}` },
+    })
+    .promise();
+
+  return Item as DynamoRun;
+}
+
 export async function getEnabledQuestionRuns(
   id: string,
   { dynamo }: UserModelContext
@@ -143,7 +160,7 @@ export async function createQuestionRun(
     qsk: `${question.id}#true#R#${runId}`,
     gsi_pk: `${question.id}#true#R#${runId}`,
     gsi_sk: `${question.id}#R#${runId}`,
-    generation: 1,
+    generation: INITIAL_GENERATION_NUMBER,
     previousTips:
       question.strategy.initialTips[
         runIndex % question.strategy.initialTips.length
@@ -253,54 +270,58 @@ export async function createQuestionTip(
 
   // TODO: maybe consider mutex and/or transaction here
   return dynamo
-    .put(
-      {
-        ReturnValues: 'ALL_OLD',
-        TableName: TABLE_QUESTION,
-        Item: params,
-      },
-      (error, { Attributes: newTip }) => {
-        if (error) {
-          console.error('Dynamo put operation failed: ', error);
-        }
+    .put({
+      ReturnValues: 'ALL_OLD',
+      TableName: TABLE_QUESTION,
+      Item: params,
+    })
+    .promise()
+    .then(() => {
+      // If we hit tips per generation threshold, start new generation by updating RUN
+      if (
+        answered !== false &&
+        knewAnswer !== true &&
+        currentTipsWithAnswer.length + 1 >= strategy.tipsPerGeneration &&
+        !runLock.getLock(`${id}#${run}#${generation}`)
+      ) {
+        // We first check, whether RUN is still enabled and whether generation is still the same
+        getQuestionRun(id, run, { dynamo }).then((dbRun) => {
+          if (dbRun && dbRun.generation === generation) {
+            // Lock current Q#RUN#GEN to prevent creating multiple generations
+            // we release current generation when we create next generation in future
+            runLock.lock(`${id}#${run}#${generation}`);
 
-        // If we hit tips per generation threshold, start new generation by updating RUN
-        if (
-          answered !== false &&
-          knewAnswer !== true &&
-          currentTipsWithAnswer.length + 1 >= strategy.tipsPerGeneration &&
-          !runLock.getLock(`${id}#${run}#${generation}`)
-        ) {
-          // Lock current Q#RUN#GEN to prevent creating multiple generations
-          // we release current generation when we create next generation in future
-          runLock.lock(`${id}#${run}#${generation}`);
+            const allGenerationTips = [
+              ...currentTipsWithAnswer.map((t: any) => t.data.tip),
+              tip,
+            ];
+            // If we hit correct answer for too many people in generation, we disable this RUN
+            if (
+              isGenerationTooCloseToCorrectAnswer(
+                allGenerationTips,
+                correctAnswer
+              )
+            ) {
+              return disableRun(id, run, { dynamo });
+            }
 
-          const allGenerationTips = [
-            ...currentTipsWithAnswer.map((t: any) => t.data.tip),
-            tip,
-          ];
-          // If we hit correct answer for too many people in generation, we disable this RUN
-          if (
-            isGenerationTooCloseToCorrectAnswer(
-              allGenerationTips,
-              correctAnswer
-            )
-          ) {
-            return disableRun(id, run, { dynamo });
+            // new generation and new previous tips
+            return updateCurrentGeneration(
+              id,
+              run,
+              generation + 1,
+              getNewPreviousTips(allGenerationTips, correctAnswer, strategy),
+              { dynamo, runLock }
+            );
           }
-
-          // new generation and new previous tips
-          return updateCurrentGeneration(
-            id,
-            run,
-            generation + 1,
-            getNewPreviousTips(allGenerationTips, correctAnswer, strategy),
-            { dynamo, runLock }
-          );
-        }
+        });
       }
-    )
-    .promise();
+    })
+    .catch((error) => {
+      if (error) {
+        console.error('Dynamo put operation failed: ', error);
+      }
+    });
 }
 
 export async function getCurrentGenerationTips(
@@ -477,7 +498,9 @@ async function updateCurrentGeneration(
   } catch (e) {
     console.error('Update DynamoDB generation failed: ', e);
   } finally {
-    runLock.unlock(`${questionId}#${runId}#${newCurrentGeneration - 1}`);
+    if (newCurrentGeneration - 2 >= INITIAL_GENERATION_NUMBER) {
+      runLock.unlock(`${questionId}#${runId}#${newCurrentGeneration - 2}`);
+    }
   }
 }
 
