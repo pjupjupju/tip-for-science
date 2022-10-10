@@ -1,5 +1,6 @@
 import { gql, makeExecutableSchema } from 'apollo-server-express';
 import {
+  batchSlugify,
   exportData,
   importQuestions,
   saveTip,
@@ -73,6 +74,7 @@ export const typeDefs = /* GraphQL */ gql`
   }
 
   type Mutation {
+    batchSlugify: String
     exportData: String
     importQuestions: Boolean
     saveTip(
@@ -151,6 +153,7 @@ type Tip = {
 
 export const resolvers = {
   Mutation: {
+    batchSlugify,
     exportData,
     importQuestions,
     saveTip,

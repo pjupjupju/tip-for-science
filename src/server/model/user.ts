@@ -1,4 +1,5 @@
-import { DynamoDB } from 'aws-sdk';
+import { AWSError, DynamoDB } from 'aws-sdk';
+import { ScanOutput } from 'aws-sdk/clients/dynamodb';
 import { ulid } from 'ulid';
 import * as yup from 'yup';
 import {
@@ -7,7 +8,8 @@ import {
   USERS_BY_EMAIL_INDEX,
   PLAYERS_BY_HIGHSCORE,
 } from '../../config';
-import { generateQuestionBundle } from '../../helpers';
+import { generateQuestionBundle, sliceIntoChunks } from '../../helpers';
+import { getUniqueSlug } from '../io';
 import { ProgressItem, User, UserRole, UserSettings } from './types';
 
 interface UserModelContext {
@@ -43,7 +45,7 @@ export async function createUser(
     userskey: `USER#${id}`,
     password: args.password,
     role: args.role,
-    slug: Date.now().toString(), // use timestamp converted to string for now
+    slug: getUniqueSlug(id),
     updatedAt: new Date().toISOString(),
     score: 0,
   };
@@ -283,6 +285,70 @@ export async function getUserProgress(
   const result = await dynamo.query(params).promise();
 
   return result.Items;
+}
+
+export async function batchSlugifyUsers({
+  dynamo,
+}: UserModelContext): Promise<any> {
+  const params = {
+    TableName: TABLE_USER,
+    FilterExpression: 'begins_with(#userskey, :userskey)',
+    ExpressionAttributeNames: { '#userskey': 'userskey' },
+    ExpressionAttributeValues: {
+      ':userskey': 'USER#',
+    },
+  };
+
+  let users: string[] = [];
+
+  const onScanUsersAndUpdateBundles = async (
+    err: AWSError,
+    data: ScanOutput
+  ): Promise<void> => {
+    if (err) {
+      console.error('Unable to scan the table. Error:', JSON.stringify(err));
+    } else {
+      const additionalUsers = (data as any).Items;
+
+      if (additionalUsers.length > 0) {
+        const chunks = sliceIntoChunks(additionalUsers, 24);
+
+        const paramsForEachChunk = chunks.map((chunk) =>
+          chunk.map(({ id }) => ({
+            Update: {
+              TableName: TABLE_USER,
+              Key: { id, userskey: `USER#${id}` },
+              UpdateExpression: 'set slug = :slug',
+              ExpressionAttributeValues: {
+                ':slug': getUniqueSlug(id),
+              },
+            },
+          }))
+        );
+
+        const allPromises = paramsForEachChunk.map((paramsForChunk) =>
+          dynamo
+            .transactWrite({
+              TransactItems: paramsForChunk,
+            })
+            .promise()
+        );
+
+        await Promise.all(allPromises);
+      }
+
+      users = [...users, ...additionalUsers];
+
+      if (typeof data.LastEvaluatedKey !== 'undefined') {
+        dynamo.scan(
+          { ...params, ExclusiveStartKey: data.LastEvaluatedKey },
+          onScanUsersAndUpdateBundles
+        );
+      }
+    }
+  };
+
+  dynamo.scan(params, onScanUsersAndUpdateBundles);
 }
 
 async function getQuestionCorpus(
