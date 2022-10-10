@@ -1,4 +1,5 @@
 export * from './authQuery';
+export * from './batchSlugifyMutation';
 export * from './exportMutation';
 export * from './getUserStats';
 export * from './highScoreQuery';

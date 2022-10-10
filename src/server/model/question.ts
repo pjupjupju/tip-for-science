@@ -511,9 +511,11 @@ async function updateUserBatches(
 ): Promise<any> {
   const params = {
     TableName: TABLE_USER,
-    FilterExpression: '#role <> :adminrole',
-    ExpressionAttributeNames: { '#role': 'role' },
+    FilterExpression:
+      'begins_with(#userskey, :userskey) and #role <> :adminrole',
+    ExpressionAttributeNames: { '#role': 'role', '#userskey': 'userskey' },
     ExpressionAttributeValues: {
+      ':userskey': 'USER#',
       ':adminrole': 'admin',
     },
   };
