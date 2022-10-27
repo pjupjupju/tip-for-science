@@ -1,17 +1,11 @@
-import {
-  uniqueNamesGenerator,
-  Config,
-  adjectives,
-} from 'unique-names-generator';
-import { adverbs, nouns } from './words';
+import { adjectives, adverbs, nouns } from './words';
 
-const customConfig: Config = {
-  dictionaries: [adverbs, adjectives, nouns],
-  separator: '-',
-  length: 3,
+const getUniqueSlug = (index: number): string => {
+  const adverb = adverbs[(index + 161) % adverbs.length];
+  const adjective = adjectives[(index + 16) % adjectives.length];
+  const noun = nouns[(index + 1) % nouns.length];
+
+  return `${adverb}-${adjective}-${noun}`;
 };
-
-const getUniqueSlug = (seed: string | number): string =>
-  uniqueNamesGenerator({ ...customConfig, seed });
 
 export { getUniqueSlug };

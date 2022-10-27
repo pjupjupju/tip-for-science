@@ -113,6 +113,31 @@ const Stats = ({ user }: { user: User | null }) => {
               </Text>
             </Text>
           ))}
+      {highScore &&
+        highScore.slice(0, 5).filter((player) => player.slug === user.slug)
+          .length === 0 && (
+          <Text color="secondary">
+            <Text fontWeight="bold" as="span" color="accent" ml="5">
+              {/* eslint-disable jsx-a11y/accessible-emoji */}
+              <Text
+                as="span"
+                ml="-24px"
+                aria-label="champion"
+                role="img"
+                sx={{ position: 'absolute' }}
+              >
+                🎮
+              </Text>
+            </Text>{' '}
+            <Text as="span" color="primary" fontWeight="bold">
+              {user.slug}
+            </Text>
+            :{' '}
+            <Text as="span" color="accent" fontWeight="bold">
+              {getMyScoreData.getMyScore.toFixed(2)}
+            </Text>
+          </Text>
+        )}
     </>
   );
 };
