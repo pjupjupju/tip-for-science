@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom';
 import { Box, Button, Flex, Heading, Text } from 'rebass';
 import { BackButton, Container, Spinner } from '../../components';
 import {
-  BATCH_SLUGIFY_MUTATION,
   EXPORT_MUTATION,
   IMPORT_MUTATION,
   ONLINE_STATS_QUERY,
@@ -31,15 +30,6 @@ interface DashboardProps {
 const Dashboard = ({ user }: DashboardProps) => {
   const [log, setLog] = useState<string[]>([]);
   const { loading, data } = useQuery(ONLINE_STATS_QUERY);
-
-  const [batchSlugify, { loading: batchSlugifyLoading }] = useMutation(
-    BATCH_SLUGIFY_MUTATION,
-    {
-      onCompleted: () => {
-        setLog([...log, JSON.stringify('Slugifying completed.')]);
-      },
-    }
-  );
 
   const [importQuestions, { loading: importLoading }] = useMutation(
     IMPORT_MUTATION,
@@ -73,9 +63,6 @@ const Dashboard = ({ user }: DashboardProps) => {
     }
   );
 
-  const handleClickBatchSlugify = () => {
-    batchSlugify();
-  };
   const handleClickExport = () => {
     exportData();
   };
@@ -132,14 +119,6 @@ const Dashboard = ({ user }: DashboardProps) => {
               onClick={handleClickImport}
             >
               {importLoading ? '... importing' : 'Import'}
-            </Button>
-          </Flex>
-          <Flex flex={1} flexDirection="column" mr={1}>
-            <Text color="white" fontFamily="Tahoma">
-              Batch slugify
-            </Text>
-            <Button width="50%" my={2} onClick={handleClickBatchSlugify}>
-              {batchSlugifyLoading ? '... slugifying' : 'Slugify'}
             </Button>
           </Flex>
         </Flex>

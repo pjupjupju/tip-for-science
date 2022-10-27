@@ -51,7 +51,10 @@ const Stats = ({ user }: { user: User | null }) => {
   return (
     <>
       <Heading color="secondary" fontSize={[2, 3, 4]} my="4" mx="3">
-        Tvoje skóre: {getMyScoreData.getMyScore}
+        Tvoje skóre:{' '}
+        <Text as="span" color="accent">
+          {getMyScoreData.getMyScore}
+        </Text>
       </Heading>
       <Heading color="secondary" fontSize={[2, 3, 4]} mb="2" mx="3">
         Vývoj tvého skóre:
