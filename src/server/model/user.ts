@@ -27,6 +27,7 @@ export async function createUser(
   const id = ulid();
 
   const questions = await getQuestionCorpus(dynamo);
+  const currentIndex = await getCurrentUserIndex(dynamo);
 
   const initialQuestions = questions
     .filter((q: any) => q.isInit)
@@ -45,7 +46,7 @@ export async function createUser(
     userskey: `USER#${id}`,
     password: args.password,
     role: args.role,
-    slug: getUniqueSlug(id),
+    slug: '',
     updatedAt: new Date().toISOString(),
     score: 0,
   };
@@ -57,21 +58,7 @@ export async function createUser(
     throw new yup.ValidationError('Tento email už existuje', null, 'email');
   }
 
-  await dynamo
-    .transactWrite({
-      TransactItems: (
-        [
-          // write user
-          {
-            Put: {
-              TableName: TABLE_USER,
-              Item: user,
-            },
-          },
-        ] as (DynamoDB.DocumentClient.TransactWriteItem | undefined)[]
-      ).filter(Boolean) as DynamoDB.DocumentClient.TransactWriteItem[],
-    })
-    .promise();
+  await executeTransactWriteUser(user, currentIndex, dynamo);
 
   return user;
 }
@@ -290,6 +277,9 @@ export async function getUserProgress(
 export async function batchSlugifyUsers({
   dynamo,
 }: UserModelContext): Promise<any> {
+  const currentDbIndex = await getCurrentUserIndex(dynamo);
+  let currentIndex = currentDbIndex;
+
   const params = {
     TableName: TABLE_USER,
     FilterExpression: 'begins_with(#userskey, :userskey)',
@@ -313,14 +303,16 @@ export async function batchSlugifyUsers({
       if (additionalUsers.length > 0) {
         const chunks = sliceIntoChunks(additionalUsers, 24);
 
-        const paramsForEachChunk = chunks.map((chunk) =>
-          chunk.map(({ id }) => ({
+        const paramsForEachChunk = chunks.map((chunk, chunkIndex) =>
+          chunk.map(({ id }, userInChunkIndex) => ({
             Update: {
               TableName: TABLE_USER,
               Key: { id, userskey: `USER#${id}` },
               UpdateExpression: 'set slug = :slug',
               ExpressionAttributeValues: {
-                ':slug': getUniqueSlug(id),
+                ':slug': getUniqueSlug(
+                  currentIndex + chunkIndex * 24 + userInChunkIndex + 1
+                ),
               },
             },
           }))
@@ -338,17 +330,61 @@ export async function batchSlugifyUsers({
       }
 
       users = [...users, ...additionalUsers];
+      currentIndex = currentIndex + users.length;
 
       if (typeof data.LastEvaluatedKey !== 'undefined') {
         dynamo.scan(
           { ...params, ExclusiveStartKey: data.LastEvaluatedKey },
           onScanUsersAndUpdateBundles
         );
+      } else {
+        await dynamo
+          .update({
+            TableName: TABLE_USER,
+            Key: { id: 'METADATA', userskey: 'METADATA' },
+            UpdateExpression: 'SET currentIndex = :cindex',
+            ExpressionAttributeValues: {
+              ':cindex': currentIndex,
+            },
+          })
+          .promise();
       }
     }
   };
 
   dynamo.scan(params, onScanUsersAndUpdateBundles);
+}
+
+async function getCurrentUserIndex(dynamo: DynamoDB.DocumentClient) {
+  const { Item } = await dynamo
+    .get({
+      TableName: TABLE_USER,
+      Key: { id: 'METADATA', userskey: 'METADATA' },
+    })
+    .promise();
+
+  if (!Item) {
+    const paramsInsert = {
+      TableName: TABLE_USER,
+      Item: {
+        currentIndex: 0,
+        id: 'METADATA',
+        userskey: 'METADATA',
+      },
+    };
+    await dynamo
+      .put(paramsInsert, (err) => {
+        if (err) {
+          console.error(
+            'Dynamo create METADATA currentIndex operation failed: ',
+            err
+          );
+        }
+      })
+      .promise();
+  }
+
+  return Item?.currentIndex || 0;
 }
 
 async function getQuestionCorpus(
@@ -369,4 +405,69 @@ async function getQuestionCorpus(
   const result = await dynamo.query(params).promise();
 
   return result.Items;
+}
+
+export async function executeTransactWriteUser(
+  user: User,
+  index,
+  dynamo: DynamoDB.DocumentClient
+): Promise<DynamoDB.DocumentClient.TransactWriteItemsOutput> {
+  let currentIndex = index;
+  const getMetaData = (current: number) => ({
+    Update: {
+      TableName: TABLE_USER,
+      Key: { id: 'METADATA', userskey: 'METADATA' },
+      ConditionExpression: 'currentIndex = :currindex',
+      UpdateExpression: 'SET currentIndex = currentIndex + :incr',
+      ExpressionAttributeValues: {
+        ':incr': 1,
+        ':currindex': currentIndex,
+      },
+    },
+  });
+  const transactionRequest = dynamo.transactWrite({
+    TransactItems: [
+      // increment counter
+      getMetaData(currentIndex),
+      // write user
+      {
+        Put: {
+          TableName: TABLE_USER,
+          Item: { ...user, slug: getUniqueSlug(currentIndex + 1) },
+        },
+      },
+    ],
+  });
+  let cancellationReasons: any[];
+  transactionRequest.on('extractError', (response) => {
+    try {
+      cancellationReasons = JSON.parse(
+        response.httpResponse.body.toString()
+      ).CancellationReasons;
+    } catch (err) {
+      // suppress this just in case some types of errors aren't JSON parseable
+      console.error('Error extracting cancellation error', err);
+    }
+  });
+  return new Promise((resolve, reject) => {
+    transactionRequest.send((err, response) => {
+      if (err) {
+        console.error('Error performing transactWrite', {
+          cancellationReasons,
+          err,
+        });
+
+        if (
+          cancellationReasons.filter(
+            (reason) => reason.Code === 'ConditionalCheckFailed'
+          ).length > 0
+        ) {
+          return executeTransactWriteUser(user, index + 1, dynamo);
+        }
+
+        return reject(err);
+      }
+      return resolve(response);
+    });
+  });
 }
