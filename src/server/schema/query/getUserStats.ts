@@ -47,9 +47,14 @@ export async function getUserStats(
     }
   }
 
-  if (days.length > 0 && days[0].score !== 0) {
+  if (days[days.length - 1].day - days[0].day < 24 * 60 * 60 * 1000 * 5) {
     const firstDay = new Date(days[0].day);
-    days.unshift({ day: firstDay.setDate(firstDay.getDate() - 1), score: 0 });
+    const daysNeeded = 5 - days.length;
+
+    for (let i = daysNeeded; i > 0; i--) {
+      const addingDay = new Date(days[0].day);
+      days.unshift({ day: addingDay.setDate(firstDay.getDate() - (daysNeeded - i + 1)), score: 0 });
+    }
   }
 
   return {
