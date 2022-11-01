@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { ResponsiveLine } from '@nivo/line';
+import { getColor } from '../../theme';
 
 type StatsData = { x: number; y: number };
 interface UserScoreCurveProps {
@@ -8,6 +9,7 @@ interface UserScoreCurveProps {
 }
 
 const commonProperties = {
+  colors: { datum: 'color' },
   maxHeight: 400,
   margin: { top: 20, right: 20, bottom: 60, left: 80 },
   pointSize: 8,
@@ -16,35 +18,19 @@ const commonProperties = {
   pointBorderColor: { theme: 'background' },
 };
 
-const getTickRule = (days: number) => {
-  if (days < 10) {
-    return 'every 1 days';
-  }
-
-  if (days < 30) {
-    return 'every 2 days';
-  }
-
-  if (days < 90) {
-    return 'every 10 days';
-  }
-
-  return 'every 1 month';
-};
-
 const UserScoreCurve = ({ stats }: UserScoreCurveProps) => {
   const data = [
     {
       id: 'userScoreCurve',
+      color: getColor('accent'),
       data: stats.map(({ x, y }: StatsData) => ({
         y,
-        x: moment(x).format('YYYY-MM-DD'),
+        x: moment(x).format('YYYY-MM-DD HH:mm:ss'),
       })),
     },
   ];
 
-  const daysBetween =
-    (stats[stats.length - 1].x - stats[0].x) / (24 * 60 * 60 * 1000);
+  console.log('data: ', data);
 
   return (
     <ResponsiveLine
@@ -52,19 +38,19 @@ const UserScoreCurve = ({ stats }: UserScoreCurveProps) => {
       {...commonProperties}
       xScale={{
         type: 'time',
-        format: '%Y-%m-%d',
+        format: '%Y-%m-%d %H:%M:%S',
         useUTC: false,
-        precision: 'day',
+        precision: 'minute',
       }}
-      xFormat="time:%Y-%m-%d"
+      xFormat="time:%Y-%m-%d %H:%M:%S"
       axisBottom={{
         format: '%d.%m.%Y',
-        tickValues: getTickRule(daysBetween),
+        tickValues: 6,
         tickRotation: -37,
       }}
-      curve="linear"
+      curve="basis"
       theme={{
-        grid: { line: { stroke: '#9A9A9A', strokeDasharray: '1 5' } },
+        grid: { line: { stroke: '#2A2A2A', strokeDasharray: '1 2' } },
       }}
     />
   );
