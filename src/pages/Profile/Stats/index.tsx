@@ -39,6 +39,7 @@ const Stats = ({ user }: { user: User | null }) => {
       </Flex>
     );
   }
+  
   const stats = data.getUserStats.days.map(
     (d: { day: string; score: number }) => ({
       x: d.day,

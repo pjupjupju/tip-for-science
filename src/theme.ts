@@ -22,3 +22,5 @@ export const tipForScienceTheme = {
     heading: 'Raleway',
   },
 };
+
+export const getColor = (colorId: string) => tipForScienceTheme.colors[colorId];
