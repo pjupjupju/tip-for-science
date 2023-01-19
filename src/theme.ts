@@ -17,7 +17,7 @@ export const tipForScienceTheme = {
   },
   fonts: {
     ...(theme as any).fonts,
-    // todo: why this doesn't work, probably some problem with rebass and emotion?
+    // todo: why this doesn't work - because mismatch of emotion/rebass/react versions, outdated
     body: 'Jost',
     heading: 'Raleway',
   },
