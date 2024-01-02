@@ -8,6 +8,7 @@ import { ThemeProvider } from 'emotion-theming';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 import React from 'react';
+import { IntlProvider } from 'react-intl';
 import { Helmet } from 'react-helmet';
 import { StaticRouterContext } from 'react-router';
 import { StaticRouter } from 'react-router-dom';
@@ -143,11 +144,13 @@ export async function createServer(): Promise<express.Application> {
       const context: StaticRouterContext = {};
       const bootstrap = (
         <StaticRouter context={context} location={req.url || '/'}>
+          <IntlProvider locale="en" defaultLocale="en">
           <ApolloProvider client={client}>
             <ThemeProvider theme={tipForScienceTheme}>
               <App />
             </ThemeProvider>
           </ApolloProvider>
+          </IntlProvider>
         </StaticRouter>
       );
 

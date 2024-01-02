@@ -4,6 +4,7 @@ import { BrowserTracing } from "@sentry/tracing";
 // @ts-ignore
 import { createUploadLink } from 'apollo-upload-client';
 import React from 'react';
+import { IntlProvider } from 'react-intl';
 import { hydrate } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'emotion-theming';
@@ -28,11 +29,13 @@ const client = new ApolloClient({
 
 hydrate(
   <BrowserRouter>
+   <IntlProvider locale="en" defaultLocale="en">
     <ApolloProvider client={client}>
       <ThemeProvider theme={tipForScienceTheme}>
         <App />
       </ThemeProvider>
     </ApolloProvider>
+    </IntlProvider>
   </BrowserRouter>,
   document.getElementById('root')
 );

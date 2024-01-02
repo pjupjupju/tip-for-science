@@ -1,10 +1,11 @@
 import React from 'react';
+import Helmet from 'react-helmet';
+import { FormattedMessage } from 'react-intl';
 import { Flex, Heading, Text } from 'rebass';
 import { useHistory } from 'react-router-dom';
 import { MenuButton, Container } from '../../components';
 import { TargetImage } from '../../components/TargetImage';
 import { User, UserRole } from '../../types';
-import Helmet from 'react-helmet';
 
 interface HomeProps {
   user: User | null;
@@ -93,7 +94,9 @@ const Home = ({ user, onLogOut }: HomeProps) => {
               )}
               {user && user.role !== UserRole.admin && (
                 <MenuButton onClick={handleClickPlay} mb="2" primary>
-                  Hrát
+                  <FormattedMessage id="app.home.menu.play"
+                    defaultMessage="Play"
+                    description="Play button" />
                 </MenuButton>
               )}
               <MenuButton onClick={handleClickLogOut}>Odhlásit se</MenuButton>
@@ -113,6 +116,9 @@ const Home = ({ user, onLogOut }: HomeProps) => {
         textAlign="center"
         fontSize={1}
       >
+        <FormattedMessage
+          defaultMessage="This is beta version."
+          description="Beta warning" />
         Toto je betaverze. Pokud narazíš na nějaký problém nebo máš nějakou
         připomínku,
         <br />
