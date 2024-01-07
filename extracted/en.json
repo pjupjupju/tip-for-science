@@ -1,2 +1,10 @@
 {
+  "8Z3mIe": {
+    "defaultMessage": "This is beta version.",
+    "description": "Beta warning"
+  },
+  "app.home.menu.play": {
+    "defaultMessage": "Play",
+    "description": "Play button"
+  }
 }

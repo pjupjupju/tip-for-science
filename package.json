@@ -68,7 +68,7 @@
     "user:create:admin": "ts-node -P migrations/tsconfig.json migrations/create_admin.ts",
     "seed:dynamodb": "ts-node -P migrations/tsconfig.json migrations/create_seed_data.ts",
     "parse:prevtips": "ts-node -P migrations/tsconfig.json migrations/parse_prev_tips.ts",
-    "extract": "formatjs extract src/**/*.{ts,tsx,jsx,js} --ignore='**/*.d.ts' --id-interpolation-pattern '[sha512:contenthash:base64:6]' --out-file ./extracted/en.json"
+    "extract": "formatjs extract 'src/**/*.{ts,tsx,jsx,js}' --ignore='**/*.d.ts' --id-interpolation-pattern '[sha512:contenthash:base64:6]' --out-file ./extracted/en.json"
   },
   "eslintConfig": {
     "extends": "react-app"
