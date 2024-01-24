@@ -1,5 +1,6 @@
 import React from 'react';
 import Helmet from 'react-helmet';
+import { FormattedMessage } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 
 const Page404 = () => (
@@ -8,7 +9,9 @@ const Page404 = () => (
     <h1 style={{ color: 'white', textAlign: 'center' }}>404</h1>
     <h3 style={{ textAlign: 'center' }}>
       <NavLink to="/" style={{ color: 'white', textAlign: 'center' }}>
-        Domů 🏚
+        <FormattedMessage id="app.404.footer.home"
+          defaultMessage="Home 🏠"
+          description="Home button" />
       </NavLink>
     </h3>
   </>

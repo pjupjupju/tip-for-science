@@ -23,6 +23,11 @@ import { DynamoSessionStore, RunCache, RunLock, runMigrations } from './io';
 import { createContext, typeDefs, resolvers, schema } from './schema';
 import { tipForScienceTheme } from '../theme';
 import { AWS_REGION, TABLE_SESSION } from '../config';
+import csMessages from '../translations/cs.json';
+
+const messages = {
+  cs: csMessages,
+};
 
 // eslint-disable-next-line import/no-dynamic-require
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
@@ -38,9 +43,9 @@ export async function createServer(): Promise<express.Application> {
     env === 'production'
       ? { region: AWS_REGION }
       : {
-          endpoint: 'http://localhost:8000',
-          region: AWS_REGION,
-        }
+        endpoint: 'http://localhost:8000',
+        region: AWS_REGION,
+      }
   );
 
   const runCache = new RunCache(15, 5, { dynamo });
@@ -144,12 +149,12 @@ export async function createServer(): Promise<express.Application> {
       const context: StaticRouterContext = {};
       const bootstrap = (
         <StaticRouter context={context} location={req.url || '/'}>
-          <IntlProvider locale="en" defaultLocale="en">
-          <ApolloProvider client={client}>
-            <ThemeProvider theme={tipForScienceTheme}>
-              <App />
-            </ThemeProvider>
-          </ApolloProvider>
+          <IntlProvider locale="cs" defaultLocale="en" messages={messages.cs}>
+            <ApolloProvider client={client}>
+              <ThemeProvider theme={tipForScienceTheme}>
+                <App />
+              </ThemeProvider>
+            </ApolloProvider>
           </IntlProvider>
         </StaticRouter>
       );
@@ -164,8 +169,8 @@ export async function createServer(): Promise<express.Application> {
         return assets[entrypoint]
           ? assets[entrypoint].css
             ? assets[entrypoint].css.map((asset) => (
-                <link rel="stylesheet" href={asset} />
-              ))
+              <link rel="stylesheet" href={asset} />
+            ))
             : ''
           : '';
       };

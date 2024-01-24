@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-
+import { FormattedMessage } from 'react-intl';
 import { Container } from '../../components';
 import { AuthQueryName, SIGN_UP_MUTATION } from '../../gql';
 import {
@@ -74,7 +74,9 @@ const SignUp = () => {
         p="3"
       >
         <Label htmlFor="email" sx={labelStyles}>
-          E-mail
+        <FormattedMessage id="app.signup.menu.email"
+                  defaultMessage="E-mail"
+                  description="SignUp Email label" />
         </Label>
         <Input
           id="email"
@@ -85,7 +87,9 @@ const SignUp = () => {
           {...register('email')}
         />
         <Label htmlFor="password" sx={labelStyles}>
-          Heslo
+        <FormattedMessage id="app.signup.menu.password"
+                  defaultMessage="Password"
+                  description="SignUp Password label" />
         </Label>
         <Input
           id="password"
@@ -95,7 +99,9 @@ const SignUp = () => {
           {...register('password')}
         />
         <Label htmlFor="password" sx={labelStyles}>
-          Heslo znovu
+          <FormattedMessage id="app.signup.menu.passwordagain"
+                  defaultMessage="Repeat password"
+                  description="SignUp Repeat Password label" />
         </Label>
         <Input
           id="confirmPassword"
@@ -106,19 +112,26 @@ const SignUp = () => {
         />
         <Flex justifyContent="center" my={2}>
           <Text color="white" fontSize="1">
-            Kliknutím na "Vytvořit" vyjadřuješ souhlas se{' '}
+          <FormattedMessage id="app.signup.menu.agree"
+                  defaultMessage="By clicking on Create you agree with"
+                  description="SignUp Agree text" />
+            {' '}
             <HrefLink
               href="/consent"
               target="_blank"
               style={{ color: '#D76B90' }}
             >
-              zpracováním osobních údajů
+              <FormattedMessage id="app.signup.menu.processing"
+                  defaultMessage="processing of personal data"
+                  description="SignUp Processing text" />
             </HrefLink>
             .
           </Text>
         </Flex>
         <Button type="submit" my={3}>
-          Vytvořit
+        <FormattedMessage id="app.signup.menu.create"
+                  defaultMessage="Create"
+                  description="SignUp Agree text" />
         </Button>
         {errors.length > 0 && (
           <Box>
@@ -132,16 +145,23 @@ const SignUp = () => {
 
         <Flex justifyContent="center">
           <Text color="white" fontSize="1">
-            Máš účet?{' '}
+          <FormattedMessage id="app.signup.menu.acount"
+                  defaultMessage="Already have an account?"
+                  description="SignUp Account text" />
+            {' '}
             <Link to="/signin" style={{ color: '#FF0070' }}>
-              Přihlásit se
+              <FormattedMessage id="app.signup.menu.login"
+                  defaultMessage="Log in"
+                  description="SignUp Login text" />
             </Link>{' '}
           </Text>
         </Flex>
         <Flex justifyContent="center" my="2">
           <Text color="white" fontSize="1">
             <Link to="/" style={{ color: '#D76B90' }}>
-              Domů
+            <FormattedMessage id="app.signup.menu.home"
+                  defaultMessage="Home"
+                  description="SignUp Home link" />
             </Link>
           </Text>
         </Flex>

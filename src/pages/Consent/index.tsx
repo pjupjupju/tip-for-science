@@ -7,7 +7,7 @@ const Consent = () => (
   <Container>
     <Helmet title="Souhlas s podmínkami"></Helmet>
     <Text color="secondary" my="6">
-      Tímto uděluji souhlas Bc. Pavlíně Hillerové (hillerovap@natur.cuni.cz),
+      Tímto uděluji souhlas Mgr. Pavlíně Hillerové (hillerovap@natur.cuni.cz),
       která je správcem osobních údajů, se zpracováním svých osobních údajů
       v rozsahu
       <br />
