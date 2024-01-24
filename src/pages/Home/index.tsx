@@ -77,11 +77,15 @@ const Home = ({ user, onLogOut }: HomeProps) => {
         >
           <Flex mb="2">
             <MenuButton flex="1" onClick={handleClickAbout}>
-              Jak hrát?
+            <FormattedMessage id="app.home.menu.tutorial"
+                  defaultMessage="Tutorial"
+                  description="Tutorial button" />
             </MenuButton>
             {isSignedIn && (
               <MenuButton ml="2" flex="1" onClick={handleClickProfile}>
-                Profil
+                <FormattedMessage id="app.home.menu.profile"
+                  defaultMessage="Profile"
+                  description="Profile button" />
               </MenuButton>
             )}
           </Flex>
@@ -89,7 +93,9 @@ const Home = ({ user, onLogOut }: HomeProps) => {
             <>
               {user && user.role === UserRole.admin && (
                 <MenuButton onClick={handleClickDashboard} mb="2" primary>
-                  Dashboard
+                  <FormattedMessage id="app.home.menu.dashboard"
+                    defaultMessage="Dashboard"
+                    description="Dashboard button" />
                 </MenuButton>
               )}
               {user && user.role !== UserRole.admin && (
@@ -99,12 +105,18 @@ const Home = ({ user, onLogOut }: HomeProps) => {
                     description="Play button" />
                 </MenuButton>
               )}
-              <MenuButton onClick={handleClickLogOut}>Odhlásit se</MenuButton>
+              <MenuButton onClick={handleClickLogOut}>
+                <FormattedMessage id="app.home.menu.logout"
+                  defaultMessage="Log out"
+                  description="Logout button" />
+              </MenuButton>
             </>
           )}
           {!isSignedIn && (
             <MenuButton onClick={handleClickSignIn} primary>
-              Přihlásit se
+              <FormattedMessage id="app.home.menu.login"
+                defaultMessage="Log in"
+                description="Login button" />
             </MenuButton>
           )}
         </Flex>
@@ -116,13 +128,10 @@ const Home = ({ user, onLogOut }: HomeProps) => {
         textAlign="center"
         fontSize={1}
       >
-        <FormattedMessage
-          defaultMessage="This is beta version."
-          description="Beta warning" />
-        Toto je betaverze. Pokud narazíš na nějaký problém nebo máš nějakou
-        připomínku,
-        <br />
-        napiš nám na tipforscience@protonmail.com, díky :)
+        <FormattedMessage id="app.home.footer.beta"
+          defaultMessage="This is just a beta version. If you encounter any bug,{br} contact us at tipforscience@protonmail.com"
+          description="Beta warning"
+          values={{ br: <br /> }} />
       </Text>
     </Container>
   );

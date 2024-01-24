@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Input, Label, Radio } from '@rebass/forms';
 import { Flex, Button, Text, Box } from 'rebass';
+import { FormattedMessage } from 'react-intl';
 import * as Yup from 'yup';
 import {
   inputStyles,
@@ -152,14 +153,19 @@ const Settings = ({ user }: { user: User | null }) => {
       flexDirection="column"
     >
       <Text color="secondary" my={3}>
-        Všechny údaje budou před vyhodnocením anonymizovány.
+        <FormattedMessage id="app.settings.menu.anon"
+          defaultMessage="All data will be anonymized before evaluation."
+          description="Anon text" />
       </Text>
-
       <Text color="secondary" fontSize={3} mt={2} mb={3} px={3}>
-        Nastavení účtu
+      <FormattedMessage id="app.settings.menu.settings"
+          defaultMessage="Account settings"
+          description="Settings header" />
       </Text>
       <Label htmlFor="email" sx={labelStyles}>
-        E-mail
+      <FormattedMessage id="app.settings.menu.email"
+          defaultMessage="E-mail"
+          description="Email label" />
       </Label>
       <Input
         id="email"
@@ -170,7 +176,9 @@ const Settings = ({ user }: { user: User | null }) => {
         {...register('email')}
       />
       <Label htmlFor="oldPassword" sx={labelStyles}>
-        Aktuální heslo
+      <FormattedMessage id="app.settings.menu.passwordcur"
+          defaultMessage="Current password"
+          description="PasswordCur label" />
       </Label>
       <Input
         autoComplete="new-password"
@@ -181,7 +189,9 @@ const Settings = ({ user }: { user: User | null }) => {
         {...register('oldPassword')}
       />
       <Label htmlFor="newPassword" sx={labelStyles}>
-        Nové heslo
+      <FormattedMessage id="app.settings.menu.passwordnew"
+          defaultMessage="New password"
+          description="PasswordNew label" />
       </Label>
       <Input
         id="newPassword"
@@ -191,7 +201,9 @@ const Settings = ({ user }: { user: User | null }) => {
         {...register('newPassword')}
       />
       <Label htmlFor="confirmNewPassword" sx={labelStyles}>
-        Nové heslo znovu
+      <FormattedMessage id="app.settings.menu.passwordnew2"
+          defaultMessage="Reenter new password"
+          description="PasswordNew2 label" />
       </Label>
       <Input
         id="confirmNewPassword"
@@ -202,12 +214,16 @@ const Settings = ({ user }: { user: User | null }) => {
       />
 
       <Text color="secondary" fontSize={3} mt={4} px={3}>
-        Nepovinné údaje
+      <FormattedMessage id="app.settings.menu.otherinfo"
+          defaultMessage="Additional (voluntary) info"
+          description="Otherinfo text" />
       </Text>
 
       <Box my={3}>
         <Label htmlFor="gender" sx={radioLabelStyles}>
-          Jsem
+        <FormattedMessage id="app.settings.menu.gender"
+          defaultMessage="I am..."
+          description="Gender label" />
         </Label>
         <Label color="white">
           <Radio
@@ -216,15 +232,21 @@ const Settings = ({ user }: { user: User | null }) => {
             id="woman"
             value="woman"
           />
-          Žena
+          <FormattedMessage id="app.settings.menu.woman"
+          defaultMessage="Woman"
+          description="Woman label" />
         </Label>
         <Label color="white">
           <Radio {...register('gender')} name="gender" id="man" value="man" />
-          Muž
+          <FormattedMessage id="app.settings.menu.man"
+          defaultMessage="Man"
+          description="Man label" />
         </Label>
         <Label color="white">
           <Radio {...register('gender')} name="gender" id="enby" value="enby" />
-          Nebinární
+          <FormattedMessage id="app.settings.menu.nonbinary"
+          defaultMessage="Nonbinary"
+          description="Nonbinary label" />
         </Label>
         <Label color="white">
           <Radio
@@ -233,7 +255,9 @@ const Settings = ({ user }: { user: User | null }) => {
             id="other"
             value="other"
           />
-          Jiné (můžeš uvést):
+          <FormattedMessage id="app.settings.menu.othergender"
+          defaultMessage="Other (feel free to specify):"
+          description="Othergender label" />
         </Label>
         {watchGender === 'other' && (
           <Input
@@ -276,10 +300,17 @@ const Settings = ({ user }: { user: User | null }) => {
             backgroundColor="#15de46"
             alignItems="center"
           >
-            <Text>✓ Nastavení uloženo</Text>
+            <Text>
+            <FormattedMessage id="app.settings.menu.saved"
+          defaultMessage="✓ Settings updated"
+          description="Settingsupdated label" /></Text>
           </Flex>
         )}
-        <Button sx={{ flex: 1, color: 'white' }}>Uložit</Button>
+        <Button sx={{ flex: 1, color: 'white' }}>
+        <FormattedMessage id="app.settings.menu.save"
+          defaultMessage="Save"
+          description="Save label" />
+          </Button>
       </Flex>
     </Flex>
   );

@@ -11,6 +11,11 @@ import { ThemeProvider } from 'emotion-theming';
 import fetch from 'unfetch';
 import { App } from './App';
 import { tipForScienceTheme } from './theme';
+import csMessages from './translations/cs.json';
+
+const messages = {
+  cs: csMessages
+};
 
 Sentry.init({
   dsn: "https://f68510b1330f420eaffce1b7bc357e1f@o1163471.ingest.sentry.io/6251596",
@@ -29,7 +34,7 @@ const client = new ApolloClient({
 
 hydrate(
   <BrowserRouter>
-   <IntlProvider locale="en" defaultLocale="en">
+   <IntlProvider locale="cs" defaultLocale="en" messages={messages.cs}>
     <ApolloProvider client={client}>
       <ThemeProvider theme={tipForScienceTheme}>
         <App />

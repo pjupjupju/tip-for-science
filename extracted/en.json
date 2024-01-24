@@ -1,10 +1,186 @@
 {
-  "8Z3mIe": {
-    "defaultMessage": "This is beta version.",
+  "app.404.footer.home": {
+    "defaultMessage": "Home 🏠",
+    "description": "Home button"
+  },
+  "app.dashboard.footer.home": {
+    "defaultMessage": "Home",
+    "description": "Home button"
+  },
+  "app.dashboard.menu.actions": {
+    "defaultMessage": "Actions",
+    "description": "Actions button"
+  },
+  "app.dashboard.menu.dasboard": {
+    "defaultMessage": "Dashboard",
+    "description": "Dashboard"
+  },
+  "app.dashboard.menu.export": {
+    "defaultMessage": "Export .csv to S3",
+    "description": "Export button"
+  },
+  "app.dashboard.menu.import": {
+    "defaultMessage": "Import from Spreadsheet",
+    "description": "Import button"
+  },
+  "app.dashboard.menu.online": {
+    "defaultMessage": "Online users playing:",
+    "description": "Online button"
+  },
+  "app.dashboard.menu.stats": {
+    "defaultMessage": "Stats",
+    "description": "Stats button"
+  },
+  "app.home.footer.beta": {
+    "defaultMessage": "This is just a beta version. If you encounter any bug,{br} contact us at tipforscience@protonmail.com",
     "description": "Beta warning"
+  },
+  "app.home.menu.dashboard": {
+    "defaultMessage": "Dashboard",
+    "description": "Dashboard button"
+  },
+  "app.home.menu.login": {
+    "defaultMessage": "Log in",
+    "description": "Login button"
+  },
+  "app.home.menu.logout": {
+    "defaultMessage": "Log out",
+    "description": "Logout button"
   },
   "app.home.menu.play": {
     "defaultMessage": "Play",
     "description": "Play button"
+  },
+  "app.home.menu.profile": {
+    "defaultMessage": "Profile",
+    "description": "Profile button"
+  },
+  "app.home.menu.tutorial": {
+    "defaultMessage": "Tutorial",
+    "description": "Tutorial button"
+  },
+  "app.settings.menu.anon": {
+    "defaultMessage": "All data will be anonymized before evaluation.",
+    "description": "Anon text"
+  },
+  "app.settings.menu.email": {
+    "defaultMessage": "E-mail",
+    "description": "Email label"
+  },
+  "app.settings.menu.gender": {
+    "defaultMessage": "I am...",
+    "description": "Gender label"
+  },
+  "app.settings.menu.man": {
+    "defaultMessage": "Man",
+    "description": "Man label"
+  },
+  "app.settings.menu.nonbinary": {
+    "defaultMessage": "Nonbinary",
+    "description": "Nonbinary label"
+  },
+  "app.settings.menu.othergender": {
+    "defaultMessage": "Other (feel free to specify):",
+    "description": "Othergender label"
+  },
+  "app.settings.menu.otherinfo": {
+    "defaultMessage": "Additional (voluntary) info",
+    "description": "Otherinfo text"
+  },
+  "app.settings.menu.passwordcur": {
+    "defaultMessage": "Current password",
+    "description": "PasswordCur label"
+  },
+  "app.settings.menu.passwordnew": {
+    "defaultMessage": "New password",
+    "description": "PasswordNew label"
+  },
+  "app.settings.menu.passwordnew2": {
+    "defaultMessage": "Reenter new password",
+    "description": "PasswordNew2 label"
+  },
+  "app.settings.menu.save": {
+    "defaultMessage": "Save",
+    "description": "Save label"
+  },
+  "app.settings.menu.saved": {
+    "defaultMessage": "✓ Settings updated",
+    "description": "Settingsupdated label"
+  },
+  "app.settings.menu.settings": {
+    "defaultMessage": "Account settings",
+    "description": "Settings header"
+  },
+  "app.settings.menu.woman": {
+    "defaultMessage": "Woman",
+    "description": "Woman label"
+  },
+  "app.signin.menu.create": {
+    "defaultMessage": "Create an account",
+    "description": "SignIn CreateAcc link"
+  },
+  "app.signin.menu.home": {
+    "defaultMessage": "Home",
+    "description": "SignIn Home link"
+  },
+  "app.signin.menu.login": {
+    "defaultMessage": "Login",
+    "description": "SignIn Login button"
+  },
+  "app.signin.menu.noacc": {
+    "defaultMessage": "No account yet?",
+    "description": "SignIn NoAcc text"
+  },
+  "app.signin.menu.password": {
+    "defaultMessage": "Password",
+    "description": "SignIn Password label"
+  },
+  "app.signup.menu.acount": {
+    "defaultMessage": "Already have an account?",
+    "description": "SignUp Account text"
+  },
+  "app.signup.menu.agree": {
+    "defaultMessage": "By clicking on Create you agree with",
+    "description": "SignUp Agree text"
+  },
+  "app.signup.menu.create": {
+    "defaultMessage": "Create",
+    "description": "SignUp Agree text"
+  },
+  "app.signup.menu.email": {
+    "defaultMessage": "E-mail",
+    "description": "SignUp Email label"
+  },
+  "app.signup.menu.home": {
+    "defaultMessage": "Home",
+    "description": "SignUp Home link"
+  },
+  "app.signup.menu.login": {
+    "defaultMessage": "Log in",
+    "description": "SignUp Login text"
+  },
+  "app.signup.menu.password": {
+    "defaultMessage": "Password",
+    "description": "SignUp Password label"
+  },
+  "app.signup.menu.passwordagain": {
+    "defaultMessage": "Repeat password",
+    "description": "SignUp Repeat Password label"
+  },
+  "app.signup.menu.processing": {
+    "defaultMessage": "processing of personal data",
+    "description": "SignUp Processing text"
+  },
+  "app.stats.menu.progress": {
+    "defaultMessage": "Your progress:",
+    "description": "Progress text"
+  },
+  "app.stats.menu.top": {
+    "defaultMessage": "Top scores:",
+    "description": "Top score text"
+  },
+  "app.stats.menu.zero": {
+    "defaultMessage": "Nothing to see here (yet). Soon, there will be a chart of your progress!",
+    "description": "Zero score text"
   }
 }
