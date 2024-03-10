@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button, Box, Text, Flex } from 'rebass';
-import { useHistory } from 'react-router';
+import { Box, Text, Flex } from 'rebass';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import elephant from './../../assets/elephantTut.jpg';
@@ -14,18 +13,12 @@ import {
   zeroScoreSentence,
 } from '../../helpers';
 import { getTutorialImageStyle } from '../commonStyleSheets';
+import { HomeButton } from './HomeButton';
+import { NextButton } from './NextButton';
 
 const imageStyle = getTutorialImageStyle(elephant);
 
 const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
-  const history = useHistory();
-  const handleClickHome = () => {
-    history.push('/');
-  };
-  const handleClickNext = () => {
-    handleNextStep();
-  };
-
   const questionScore = getScore(
     typeof currentTip === 'undefined' ? 0 : currentTip,
     10886
@@ -68,17 +61,8 @@ const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
         průměrný slon africký.
       </Text>
       <Flex mt="auto" justifyContent="space-between" width="100%">
-        <Button
-          onClick={handleClickHome}
-          backgroundColor={'#414141'}
-          sx={{ flex: 1 }}
-          mr="1"
-        >
-          Domů
-        </Button>
-        <Button onClick={handleClickNext} sx={{ flex: 5 }}>
-          Další
-        </Button>
+        <HomeButton />
+        <NextButton handleNextStep={handleNextStep} />
       </Flex>
     </Container>
   );

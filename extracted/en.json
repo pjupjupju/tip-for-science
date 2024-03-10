@@ -59,6 +59,10 @@
     "defaultMessage": "Tutorial",
     "description": "Tutorial button"
   },
+  "app.settings.menu.age": {
+    "defaultMessage": "Age:",
+    "description": "Age label"
+  },
   "app.settings.menu.anon": {
     "defaultMessage": "All data will be anonymized before evaluation.",
     "description": "Anon text"

@@ -1,21 +1,16 @@
 import React from 'react';
-import { Button, Image, Text, Flex } from 'rebass';
+import { Image, Text, Flex } from 'rebass';
 import washington from './../../assets/washingtonTutF.jpg';
 import elephant from './../../assets/elephantTutF.jpg';
 import jupiter from './../../assets/jupiterTutF.jpg';
 import { SlideProps } from './types';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
-import { useHistory } from 'react-router';
+import { FormattedMessage } from 'react-intl';
+import { HomeButton } from './HomeButton';
+import { NextButton } from './NextButton';
 
 const Slide1 = ({ handleNextStep }: SlideProps) => {
-  const history = useHistory();
-  const handleClickHome = () => {
-    history.push('/');
-  };
-  const handleClickNext = () => {
-    handleNextStep();
-  };
   return (
     <Container>
       <TutorialHeader centerVertically={false}>
@@ -27,7 +22,11 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
           mb={4}
           p={4}
         >
-          Zajímalo by tě...
+          <FormattedMessage
+            id="app.tutorial.slide.curious"
+            defaultMessage="Are you curious..."
+            description="Tut1 curious"
+          />
         </Text>
       </TutorialHeader>
       <Flex flexDirection="column" pt={3} pb={4}>
@@ -48,7 +47,11 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
             mb={4}
             p={4}
           >
-            ...kolik vážil nejtěžší slon v historii?
+            <FormattedMessage
+              id="app.tutorial.slide.eleph"
+              defaultMessage="...to find out the weight of the heaviest elephant ever recorded in the annals of history?"
+              description="Tut1 elephant"
+            />
           </Text>
         </Flex>
         <Flex justifyContent="center" alignItems="center">
@@ -59,9 +62,11 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
             mb={4}
             p={4}
           >
-            ...jak velká je hlava George Washingtona
-            <br />
-            v sousoší Mount Rushmore?
+            <FormattedMessage
+              id="app.tutorial.slide.wash"
+              defaultMessage="...about the monumental size of George Washington's head at Mount Rushmore?"
+              description="Tut1 washington"
+            />
           </Text>
           <Image
             src={washington}
@@ -90,22 +95,17 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
             mb={4}
             p={4}
           >
-            ...jak rychle se pohybuje Jupiter?
+            <FormattedMessage
+              id="app.tutorial.slide.jupiter"
+              defaultMessage="...how swiftly does Jupiter race across the space?"
+              description="Tut1 jupiter"
+            />
           </Text>
         </Flex>
       </Flex>
       <Flex mt="auto" justifyContent="space-between" width="100%">
-        <Button
-          onClick={handleClickHome}
-          backgroundColor={'#414141'}
-          sx={{ flex: 1 }}
-          mr="1"
-        >
-          Domů
-        </Button>
-        <Button onClick={handleClickNext} sx={{ flex: 5 }}>
-          Další
-        </Button>
+        <HomeButton />
+        <NextButton handleNextStep={handleNextStep} />
       </Flex>
     </Container>
   );

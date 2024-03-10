@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text, Box, Flex } from 'rebass';
+import { Text, Box, Flex } from 'rebass';
 import NumberFormat from 'react-number-format';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
@@ -14,9 +14,10 @@ import {
   lowScoreSentence,
   zeroScoreSentence,
 } from '../../helpers';
-import { useHistory } from 'react-router-dom';
 import { getTutorialImageStyle } from '../commonStyleSheets';
 import { FunFact } from './../Game/FunFact';
+import { HomeButton } from './HomeButton';
+import { NextButton } from './NextButton';
 
 const imageStyle = getTutorialImageStyle(washington);
 
@@ -26,14 +27,6 @@ const fact =
 const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
   const correctAnswer = 18.29;
   const previousTips = [28, 105];
-  const history = useHistory();
-  const handleClickHome = () => {
-    history.push('/');
-  };
-  const handleClickNext = () => {
-    handleNextStep();
-  };
-
   const questionScore = getScore(
     typeof currentTip === 'undefined' ? 0 : currentTip,
     18.29
@@ -77,17 +70,8 @@ const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
       </Box>
       <FunFact correctAnswer={correctAnswer} fact={fact} />
       <Flex mt="auto" justifyContent="space-between" width="100%">
-        <Button
-          onClick={handleClickHome}
-          backgroundColor={'#414141'}
-          sx={{ flex: 1 }}
-          mr="1"
-        >
-          Domů
-        </Button>
-        <Button onClick={handleClickNext} sx={{ flex: 5 }}>
-          Další
-        </Button>
+        <HomeButton />
+        <NextButton handleNextStep={handleNextStep} />
       </Flex>
     </Container>
   );

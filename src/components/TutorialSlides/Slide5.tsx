@@ -1,22 +1,16 @@
 import React from 'react';
-import { Button, Box, Text, Flex } from 'rebass';
+import { Box, Text, Flex } from 'rebass';
 import NumberFormat from 'react-number-format';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import { SlideProps } from './types';
 import { ScoreChart } from '../ScoreChart';
-import { useHistory } from 'react-router';
+import { HomeButton } from './HomeButton';
+import { NextButton } from './NextButton';
 
 const Slide5 = ({ handleNextStep, currentTip }: SlideProps) => {
   const correctAnswer = 11000;
   const previousTips = [8300, 9500, 15000];
-  const history = useHistory();
-  const handleClickHome = () => {
-    history.push('/');
-  };
-  const handleClickNext = () => {
-    handleNextStep();
-  };
   return (
     <Container>
       <TutorialHeader>
@@ -60,17 +54,8 @@ const Slide5 = ({ handleNextStep, currentTip }: SlideProps) => {
         </Text>
       </Text>
       <Flex mt="auto" justifyContent="space-between" width="100%">
-        <Button
-          onClick={handleClickHome}
-          backgroundColor={'#414141'}
-          sx={{ flex: 1 }}
-          mr="1"
-        >
-          Domů
-        </Button>
-        <Button onClick={handleClickNext} sx={{ flex: 5 }}>
-          Další
-        </Button>
+        <HomeButton />
+        <NextButton handleNextStep={handleNextStep} />
       </Flex>
     </Container>
   );

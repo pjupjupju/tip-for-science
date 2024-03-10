@@ -43,9 +43,9 @@ export async function createServer(): Promise<express.Application> {
     env === 'production'
       ? { region: AWS_REGION }
       : {
-        endpoint: 'http://localhost:8000',
-        region: AWS_REGION,
-      }
+          endpoint: 'http://localhost:8000',
+          region: AWS_REGION,
+        }
   );
 
   const runCache = new RunCache(15, 5, { dynamo });
@@ -149,7 +149,7 @@ export async function createServer(): Promise<express.Application> {
       const context: StaticRouterContext = {};
       const bootstrap = (
         <StaticRouter context={context} location={req.url || '/'}>
-          <IntlProvider locale="cs" defaultLocale="en" messages={messages.cs}>
+          <IntlProvider locale="en" defaultLocale="en">
             <ApolloProvider client={client}>
               <ThemeProvider theme={tipForScienceTheme}>
                 <App />
@@ -169,8 +169,8 @@ export async function createServer(): Promise<express.Application> {
         return assets[entrypoint]
           ? assets[entrypoint].css
             ? assets[entrypoint].css.map((asset) => (
-              <link rel="stylesheet" href={asset} />
-            ))
+                <link rel="stylesheet" href={asset} />
+              ))
             : ''
           : '';
       };
