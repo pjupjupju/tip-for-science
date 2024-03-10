@@ -2,12 +2,11 @@ import { useQuery } from '@apollo/client';
 import React from 'react';
 import { useHistory } from 'react-router';
 import { Button, Flex, Image, Text } from 'rebass';
-import { Spinner } from '..';
+import { HomeButton, Spinner } from '..';
 import { AUTH_QUERY } from '../../gql';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import logo from './../../assets/logoskoly.png';
-import { SlideProps } from './types';
 
 const imageStyle = {
   minHeight: '210px',
@@ -18,18 +17,15 @@ const imageStyle = {
   py: 3,
 };
 
-const Slide15 = (props: SlideProps) => {
+const Slide15 = () => {
   const { loading, data } = useQuery(AUTH_QUERY, {
     fetchPolicy: 'cache-first',
   });
 
   const isLoggedIn = !!data?.viewer?.user;
-  const isAdmin = data?.viewer?.user?.role === 'admin'; 
+  const isAdmin = data?.viewer?.user?.role === 'admin';
 
   const history = useHistory();
-  const handleClickHome = () => {
-    history.push('/');
-  };
   const handleClickPlay = () => {
     history.push('/play');
   };
@@ -51,14 +47,7 @@ const Slide15 = (props: SlideProps) => {
         z Univerzity Karlovy.
       </Text>
       <Flex marginTop={'auto'}>
-        <Button
-          onClick={handleClickHome}
-          sx={{ flex: 1 }}
-          mr={1}
-          backgroundColor={'#414141'}
-        >
-          Domů
-        </Button>
+        <HomeButton />
         {loading && (
           <Flex justifyContent="center">
             <Spinner />

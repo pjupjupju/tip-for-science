@@ -6,6 +6,7 @@ import { Settings } from './Settings';
 import { Container } from '../../components';
 import { User } from '../../types';
 import Helmet from 'react-helmet';
+import { FormattedMessage } from 'react-intl';
 
 const NavbarLink = ({
   children,
@@ -25,14 +26,24 @@ const Profile = ({ user }: { user: User | null }) => (
     <Flex flexDirection="column" height="100%">
       <Flex px={2} color="white" bg="secondary" alignItems="center">
         <Text p={2} fontWeight="bold">
-          Profil
+        <FormattedMessage id="app.stats.menu.profile"
+          defaultMessage="Profile"
+          description="Profile text" />
         </Text>
         <Box mx="auto" />
-        <NavbarLink to="/profile/stats">Stats</NavbarLink>
-        <NavbarLink to="/profile/settings" color="black">
-          Nastavení
+        <NavbarLink to="/profile/stats">
+        <FormattedMessage id="app.stats.menu.stats"
+          defaultMessage="Stats"
+          description="Stats link" /></NavbarLink>
+        <NavbarLink to="/profile/settings">
+        <FormattedMessage id="app.stats.menu.settings"
+          defaultMessage="Settings"
+          description="Settings link" />
         </NavbarLink>
-        <NavbarLink to="/">Domů</NavbarLink>
+        <NavbarLink to="/">
+        <FormattedMessage id="app.stats.menu.home"
+          defaultMessage="Home"
+          description="Home link" /></NavbarLink>
       </Flex>
       <Switch>
         <Route path=".">

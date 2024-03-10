@@ -153,19 +153,25 @@ const Settings = ({ user }: { user: User | null }) => {
       flexDirection="column"
     >
       <Text color="secondary" my={3}>
-        <FormattedMessage id="app.settings.menu.anon"
+        <FormattedMessage
+          id="app.settings.menu.anon"
           defaultMessage="All data will be anonymized before evaluation."
-          description="Anon text" />
+          description="Anon text"
+        />
       </Text>
       <Text color="secondary" fontSize={3} mt={2} mb={3} px={3}>
-      <FormattedMessage id="app.settings.menu.settings"
+        <FormattedMessage
+          id="app.settings.menu.settings"
           defaultMessage="Account settings"
-          description="Settings header" />
+          description="Settings header"
+        />
       </Text>
       <Label htmlFor="email" sx={labelStyles}>
-      <FormattedMessage id="app.settings.menu.email"
+        <FormattedMessage
+          id="app.settings.menu.email"
           defaultMessage="E-mail"
-          description="Email label" />
+          description="Email label"
+        />
       </Label>
       <Input
         id="email"
@@ -176,9 +182,11 @@ const Settings = ({ user }: { user: User | null }) => {
         {...register('email')}
       />
       <Label htmlFor="oldPassword" sx={labelStyles}>
-      <FormattedMessage id="app.settings.menu.passwordcur"
+        <FormattedMessage
+          id="app.settings.menu.passwordcur"
           defaultMessage="Current password"
-          description="PasswordCur label" />
+          description="PasswordCur label"
+        />
       </Label>
       <Input
         autoComplete="new-password"
@@ -189,9 +197,11 @@ const Settings = ({ user }: { user: User | null }) => {
         {...register('oldPassword')}
       />
       <Label htmlFor="newPassword" sx={labelStyles}>
-      <FormattedMessage id="app.settings.menu.passwordnew"
+        <FormattedMessage
+          id="app.settings.menu.passwordnew"
           defaultMessage="New password"
-          description="PasswordNew label" />
+          description="PasswordNew label"
+        />
       </Label>
       <Input
         id="newPassword"
@@ -201,9 +211,11 @@ const Settings = ({ user }: { user: User | null }) => {
         {...register('newPassword')}
       />
       <Label htmlFor="confirmNewPassword" sx={labelStyles}>
-      <FormattedMessage id="app.settings.menu.passwordnew2"
+        <FormattedMessage
+          id="app.settings.menu.passwordnew2"
           defaultMessage="Reenter new password"
-          description="PasswordNew2 label" />
+          description="PasswordNew2 label"
+        />
       </Label>
       <Input
         id="confirmNewPassword"
@@ -214,16 +226,20 @@ const Settings = ({ user }: { user: User | null }) => {
       />
 
       <Text color="secondary" fontSize={3} mt={4} px={3}>
-      <FormattedMessage id="app.settings.menu.otherinfo"
+        <FormattedMessage
+          id="app.settings.menu.otherinfo"
           defaultMessage="Additional (voluntary) info"
-          description="Otherinfo text" />
+          description="Otherinfo text"
+        />
       </Text>
 
       <Box my={3}>
         <Label htmlFor="gender" sx={radioLabelStyles}>
-        <FormattedMessage id="app.settings.menu.gender"
-          defaultMessage="I am..."
-          description="Gender label" />
+          <FormattedMessage
+            id="app.settings.menu.gender"
+            defaultMessage="I am..."
+            description="Gender label"
+          />
         </Label>
         <Label color="white">
           <Radio
@@ -232,21 +248,27 @@ const Settings = ({ user }: { user: User | null }) => {
             id="woman"
             value="woman"
           />
-          <FormattedMessage id="app.settings.menu.woman"
-          defaultMessage="Woman"
-          description="Woman label" />
+          <FormattedMessage
+            id="app.settings.menu.woman"
+            defaultMessage="Woman"
+            description="Woman label"
+          />
         </Label>
         <Label color="white">
           <Radio {...register('gender')} name="gender" id="man" value="man" />
-          <FormattedMessage id="app.settings.menu.man"
-          defaultMessage="Man"
-          description="Man label" />
+          <FormattedMessage
+            id="app.settings.menu.man"
+            defaultMessage="Man"
+            description="Man label"
+          />
         </Label>
         <Label color="white">
           <Radio {...register('gender')} name="gender" id="enby" value="enby" />
-          <FormattedMessage id="app.settings.menu.nonbinary"
-          defaultMessage="Nonbinary"
-          description="Nonbinary label" />
+          <FormattedMessage
+            id="app.settings.menu.nonbinary"
+            defaultMessage="Nonbinary"
+            description="Nonbinary label"
+          />
         </Label>
         <Label color="white">
           <Radio
@@ -255,9 +277,11 @@ const Settings = ({ user }: { user: User | null }) => {
             id="other"
             value="other"
           />
-          <FormattedMessage id="app.settings.menu.othergender"
-          defaultMessage="Other (feel free to specify):"
-          description="Othergender label" />
+          <FormattedMessage
+            id="app.settings.menu.othergender"
+            defaultMessage="Other (feel free to specify):"
+            description="Othergender label"
+          />
         </Label>
         {watchGender === 'other' && (
           <Input
@@ -270,7 +294,11 @@ const Settings = ({ user }: { user: User | null }) => {
         )}
       </Box>
       <Label htmlFor="email" sx={labelStyles}>
-        Věk
+        <FormattedMessage
+          id="app.settings.menu.age"
+          defaultMessage="Age:"
+          description="Age label"
+        />
       </Label>
       <Input
         type="number"
@@ -301,16 +329,21 @@ const Settings = ({ user }: { user: User | null }) => {
             alignItems="center"
           >
             <Text>
-            <FormattedMessage id="app.settings.menu.saved"
-          defaultMessage="✓ Settings updated"
-          description="Settingsupdated label" /></Text>
+              <FormattedMessage
+                id="app.settings.menu.saved"
+                defaultMessage="✓ Settings updated"
+                description="Settingsupdated label"
+              />
+            </Text>
           </Flex>
         )}
         <Button sx={{ flex: 1, color: 'white' }}>
-        <FormattedMessage id="app.settings.menu.save"
-          defaultMessage="Save"
-          description="Save label" />
-          </Button>
+          <FormattedMessage
+            id="app.settings.menu.save"
+            defaultMessage="Save"
+            description="Save label"
+          />
+        </Button>
       </Flex>
     </Flex>
   );

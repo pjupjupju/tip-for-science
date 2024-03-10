@@ -63,7 +63,9 @@ const SignIn = () => {
         p="3"
       >
         <Label htmlFor="email" sx={labelStyles}>
-        
+          <FormattedMessage id="app.signin.menu.email"
+            defaultMessage="E-mail"
+            description="SignIn E-mail label" />
         </Label>
         <Input
           id="email"
@@ -74,9 +76,9 @@ const SignIn = () => {
           {...register('email')}
         />
         <Label htmlFor="password" sx={labelStyles}>
-        <FormattedMessage id="app.signin.menu.password"
-                  defaultMessage="Password"
-                  description="SignIn Password label" />
+          <FormattedMessage id="app.signin.menu.password"
+            defaultMessage="Password"
+            description="SignIn Password label" />
         </Label>
         <Input
           id="password"
@@ -86,9 +88,9 @@ const SignIn = () => {
           {...register('password')}
         />
         <Button type="submit" my={3}>
-        <FormattedMessage id="app.signin.menu.login"
-                  defaultMessage="Login"
-                  description="SignIn Login button" />
+          <FormattedMessage id="app.signin.menu.login"
+            defaultMessage="Login"
+            description="SignIn Login button" />
         </Button>
         {errors.length > 0 && (
           <Box>
@@ -99,23 +101,23 @@ const SignIn = () => {
         )}
         <Flex justifyContent="center">
           <Text color="white" fontSize="1">
-          <FormattedMessage id="app.signin.menu.noacc"
-                  defaultMessage="No account yet?"
-                  description="SignIn NoAcc text" />
+            <FormattedMessage id="app.signin.menu.noacc"
+              defaultMessage="No account yet?"
+              description="SignIn NoAcc text" />
             {' '}
             <Link to="/signup" style={{ color: '#FF0070' }}>
-            <FormattedMessage id="app.signin.menu.create"
-                  defaultMessage="Create an account"
-                  description="SignIn CreateAcc link" />
+              <FormattedMessage id="app.signin.menu.create"
+                defaultMessage="Create an account"
+                description="SignIn CreateAcc link" />
             </Link>
           </Text>
         </Flex>
         <Flex justifyContent="center" my="2">
           <Text color="white" fontSize="1">
             <Link to="/" style={{ color: '#D76B90' }}>
-            <FormattedMessage id="app.signin.menu.home"
-                  defaultMessage="Home"
-                  description="SignIn Home link" />
+              <FormattedMessage id="app.signin.menu.home"
+                defaultMessage="Home"
+                description="SignIn Home link" />
             </Link>
           </Text>
         </Flex>

@@ -39,7 +39,7 @@ const Stats = ({ user }: { user: User | null }) => {
       </Flex>
     );
   }
-  
+
   const stats = data.getUserStats.days.map(
     (d: { day: string; score: number }) => ({
       x: d.day,
@@ -53,15 +53,21 @@ const Stats = ({ user }: { user: User | null }) => {
   return (
     <>
       <Heading color="secondary" fontSize={[2, 3, 4]} my="4" mx="3">
-        Tvoje skóre:{' '} 
+        <FormattedMessage
+          id="app.stats.menu.score"
+          defaultMessage="Your score:"
+          description="Score text"
+        />{' '}
         <Text as="span" color="accent">
           {getMyScoreData.getMyScore}
         </Text>
       </Heading>
       <Heading color="secondary" fontSize={[2, 3, 4]} mb="2" mx="3">
-      <FormattedMessage id="app.stats.menu.progress"
+        <FormattedMessage
+          id="app.stats.menu.progress"
           defaultMessage="Your progress:"
-          description="Progress text" />
+          description="Progress text"
+        />
       </Heading>
       <Box sx={{ flexGrow: 1, maxHeight: 400 }}>
         {stats.length > 0 ? (
@@ -74,17 +80,21 @@ const Stats = ({ user }: { user: User | null }) => {
             alignItems="center"
           >
             <Text color="white" textAlign="center">
-            <FormattedMessage id="app.stats.menu.zero"
-          defaultMessage="Nothing to see here (yet). Soon, there will be a chart of your progress!"
-          description="Zero score text" />
+              <FormattedMessage
+                id="app.stats.menu.zero"
+                defaultMessage="Nothing to see here (yet). Soon, there will be a chart of your progress!"
+                description="Zero score text"
+              />
             </Text>
           </Flex>
         )}
       </Box>
       <Heading color="secondary" fontSize={[2, 3, 4]} mb="2" mx="3">
-      <FormattedMessage id="app.stats.menu.top"
+        <FormattedMessage
+          id="app.stats.menu.top"
           defaultMessage="Top scores:"
-          description="Top score text" />
+          description="Top score text"
+        />
       </Heading>
       {highScore &&
         highScore

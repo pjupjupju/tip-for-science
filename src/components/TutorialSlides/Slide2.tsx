@@ -1,23 +1,17 @@
 import React from 'react';
-import { Box, Button, Text, Flex } from 'rebass';
+import { Box, Text, Flex } from 'rebass';
 import { getTutorialImageStyle } from '../commonStyleSheets';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import elephant from './../../assets/elephantTut.jpg';
 import { SlideProps } from './types';
-import { useHistory } from 'react-router';
+import { FormattedMessage } from 'react-intl';
+import { HomeButton } from './HomeButton';
+import { NextButton } from './NextButton';
 
 const imageStyle = getTutorialImageStyle(elephant);
 
 const Slide2 = ({ handleNextStep }: SlideProps) => {
-  const history = useHistory();
-  const handleClickHome = () => {
-    history.push('/');
-  };
-  const handleClickNext = () => {
-    handleNextStep();
-  };
-
   return (
     <Container>
       <TutorialHeader>
@@ -28,7 +22,11 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
           px={3}
           py={4}
         >
-          Neboj, správné odpovědi se brzy dozvíš! Nejdřív ale zkus hádat...
+          <FormattedMessage
+            id="app.tutorial.slide.guess"
+            defaultMessage="Fear not, the correct answers will soon be revealed! But first, why not take a guess..."
+            description="Tut2 guess"
+          />
         </Text>
       </TutorialHeader>
       <Box sx={imageStyle} />
@@ -39,8 +37,11 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
         py={4}
         px={3}
       >
-        Největší známý slon byl zastřelen v roce 1956 v Angole. Řekněme, že
-        předchozí hráči Tip for Science hádali, že toto obrovské zvíře vážilo{' '}
+        <FormattedMessage
+          id="app.tutorial.slide.ffeleph"
+          defaultMessage="The largest known elephant was shot dead in 1956 in Angola. Let's say the previous players of Tip for Science guessed that this colossal creature weighed"
+          description="Tut2 ffeleph"
+        />{' '}
         <Text color="primary" as="span">
           8 300
         </Text>
@@ -55,17 +56,8 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
         kg.
       </Text>
       <Flex mt="auto" justifyContent="space-between" width="100%">
-        <Button
-          onClick={handleClickHome}
-          backgroundColor={'#414141'}
-          sx={{ flex: 1 }}
-          mr="1"
-        >
-          Domů
-        </Button>
-        <Button onClick={handleClickNext} sx={{ flex: 5 }}>
-          Další
-        </Button>
+        <HomeButton />
+        <NextButton handleNextStep={handleNextStep} />
       </Flex>
     </Container>
   );
