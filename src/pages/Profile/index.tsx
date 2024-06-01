@@ -26,35 +26,39 @@ const Profile = ({ user }: { user: User | null }) => (
     <Flex flexDirection="column" height="100%">
       <Flex px={2} color="white" bg="secondary" alignItems="center">
         <Text p={2} fontWeight="bold">
-        <FormattedMessage id="app.stats.menu.profile"
-          defaultMessage="Profile"
-          description="Profile text" />
+          <FormattedMessage
+            id="app.stats.menu.profile"
+            defaultMessage="Profile"
+            description="Profile text"
+          />
         </Text>
         <Box mx="auto" />
         <NavbarLink to="/profile/stats">
-        <FormattedMessage id="app.stats.menu.stats"
-          defaultMessage="Stats"
-          description="Stats link" /></NavbarLink>
+          <FormattedMessage
+            id="app.stats.menu.stats"
+            defaultMessage="Stats"
+            description="Stats link"
+          />
+        </NavbarLink>
         <NavbarLink to="/profile/settings">
-        <FormattedMessage id="app.stats.menu.settings"
-          defaultMessage="Settings"
-          description="Settings link" />
+          <FormattedMessage
+            id="app.stats.menu.settings"
+            defaultMessage="Settings"
+            description="Settings link"
+          />
         </NavbarLink>
         <NavbarLink to="/">
-        <FormattedMessage id="app.stats.menu.home"
-          defaultMessage="Home"
-          description="Home link" /></NavbarLink>
+          <FormattedMessage
+            id="app.stats.menu.home"
+            defaultMessage="Home"
+            description="Home link"
+          />
+        </NavbarLink>
       </Flex>
       <Routes>
-        <Route path=".">
-          <Stats user={user} />
-        </Route>
-        <Route path="/profile/stats">
-          <Stats user={user} />
-        </Route>
-        <Route path="/profile/settings">
-          <Settings user={user} />
-        </Route>
+        <Route index element={<Stats user={user} />} />
+        <Route path="stats" element={<Stats user={user} />} />
+        <Route path="settings" element={<Settings user={user} />} />
       </Routes>
     </Flex>
   </Container>

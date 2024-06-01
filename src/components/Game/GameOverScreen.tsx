@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, Flex, Button } from 'rebass';
+import { useNavigate } from 'react-router-dom';
 import { TranslucentBox } from '../TranslucentBox';
 import { Container } from '../Container';
-import { useNavigate } from 'react-router';
 
 interface GameOverScreenProps {
   onContinue: Function,

@@ -55,7 +55,7 @@ export const App = () => {
         />
         <Route path="/about" element={<About />} />
         <Route path="/play" element={<Play user={user} />} />
-        <Route path="/profile" element={<Profile user={user} />} />
+        <Route path="/profile/*" element={<Profile user={user} />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/consent" element={<Consent />} />

@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import React from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { Button, Flex, Image, Text } from 'rebass';
 import { HomeButton, Spinner } from '..';
 import { AUTH_QUERY } from '../../gql';
