@@ -2,7 +2,6 @@ import { DynamoDB } from 'aws-sdk';
 import { hashSync } from 'bcryptjs';
 import { ulid } from 'ulid';
 import { TABLE_USER, USERS_BY_EMAIL_INDEX } from '../src/config';
-import { getUniqueSlug } from '../src/server/io';
 import { User, UserRole } from '../src/server/model/types';
 
 const db = new DynamoDB.DocumentClient(
@@ -31,7 +30,7 @@ async function createUser() {
     email: email.toLowerCase(),
     password: hashSync(password, 10),
     role: UserRole.admin,
-    slug: getUniqueSlug(id),
+    slug: 'not-unique-slug',
     updatedAt: new Date().toISOString(),
     score: 0,
     lastQuestion: null,

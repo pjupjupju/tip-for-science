@@ -56,7 +56,7 @@
     "react-spring": "^9.2.4",
     "rebass": "^4.0.7",
     "session-file-store": "^1.5.0",
-    "ts-node": "^9.1.1",
+    "ts-node": "^10.9.2",
     "ulid": "^2.3.0",
     "unfetch": "^4.2.0",
     "unique-names-generator": "^4.7.1",
