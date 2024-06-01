@@ -1,19 +1,19 @@
 import { Flex, Text, Button } from 'rebass';
 import React from 'react';
 import { Container } from '..';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 
 interface NoMoreQuestionsProps {
   score: Number;
 }
 
 const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const handleClickHome = () => {
-    history.push('/');
+    navigate('/');
   };
   const handleClickSettings = () => {
-    history.push('/profile/settings');
+    navigate('/profile/settings');
   };
 
   return (
@@ -38,7 +38,7 @@ const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => {
           Tvoje skóre:{' '}
         </Text>
         <Text color="accent" as="span" fontSize={6} fontWeight={700}>
-          {score}
+          {score.toString()}
         </Text>
         <Text fontWeight={500} textAlign="center" my={5} color="secondary">
           Až budou k dispozici další, dáme ti vědět na registrační e-mail.

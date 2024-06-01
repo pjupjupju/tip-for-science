@@ -2,7 +2,7 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { Flex, Heading, Text } from 'rebass';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { MenuButton, Container } from '../../components';
 import { TargetImage } from '../../components/TargetImage';
 import { User, UserRole } from '../../types';
@@ -14,26 +14,26 @@ interface HomeProps {
 
 const Home = ({ user, onLogOut }: HomeProps) => {
   const isSignedIn = !!user;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleClickAbout = () => {
-    history.push('/about');
+    navigate('/about');
   };
 
   const handleClickDashboard = () => {
-    history.push('/dashboard');
+    navigate('/dashboard');
   };
 
   const handleClickPlay = () => {
-    history.push('/play');
+    navigate('/play');
   };
 
   const handleClickProfile = () => {
-    history.push('/profile');
+    navigate('/profile');
   };
 
   const handleClickSignIn = () => {
-    history.push('/signin');
+    navigate('/signin');
   };
 
   const handleClickLogOut = () => {

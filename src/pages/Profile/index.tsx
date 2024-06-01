@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Link as RouterLink, Switch, Route, Redirect } from 'react-router-dom';
+import { Link as RouterLink, Route, Routes } from 'react-router-dom';
 import { Flex, Link, Text, Box } from 'rebass';
 import { Stats } from './Stats';
 import { Settings } from './Settings';
@@ -45,7 +45,7 @@ const Profile = ({ user }: { user: User | null }) => (
           defaultMessage="Home"
           description="Home link" /></NavbarLink>
       </Flex>
-      <Switch>
+      <Routes>
         <Route path=".">
           <Stats user={user} />
         </Route>
@@ -55,8 +55,7 @@ const Profile = ({ user }: { user: User | null }) => (
         <Route path="/profile/settings">
           <Settings user={user} />
         </Route>
-        <Redirect from="/" to="/profile/stats" />
-      </Switch>
+      </Routes>
     </Flex>
   </Container>
 );
