@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useReducer } from 'react';
-import { Redirect } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, NetworkStatus } from '@apollo/client';
-import { useHistory } from 'react-router';
 import { Flex } from 'rebass';
 import { Container, Game, NoMoreQuestions, Spinner } from './../../components';
 import { MY_SCORE_QUERY, QUESTION_QUERY, SAVE_MUTATION } from '../../gql';
@@ -64,8 +63,8 @@ const Play = ({ user }: PlayProps) => {
     initState
   );
 
-  const history = useHistory();
-  const onHome = () => history.push('/');
+  const navigate = useNavigate();
+  const onHome = () => navigate('/');
   const onIsTooClose = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -145,7 +144,7 @@ const Play = ({ user }: PlayProps) => {
   }, [questionId]);
 
   if (!user) {
-    return <Redirect to="/" />;
+    redirect('/');
   }
 
   if (loading || scoreLoading || networkStatus === NetworkStatus.refetch) {

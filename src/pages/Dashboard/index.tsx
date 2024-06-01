@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
 import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
-import { Redirect } from 'react-router-dom';
+import { redirect } from 'react-router-dom';
 import { Box, Button, Flex, Heading, Text } from 'rebass';
 import { BackButton, Container, Spinner } from '../../components';
 import {
@@ -72,7 +72,7 @@ const Dashboard = ({ user }: DashboardProps) => {
   };
 
   if (!user || user.role !== UserRole.admin) {
-    return <Redirect to="/" />;
+    redirect('/');
   }
 
   if (loading) {
@@ -94,22 +94,28 @@ const Dashboard = ({ user }: DashboardProps) => {
     <Container>
       <Helmet title="Admin dashboard"></Helmet>
       <Heading color="primary" my={4}>
-      <FormattedMessage id="app.dashboard.menu.dasboard"
-                  defaultMessage="Dashboard"
-                  description="Dashboard" />
+        <FormattedMessage
+          id="app.dashboard.menu.dasboard"
+          defaultMessage="Dashboard"
+          description="Dashboard"
+        />
       </Heading>
       <Flex flexDirection="column">
         <Heading fontSize={3} color="white" mb={3}>
-        <FormattedMessage id="app.dashboard.menu.actions"
-                  defaultMessage="Actions"
-                  description="Actions button" />
+          <FormattedMessage
+            id="app.dashboard.menu.actions"
+            defaultMessage="Actions"
+            description="Actions button"
+          />
         </Heading>
         <Flex justifyContent="space-between" alignItems="center">
           <Flex flex={1} flexDirection="column" mr={1}>
             <Text color="white" fontFamily="Tahoma">
-            <FormattedMessage id="app.dashboard.menu.export"
-                  defaultMessage="Export .csv to S3"
-                  description="Export button" />
+              <FormattedMessage
+                id="app.dashboard.menu.export"
+                defaultMessage="Export .csv to S3"
+                description="Export button"
+              />
             </Text>
             <Button width="50%" my={2} onClick={handleClickExport}>
               {exportLoading ? '... generating' : 'Download'}
@@ -117,9 +123,11 @@ const Dashboard = ({ user }: DashboardProps) => {
           </Flex>
           <Flex flex={1} flexDirection="column">
             <Text color="white" fontFamily="Tahoma">
-            <FormattedMessage id="app.dashboard.menu.import"
-                  defaultMessage="Import from Spreadsheet"
-                  description="Import button" />
+              <FormattedMessage
+                id="app.dashboard.menu.import"
+                defaultMessage="Import from Spreadsheet"
+                description="Import button"
+              />
             </Text>
             <Button
               disabled={importLoading}
@@ -139,23 +147,29 @@ const Dashboard = ({ user }: DashboardProps) => {
           ))}
         </Box>
         <Heading fontSize={3} color="white" mb={3}>
-        <FormattedMessage id="app.dashboard.menu.stats"
-                  defaultMessage="Stats"
-                  description="Stats button" />
+          <FormattedMessage
+            id="app.dashboard.menu.stats"
+            defaultMessage="Stats"
+            description="Stats button"
+          />
         </Heading>
         <Flex flexDirection="column">
           <Text color="white" fontWeight="bold" fontFamily="Tahoma" mb={3}>
-          <FormattedMessage id="app.dashboard.menu.online"
-                  defaultMessage="Online users playing: "
-                  description="Online button" />
+            <FormattedMessage
+              id="app.dashboard.menu.online"
+              defaultMessage="Online users playing: "
+              description="Online button"
+            />
             {data.getOnlineStats.online}
           </Text>
         </Flex>
       </Flex>
       <BackButton>
-      <FormattedMessage id="app.dashboard.footer.home"
-                  defaultMessage="Home"
-                  description="Home button" />
+        <FormattedMessage
+          id="app.dashboard.footer.home"
+          defaultMessage="Home"
+          description="Home button"
+        />
       </BackButton>
     </Container>
   );

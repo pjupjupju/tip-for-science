@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import React from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { Button, Flex, Image, Text } from 'rebass';
 import { HomeButton, Spinner } from '..';
 import { AUTH_QUERY } from '../../gql';
@@ -25,12 +25,12 @@ const Slide15 = () => {
   const isLoggedIn = !!data?.viewer?.user;
   const isAdmin = data?.viewer?.user?.role === 'admin';
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const handleClickPlay = () => {
-    history.push('/play');
+    navigate('/play');
   };
   const handleClickSignIn = () => {
-    history.push('/signin');
+    navigate('/signin');
   };
 
   return (

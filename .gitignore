@@ -11,6 +11,9 @@ dynamodb-data
 cache
 sessions
 
+# yarn
+.yarn/*
+
 # testing
 /coverage
 
@@ -30,6 +33,7 @@ export-tipdata**.csv
 .env.test.local
 .env.production.local
 .idea
+.vscode
 
 npm-debug.log*
 yarn-debug.log*

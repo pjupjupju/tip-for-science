@@ -3,7 +3,7 @@ import { Flex, Link as HrefLink, Button, Box, Text } from 'rebass';
 import { Label, Input } from '@rebass/forms';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { FormattedMessage } from 'react-intl';
 import { Container } from '../../components';
@@ -36,7 +36,7 @@ const SignUp = () => {
   const resolver = useYupValidationResolver(validationSchema, setErrors);
   const { register, handleSubmit } = useForm({ resolver });
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [signUp] = useMutation(SIGN_UP_MUTATION, {
     refetchQueries: [AuthQueryName],
@@ -55,7 +55,7 @@ const SignUp = () => {
     });
 
     if (data && !data.signUp.errors) {
-      history.push('/');
+      navigate('/');
     } else {
       setErrors(data!.signUp!.errors);
     }

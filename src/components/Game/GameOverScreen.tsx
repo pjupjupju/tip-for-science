@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, Flex, Button } from 'rebass';
 import { TranslucentBox } from '../TranslucentBox';
 import { Container } from '../Container';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 
 interface GameOverScreenProps {
   onContinue: Function,
@@ -10,9 +10,9 @@ interface GameOverScreenProps {
 
 const GameOverScreen = ({ onContinue }: GameOverScreenProps) => {
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const handleClickHome = () => {
-    history.push('/');
+    navigate('/');
   };
   const handleClickPlay = () => {
     onContinue();

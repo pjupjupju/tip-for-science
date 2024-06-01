@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { Flex } from 'rebass';
 import { useMutation, useQuery } from '@apollo/client';
 import './index.css';
@@ -48,37 +48,22 @@ export const App = () => {
   return (
     <>
       <Helmet titleTemplate="%s | TipForScience.org"></Helmet>
-      <Switch>
-        <Route path="/" exact>
-          <Home user={user} onLogOut={handleLogOut} />
-        </Route>
-        <Route path="/about">
-          <About />
-        </Route>
-        <Route path="/play">
-          <Play user={user} />
-        </Route>
-        <Route path="/profile">
-          <Profile user={user} />
-        </Route>
-        <Route path="/signin">
-          <SignIn />
-        </Route>
-        <Route path="/signup">
-          <SignUp />
-        </Route>
-        <Route path="/consent">
-          <Consent />
-        </Route>
+      <Routes>
+        <Route
+          path="/"
+          element={<Home user={user} onLogOut={handleLogOut} />}
+        />
+        <Route path="/about" element={<About />} />
+        <Route path="/play" element={<Play user={user} />} />
+        <Route path="/profile" element={<Profile user={user} />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/consent" element={<Consent />} />
         {user && user.role === 'admin' && (
-          <Route path="/dashboard">
-            <Dashboard user={user} />
-          </Route>
+          <Route path="/dashboard" element={<Dashboard user={user} />} />
         )}
-        <Route path="*">
-          <Page404 />
-        </Route>
-      </Switch>
+        <Route path="*" element={<Page404 />} />
+      </Routes>
     </>
   );
 };
