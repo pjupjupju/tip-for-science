@@ -8,10 +8,8 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { hydrateRoot, Root } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from 'emotion-theming';
 import fetch from 'unfetch';
 import { App } from './App';
-import { tipForScienceTheme } from './theme';
 import csMessages from './translations/cs.json';
 
 declare global {
@@ -44,9 +42,7 @@ loadableReady().then(() => {
     <BrowserRouter>
       <IntlProvider locale="en" defaultLocale="en" messages={messages.cs}>
         <ApolloProvider client={client}>
-          <ThemeProvider theme={tipForScienceTheme}>
-            <App />
-          </ThemeProvider>
+          <App />
         </ApolloProvider>
       </IntlProvider>
     </BrowserRouter>

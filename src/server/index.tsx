@@ -5,7 +5,6 @@ import { SchemaLink } from '@apollo/client/link/schema';
 import { renderToStringWithData } from '@apollo/client/react/ssr';
 import { DynamoDB } from 'aws-sdk';
 import { renderStylesToString } from 'emotion-server';
-import { ThemeProvider } from 'emotion-theming';
 import { ChunkExtractor } from '@loadable/server';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
@@ -22,7 +21,6 @@ import { App } from '../App';
 import { Document } from './Document';
 import { DynamoSessionStore, RunCache, RunLock, runMigrations } from './io';
 import { createContext, typeDefs, resolvers, schema } from './schema';
-import { tipForScienceTheme } from '../theme';
 import { AWS_REGION, TABLE_SESSION } from '../config';
 import csMessages from '../translations/cs.json';
 
@@ -164,15 +162,13 @@ export async function createServer(): Promise<express.Application> {
       });
 
       const bootstrap = extractor.collectChunks(
-        <StaticRouter location={req.url || '/'}>
-          <IntlProvider locale="cs" defaultLocale="en" messages={messages.cs}>
-            <ApolloProvider client={client}>
-              <ThemeProvider theme={tipForScienceTheme}>
-                <App />
-              </ThemeProvider>
-            </ApolloProvider>
-          </IntlProvider>
-        </StaticRouter>
+        <ApolloProvider client={client}>
+          <StaticRouter location={req.url || '/'}>
+            <IntlProvider locale="cs" defaultLocale="en" messages={messages.cs}>
+              <App />
+            </IntlProvider>
+          </StaticRouter>
+        </ApolloProvider>
       );
 
       const result = await renderToStringWithData(bootstrap);

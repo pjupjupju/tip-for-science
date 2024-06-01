@@ -2,6 +2,10 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Flex } from 'rebass';
 import { useMutation, useQuery } from '@apollo/client';
+import Helmet from 'react-helmet';
+import { ThemeProvider } from 'emotion-theming';
+import { GlobalStyles } from '@mui/material';
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import './index.css';
 import { About } from './pages/About';
 import { Home } from './pages/Home';
@@ -14,9 +18,9 @@ import { Spinner } from './components';
 import { SignUp } from './pages/SignUp';
 import { Dashboard } from './pages/Dashboard';
 import { Page404 } from './pages/Page404';
-import Helmet from 'react-helmet';
+import { muiTheme, resetStyles, tipForScienceTheme } from './theme';
 
-export const App = () => {
+const AppLayout = () => {
   const { loading, data } = useQuery(AUTH_QUERY);
   const [signOut] = useMutation(SIGN_OUT_MUTATION, {
     refetchQueries: [AuthQueryName],
@@ -67,3 +71,14 @@ export const App = () => {
     </>
   );
 };
+
+const globalStyles = <GlobalStyles styles={resetStyles} />;
+
+export const App = () => (
+  <ThemeProvider theme={tipForScienceTheme}>
+    <MuiThemeProvider theme={muiTheme}>
+      {globalStyles}
+      <AppLayout />
+    </MuiThemeProvider>
+  </ThemeProvider>
+);
