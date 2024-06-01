@@ -1,11 +1,11 @@
 import { FormattedMessage } from 'react-intl';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'rebass';
 
 const HomeButton = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const handleClickHome = () => {
-    history.push('/');
+    navigate('/');
   };
   return (
     <Button

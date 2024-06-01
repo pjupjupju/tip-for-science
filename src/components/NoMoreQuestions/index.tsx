@@ -1,7 +1,7 @@
 import { Flex, Text, Button } from 'rebass';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container } from '..';
-import { useNavigate } from 'react-router';
 
 interface NoMoreQuestionsProps {
   score: Number;
