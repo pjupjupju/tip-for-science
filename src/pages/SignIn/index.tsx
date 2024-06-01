@@ -4,7 +4,7 @@ import { Label, Input } from '@rebass/forms';
 import { useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 import { Container } from '../../components';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { AuthQueryName, SIGN_IN_MUTATION } from '../../gql';
 import Helmet from 'react-helmet';
@@ -25,7 +25,7 @@ const SignIn = () => {
   const { register, handleSubmit } = useForm();
 
   const [errors, setErrors] = useState([]);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [signIn] = useMutation(SIGN_IN_MUTATION, {
     refetchQueries: [AuthQueryName],
@@ -44,7 +44,7 @@ const SignIn = () => {
     });
 
     if (data && !data.signIn.errors) {
-      history.push('/');
+      navigate('/');
     } else {
       setErrors(data!.signIn!.errors);
     }

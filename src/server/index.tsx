@@ -1,21 +1,22 @@
+import path from 'path';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import { getDataFromTree } from '@apollo/react-ssr';
 import { ApolloServer } from 'apollo-server-express';
 import { SchemaLink } from '@apollo/client/link/schema';
+import { renderToStringWithData } from '@apollo/client/react/ssr';
 import { DynamoDB } from 'aws-sdk';
 import { renderStylesToString } from 'emotion-server';
 import { ThemeProvider } from 'emotion-theming';
+import { ChunkExtractor } from '@loadable/server';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { Helmet } from 'react-helmet';
-import { StaticRouterContext } from 'react-router';
-import { StaticRouter } from 'react-router-dom';
+import { StaticRouter } from 'react-router-dom/server';
 import express from 'express';
 import expressSession from 'express-session';
 import createSessionFileStore from 'session-file-store';
-import { renderToString, renderToStaticMarkup } from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
 import { resolve } from 'path';
 import { App } from '../App';
 import { Document } from './Document';
@@ -141,15 +142,30 @@ export async function createServer(): Promise<express.Application> {
     res.setHeader('Expires', '0');
 
     try {
+      const createApolloContext = createContext({
+        dynamo,
+        runCache,
+        runLock,
+      });
+      const context = await createApolloContext({ req, res });
       const client = new ApolloClient({
         cache: new InMemoryCache(),
         ssrMode: true,
-        link: new SchemaLink({ schema }),
+        link: new SchemaLink({
+          schema,
+          context,
+        }),
       });
-      const context: StaticRouterContext = {};
-      const bootstrap = (
-        <StaticRouter context={context} location={req.url || '/'}>
-          <IntlProvider locale="en" defaultLocale="en">
+
+      const extractor = new ChunkExtractor({
+        statsFile: path.resolve('build/loadable-stats.json'),
+        // razzle client bundle entrypoint is client.js
+        entrypoints: ['client'],
+      });
+
+      const bootstrap = extractor.collectChunks(
+        <StaticRouter location={req.url || '/'}>
+          <IntlProvider locale="cs" defaultLocale="en" messages={messages.cs}>
             <ApolloProvider client={client}>
               <ThemeProvider theme={tipForScienceTheme}>
                 <App />
@@ -159,39 +175,47 @@ export async function createServer(): Promise<express.Application> {
         </StaticRouter>
       );
 
-      await getDataFromTree(bootstrap);
+      const result = await renderToStringWithData(bootstrap);
 
-      const markup = renderStylesToString(renderToString(bootstrap));
-      const helmet = Helmet.renderStatic();
       const initialState = client.extract();
 
-      const cssLinksFromAssets = (assets, entrypoint): string => {
+      // collect script tags
+      const scriptTags = extractor.getScriptElements();
+
+      // collect "preload/prefetch" links
+      const linkTags = extractor.getLinkElements();
+
+      // collect style tags
+      const styleTags = extractor.getStyleElements();
+
+      const helmet = Helmet.renderStatic();
+
+      // TODO: fix ANY
+      const cssLinksFromAssets = (assets: any, entrypoint: any): string => {
         return assets[entrypoint]
           ? assets[entrypoint].css
-            ? assets[entrypoint].css.map((asset) => (
+            ? assets[entrypoint].css.map((asset: string) => (
                 <link rel="stylesheet" href={asset} />
               ))
             : ''
           : '';
       };
 
-      if (context.url) {
-        res.redirect(context.url);
-      } else {
-        res
-          .status(context.statusCode || 200)
-          .send(
-            `<!doctype html>${renderToStaticMarkup(
-              <Document
-                content={markup}
-                helmet={helmet}
-                css={cssLinksFromAssets(assets, 'client')}
-                js={assets.client.js}
-                state={initialState}
-              />
-            )}`
-          );
-      }
+      res
+        .status(200)
+        .send(
+          `<!doctype html>${renderToString(
+            <Document
+              content={renderStylesToString(result)}
+              helmet={helmet}
+              css={cssLinksFromAssets(assets, 'client')}
+              state={initialState}
+              linkTags={linkTags}
+              styleTags={styleTags}
+              scriptTags={scriptTags}
+            />
+          )}`
+        );
     } catch (e) {
       console.log(e);
       next(e);

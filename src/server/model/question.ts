@@ -412,7 +412,7 @@ export async function exportTipData({
     );
 
     // @ts-ignore
-    stream.pipe(writableStream);
+    stream.pipe(writableStream);  
   }
 
   const writeTipsToStream = (tipsArray, anyWritableStream) => {

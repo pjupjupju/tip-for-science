@@ -1,17 +1,24 @@
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import { loadableReady } from '@loadable/component';
 import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
 // @ts-ignore
 import { createUploadLink } from 'apollo-upload-client';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
-import { hydrate } from 'react-dom';
+import { hydrateRoot, Root } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'emotion-theming';
 import fetch from 'unfetch';
 import { App } from './App';
 import { tipForScienceTheme } from './theme';
 import csMessages from './translations/cs.json';
+
+declare global {
+  interface Window {
+    tfsRoot: Root;
+  }
+}
 
 const messages = {
   cs: csMessages,
@@ -32,18 +39,29 @@ const client = new ApolloClient({
   }),
 });
 
-hydrate(
-  <BrowserRouter>
-    <IntlProvider locale="en" defaultLocale="en">
-      <ApolloProvider client={client}>
-        <ThemeProvider theme={tipForScienceTheme}>
-          <App />
-        </ThemeProvider>
-      </ApolloProvider>
-    </IntlProvider>
-  </BrowserRouter>,
-  document.getElementById('root')
-);
+loadableReady().then(() => {
+  const content = (
+    <BrowserRouter>
+      <IntlProvider locale="en" defaultLocale="en" messages={messages.cs}>
+        <ApolloProvider client={client}>
+          <ThemeProvider theme={tipForScienceTheme}>
+            <App />
+          </ThemeProvider>
+        </ApolloProvider>
+      </IntlProvider>
+    </BrowserRouter>
+  );
+
+  if (process.env.NODE_ENV === 'production') {
+    hydrateRoot(document.getElementById('root'), content);
+  } else {
+    if (window.tfsRoot) {
+      window.tfsRoot.render(content);
+    } else {
+      window.tfsRoot = hydrateRoot(document.getElementById('root'), content);
+    }
+  }
+});
 
 // @ts-ignore
 if (module.hot) {
