@@ -16,7 +16,7 @@ const BackButton = ({
   const pushDownProps = pushDown ? { mt: 'auto' } : {};
   return (
     <Flex {...pushDownProps} {...props}>
-      <Link component={BackButtonComponent} to="/">
+      <Link to="/">
         {children}
       </Link>
     </Flex>

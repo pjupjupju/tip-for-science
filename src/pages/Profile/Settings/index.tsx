@@ -37,21 +37,22 @@ const validationSchema = Yup.object().shape({
     .nullable()
     .transform((value) => (!!value ? value : undefined)),
   oldPassword: Yup.mixed()
-    .when('newPassword', {
-      is: (val) => val !== '' && val != null,
-      then: Yup.string().required(
-        'Pro změnu hesla musíš vyplnit aktuální heslo'
-      ),
-      otherwise: Yup.mixed().notRequired(),
+    .when('newPassword', ([newPassword, schema]) => {
+      return newPassword !== '' && newPassword != null
+        ? schema
+            .string()
+            .required('Pro změnu hesla musíš vyplnit aktuální heslo')
+        : schema.mixed().notRequired();
     })
     .strict(),
   confirmNewPassword: Yup.mixed()
-    .when('newPassword', {
-      is: (val) => val !== '' && val != null,
-      then: Yup.string()
-        .oneOf([Yup.ref('newPassword')], 'Hesla se neshodují')
-        .required(),
-      otherwise: Yup.mixed().notRequired(),
+    .when('newPassword', ([confirmNewPassword, schema]) => {
+      return confirmNewPassword !== '' && confirmNewPassword != null
+        ? schema
+            .string()
+            .oneOf([Yup.ref('newPassword')], 'Hesla se neshodují')
+            .required()
+        : schema.mixed().notRequired();
     })
     .strict(),
   newPassword: Yup.string()
