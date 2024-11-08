@@ -120,6 +120,7 @@ export const typeDefs = /* GraphQL */ gql`
     score: Float
     createdAt: DateTime!
     updatedAt: DateTime!
+    language: String
   }
 
   enum UserRole {

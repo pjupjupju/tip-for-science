@@ -18,6 +18,8 @@ export interface User {
    * ISO 8601 DateTime
    */
   updatedAt: string;
+  country?: string;
+  language?: string;
 }
 
 export interface UserSettings {
@@ -25,6 +27,8 @@ export interface UserSettings {
   password?: string;
   gender?: string | void;
   age?: number | void;
+  country?: string;
+  language?: string;
 }
 
 export type QuestionSettings = {

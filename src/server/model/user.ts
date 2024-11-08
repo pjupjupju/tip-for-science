@@ -21,6 +21,8 @@ export async function createUser(
     email: string;
     password: string;
     role: UserRole;
+    language: string;
+    country: string;
   },
   { dynamo }: UserModelContext
 ) {
@@ -42,6 +44,8 @@ export async function createUser(
     createdAt: new Date().toISOString(),
     email: args.email,
     id,
+    language: args.language,
+    country: args.language,
     lastQuestion: null,
     userskey: `USER#${id}`,
     password: args.password,

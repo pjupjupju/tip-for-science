@@ -4,6 +4,8 @@ import { ApolloServer } from 'apollo-server-express';
 import { SchemaLink } from '@apollo/client/link/schema';
 import { renderToStringWithData } from '@apollo/client/react/ssr';
 import { DynamoDB } from 'aws-sdk';
+import { createClient } from '@supabase/supabase-js';
+import postgres from 'postgres';
 import { renderStylesToString } from 'emotion-server';
 import { ChunkExtractor } from '@loadable/server';
 import * as Sentry from '@sentry/node';
@@ -30,6 +32,9 @@ const messages = {
 
 // eslint-disable-next-line import/no-dynamic-require
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
+const supabaseKey = process.env.SUPABASE_KEY || process.env.RAZZLE_SUPABASE_KEY;
+const dbPassword = process.env.DB_PASSWORD || process.env.RAZZLE_DB_PASSWORD;
+
 const env = process.env.NODE_ENV;
 
 export async function createServer(): Promise<express.Application> {
@@ -47,6 +52,12 @@ export async function createServer(): Promise<express.Application> {
         }
   );
 
+  const supabaseUrl = 'https://ruxzbhhhyyzdrhyaxlyd.supabase.co';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  const sql = postgres(
+    `postgresql://postgres.lajqpghdvxavpiygpekv:${dbPassword}@aws-0-eu-central-1.pooler.supabase.com:6543/postgres`
+  );
+
   const runCache = new RunCache(15, 5, { dynamo });
   const runLock = new RunLock();
 
@@ -56,7 +67,7 @@ export async function createServer(): Promise<express.Application> {
       : process.env.RAZZLE_PUBLIC_DIR;
 
   const app = new ApolloServer({
-    context: createContext({ dynamo, runCache, runLock }),
+    context: createContext({ dynamo, supabase, sql, runCache, runLock }),
     debug: env !== 'production',
     playground: env !== 'production',
     formatError(error) {
@@ -142,6 +153,8 @@ export async function createServer(): Promise<express.Application> {
     try {
       const createApolloContext = createContext({
         dynamo,
+        supabase,
+        sql,
         runCache,
         runLock,
       });

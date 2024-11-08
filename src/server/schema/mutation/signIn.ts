@@ -2,14 +2,15 @@ import { compareSync } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import * as yup from 'yup';
 import { GraphQLContext, UserTokenData } from '../context';
-import { findUserByEmail } from '../../model';
+import { findUserByEmail, updateUserSettings } from '../../model';
 import { JWT_SECRET } from '../../../config';
 import { SignInResultSource } from '../types';
+import { countries } from '../../io';
 
 export async function signIn(
   parent: any,
   args: { email: string; password: string },
-  context: GraphQLContext,
+  context: GraphQLContext
 ): Promise<SignInResultSource> {
   const validator = yup
     .object()
@@ -41,8 +42,23 @@ export async function signIn(
       JWT_SECRET,
       {
         expiresIn: '90 days',
-      },
+      }
     );
+
+    if (!user.country) {
+      const countryResponse = await fetch(
+        `https://api.country.is/86.49.101.82`
+      );
+      const country = await countryResponse.json();
+      await updateUserSettings(
+        user.id,
+        {
+          country: country?.country || 'N/A',
+          language: countries[country?.country || 'GB'].language,
+        },
+        context
+      );
+    }
 
     // eslint-disable-next-line no-param-reassign
     context.request.session!.token = token;
