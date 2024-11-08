@@ -6,6 +6,7 @@ import { createUser } from '../../model';
 import { JWT_SECRET } from '../../../config';
 import { SignInResultSource } from '../types';
 import { UserRole } from '../../model/types';
+import { countries } from '../../io';
 
 export async function signUp(
   parent: any,
@@ -26,10 +27,17 @@ export async function signUp(
       abortEarly: false,
     });
 
+    const countryResponse = await fetch(
+      `https://api.country.is/86.49.101.82`
+    );
+    const country = await countryResponse.json();
+
     const newUser = {
       email: email.toLowerCase(),
       password: hashSync(password, 10),
       role: UserRole.player,
+      country: country?.country || 'N/A',
+      language: countries[country?.country || 'GB'].language,
     };
 
     const user = await createUser(newUser, context);

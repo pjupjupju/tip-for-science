@@ -15,6 +15,7 @@ export const AUTH_QUERY = gql`
         updatedAt
         age
         gender
+        language
       }
     }
   }
