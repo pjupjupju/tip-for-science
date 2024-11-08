@@ -1,5 +1,7 @@
 import { ExpressContext } from 'apollo-server-express';
 import { DynamoDB } from 'aws-sdk';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { Sql } from 'postgres';
 import { Request } from 'express';
 import { verify } from 'jsonwebtoken';
 import { JWT_SECRET } from '../../config';
@@ -15,6 +17,8 @@ export interface GraphQLContext {
   request: Request;
   runCache: RunCache;
   runLock: RunLock;
+  supabase: SupabaseClient;
+  sql: Sql;
   user?: UserTokenData;
 }
 
@@ -22,12 +26,16 @@ interface ContextOptions {
   dynamo: DynamoDB.DocumentClient;
   runCache: RunCache;
   runLock: RunLock;
+  supabase: SupabaseClient;
+  sql: Sql;
 }
 
 export function createContext({
   dynamo,
   runCache,
   runLock,
+  supabase,
+  sql,
 }: ContextOptions): (apolloContext: ExpressContext) => Promise<GraphQLContext> {
   return async (apolloContext): Promise<GraphQLContext> => {
     let user: UserTokenData | undefined;
@@ -51,6 +59,8 @@ export function createContext({
 
     return {
       dynamo,
+      supabase,
+      sql,
       request: apolloContext.req,
       runCache,
       runLock,

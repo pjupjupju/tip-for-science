@@ -32,6 +32,8 @@ async function createUser() {
     role: UserRole.admin,
     slug: 'not-unique-slug',
     updatedAt: new Date().toISOString(),
+    language: 'cs',
+    country: 'CZ',
     score: 0,
     lastQuestion: null,
     bundle: [],
