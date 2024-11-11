@@ -9,6 +9,7 @@ interface DocumentProps {
   linkTags: React.ReactNode;
   styleTags: React.ReactNode;
   scriptTags: React.ReactNode;
+  initialLanguage: string;
 }
 
 export function Document({
@@ -19,9 +20,10 @@ export function Document({
   linkTags,
   styleTags,
   scriptTags,
+  initialLanguage,
 }: DocumentProps) {
   return (
-    <html lang="sk">
+    <html lang={initialLanguage}>
       <head>
         <meta charSet="UTF-8" />
         <meta name="google" content="notranslate" />
@@ -60,6 +62,11 @@ export function Document({
       <body>
         <div id="root" dangerouslySetInnerHTML={{ __html: content }} />
         {scriptTags}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.__INITIAL_LANGUAGE__="${initialLanguage}";`,
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `window.__D=${JSON.stringify(state).replace(
