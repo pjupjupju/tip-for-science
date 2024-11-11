@@ -15,6 +15,7 @@ export const SIGN_IN_MUTATION = gql`
             updatedAt
             age
             gender
+            language
           }
         }
       }

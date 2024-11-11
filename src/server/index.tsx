@@ -11,7 +11,6 @@ import { ChunkExtractor } from '@loadable/server';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 import React from 'react';
-import { IntlProvider } from 'react-intl';
 import { Helmet } from 'react-helmet';
 import { StaticRouter } from 'react-router-dom/server';
 import express from 'express';
@@ -21,14 +20,16 @@ import { renderToString } from 'react-dom/server';
 import { resolve } from 'path';
 import { App } from '../App';
 import { Document } from './Document';
-import { DynamoSessionStore, RunCache, RunLock, runMigrations } from './io';
+import {
+  countries,
+  DynamoSessionStore,
+  RunCache,
+  RunLock,
+  runMigrations,
+} from './io';
 import { createContext, typeDefs, resolvers, schema } from './schema';
 import { AWS_REGION, TABLE_SESSION } from '../config';
-import csMessages from '../translations/cs.json';
-
-const messages = {
-  cs: csMessages,
-};
+import { LanguageProvider } from '../LanguageProvider';
 
 // eslint-disable-next-line import/no-dynamic-require
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
@@ -174,12 +175,23 @@ export async function createServer(): Promise<express.Application> {
         entrypoints: ['client'],
       });
 
+      let language = context.user?.language;
+      if (!language) {
+        const countryResponse = await fetch(
+          `https://api.country.is/86.49.101.82`
+        );
+        const country = await countryResponse.json();
+        language = countries[country?.country || 'GB'].language;
+      }
+
+      console.log('LENGUAAAZ', language);
+
       const bootstrap = extractor.collectChunks(
         <ApolloProvider client={client}>
           <StaticRouter location={req.url || '/'}>
-            <IntlProvider locale="cs" defaultLocale="en" messages={messages.cs}>
+            <LanguageProvider serverLanguage={language}>
               <App />
-            </IntlProvider>
+            </LanguageProvider>
           </StaticRouter>
         </ApolloProvider>
       );
@@ -215,6 +227,7 @@ export async function createServer(): Promise<express.Application> {
         .send(
           `<!doctype html>${renderToString(
             <Document
+              initialLanguage={language}
               content={renderStylesToString(result)}
               helmet={helmet}
               css={cssLinksFromAssets(assets, 'client')}

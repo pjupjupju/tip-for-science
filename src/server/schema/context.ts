@@ -10,6 +10,7 @@ import { RunCache, RunLock } from '../io';
 export interface UserTokenData {
   /** User ulid */
   id: string;
+  language: string;
 }
 
 export interface GraphQLContext {
@@ -20,6 +21,7 @@ export interface GraphQLContext {
   supabase: SupabaseClient;
   sql: Sql;
   user?: UserTokenData;
+  language?: string;
 }
 
 interface ContextOptions {
