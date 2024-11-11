@@ -27,17 +27,16 @@ export async function signUp(
       abortEarly: false,
     });
 
-    const countryResponse = await fetch(
-      `https://api.country.is/86.49.101.82`
-    );
+    const countryResponse = await fetch(`https://api.country.is/86.49.101.82`);
     const country = await countryResponse.json();
+    const language = countries[country?.country || 'GB'].language;
 
     const newUser = {
       email: email.toLowerCase(),
       password: hashSync(password, 10),
       role: UserRole.player,
       country: country?.country || 'N/A',
-      language: countries[country?.country || 'GB'].language,
+      language,
     };
 
     const user = await createUser(newUser, context);
@@ -56,7 +55,7 @@ export async function signUp(
     context.request.session!.token = token;
     // assign user data to context so it can be used in downstream gql operations
     // eslint-disable-next-line no-param-reassign
-    context.user = { id: user.id };
+    context.user = { id: user.id, language };
 
     return {
       type: 'SignInSuccess',
