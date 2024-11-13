@@ -7,24 +7,28 @@ import { TutorialHeader } from '../TutorialHeader';
 import { getTutorialImageStyle } from '../commonStyleSheets';
 import jupiter from './../../assets/jupiterTut.jpg';
 import { SlideProps } from './types';
-import {
-  getScore,
-  getScoreSentence,
-  topScoreSentence,
-  highScoreSentence,
-  lowScoreSentence,
-  zeroScoreSentence,
-} from '../../helpers';
+import { getScore } from '../../helpers';
 import { FunFact } from './../Game/FunFact';
 import { HomeButton } from './HomeButton';
 import { NextButton } from './NextButton';
+import { useIntl } from 'react-intl';
+import ScoreMessage from '../ScoreMessage';
 
 const imageStyle = getTutorialImageStyle(jupiter);
 
-const fact =
-  'Tento plynný obr se (na rovníku) otáčí rychlostí {correct} km/h. Jeden den na Jupiteru trvá necelých 10 hodin. Slunce oběhne za zhruba 12 pozemských let.';
-
 const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
+  const intl = useIntl();
+  const fact = intl.formatMessage({
+    id: 'app.tutorial.slide.ffjupiter',
+    defaultMessage: `This gas giant rotates at a speed of {correct} km/h at the equator. 
+    One day on Jupiter lasts just under 10 hours, and it completes an orbit around the Sun in approximately 12 Earth years.`,
+    description: 'Tut14 ffjupiter',
+  });
+  const unit = intl.formatMessage({
+    id: 'app.unitkmh',
+    defaultMessage: `km/h`,
+    description: 'unit km/h',
+  });
   const correctAnswer = 45583;
   const previousTips = [80000, 1000, 500, 20000];
   const questionScore = getScore(
@@ -40,21 +44,18 @@ const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
             displayType={'text'}
             thousandSeparator={' '}
           />{' '}
-          km/h?{' '}
+          {unit}?{' '}
           <Text color="secondary" as="span">
-            {questionScore === 0 && getScoreSentence(zeroScoreSentence)}
+            {questionScore === 0 && <ScoreMessage scoreType="score.zero" />}
             {questionScore !== null &&
               questionScore > 0 &&
-              questionScore < 40 &&
-              getScoreSentence(lowScoreSentence)}
+              questionScore < 40 && <ScoreMessage scoreType="score.low" />}
             {questionScore !== null &&
               questionScore >= 40 &&
-              questionScore < 80 &&
-              getScoreSentence(highScoreSentence)}
+              questionScore < 80 && <ScoreMessage scoreType="score.high" />}
             {questionScore !== null &&
               questionScore >= 80 &&
-              questionScore < 95 &&
-              getScoreSentence(topScoreSentence)}
+              questionScore < 95 && <ScoreMessage scoreType="score.top" />}
           </Text>
         </Text>
       </TutorialHeader>

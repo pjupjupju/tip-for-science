@@ -3,13 +3,13 @@ import { Text, Flex, Button } from 'rebass';
 import { useNavigate } from 'react-router-dom';
 import { TranslucentBox } from '../TranslucentBox';
 import { Container } from '../Container';
+import { FormattedMessage } from 'react-intl';
 
 interface GameOverScreenProps {
-  onContinue: Function,
+  onContinue: Function;
 }
 
 const GameOverScreen = ({ onContinue }: GameOverScreenProps) => {
-
   const navigate = useNavigate();
   const handleClickHome = () => {
     navigate('/');
@@ -39,7 +39,11 @@ const GameOverScreen = ({ onContinue }: GameOverScreenProps) => {
             GAME OVER
           </Text>
           <Text fontWeight={500} textAlign="center" my={2} color="white">
-            Vypršel ti čas. Můžeš pokračovat, nebo si dát pauzu :)
+            <FormattedMessage
+              id="app.game.gameover"
+              defaultMessage="Time’s up! You can continue with the next question or take a break."
+              description="Game over"
+            />
           </Text>
 
           <Flex justifyContent="space-between" width="100%" mt={6}>
@@ -49,10 +53,18 @@ const GameOverScreen = ({ onContinue }: GameOverScreenProps) => {
               mr={1}
               backgroundColor={'#414141'}
             >
-              Domů
+              <FormattedMessage
+                id="app.tutorial.menu.home"
+                defaultMessage="Home"
+                description="Tut home button"
+              />
             </Button>
             <Button onClick={handleClickPlay} sx={{ flex: 3 }}>
-              Pokračovat ve hře
+              <FormattedMessage
+                id="app.game.continue"
+                defaultMessage="Continue"
+                description="Continue"
+              />
             </Button>
           </Flex>
         </Flex>

@@ -3,6 +3,14 @@
     "defaultMessage": "Home 🏠",
     "description": "Home button"
   },
+  "app.consent": {
+    "defaultMessage": "I hereby consent to Mgr. Pavlína Hillerová (hillerovap@natur.cuni.cz) processing my personal data, specifically: {lineBreak} - my email address {lineBreak} - personal information derived from my responses to questions in the questionnaires, {lineBreak} for the purposes of a study on cultural transmission. {lineBreak} {lineBreak} I understand that: {lineBreak} - I will receive information at the email address provided, {lineBreak} - I have the right to request information on what personal data is being processed about me, {lineBreak} - I can request corrections to my personal data if it is inaccurate or outdated, {lineBreak} - I can request that my personal data not be processed until the validity of the above requests is resolved, {lineBreak} - I have the right to lodge a complaint with the supervisory authority, {lineBreak} - I may withdraw my consent at any time by requesting deletion of my profile via email to hillerovap@natur.cuni.cz.",
+    "description": "Consent"
+  },
+  "app.consenthelmet": {
+    "defaultMessage": "Consent to Terms",
+    "description": "Consent helmet"
+  },
   "app.dashboard.footer.home": {
     "defaultMessage": "Home",
     "description": "Home button"
@@ -31,17 +39,57 @@
     "defaultMessage": "Stats",
     "description": "Stats button"
   },
+  "app.game.checkmail": {
+    "defaultMessage": "You can check or update it in the Settings.",
+    "description": "mail settings"
+  },
+  "app.game.closedontworry": {
+    "defaultMessage": "Don't worry, this won't affect your score, but it helps us with data analysis. :)",
+    "description": "Don't worry"
+  },
+  "app.game.continue": {
+    "defaultMessage": "Continue",
+    "description": "Continue"
+  },
+  "app.game.gameover": {
+    "defaultMessage": "Time’s up! You can continue with the next question or take a break.",
+    "description": "Game over"
+  },
+  "app.game.guessed": {
+    "defaultMessage": "I guessed",
+    "description": "Guessed"
+  },
+  "app.game.knew": {
+    "defaultMessage": "I knew",
+    "description": "Knew"
+  },
+  "app.game.lastquestion": {
+    "defaultMessage": "This was the last question (for now).",
+    "description": "Last question"
+  },
+  "app.game.morequestions": {
+    "defaultMessage": "When more questions become available, we'll let you know at your registration email.",
+    "description": "More questions"
+  },
+  "app.game.score": {
+    "defaultMessage": "Score:",
+    "description": "Score"
+  },
+  "app.game.tooclose": {
+    "defaultMessage": "Wow! That was REALLY close! Did you actually know the correct answer, or did you just make an amazing guess?",
+    "description": "Too close"
+  },
+  "app.home": {
+    "defaultMessage": "Home",
+    "description": "Home button"
+  },
   "app.home.footer.beta": {
-    "defaultMessage": "This is just a beta version. If you encounter any bug,{br} contact us at tipforscience@protonmail.com",
+    "defaultMessage": "This is just a beta version. If you encounter any bug,{lineBreak} contact us at tipforscience@protonmail.com",
     "description": "Beta warning"
   },
   "app.home.menu.dashboard": {
     "defaultMessage": "Dashboard",
     "description": "Dashboard button"
-  },
-  "app.home.menu.login": {
-    "defaultMessage": "Log in",
-    "description": "Login button"
   },
   "app.home.menu.logout": {
     "defaultMessage": "Log out",
@@ -55,9 +103,25 @@
     "defaultMessage": "Profile",
     "description": "Profile button"
   },
+  "app.home.menu.signup": {
+    "defaultMessage": "Sign up",
+    "description": "Sign up"
+  },
   "app.home.menu.tutorial": {
     "defaultMessage": "Tutorial",
     "description": "Tutorial button"
+  },
+  "app.kgunit": {
+    "defaultMessage": "kg",
+    "description": "kgunit"
+  },
+  "app.notfound": {
+    "defaultMessage": "404 - Not found",
+    "description": "404"
+  },
+  "app.previoustis": {
+    "defaultMessage": "Previous tips:",
+    "description": "Previous tips"
   },
   "app.settings.menu.age": {
     "defaultMessage": "Age:",
@@ -119,9 +183,17 @@
     "defaultMessage": "Woman",
     "description": "Woman label"
   },
+  "app.sigin": {
+    "defaultMessage": "Sign in",
+    "description": "Sign in"
+  },
   "app.signin.menu.create": {
     "defaultMessage": "Create an account",
     "description": "SignIn CreateAcc link"
+  },
+  "app.signin.menu.email": {
+    "defaultMessage": "E-mail",
+    "description": "SignIn E-mail label"
   },
   "app.signin.menu.home": {
     "defaultMessage": "Home",
@@ -175,9 +247,51 @@
     "defaultMessage": "processing of personal data",
     "description": "SignUp Processing text"
   },
+  "app.signup.validation.emailinvalid": {
+    "defaultMessage": "Please enter a valid e-mail"
+  },
+  "app.signup.validation.emailrequired": {
+    "defaultMessage": "E-mail is required"
+  },
+  "app.signup.validation.pwdconfirmation": {
+    "defaultMessage": "Please confirm the password"
+  },
+  "app.signup.validation.pwdcurrent": {
+    "defaultMessage": "Current password is required to change the password"
+  },
+  "app.signup.validation.pwdnotmatch": {
+    "defaultMessage": "Passwords do not match"
+  },
+  "app.signup.validation.pwdrequired": {
+    "defaultMessage": "Password is required"
+  },
+  "app.specifygender": {
+    "defaultMessage": "specify (if you like)",
+    "description": "specify gender"
+  },
+  "app.stats.menu.home": {
+    "defaultMessage": "Home",
+    "description": "Home link"
+  },
+  "app.stats.menu.profile": {
+    "defaultMessage": "Profile",
+    "description": "Profile text"
+  },
   "app.stats.menu.progress": {
     "defaultMessage": "Your progress:",
     "description": "Progress text"
+  },
+  "app.stats.menu.score": {
+    "defaultMessage": "Your score:",
+    "description": "Score text"
+  },
+  "app.stats.menu.settings": {
+    "defaultMessage": "Settings",
+    "description": "Settings link"
+  },
+  "app.stats.menu.stats": {
+    "defaultMessage": "Stats",
+    "description": "Stats link"
   },
   "app.stats.menu.top": {
     "defaultMessage": "Top scores:",
@@ -186,5 +300,204 @@
   "app.stats.menu.zero": {
     "defaultMessage": "Nothing to see here (yet). Soon, there will be a chart of your progress!",
     "description": "Zero score text"
+  },
+  "app.submitbutton": {
+    "defaultMessage": "Submit",
+    "description": "Submitbutton"
+  },
+  "app.tip": {
+    "defaultMessage": "tip:",
+    "description": "Tip"
+  },
+  "app.tipeval": {
+    "defaultMessage": "Your tip:",
+    "description": "Tipeval"
+  },
+  "app.tutorial.menu.home": {
+    "defaultMessage": "Home",
+    "description": "Tut home button"
+  },
+  "app.tutorial.menu.next": {
+    "defaultMessage": "Next",
+    "description": "Tut next button"
+  },
+  "app.tutorial.slide.and": {
+    "defaultMessage": "and",
+    "description": "Tut5 and"
+  },
+  "app.tutorial.slide.answer": {
+    "defaultMessage": "your answer",
+    "description": "Tut5 answer"
+  },
+  "app.tutorial.slide.apes": {
+    "defaultMessage": "This game is one big experiment in cultural evolution. Interested us how this species of extremely cooperative apes finds the optimum strategy when only group intelligence is available.",
+    "description": "Tut12 apes"
+  },
+  "app.tutorial.slide.byeb": {
+    "defaultMessage": "Tip for Science was created by evolutionary biologists {lineBreak} from Charles University.",
+    "description": "Tut15 by EB"
+  },
+  "app.tutorial.slide.chart": {
+    "defaultMessage": "In this chart you can see",
+    "description": "Tut5 chart"
+  },
+  "app.tutorial.slide.correct": {
+    "defaultMessage": "the correct answer.",
+    "description": "Tut5 correct answer"
+  },
+  "app.tutorial.slide.curious": {
+    "defaultMessage": "Are you curious...",
+    "description": "Tut1 curious"
+  },
+  "app.tutorial.slide.elekg": {
+    "defaultMessage": "kg",
+    "description": "Tut2 kg"
+  },
+  "app.tutorial.slide.elemale": {
+    "defaultMessage": "The largest male elephant on record weighed",
+    "description": "Tut4 elemale"
+  },
+  "app.tutorial.slide.eleph": {
+    "defaultMessage": "...to find out the weight of the heaviest elephant ever recorded in the annals of history?",
+    "description": "Tut1 elephant"
+  },
+  "app.tutorial.slide.elephant": {
+    "defaultMessage": "How much did the heaviest elephant weight?",
+    "description": "Tut3 eleph"
+  },
+  "app.tutorial.slide.evolution": {
+    "defaultMessage": "This game is a model of evolution.",
+    "description": "Tut7 evolution"
+  },
+  "app.tutorial.slide.ffeleph": {
+    "defaultMessage": "The largest known elephant was shot dead in 1956 in Angola. Let's say the previous players of Tip for Science guessed that this colossal creature weighed",
+    "description": "Tut2 ffeleph"
+  },
+  "app.tutorial.slide.ffjupiter": {
+    "defaultMessage": "This gas giant rotates at a speed of {correct} km/h at the equator. One day on Jupiter lasts just under 10 hours, and it completes an orbit around the Sun in approximately 12 Earth years.",
+    "description": "Tut14 ffjupiter"
+  },
+  "app.tutorial.slide.ffwash": {
+    "defaultMessage": "Washington's head measures {correct} meters. The original plan for the sculptures was to depict prominent figures of the American West, including Native Americans. The presidents were eventually depicted to give the statue a \"broader meaning\".",
+    "description": "Tut10 washington funfact"
+  },
+  "app.tutorial.slide.guess": {
+    "defaultMessage": "Fear not, the correct answers will soon be revealed! But first, why not take a guess...",
+    "description": "Tut2 guess"
+  },
+  "app.tutorial.slide.indispensable": {
+    "defaultMessage": "In this game, you are the indispensable driving force of inheritance!",
+    "description": "Tut8 indispensable"
+  },
+  "app.tutorial.slide.inheritance": {
+    "defaultMessage": "We take advantage of the cultural inheritance.",
+    "description": "Tut11 inheritance"
+  },
+  "app.tutorial.slide.jupiter": {
+    "defaultMessage": "How fast does Jupiter rotate? And hurry up, time is ticking!",
+    "description": "Tut13 jupiter"
+  },
+  "app.tutorial.slide.jupiter1": {
+    "defaultMessage": "...how swiftly does Jupiter race across the space?",
+    "description": "Tut1 jupiter"
+  },
+  "app.tutorial.slide.meter": {
+    "defaultMessage": "m",
+    "description": "Tut9 meter"
+  },
+  "app.tutorial.slide.metersq": {
+    "defaultMessage": "meters?",
+    "description": "Tut10 meters?"
+  },
+  "app.tutorial.slide.notshown": {
+    "defaultMessage": "...and sometimes you won't see any tip.",
+    "description": "Tut7 notshown"
+  },
+  "app.tutorial.slide.or": {
+    "defaultMessage": "or",
+    "description": "Tut2 or"
+  },
+  "app.tutorial.slide.perfected": {
+    "defaultMessage": "We have almost perfected social transmission.",
+    "description": "Tut11 perfected"
+  },
+  "app.tutorial.slide.play": {
+    "defaultMessage": "Play",
+    "description": "Tut15 play"
+  },
+  "app.tutorial.slide.poets": {
+    "defaultMessage": "We learn from each other - we create, build, paint, write poems - inspired by painters, inventors, scientists and poets of the past.",
+    "description": "Tut11 poets"
+  },
+  "app.tutorial.slide.points": {
+    "defaultMessage": "points.",
+    "description": "Tut6 points"
+  },
+  "app.tutorial.slide.population": {
+    "defaultMessage": "Your tips and other players' tips make up the population. Within them, individual tips fight for survival, look for partners, and reproduce.",
+    "description": "Tut7 population"
+  },
+  "app.tutorial.slide.previousp": {
+    "defaultMessage": "Now you also have the previous tips available as a potential hint:",
+    "description": "Tut9 previousp"
+  },
+  "app.tutorial.slide.prevtips": {
+    "defaultMessage": "previous tips",
+    "description": "Tut5 prevtips"
+  },
+  "app.tutorial.slide.ready": {
+    "defaultMessage": "That's it! You're now ready to play for real!",
+    "description": "Tut15 ready"
+  },
+  "app.tutorial.slide.shown": {
+    "defaultMessage": "And your tip can be seen by someone else.",
+    "description": "Tut7 shown"
+  },
+  "app.tutorial.slide.signin": {
+    "defaultMessage": "Sign in",
+    "description": "Tut15 signin"
+  },
+  "app.tutorial.slide.survive": {
+    "defaultMessage": "The ones that survive can be shown to you as a previous tip.",
+    "description": "Tut7 survive"
+  },
+  "app.tutorial.slide.timesup": {
+    "defaultMessage": "Time’s up! But this time, you can still submit your answer here:",
+    "description": "Tut13 times up"
+  },
+  "app.tutorial.slide.wash": {
+    "defaultMessage": "...about the monumental size of George Washington's head at Mount Rushmore?",
+    "description": "Tut1 washington"
+  },
+  "app.tutorial.slide.washingtonq": {
+    "defaultMessage": "How tall is George Washington's head in the Mt. Rushmore?",
+    "description": "Tut9 washington question"
+  },
+  "app.tutorial.slide.whenpoints": {
+    "defaultMessage": "You get points if you hit between 50 - 200% of the value of the correct answer.",
+    "description": "Tut6 whenpoints"
+  },
+  "app.tutorial.slide.withers": {
+    "defaultMessage": "kg and his withers height was 3,96 meters. That made him a meter higher than an average african elephant!",
+    "description": "Tut4 withers"
+  },
+  "app.tutorial.slide.youdget": {
+    "defaultMessage": "For your answer you would get",
+    "description": "Tut6 you'd get"
+  },
+  "app.unitkg": {
+    "defaultMessage": "kg",
+    "description": "unit kg"
+  },
+  "app.unitkmh": {
+    "defaultMessage": "km/h",
+    "description": "unit km/h"
+  },
+  "app.yourtip": {
+    "defaultMessage": "your tip",
+    "description": "Yourtip placeholder"
+  },
+  "validation.passwordMin": {
+    "defaultMessage": "Password must be at least {min} characters"
   }
 }

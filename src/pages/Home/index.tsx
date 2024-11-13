@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { MenuButton, Container } from '../../components';
 import { TargetImage } from '../../components/TargetImage';
 import { User, UserRole } from '../../types';
+import { Stack } from '@mui/material';
 
 interface HomeProps {
   user: User | null;
@@ -32,13 +33,15 @@ const Home = ({ user, onLogOut }: HomeProps) => {
     navigate('/profile');
   };
 
-  const handleClickSignIn = () => {
-    navigate('/signin');
+  const handleClickSignUp = () => {
+    navigate('/signup');
   };
 
   const handleClickLogOut = () => {
     onLogOut();
   };
+
+  const buttonStyles = { flex: 1 };
 
   return (
     <Container>
@@ -68,58 +71,64 @@ const Home = ({ user, onLogOut }: HomeProps) => {
             SCIENCE
           </Heading>
         </Flex>
-        <Flex
-          flexDirection="column"
-          sx={{
-            flexGrow: 1,
-            flexShrink: 0,
-          }}
-        >
-          <Flex mb="2">
-            <MenuButton flex="1" onClick={handleClickAbout}>
-            <FormattedMessage id="app.home.menu.tutorial"
-                  defaultMessage="Tutorial"
-                  description="Tutorial button" />
+        <Stack flexDirection="column" flexGrow={1} flexShrink={0} spacing={1}>
+          <Stack direction="row" spacing={1}>
+            <MenuButton sx={buttonStyles} onClick={handleClickAbout}>
+              <FormattedMessage
+                id="app.home.menu.tutorial"
+                defaultMessage="Tutorial"
+                description="Tutorial button"
+              />
             </MenuButton>
             {isSignedIn && (
-              <MenuButton ml="2" flex="1" onClick={handleClickProfile}>
-                <FormattedMessage id="app.home.menu.profile"
+              <MenuButton sx={buttonStyles} onClick={handleClickProfile}>
+                <FormattedMessage
+                  id="app.home.menu.profile"
                   defaultMessage="Profile"
-                  description="Profile button" />
+                  description="Profile button"
+                />
               </MenuButton>
             )}
-          </Flex>
+          </Stack>
           {isSignedIn && (
             <>
               {user && user.role === UserRole.admin && (
-                <MenuButton onClick={handleClickDashboard} mb="2" primary>
-                  <FormattedMessage id="app.home.menu.dashboard"
+                <MenuButton onClick={handleClickDashboard} primary>
+                  <FormattedMessage
+                    id="app.home.menu.dashboard"
                     defaultMessage="Dashboard"
-                    description="Dashboard button" />
+                    description="Dashboard button"
+                  />
                 </MenuButton>
               )}
               {user && user.role !== UserRole.admin && (
-                <MenuButton onClick={handleClickPlay} mb="2" primary>
-                  <FormattedMessage id="app.home.menu.play"
+                <MenuButton onClick={handleClickPlay} primary>
+                  <FormattedMessage
+                    id="app.home.menu.play"
                     defaultMessage="Play"
-                    description="Play button" />
+                    description="Play button"
+                  />
                 </MenuButton>
               )}
               <MenuButton onClick={handleClickLogOut}>
-                <FormattedMessage id="app.home.menu.logout"
+                <FormattedMessage
+                  id="app.home.menu.logout"
                   defaultMessage="Log out"
-                  description="Logout button" />
+                  description="Logout button"
+                />
               </MenuButton>
             </>
           )}
           {!isSignedIn && (
-            <MenuButton onClick={handleClickSignIn} primary>
-              <FormattedMessage id="app.home.menu.login"
-                defaultMessage="Log in"
-                description="Login button" />
+            <MenuButton onClick={handleClickSignUp} primary>
+              <FormattedMessage
+                id="app.home.menu.signup"
+                defaultMessage="Sign up"
+                description="Sign up"
+              />
             </MenuButton>
           )}
-        </Flex>
+        </Stack>
       </Flex>
       <Text
         mt="auto"
@@ -128,10 +137,14 @@ const Home = ({ user, onLogOut }: HomeProps) => {
         textAlign="center"
         fontSize={1}
       >
-        <FormattedMessage id="app.home.footer.beta"
-          defaultMessage="This is just a beta version. If you encounter any bug,{br} contact us at tipforscience@protonmail.com"
+        <FormattedMessage
+          id="app.home.footer.beta"
+          defaultMessage="This is just a beta version. If you encounter any bug,{lineBreak} contact us at tipforscience@protonmail.com"
           description="Beta warning"
-          values={{ br: <br /> }} />
+          values={{
+            lineBreak: <br />,
+          }}
+        />
       </Text>
     </Container>
   );

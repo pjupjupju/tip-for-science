@@ -7,6 +7,7 @@ import { AUTH_QUERY } from '../../gql';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import logo from './../../assets/logoskoly.png';
+import { FormattedMessage } from 'react-intl';
 
 const imageStyle = {
   minHeight: '210px',
@@ -29,22 +30,32 @@ const Slide15 = () => {
   const handleClickPlay = () => {
     navigate('/play');
   };
-  const handleClickSignIn = () => {
-    navigate('/signin');
+  const handleClickSignUp = () => {
+    navigate('/signup');
   };
 
   return (
     <Container>
       <TutorialHeader>
         <Text fontSize={[4, 4, 5]} color="secondary" textAlign="center" p={4}>
-          To je vše, nyní jsi připraven*a na hru naostro!
+          <FormattedMessage
+            id="app.tutorial.slide.ready"
+            defaultMessage="That's it! You're now ready to play for real!"
+            description="Tut15 ready"
+          />
         </Text>
       </TutorialHeader>
       <Image src={logo} sx={imageStyle} />
       <Text fontSize={[2, 3, 4]} color="secondary" textAlign="center" p={3}>
-        Tip for Science bylo vytvořeno evolučními biology
-        <br />
-        z Univerzity Karlovy.
+        <FormattedMessage
+          id="app.tutorial.slide.byeb"
+          defaultMessage="Tip for Science was created by evolutionary biologists {lineBreak}
+            from Charles University."
+          description="Tut15 by EB"
+          values={{
+            lineBreak: <br />,
+          }}
+        />
       </Text>
       <Flex marginTop={'auto'}>
         <HomeButton />
@@ -55,12 +66,20 @@ const Slide15 = () => {
         )}
         {!loading && isLoggedIn && !isAdmin && (
           <Button onClick={handleClickPlay} sx={{ flex: 3 }}>
-            Začít hrát
+            <FormattedMessage
+              id="app.tutorial.slide.play"
+              defaultMessage="Play"
+              description="Tut15 play"
+            />
           </Button>
         )}
         {!loading && !isLoggedIn && (
-          <Button onClick={handleClickSignIn} sx={{ flex: 3 }}>
-            Přihlásit se
+          <Button onClick={handleClickSignUp} sx={{ flex: 3 }}>
+            <FormattedMessage
+              id="app.tutorial.slide.signin"
+              defaultMessage="Sign in"
+              description="Tut15 signin"
+            />
           </Button>
         )}
       </Flex>

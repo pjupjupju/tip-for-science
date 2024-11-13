@@ -1,6 +1,8 @@
 import React from 'react';
-import { Box, Button, ButtonProps } from 'rebass';
 import { animated, useSpring } from 'react-spring';
+import Button, { ButtonProps } from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import { FormattedMessage } from 'react-intl';
 
 const Circle = ({ value }: { value: number }) => (
   <Box
@@ -13,7 +15,7 @@ const Circle = ({ value }: { value: number }) => (
   />
 );
 
-const AnimatedCircle =  animated(Circle);
+const AnimatedCircle = animated(Circle);
 
 const AnimatedButton = ({ timeLimit, ...rest }: { timeLimit: number }) => {
   const { value } = useSpring({
@@ -24,18 +26,25 @@ const AnimatedButton = ({ timeLimit, ...rest }: { timeLimit: number }) => {
 
   return (
     <Button {...rest}>
-      <AnimatedCircle
-        value={value}
-      />
+      <AnimatedCircle value={value} />
     </Button>
   );
 };
 
-const SubmitButton = ({ timeLimit, ...rest }: ButtonProps & { timeLimit?: number }) =>
+const SubmitButton = ({
+  timeLimit,
+  ...rest
+}: ButtonProps & { timeLimit?: number }) =>
   typeof timeLimit !== 'undefined' ? (
-    <AnimatedButton {...rest} timeLimit={timeLimit} />
+    <AnimatedButton variant="contained" {...rest} timeLimit={timeLimit} />
   ) : (
-    <Button {...rest}>Odeslat</Button>
+    <Button variant="contained" {...rest}>
+      <FormattedMessage
+        id="app.submitbutton"
+        defaultMessage="Submit"
+        description="Submitbutton"
+      />
+    </Button>
   );
 
 export { SubmitButton };

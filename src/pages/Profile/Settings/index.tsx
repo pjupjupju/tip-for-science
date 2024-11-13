@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Input, Label, Radio } from '@rebass/forms';
-import { Flex, Button, Text, Box } from 'rebass';
-import { FormattedMessage } from 'react-intl';
+import { Flex, Text, Box } from 'rebass';
+import { FormattedMessage, useIntl } from 'react-intl';
 import * as Yup from 'yup';
 import {
   inputStyles,
@@ -16,6 +16,8 @@ import {
 import { useMutation } from '@apollo/client';
 import { AuthQueryName, UPDATE_USER_MUTATION } from '../../../gql';
 import { User } from '../../../types';
+import Button from '@mui/material/Button';
+import { validationMessages } from './messages';
 
 enum Genders {
   man = 'man',
@@ -30,52 +32,63 @@ const getOtherGender = (gender: string) =>
 const otherGenderInputStyles = { ...inputStyles, mt: 2 };
 const radioLabelStyles = { ...labelStyles, mb: 2 };
 
-const validationSchema = Yup.object().shape({
-  email: Yup.string()
-    .notRequired()
-    .matches(emailRegex, 'Prosím, zadej platný e-mail')
-    .nullable()
-    .transform((value) => (!!value ? value : undefined)),
-  oldPassword: Yup.mixed()
-    .when('newPassword', ([newPassword, schema]) => {
-      return newPassword !== '' && newPassword != null
-        ? schema
-            .string()
-            .required('Pro změnu hesla musíš vyplnit aktuální heslo')
-        : schema.mixed().notRequired();
-    })
-    .strict(),
-  confirmNewPassword: Yup.mixed()
-    .when('newPassword', ([confirmNewPassword, schema]) => {
-      return confirmNewPassword !== '' && confirmNewPassword != null
-        ? schema
-            .string()
-            .oneOf([Yup.ref('newPassword')], 'Hesla se neshodují')
-            .required()
-        : schema.mixed().notRequired();
-    })
-    .strict(),
-  newPassword: Yup.string()
-    .notRequired()
-    .min(
-      MIN_PASSWORD_LENGTH,
-      `Heslo musí mít alespoň ${MIN_PASSWORD_LENGTH} znaků`
-    )
-    .nullable()
-    .transform((value) => (!!value ? value : undefined)),
-  age: Yup.number()
-    .notRequired()
-    .min(18)
-    .max(120)
-    .nullable()
-    .transform((value) => (!!value ? value : undefined)),
-  gender: Yup.string()
-    .notRequired()
-    .nullable()
-    .transform((value) => (!!value ? value : undefined)),
-});
-
 const Settings = ({ user }: { user: User | null }) => {
+  const intl = useIntl();
+  const placeholder = intl.formatMessage({
+    id: 'app.specifygender',
+    defaultMessage: 'specify (if you like)',
+    description: 'specify gender',
+  });
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .notRequired()
+      .matches(emailRegex, intl.formatMessage(validationMessages.emailInvalid))
+      .nullable()
+      .transform((value) => (!!value ? value : undefined)),
+    oldPassword: Yup.mixed()
+      .when('newPassword', ([newPassword, schema]) => {
+        return newPassword !== '' && newPassword != null
+          ? schema
+              .string()
+              .required(intl.formatMessage(validationMessages.passwordCurrent))
+          : schema.mixed().notRequired();
+      })
+      .strict(),
+    confirmNewPassword: Yup.mixed()
+      .when('newPassword', ([confirmNewPassword, schema]) => {
+        return confirmNewPassword !== '' && confirmNewPassword != null
+          ? schema
+              .string()
+              .oneOf(
+                [Yup.ref('newPassword')],
+                intl.formatMessage(validationMessages.passwordNotMatch)
+              )
+              .required()
+          : schema.mixed().notRequired();
+      })
+      .strict(),
+    newPassword: Yup.string()
+      .notRequired()
+      .min(
+        MIN_PASSWORD_LENGTH,
+        intl.formatMessage(validationMessages.passwordMin, {
+          min: MIN_PASSWORD_LENGTH,
+        })
+      )
+      .nullable()
+      .transform((value) => (!!value ? value : undefined)),
+    age: Yup.number()
+      .notRequired()
+      .min(18)
+      .max(120)
+      .nullable()
+      .transform((value) => (!!value ? value : undefined)),
+    gender: Yup.string()
+      .notRequired()
+      .nullable()
+      .transform((value) => (!!value ? value : undefined)),
+  });
+
   const otherGenderInputRef = useRef();
   const [log, setLog] = useState<boolean | undefined>();
   const [errors, setErrors] = useState<Array<{ error: string }>>([]);
@@ -160,7 +173,101 @@ const Settings = ({ user }: { user: User | null }) => {
           description="Anon text"
         />
       </Text>
-      <Text color="secondary" fontSize={3} mt={2} mb={3} px={3}>
+      <Text color="secondary" fontSize={3} mt={1} px={3}>
+        <FormattedMessage
+          id="app.settings.menu.otherinfo"
+          defaultMessage="Additional (voluntary) info"
+          description="Otherinfo text"
+        />
+      </Text>
+
+      <Box my={3}>
+        <Label htmlFor="gender" sx={radioLabelStyles}>
+          <FormattedMessage
+            id="app.settings.menu.gender"
+            defaultMessage="I am..."
+            description="Gender label"
+          />
+        </Label>
+        <Label color="white">
+          <Radio
+            {...register('gender')}
+            name="gender"
+            id="woman"
+            value="woman"
+          />
+          <FormattedMessage
+            id="app.settings.menu.woman"
+            defaultMessage="Woman"
+            description="Woman label"
+          />
+        </Label>
+        <Label color="white">
+          <Radio {...register('gender')} name="gender" id="man" value="man" />
+          <FormattedMessage
+            id="app.settings.menu.man"
+            defaultMessage="Man"
+            description="Man label"
+          />
+        </Label>
+        <Label color="white">
+          <Radio {...register('gender')} name="gender" id="enby" value="enby" />
+          <FormattedMessage
+            id="app.settings.menu.nonbinary"
+            defaultMessage="Nonbinary"
+            description="Nonbinary label"
+          />
+        </Label>
+        <Label color="white">
+          <Radio
+            {...register('gender')}
+            name="gender"
+            id="other"
+            value="other"
+          />
+          <FormattedMessage
+            id="app.settings.menu.othergender"
+            defaultMessage="Other (feel free to specify):"
+            description="Othergender label"
+          />
+        </Label>
+        {watchGender === 'other' && (
+          <Input
+            ref={otherGenderInputRef}
+            placeholder={placeholder}
+            mb="2"
+            defaultValue={user.gender}
+            sx={otherGenderInputStyles}
+          />
+        )}
+      </Box>
+      <Label htmlFor="age" sx={labelStyles}>
+        <FormattedMessage
+          id="app.settings.menu.age"
+          defaultMessage="Age:"
+          description="Age label"
+        />
+      </Label>
+      <Input
+        id="age"
+        type="number"
+        name="age"
+        min={18}
+        max={120}
+        mb={2}
+        sx={inputStyles}
+        {...register('age')}
+      />
+      {errors.length > 0 && (
+        <Box>
+          {errors.map((item: { error: string }, index) => (
+            <Text color="red" key={`error-${index}`}>
+              {item.error}
+            </Text>
+          ))}
+        </Box>
+      )}
+      <Text color="secondary" fontSize={3} mt={4} mb={3} px={3}>
         <FormattedMessage
           id="app.settings.menu.settings"
           defaultMessage="Account settings"
@@ -226,100 +333,6 @@ const Settings = ({ user }: { user: User | null }) => {
         {...register('confirmNewPassword')}
       />
 
-      <Text color="secondary" fontSize={3} mt={4} px={3}>
-        <FormattedMessage
-          id="app.settings.menu.otherinfo"
-          defaultMessage="Additional (voluntary) info"
-          description="Otherinfo text"
-        />
-      </Text>
-
-      <Box my={3}>
-        <Label htmlFor="gender" sx={radioLabelStyles}>
-          <FormattedMessage
-            id="app.settings.menu.gender"
-            defaultMessage="I am..."
-            description="Gender label"
-          />
-        </Label>
-        <Label color="white">
-          <Radio
-            {...register('gender')}
-            name="gender"
-            id="woman"
-            value="woman"
-          />
-          <FormattedMessage
-            id="app.settings.menu.woman"
-            defaultMessage="Woman"
-            description="Woman label"
-          />
-        </Label>
-        <Label color="white">
-          <Radio {...register('gender')} name="gender" id="man" value="man" />
-          <FormattedMessage
-            id="app.settings.menu.man"
-            defaultMessage="Man"
-            description="Man label"
-          />
-        </Label>
-        <Label color="white">
-          <Radio {...register('gender')} name="gender" id="enby" value="enby" />
-          <FormattedMessage
-            id="app.settings.menu.nonbinary"
-            defaultMessage="Nonbinary"
-            description="Nonbinary label"
-          />
-        </Label>
-        <Label color="white">
-          <Radio
-            {...register('gender')}
-            name="gender"
-            id="other"
-            value="other"
-          />
-          <FormattedMessage
-            id="app.settings.menu.othergender"
-            defaultMessage="Other (feel free to specify):"
-            description="Othergender label"
-          />
-        </Label>
-        {watchGender === 'other' && (
-          <Input
-            ref={otherGenderInputRef}
-            placeholder="uveď, prosím"
-            mb="2"
-            defaultValue={user.gender}
-            sx={otherGenderInputStyles}
-          />
-        )}
-      </Box>
-      <Label htmlFor="email" sx={labelStyles}>
-        <FormattedMessage
-          id="app.settings.menu.age"
-          defaultMessage="Age:"
-          description="Age label"
-        />
-      </Label>
-      <Input
-        type="number"
-        name="age"
-        min={18}
-        max={120}
-        mb={2}
-        sx={inputStyles}
-        {...register('age')}
-      />
-      {errors.length > 0 && (
-        <Box>
-          {errors.map((item: { error: string }, index) => (
-            <Text color="red" key={`error-${index}`}>
-              {item.error}
-            </Text>
-          ))}
-        </Box>
-      )}
-
       <Flex mt="auto" flexDirection="column" width="100%" mb="2">
         {log === true && (
           <Flex
@@ -338,7 +351,7 @@ const Settings = ({ user }: { user: User | null }) => {
             </Text>
           </Flex>
         )}
-        <Button sx={{ flex: 1, color: 'white' }}>
+        <Button variant="contained" sx={{ flex: 1, color: 'white' }}>
           <FormattedMessage
             id="app.settings.menu.save"
             defaultMessage="Save"

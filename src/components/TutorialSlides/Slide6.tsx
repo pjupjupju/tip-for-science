@@ -7,6 +7,7 @@ import { SlideProps } from './types';
 import { ScoreChart } from '../ScoreChart';
 import { HomeButton } from './HomeButton';
 import { NextButton } from './NextButton';
+import { FormattedMessage } from 'react-intl';
 
 const Slide6 = ({ handleNextStep, currentTip }: SlideProps) => {
   const correctAnswer = 11000;
@@ -14,14 +15,22 @@ const Slide6 = ({ handleNextStep, currentTip }: SlideProps) => {
     <Container>
       <TutorialHeader>
         <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" p={3}>
-          Za svou odpověď bys dostal*a{' '}
+          <FormattedMessage
+            id="app.tutorial.slide.youdget"
+            defaultMessage="For your answer you would get "
+            description="Tut6 you'd get"
+          />
           <Text color="accent" as="span">
             {' '}
             {typeof currentTip !== 'undefined'
               ? getScore(currentTip, 11000).toFixed(2)
               : 0}{' '}
           </Text>
-          bodu.
+          <FormattedMessage
+            id="app.tutorial.slide.points"
+            defaultMessage="points."
+            description="Tut6 points"
+          />
         </Text>
       </TutorialHeader>
       <Box width="100%" height="200px">
@@ -36,7 +45,11 @@ const Slide6 = ({ handleNextStep, currentTip }: SlideProps) => {
         py={4}
         px={3}
       >
-        Body získáš, pokud se trefíš mezi 50 - 200 % hodnoty správné odpovědi.
+        <FormattedMessage
+          id="app.tutorial.slide.whenpoints"
+          defaultMessage="You get points if you hit between 50 - 200% of the value of the correct answer."
+          description="Tut6 whenpoints"
+        />
       </Text>
       <Flex mt="auto" justifyContent="space-between" width="100%">
         <HomeButton />
