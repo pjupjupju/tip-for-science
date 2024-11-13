@@ -1,7 +1,6 @@
 import fs from 'fs';
 import { parse } from 'csv-parse';
 import { writeToPath } from '@fast-csv/format';
-import path from 'path';
 
 type ImportedStrategy = {
   id: number;

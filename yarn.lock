@@ -7517,16 +7517,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@maxmind/geoip2-node@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "@maxmind/geoip2-node@npm:5.0.0"
-  dependencies:
-    ip6addr: "npm:^0.2.5"
-    maxmind: "npm:^4.2.0"
-  checksum: 10c0/10f6c936b45632210210750b839578c610a3ceba06aff5db2a3d9da68b51b986caa7e700c78ab2ea02524b3793e4f21daee7ecfde1dc242241291e43833b7087
-  languageName: node
-  linkType: hard
-
 "@mdx-js/mdx@npm:^1.6.22":
   version: 1.6.22
   resolution: "@mdx-js/mdx@npm:1.6.22"
@@ -17772,7 +17762,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"decamelize@npm:^1.1.2, decamelize@npm:^1.2.0":
+"decamelize-keys@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "decamelize-keys@npm:1.1.1"
+  dependencies:
+    decamelize: "npm:^1.1.0"
+    map-obj: "npm:^1.0.0"
+  checksum: 10c0/4ca385933127437658338c65fb9aead5f21b28d3dd3ccd7956eb29aab0953b5d3c047fbc207111672220c71ecf7a4d34f36c92851b7bbde6fca1a02c541bdd7d
+  languageName: node
+  linkType: hard
+
+"decamelize@npm:^1.1.0, decamelize@npm:^1.1.2, decamelize@npm:^1.2.0":
   version: 1.2.0
   resolution: "decamelize@npm:1.2.0"
   checksum: 10c0/85c39fe8fbf0482d4a1e224ef0119db5c1897f8503bcef8b826adff7a1b11414972f6fef2d7dec2ee0b4be3863cf64ac1439137ae9e6af23a3d8dcbe26a5b4b2
@@ -22813,16 +22813,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ip6addr@npm:^0.2.5":
-  version: 0.2.5
-  resolution: "ip6addr@npm:0.2.5"
-  dependencies:
-    assert-plus: "npm:^1.0.0"
-    jsprim: "npm:^2.0.2"
-  checksum: 10c0/aaa16f844d57d2c8afca375dabb42a62e6990ea044e397bf50e18bea8b445ae0978df6fae5898c898edfd6b58cc3d3c557f405a34792739be912cd303563a916
-  languageName: node
-  linkType: hard
-
 "ip@npm:^1.1.0, ip@npm:^1.1.5":
   version: 1.1.5
   resolution: "ip@npm:1.1.5"
@@ -25195,7 +25185,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-schema@npm:0.4.0, json-schema@npm:^0.4.0":
+"json-schema@npm:^0.4.0":
   version: 0.4.0
   resolution: "json-schema@npm:0.4.0"
   checksum: 10c0/d4a637ec1d83544857c1c163232f3da46912e971d5bf054ba44fdb88f07d8d359a462b4aec46f2745efbc57053365608d88bc1d7b1729f7b4fc3369765639ed3
@@ -25372,18 +25362,6 @@ __metadata:
     json-schema: "npm:0.2.3"
     verror: "npm:1.10.0"
   checksum: 10c0/e457bd0d5f7eb11477708d77ed37a7dae88caf8226dc807a1a7d320bdb1085b7e3f89c057c2cbbcd543be41bbb934231549ef3842c9a5bbf2def940f2d07a841
-  languageName: node
-  linkType: hard
-
-"jsprim@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "jsprim@npm:2.0.2"
-  dependencies:
-    assert-plus: "npm:1.0.0"
-    extsprintf: "npm:1.3.0"
-    json-schema: "npm:0.4.0"
-    verror: "npm:1.10.0"
-  checksum: 10c0/677be2d41df536c92c6d0114a492ef197084018cfbb1a3e10b1fa1aad889564b2e3a7baa6af7949cc2d73678f42368b0be165a26bd4e4de6883a30dd6a24e98d
   languageName: node
   linkType: hard
 
@@ -26225,16 +26203,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"maxmind@npm:^4.2.0":
-  version: 4.3.22
-  resolution: "maxmind@npm:4.3.22"
-  dependencies:
-    mmdb-lib: "npm:2.1.1"
-    tiny-lru: "npm:11.2.11"
-  checksum: 10c0/75505b48b8ce0b96fac25eb135c12cdb627a3889eb6c426cd8495bb465783e76d793b8fbfc9128e6ef0941a35864e6b503858fcc4216120f0d8f97dbe8bcbd56
-  languageName: node
-  linkType: hard
-
 "md5.js@npm:^1.3.4":
   version: 1.3.5
   resolution: "md5.js@npm:1.3.5"
@@ -26861,13 +26829,6 @@ __metadata:
   bin:
     mkdirp: bin/cmd.js
   checksum: 10c0/4469faeeba703bc46b7cdbe3097d6373747a581eb8b556ce41c8fd25a826eb3254466c6522ba823c2edb0b6f0da7beb91cf71f040bc4e361534a3e67f0994bd0
-  languageName: node
-  linkType: hard
-
-"mmdb-lib@npm:2.1.1":
-  version: 2.1.1
-  resolution: "mmdb-lib@npm:2.1.1"
-  checksum: 10c0/675817303af64c21be02e9550ce885b6ffcc6fbbeae7959a189493ccf68c6b7bac74afa00376fd7a421ff2acd8f74f44fc7fd25aeed0675fc21dbc1a9d5df9f9
   languageName: node
   linkType: hard
 
@@ -34957,13 +34918,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tiny-lru@npm:11.2.11":
-  version: 11.2.11
-  resolution: "tiny-lru@npm:11.2.11"
-  checksum: 10c0/6fe45e477e198f204752cb83bb02c963e9cdcabfb0083a723b498e6a7661143641be36a3d7170df6e4a0b5d5ac6a06533b8cccc98cbdfddacec826016a5dab97
-  languageName: node
-  linkType: hard
-
 "tip-for-science@workspace:.":
   version: 0.0.0-use.local
   resolution: "tip-for-science@workspace:."
@@ -34979,7 +34933,6 @@ __metadata:
     "@loadable/component": "npm:^5.15.3"
     "@loadable/server": "npm:^5.16.1"
     "@loadable/webpack-plugin": "npm:^5.15.2"
-    "@maxmind/geoip2-node": "npm:^5.0.0"
     "@mui/material": "npm:^5.15.19"
     "@nivo/core": "npm:^0.66.0"
     "@nivo/line": "npm:^0.66.0"
@@ -35030,6 +34983,7 @@ __metadata:
     cross-env: "npm:^7.0.3"
     csv-parse: "npm:^5.3.0"
     csv-stringify: "npm:^6.2.0"
+    decamelize-keys: "npm:^1.1.1"
     dotenv: "npm:^16.4.5"
     emotion: "npm:^10.0.0"
     emotion-server: "npm:^10.0.0"

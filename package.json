@@ -30,6 +30,7 @@
     "aws-sdk": "^2.869.0",
     "bcryptjs": "^2.4.3",
     "csv-stringify": "^6.2.0",
+    "decamelize-keys": "^1.1.1",
     "dotenv": "^16.4.5",
     "emotion": "^10.0.0",
     "emotion-server": "^10.0.0",

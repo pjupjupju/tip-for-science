@@ -124,6 +124,20 @@ export type ImportedQuestionSettings = {
   numTipsToShow: number[];
 };
 
+export type ImportedTranslationSettings = {
+  qIdInSheet: string;
+  question: string;
+  qT: string;
+  factT?: string;
+  unitT?: string;
+};
+
+export type QuestionTranslationRecord = {
+  qT: string;
+  factT?: string;
+  unitT?: string;
+};
+
 /**
  * User roles
  */
@@ -131,3 +145,5 @@ export enum UserRole {
   admin = 'admin',
   player = 'player',
 }
+
+

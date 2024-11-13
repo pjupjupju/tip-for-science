@@ -5,6 +5,7 @@ export * from './getUserStats';
 export * from './highScoreQuery';
 export * from './myScoreQuery';
 export * from './importMutation';
+export * from './importTranslationsMutation';
 export * from './questionQuery';
 export * from './onlineQuery';
 export * from './saveMutation';
