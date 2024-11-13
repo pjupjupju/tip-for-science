@@ -96,7 +96,7 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
             p={4}
           >
             <FormattedMessage
-              id="app.tutorial.slide.jupiter"
+              id="app.tutorial.slide.jupiter1"
               defaultMessage="...how swiftly does Jupiter race across the space?"
               description="Tut1 jupiter"
             />

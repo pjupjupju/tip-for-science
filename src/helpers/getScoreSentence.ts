@@ -18,18 +18,17 @@ const lowScoreSentence = [
   'Not great, not terrible 🙃',
   'Slušný, na amatéra 😏',
   'Hmm!',
-  'Jakože... jo, ale úplně ne.',
+  'Skoro!',
 ];
 const zeroScoreSentence = [
   'Whoops 🙈',
-  'Tak tohle nevyšlo 🙃',
+  'Tak tohle nevyšlo.',
   'Snažíš se vůbec? 🧐',
   'Tak třeba příště.',
   '🤏 Takhle blízko... se třeba trefíš příště.',
-  'Hmmm 🤡',
+  'Hm.',
   'Tohle se moc nepovedlo.',
   '🤨',
-  '🥴',
 ];
 
 const getScoreSentence = (sentences: string[]) => {

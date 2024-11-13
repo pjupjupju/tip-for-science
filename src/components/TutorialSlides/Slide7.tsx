@@ -4,26 +4,46 @@ import { Container } from '../Container';
 import { SlideProps } from './types';
 import { NextButton } from './NextButton';
 import { HomeButton } from './HomeButton';
+import { FormattedMessage } from 'react-intl';
 
 const Slide7 = ({ handleNextStep }: SlideProps) => {
   return (
     <Container>
       <Box p="4" my="auto">
         <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" mb="4">
-          Tato hra je modelem evoluce.
+          <FormattedMessage
+            id="app.tutorial.slide.evolution"
+            defaultMessage="This game is a model of evolution."
+            description="Tut7 evolution"
+          />
         </Text>
         <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" mb="4">
-          Tvé tipy a tipy ostatních hráčů tvoří populace. V rámci nich
-          jednotlivé tipy bojují o přežití, hledají partnery, množí se.
+          <FormattedMessage
+            id="app.tutorial.slide.population"
+            defaultMessage="Your tips and other players' tips make up the population. Within them, individual tips fight for survival, look for partners, and reproduce."
+            description="Tut7 population"
+          />
         </Text>
         <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" mb="4">
-          Ty, které přežijí, se mohou jako "předchozí tip" zobrazit právě tobě.
+          <FormattedMessage
+            id="app.tutorial.slide.survive"
+            defaultMessage="The ones that survive can be shown to you as a previous tip."
+            description="Tut7 survive"
+          />
         </Text>
         <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center">
-          A tvůj tip může vidět někdo další.
+          <FormattedMessage
+            id="app.tutorial.slide.shown"
+            defaultMessage="And your tip can be seen by someone else."
+            description="Tut7 shown"
+          />
         </Text>
         <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center">
-          ...a občas žádný tip neuvidíš.
+          <FormattedMessage
+            id="app.tutorial.slide.notshown"
+            defaultMessage="...and sometimes you won't see any tip."
+            description="Tut7 notshown"
+          />
         </Text>
       </Box>
       <Flex mt="auto" justifyContent="space-between" width="100%">

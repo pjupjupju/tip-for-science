@@ -1,5 +1,5 @@
 import theme from '@rebass/preset';
-import { grey } from '@mui/material/colors';
+import { grey, pink } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
 export const tipForScienceTheme = {
@@ -122,7 +122,13 @@ export const muiTheme = createTheme({
       },
     },
   },
-  palette: {},
+  palette: {
+    primary: {
+      main: pink[500],
+    },
+    secondary: {
+      main: grey[800],
+    },},
   typography: {
     fontFamily: "'Jost', 'Helvetica Neue', sans-serif",
   },

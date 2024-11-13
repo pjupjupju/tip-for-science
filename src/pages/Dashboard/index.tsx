@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { redirect } from 'react-router-dom';
-import { Box, Button, Flex, Heading, Text } from 'rebass';
+import { Box, Flex, Heading, Text } from 'rebass';
+import Button from '@mui/material/Button';
 import { BackButton, Container, Spinner } from '../../components';
 import {
   EXPORT_MUTATION,
@@ -11,6 +12,8 @@ import {
   ONLINE_STATS_QUERY,
 } from '../../gql';
 import { User, UserRole } from '../../types';
+
+const buttonStyles = { width: '50%', my: 2 };
 
 const consoleStyle = {
   px: 2,
@@ -117,7 +120,11 @@ const Dashboard = ({ user }: DashboardProps) => {
                 description="Export button"
               />
             </Text>
-            <Button width="50%" my={2} onClick={handleClickExport}>
+            <Button
+              variant="contained"
+              sx={buttonStyles}
+              onClick={handleClickExport}
+            >
               {exportLoading ? '... generating' : 'Download'}
             </Button>
           </Flex>
@@ -130,9 +137,9 @@ const Dashboard = ({ user }: DashboardProps) => {
               />
             </Text>
             <Button
+              variant="contained"
               disabled={importLoading}
-              width="50%"
-              my={2}
+              sx={buttonStyles}
               onClick={handleClickImport}
             >
               {importLoading ? '... importing' : 'Import'}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Flex, FlexProps } from 'rebass';
 import { Link } from 'react-router-dom';
-import { Button } from '@mui/material';
+import Button from '@mui/material/Button';
 
 const buttonStyles = { mb: 3 };
 
@@ -14,7 +14,7 @@ const BackButton = ({
 
   return (
     <Flex {...pushDownProps} {...props}>
-      <Button sx={buttonStyles} to="/" component={Link}>
+      <Button variant="contained" sx={buttonStyles} to="/" component={Link}>
         {children}
       </Button>
     </Flex>

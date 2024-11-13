@@ -49,11 +49,21 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
         <Text color="primary" as="span">
           9 500
         </Text>
-        , nebo{' '}
+        ,{' '}
+        <FormattedMessage
+          id="app.tutorial.slide.or"
+          defaultMessage="or"
+          description="Tut2 or"
+        />{' '}
         <Text color="primary" as="span">
           15 000{' '}
         </Text>
-        kg.
+        <FormattedMessage
+          id="app.tutorial.slide.elekg"
+          defaultMessage="kg"
+          description="Tut2 kg"
+        />
+        .
       </Text>
       <Flex mt="auto" justifyContent="space-between" width="100%">
         <HomeButton />
