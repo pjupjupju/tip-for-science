@@ -36,6 +36,8 @@ const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 const supabaseKey = process.env.SUPABASE_KEY || process.env.RAZZLE_SUPABASE_KEY;
 const dbPassword = process.env.DB_PASSWORD || process.env.RAZZLE_DB_PASSWORD;
 
+console.log('supabasekey', supabaseKey);
+
 const env = process.env.NODE_ENV;
 
 export async function createServer(): Promise<express.Application> {
@@ -53,7 +55,7 @@ export async function createServer(): Promise<express.Application> {
         }
   );
 
-  const supabaseUrl = 'https://ruxzbhhhyyzdrhyaxlyd.supabase.co';
+  const supabaseUrl = 'https://lajqpghdvxavpiygpekv.supabase.co';
   const supabase = createClient(supabaseUrl, supabaseKey);
   const sql = postgres(
     `postgresql://postgres.lajqpghdvxavpiygpekv:${dbPassword}@aws-0-eu-central-1.pooler.supabase.com:6543/postgres`

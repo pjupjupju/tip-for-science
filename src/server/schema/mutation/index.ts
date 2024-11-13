@@ -1,6 +1,7 @@
 export * from './batchSlugify';
 export * from './exportData';
 export * from './importQuestions';
+export * from './importTranslations';
 export * from './saveTip';
 export * from './signIn';
 export * from './signOut';

@@ -1,5 +1,8 @@
 import { google } from 'googleapis';
-import { ImportedQuestionSettings } from '../model/types';
+import {
+  ImportedQuestionSettings,
+  ImportedTranslationSettings,
+} from '../model/types';
 import googleCredentials from './google-credentials.json';
 
 process.env.GOOGLE_APPLICATION_CREDENTIALS = './google-credentials.json';
@@ -76,33 +79,6 @@ async function getQuestionBatch(
       initialTips: JSON.parse(strategyRows[index][3]),
       numTipsToShow: JSON.parse(strategyRows[index][4]),
     }));
-
-    // TODO: filter to include only rows with white background or other way to select what is not imported yet
-    // TODO: change background color or setting in spreadsheet to mark what has been already imported - maybe do it after database insert instead?
-
-    /*
-    return rows
-      .filter(
-        (row, index) =>
-          !(
-            row.length < 6 ||
-            row[6].split(',').length < 2 ||
-            isRowWhite(
-              rowData[index + 3].values[0].userEnteredFormat.backgroundColor
-            )
-          )
-      )
-      .map((row) => ({
-        number: row[0],
-        id: row[1],
-        district,
-        lat: row[6].split(',')[0].trim(),
-        lon: row[6].split(',')[1].trim(),
-        foundAt: row[7],
-        author: row[11],
-        institution,
-      }));
-      */
   } catch (e) {
     console.error(e);
     new Error(
@@ -113,18 +89,42 @@ async function getQuestionBatch(
   return [];
 }
 
-function isRowWhite(
-  backgroundColorObject:
-    | { red: number; green: number; blue: number }
-    | undefined
-) {
-  return (
-    !backgroundColorObject ||
-    backgroundColorObject.red +
-      backgroundColorObject.green +
-      backgroundColorObject.blue ===
-      3
-  );
+async function getTranslationBatch(
+  spreadsheetId: string,
+  sheetName: string
+): Promise<ImportedTranslationSettings[]> {
+  const googleJwt = getToken();
+  const sheets = google.sheets('v4');
+  try {
+    const response = await sheets.spreadsheets.values.get({
+      auth: googleJwt,
+      spreadsheetId,
+      range: `${sheetName}!A1:L`,
+    });
+
+    // Slice only rows of finds
+    const rows = response!.data!.values!.slice(1);
+
+    if (rows.length === 0) {
+      console.log('No data found inside spreadsheet.');
+      return [];
+    }
+
+    return rows.map((r) => ({
+      qIdInSheet: r[0],
+      question: r[1].trim(),
+      qT: r[2].trim(),
+      ...(r[4].trim() !== '' ? { unitT: r[4].trim() } : {}),
+      ...(r[7].trim() !== '' ? { factT: r[7].trim() } : {})
+    }));
+  } catch (e) {
+    console.error(e);
+    new Error(
+      'The Spreadsheet API returned an error. Check your arguments and try again.'
+    );
+  }
+
+  return [];
 }
 
-export { getQuestionBatch };
+export { getQuestionBatch, getTranslationBatch };
