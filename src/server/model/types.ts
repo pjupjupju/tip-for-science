@@ -18,6 +18,8 @@ export interface User {
    * ISO 8601 DateTime
    */
   updatedAt: string;
+  country?: string;
+  language?: string;
 }
 
 export interface UserSettings {
@@ -25,6 +27,8 @@ export interface UserSettings {
   password?: string;
   gender?: string | void;
   age?: number | void;
+  country?: string;
+  language?: string;
 }
 
 export type QuestionSettings = {
@@ -120,6 +124,20 @@ export type ImportedQuestionSettings = {
   numTipsToShow: number[];
 };
 
+export type ImportedTranslationSettings = {
+  qIdInSheet: string;
+  question: string;
+  qT: string;
+  factT?: string;
+  unitT?: string;
+};
+
+export type QuestionTranslationRecord = {
+  qT: string;
+  factT?: string;
+  unitT?: string;
+};
+
 /**
  * User roles
  */
@@ -127,3 +145,5 @@ export enum UserRole {
   admin = 'admin',
   player = 'player',
 }
+
+

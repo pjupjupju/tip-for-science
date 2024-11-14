@@ -1,39 +1,30 @@
 import React from 'react';
-import { Button, Text, Box, Flex } from 'rebass';
+import { Text, Box, Flex } from 'rebass';
 import NumberFormat from 'react-number-format';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import washington from './../../assets/washingtonTut.jpg';
 import { ScoreChart } from '../ScoreChart';
 import { SlideProps } from './types';
-import {
-  getScore,
-  getScoreSentence,
-  topScoreSentence,
-  highScoreSentence,
-  lowScoreSentence,
-  zeroScoreSentence,
-} from '../../helpers';
-import { useHistory } from 'react-router-dom';
+import { getScore } from '../../helpers';
 import { getTutorialImageStyle } from '../commonStyleSheets';
 import { FunFact } from './../Game/FunFact';
+import { HomeButton } from './HomeButton';
+import { NextButton } from './NextButton';
+import { FormattedMessage, useIntl } from 'react-intl';
+import ScoreMessage from '../ScoreMessage';
 
 const imageStyle = getTutorialImageStyle(washington);
 
-const fact =
-  'Washingtonova hlava měří {correct} metrů. Prvotní plán sousoší měl zobrazit významné postavy amerického Západu včetně původních obyvatel. Prezidenti nakonec byli zobrazeni, aby sousoší mělo "širší význam".';
-
 const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
+  const intl = useIntl();
+  const fact = intl.formatMessage({
+    id: 'app.tutorial.slide.ffwash',
+    defaultMessage: `Washington's head measures {correct} meters. The original plan for the sculptures was to depict prominent figures of the American West, including Native Americans. The presidents were eventually depicted to give the statue a "broader meaning".`,
+    description: 'Tut10 washington funfact',
+  });
   const correctAnswer = 18.29;
   const previousTips = [28, 105];
-  const history = useHistory();
-  const handleClickHome = () => {
-    history.push('/');
-  };
-  const handleClickNext = () => {
-    handleNextStep();
-  };
-
   const questionScore = getScore(
     typeof currentTip === 'undefined' ? 0 : currentTip,
     18.29
@@ -46,22 +37,23 @@ const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
             value={currentTip}
             displayType={'text'}
             thousandSeparator={' '}
-          />{' '}
-          metrů?{' '}
+          />
+          <FormattedMessage
+            id="app.tutorial.slide.metersq"
+            defaultMessage=" meters? "
+            description="Tut10 meters?"
+          />
           <Text color="secondary" as="span">
-            {questionScore === 0 && getScoreSentence(zeroScoreSentence)}
+            {questionScore === 0 && <ScoreMessage scoreType="score.zero" />}
             {questionScore !== null &&
               questionScore > 0 &&
-              questionScore < 40 &&
-              getScoreSentence(lowScoreSentence)}
+              questionScore < 40 && <ScoreMessage scoreType="score.low" />}
             {questionScore !== null &&
               questionScore >= 40 &&
-              questionScore < 80 &&
-              getScoreSentence(highScoreSentence)}
+              questionScore < 80 && <ScoreMessage scoreType="score.high" />}
             {questionScore !== null &&
               questionScore >= 80 &&
-              questionScore < 95 &&
-              getScoreSentence(topScoreSentence)}
+              questionScore < 95 && <ScoreMessage scoreType="score.top" />}
           </Text>
         </Text>
       </TutorialHeader>
@@ -77,17 +69,8 @@ const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
       </Box>
       <FunFact correctAnswer={correctAnswer} fact={fact} />
       <Flex mt="auto" justifyContent="space-between" width="100%">
-        <Button
-          onClick={handleClickHome}
-          backgroundColor={'#414141'}
-          sx={{ flex: 1 }}
-          mr="1"
-        >
-          Domů
-        </Button>
-        <Button onClick={handleClickNext} sx={{ flex: 5 }}>
-          Další
-        </Button>
+        <HomeButton />
+        <NextButton handleNextStep={handleNextStep} />
       </Flex>
     </Container>
   );

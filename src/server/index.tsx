@@ -1,30 +1,41 @@
+import path from 'path';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import { getDataFromTree } from '@apollo/react-ssr';
 import { ApolloServer } from 'apollo-server-express';
 import { SchemaLink } from '@apollo/client/link/schema';
+import { renderToStringWithData } from '@apollo/client/react/ssr';
 import { DynamoDB } from 'aws-sdk';
+import { createClient } from '@supabase/supabase-js';
+import postgres from 'postgres';
 import { renderStylesToString } from 'emotion-server';
-import { ThemeProvider } from 'emotion-theming';
+import { ChunkExtractor } from '@loadable/server';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { StaticRouterContext } from 'react-router';
-import { StaticRouter } from 'react-router-dom';
+import { StaticRouter } from 'react-router-dom/server';
 import express from 'express';
 import expressSession from 'express-session';
 import createSessionFileStore from 'session-file-store';
-import { renderToString, renderToStaticMarkup } from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
 import { resolve } from 'path';
 import { App } from '../App';
 import { Document } from './Document';
-import { DynamoSessionStore, RunCache, RunLock, runMigrations } from './io';
+import {
+  countries,
+  DynamoSessionStore,
+  RunCache,
+  RunLock,
+  runMigrations,
+} from './io';
 import { createContext, typeDefs, resolvers, schema } from './schema';
-import { tipForScienceTheme } from '../theme';
 import { AWS_REGION, TABLE_SESSION } from '../config';
+import { LanguageProvider } from '../LanguageProvider';
 
 // eslint-disable-next-line import/no-dynamic-require
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
+const supabaseKey = process.env.SUPABASE_KEY || process.env.RAZZLE_SUPABASE_KEY;
+const dbPassword = process.env.DB_PASSWORD || process.env.RAZZLE_DB_PASSWORD;
+
 const env = process.env.NODE_ENV;
 
 export async function createServer(): Promise<express.Application> {
@@ -42,6 +53,12 @@ export async function createServer(): Promise<express.Application> {
         }
   );
 
+  const supabaseUrl = 'https://lajqpghdvxavpiygpekv.supabase.co';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  const sql = postgres(
+    `postgresql://postgres.lajqpghdvxavpiygpekv:${dbPassword}@aws-0-eu-central-1.pooler.supabase.com:6543/postgres`
+  );
+
   const runCache = new RunCache(15, 5, { dynamo });
   const runLock = new RunLock();
 
@@ -51,7 +68,7 @@ export async function createServer(): Promise<express.Application> {
       : process.env.RAZZLE_PUBLIC_DIR;
 
   const app = new ApolloServer({
-    context: createContext({ dynamo, runCache, runLock }),
+    context: createContext({ dynamo, supabase, sql, runCache, runLock }),
     debug: env !== 'production',
     playground: env !== 'production',
     formatError(error) {
@@ -135,55 +152,92 @@ export async function createServer(): Promise<express.Application> {
     res.setHeader('Expires', '0');
 
     try {
+      const createApolloContext = createContext({
+        dynamo,
+        supabase,
+        sql,
+        runCache,
+        runLock,
+      });
+      const context = await createApolloContext({ req, res });
       const client = new ApolloClient({
         cache: new InMemoryCache(),
         ssrMode: true,
-        link: new SchemaLink({ schema }),
+        link: new SchemaLink({
+          schema,
+          context,
+        }),
       });
-      const context: StaticRouterContext = {};
-      const bootstrap = (
-        <StaticRouter context={context} location={req.url || '/'}>
-          <ApolloProvider client={client}>
-            <ThemeProvider theme={tipForScienceTheme}>
+
+      const extractor = new ChunkExtractor({
+        statsFile: path.resolve('build/loadable-stats.json'),
+        // razzle client bundle entrypoint is client.js
+        entrypoints: ['client'],
+      });
+
+      let language = context.user?.language;
+      if (!language) {
+        const countryResponse = await fetch(
+          `https://api.country.is/86.49.101.82`
+        );
+        const country = await countryResponse.json();
+        language = countries[country?.country || 'GB'].language;
+      }
+
+      console.log('LENGUAAAZ', language);
+
+      const bootstrap = extractor.collectChunks(
+        <ApolloProvider client={client}>
+          <StaticRouter location={req.url || '/'}>
+            <LanguageProvider serverLanguage={language}>
               <App />
-            </ThemeProvider>
-          </ApolloProvider>
-        </StaticRouter>
+            </LanguageProvider>
+          </StaticRouter>
+        </ApolloProvider>
       );
 
-      await getDataFromTree(bootstrap);
+      const result = await renderToStringWithData(bootstrap);
 
-      const markup = renderStylesToString(renderToString(bootstrap));
-      const helmet = Helmet.renderStatic();
       const initialState = client.extract();
 
-      const cssLinksFromAssets = (assets, entrypoint): string => {
+      // collect script tags
+      const scriptTags = extractor.getScriptElements();
+
+      // collect "preload/prefetch" links
+      const linkTags = extractor.getLinkElements();
+
+      // collect style tags
+      const styleTags = extractor.getStyleElements();
+
+      const helmet = Helmet.renderStatic();
+
+      // TODO: fix ANY
+      const cssLinksFromAssets = (assets: any, entrypoint: any): string => {
         return assets[entrypoint]
           ? assets[entrypoint].css
-            ? assets[entrypoint].css.map((asset) => (
+            ? assets[entrypoint].css.map((asset: string) => (
                 <link rel="stylesheet" href={asset} />
               ))
             : ''
           : '';
       };
 
-      if (context.url) {
-        res.redirect(context.url);
-      } else {
-        res
-          .status(context.statusCode || 200)
-          .send(
-            `<!doctype html>${renderToStaticMarkup(
-              <Document
-                content={markup}
-                helmet={helmet}
-                css={cssLinksFromAssets(assets, 'client')}
-                js={assets.client.js}
-                state={initialState}
-              />
-            )}`
-          );
-      }
+      res
+        .status(200)
+        .send(
+          `<!doctype html>${renderToString(
+            <Document
+              initialLanguage={language}
+              content={renderStylesToString(result)}
+              helmet={helmet}
+              css={cssLinksFromAssets(assets, 'client')}
+              state={initialState}
+              linkTags={linkTags}
+              styleTags={styleTags}
+              scriptTags={scriptTags}
+            />
+          )}`
+        );
     } catch (e) {
       console.log(e);
       next(e);

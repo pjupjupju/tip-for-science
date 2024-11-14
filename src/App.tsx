@@ -1,7 +1,11 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { Flex } from 'rebass';
 import { useMutation, useQuery } from '@apollo/client';
+import Helmet from 'react-helmet';
+import { ThemeProvider } from 'emotion-theming';
+import { GlobalStyles } from '@mui/material';
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import './index.css';
 import { About } from './pages/About';
 import { Home } from './pages/Home';
@@ -14,9 +18,9 @@ import { Spinner } from './components';
 import { SignUp } from './pages/SignUp';
 import { Dashboard } from './pages/Dashboard';
 import { Page404 } from './pages/Page404';
-import Helmet from 'react-helmet';
+import { muiTheme, resetStyles, tipForScienceTheme } from './theme';
 
-export const App = () => {
+const AppLayout = () => {
   const { loading, data } = useQuery(AUTH_QUERY);
   const [signOut] = useMutation(SIGN_OUT_MUTATION, {
     refetchQueries: [AuthQueryName],
@@ -48,37 +52,33 @@ export const App = () => {
   return (
     <>
       <Helmet titleTemplate="%s | TipForScience.org"></Helmet>
-      <Switch>
-        <Route path="/" exact>
-          <Home user={user} onLogOut={handleLogOut} />
-        </Route>
-        <Route path="/about">
-          <About />
-        </Route>
-        <Route path="/play">
-          <Play user={user} />
-        </Route>
-        <Route path="/profile">
-          <Profile user={user} />
-        </Route>
-        <Route path="/signin">
-          <SignIn />
-        </Route>
-        <Route path="/signup">
-          <SignUp />
-        </Route>
-        <Route path="/consent">
-          <Consent />
-        </Route>
+      <Routes>
+        <Route
+          path="/"
+          element={<Home user={user} onLogOut={handleLogOut} />}
+        />
+        <Route path="/about" element={<About />} />
+        <Route path="/play" element={<Play user={user} />} />
+        <Route path="/profile/*" element={<Profile user={user} />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/consent" element={<Consent />} />
         {user && user.role === 'admin' && (
-          <Route path="/dashboard">
-            <Dashboard user={user} />
-          </Route>
+          <Route path="/dashboard" element={<Dashboard user={user} />} />
         )}
-        <Route path="*">
-          <Page404 />
-        </Route>
-      </Switch>
+        <Route path="*" element={<Page404 />} />
+      </Routes>
     </>
   );
 };
+
+const globalStyles = <GlobalStyles styles={resetStyles} />;
+
+export const App = () => (
+  <ThemeProvider theme={tipForScienceTheme}>
+    <MuiThemeProvider theme={muiTheme}>
+      {globalStyles}
+      <AppLayout />
+    </MuiThemeProvider>
+  </ThemeProvider>
+);

@@ -1,36 +1,26 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { Box, Button, Text, Flex } from 'rebass';
+import { Box, Text, Flex } from 'rebass';
 import { Container } from '../Container';
 import { SlideProps } from './types';
+import { HomeButton } from './HomeButton';
+import { NextButton } from './NextButton';
+import { FormattedMessage } from 'react-intl';
 
 const Slide8 = ({ handleNextStep }: SlideProps) => {
-  const history = useHistory();
-  const handleClickHome = () => {
-    history.push('/');
-  };
-  const handleClickNext = () => {
-    handleNextStep();
-  };
   return (
     <Container>
       <Box p="4" my="auto">
         <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" mb="4">
-          V této hře jsi nepostradatelnou hybnou silou dědičnosti!
+          <FormattedMessage
+            id="app.tutorial.slide.indispensable"
+            defaultMessage="In this game, you are the indispensable driving force of inheritance!"
+            description="Tut8 indispensable"
+          />
         </Text>
       </Box>
       <Flex mt="auto" justifyContent="space-between" width="100%">
-        <Button
-          onClick={handleClickHome}
-          backgroundColor={'#414141'}
-          sx={{ flex: 1 }}
-          mr="1"
-        >
-          Domů
-        </Button>
-        <Button onClick={handleClickNext} sx={{ flex: 5 }}>
-          Další
-        </Button>
+        <HomeButton />
+        <NextButton handleNextStep={handleNextStep} />
       </Flex>
     </Container>
   );

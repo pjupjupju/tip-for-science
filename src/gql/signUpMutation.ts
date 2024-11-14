@@ -15,6 +15,7 @@ export const SIGN_UP_MUTATION = gql`
             score
             createdAt
             updatedAt
+            language
           }
         }
       }

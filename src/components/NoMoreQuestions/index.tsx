@@ -1,19 +1,20 @@
 import { Flex, Text, Button } from 'rebass';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container } from '..';
-import { useHistory } from 'react-router';
+import { FormattedMessage } from 'react-intl';
 
 interface NoMoreQuestionsProps {
   score: Number;
 }
 
 const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const handleClickHome = () => {
-    history.push('/');
+    navigate('/');
   };
   const handleClickSettings = () => {
-    history.push('/profile/settings');
+    navigate('/profile/settings');
   };
 
   return (
@@ -33,17 +34,33 @@ const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => {
           my={2}
           color="secondary"
         >
-          Toto byla (prozatím) poslední otázka.
+          <FormattedMessage
+            id="app.game.lastquestion"
+            defaultMessage="This was the last question (for now)."
+            description="Last question"
+          />
           <br />
-          Tvoje skóre:{' '}
+          <FormattedMessage
+            id="app.stats.menu.score"
+            defaultMessage="Your score:"
+            description="Score text"
+          />{' '}
         </Text>
         <Text color="accent" as="span" fontSize={6} fontWeight={700}>
-          {score}
+          {score.toString()}
         </Text>
         <Text fontWeight={500} textAlign="center" my={5} color="secondary">
-          Až budou k dispozici další, dáme ti vědět na registrační e-mail.
+          <FormattedMessage
+            id="app.game.morequestions"
+            defaultMessage="When more questions become available, we'll let you know at your registration email."
+            description="More questions"
+          />
           <br />
-          Zkontrolovat nebo opravit jej můžeš v sekci Nastavení
+          <FormattedMessage
+            id="app.game.checkmail"
+            defaultMessage="You can check or update it in the Settings."
+            description="mail settings"
+          />{' '}
         </Text>
         <Flex justifyContent="space-between" width="100%" mt={6}>
           <Button
@@ -52,10 +69,18 @@ const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => {
             mr={1}
             backgroundColor={'#414141'}
           >
-            Domů
+            <FormattedMessage
+              id="app.home"
+              defaultMessage="Home"
+              description="Home button"
+            />
           </Button>
           <Button onClick={handleClickSettings} sx={{ flex: 2 }}>
-            Nastavení
+            <FormattedMessage
+              id="app.stats.menu.settings"
+              defaultMessage="Settings"
+              description="Settings link"
+            />
           </Button>
         </Flex>
       </Flex>

@@ -1,12 +1,9 @@
 import React from 'react';
-import { Button, ButtonProps, Flex, FlexProps } from 'rebass';
+import { Flex, FlexProps } from 'rebass';
 import { Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
 
-const BackButtonComponent = ({ children, ...props }: ButtonProps) => (
-  <Button {...props} as="a" mb={3}>
-    {children}
-  </Button>
-);
+const buttonStyles = { mb: 3 };
 
 const BackButton = ({
   children,
@@ -14,11 +11,12 @@ const BackButton = ({
   ...props
 }: FlexProps & { pushDown?: boolean }) => {
   const pushDownProps = pushDown ? { mt: 'auto' } : {};
+
   return (
     <Flex {...pushDownProps} {...props}>
-      <Link component={BackButtonComponent} to="/">
+      <Button variant="contained" sx={buttonStyles} to="/" component={Link}>
         {children}
-      </Link>
+      </Button>
     </Flex>
   );
 };

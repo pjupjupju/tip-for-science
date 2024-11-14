@@ -1,33 +1,20 @@
 import React from 'react';
-import { Button, ButtonProps } from 'rebass';
+import Button, { ButtonProps } from '@mui/material/Button';
 
 const buttonStyles = {
-  backgroundColor: '#414141',
-  color: '#D6D6D6',
   fontWeight: 400,
-  ':hover': {
-    backgroundColor: 'white',
-    color: '#414141',
-  },
-  fontSize: 4,
-};
-
-const primaryButtonStyles = {
-  fontWeight: 400,
-  color: 'white',
-  ':hover': {
-    backgroundColor: 'white',
-    color: 'primary',
-  },
-  fontSize: 4,
+  fontSize: 25,
 };
 
 const MenuButton = ({
   primary,
+  sx = {},
   ...restProps
-}: Omit<ButtonProps, 'sx'> & { primary?: boolean }) => (
+}: ButtonProps & { primary?: boolean }) => (
   <Button
-    sx={primary ? primaryButtonStyles : buttonStyles}
+    sx={{...buttonStyles, ...sx}}
+    color={primary ? 'primary' : 'secondary'}
+    variant="contained"
     {...(restProps as any)}
   />
 );

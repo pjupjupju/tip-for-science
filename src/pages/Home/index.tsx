@@ -1,10 +1,12 @@
 import React from 'react';
+import Helmet from 'react-helmet';
+import { FormattedMessage } from 'react-intl';
 import { Flex, Heading, Text } from 'rebass';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { MenuButton, Container } from '../../components';
 import { TargetImage } from '../../components/TargetImage';
 import { User, UserRole } from '../../types';
-import Helmet from 'react-helmet';
+import { Stack } from '@mui/material';
 
 interface HomeProps {
   user: User | null;
@@ -13,31 +15,33 @@ interface HomeProps {
 
 const Home = ({ user, onLogOut }: HomeProps) => {
   const isSignedIn = !!user;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleClickAbout = () => {
-    history.push('/about');
+    navigate('/about');
   };
 
   const handleClickDashboard = () => {
-    history.push('/dashboard');
+    navigate('/dashboard');
   };
 
   const handleClickPlay = () => {
-    history.push('/play');
+    navigate('/play');
   };
 
   const handleClickProfile = () => {
-    history.push('/profile');
+    navigate('/profile');
   };
 
-  const handleClickSignIn = () => {
-    history.push('/signin');
+  const handleClickSignUp = () => {
+    navigate('/signup');
   };
 
   const handleClickLogOut = () => {
     onLogOut();
   };
+
+  const buttonStyles = { flex: 1 };
 
   return (
     <Container>
@@ -67,44 +71,64 @@ const Home = ({ user, onLogOut }: HomeProps) => {
             SCIENCE
           </Heading>
         </Flex>
-        <Flex
-          flexDirection="column"
-          sx={{
-            flexGrow: 1,
-            flexShrink: 0,
-          }}
-        >
-          <Flex mb="2">
-            <MenuButton flex="1" onClick={handleClickAbout}>
-              Jak hrát?
+        <Stack flexDirection="column" flexGrow={1} flexShrink={0} spacing={1}>
+          <Stack direction="row" spacing={1}>
+            <MenuButton sx={buttonStyles} onClick={handleClickAbout}>
+              <FormattedMessage
+                id="app.home.menu.tutorial"
+                defaultMessage="Tutorial"
+                description="Tutorial button"
+              />
             </MenuButton>
             {isSignedIn && (
-              <MenuButton ml="2" flex="1" onClick={handleClickProfile}>
-                Profil
+              <MenuButton sx={buttonStyles} onClick={handleClickProfile}>
+                <FormattedMessage
+                  id="app.home.menu.profile"
+                  defaultMessage="Profile"
+                  description="Profile button"
+                />
               </MenuButton>
             )}
-          </Flex>
+          </Stack>
           {isSignedIn && (
             <>
               {user && user.role === UserRole.admin && (
-                <MenuButton onClick={handleClickDashboard} mb="2" primary>
-                  Dashboard
+                <MenuButton onClick={handleClickDashboard} primary>
+                  <FormattedMessage
+                    id="app.home.menu.dashboard"
+                    defaultMessage="Dashboard"
+                    description="Dashboard button"
+                  />
                 </MenuButton>
               )}
               {user && user.role !== UserRole.admin && (
-                <MenuButton onClick={handleClickPlay} mb="2" primary>
-                  Hrát
+                <MenuButton onClick={handleClickPlay} primary>
+                  <FormattedMessage
+                    id="app.home.menu.play"
+                    defaultMessage="Play"
+                    description="Play button"
+                  />
                 </MenuButton>
               )}
-              <MenuButton onClick={handleClickLogOut}>Odhlásit se</MenuButton>
+              <MenuButton onClick={handleClickLogOut}>
+                <FormattedMessage
+                  id="app.home.menu.logout"
+                  defaultMessage="Log out"
+                  description="Logout button"
+                />
+              </MenuButton>
             </>
           )}
           {!isSignedIn && (
-            <MenuButton onClick={handleClickSignIn} primary>
-              Přihlásit se
+            <MenuButton onClick={handleClickSignUp} primary>
+              <FormattedMessage
+                id="app.home.menu.signup"
+                defaultMessage="Sign up"
+                description="Sign up"
+              />
             </MenuButton>
           )}
-        </Flex>
+        </Stack>
       </Flex>
       <Text
         mt="auto"
@@ -113,10 +137,14 @@ const Home = ({ user, onLogOut }: HomeProps) => {
         textAlign="center"
         fontSize={1}
       >
-        Toto je betaverze. Pokud narazíš na nějaký problém nebo máš nějakou
-        připomínku,
-        <br />
-        napiš nám na tipforscience@protonmail.com, díky :)
+        <FormattedMessage
+          id="app.home.footer.beta"
+          defaultMessage="This is just a beta version. If you encounter any bug,{lineBreak} contact us at tipforscience@protonmail.com"
+          description="Beta warning"
+          values={{
+            lineBreak: <br />,
+          }}
+        />
       </Text>
     </Container>
   );

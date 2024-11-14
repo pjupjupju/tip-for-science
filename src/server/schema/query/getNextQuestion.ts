@@ -3,6 +3,7 @@ import { GraphQLContext } from '..';
 import {
   findUserById,
   getEnabledQuestionRuns,
+  getQuestionTranslation,
   updateLastQuestion,
 } from '../../model';
 
@@ -22,8 +23,9 @@ type Question = {
 export async function getNextQuestion(
   parent: any,
   _: {},
-  { dynamo, runCache, user }: GraphQLContext
+  context: GraphQLContext
 ): Promise<Question | null> {
+  const { dynamo, runCache, user } = context;
   if (user == null) {
     throw new ValidationError('Unauthorized.');
   }
@@ -61,16 +63,34 @@ export async function getNextQuestion(
 
   await updateLastQuestion(user.id, nextQuestionId, { dynamo });
 
+  let translatedData = {
+    fact: runRecord.settings.fact,
+    unit: runRecord.settings.unit,
+    question: runRecord.settings.question,
+  };
+
+  if (user.language !== 'cs') {
+    // get translated question
+    const translation = await getQuestionTranslation(
+      nextQuestionId,
+      user.language,
+      context
+    );
+    translatedData = {
+      fact: translation.factT,
+      unit: translation.unitT || '',
+      question: translation.qT,
+    };
+  }
+
   return {
     id: runRecord.id,
     gId: runRecord.generation,
     rId: runRecord.run,
-    fact: runRecord.settings.fact,
-    question: runRecord.settings.question,
     image: runRecord.settings.image,
     previousTips: runRecord.previousTips,
     correctAnswer: runRecord.settings.correctAnswer,
     timeLimit: runRecord.settings.timeLimit,
-    unit: runRecord.settings.unit,
+    ...translatedData,
   };
 }
