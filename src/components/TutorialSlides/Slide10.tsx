@@ -37,12 +37,12 @@ const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
             value={currentTip}
             displayType={'text'}
             thousandSeparator={' '}
-          />
+          />{' '}
           <FormattedMessage
             id="app.tutorial.slide.metersq"
-            defaultMessage=" meters? "
+            defaultMessage="meters?"
             description="Tut10 meters?"
-          />
+          />{' '}
           <Text color="secondary" as="span">
             {questionScore === 0 && <ScoreMessage scoreType="score.zero" />}
             {questionScore !== null &&
