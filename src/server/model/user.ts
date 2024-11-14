@@ -45,7 +45,7 @@ export async function createUser(
     email: args.email,
     id,
     language: args.language,
-    country: args.language,
+    country: args.country,
     lastQuestion: null,
     userskey: `USER#${id}`,
     password: args.password,
