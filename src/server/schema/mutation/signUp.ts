@@ -27,7 +27,7 @@ export async function signUp(
       abortEarly: false,
     });
 
-    const countryResponse = await fetch(`https://api.country.is/86.49.101.82`);
+    const countryResponse = await fetch(`https://api.country.is/${context.request.ip}`);
     const country = await countryResponse.json();
     const language = countries[country?.country || 'GB'].language;
 

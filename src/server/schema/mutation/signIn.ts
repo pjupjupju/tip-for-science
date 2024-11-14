@@ -39,7 +39,7 @@ export async function signIn(
 
     if (!user.country) {
       const countryResponse = await fetch(
-        `https://api.country.is/86.49.101.82`
+        `https://api.country.is/${context.request.ip}`
       );
       const country = await countryResponse.json();
       language = countries[country?.country || 'GB'].language;
