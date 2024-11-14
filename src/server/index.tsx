@@ -177,9 +177,7 @@ export async function createServer(): Promise<express.Application> {
 
       let language = context.user?.language;
       if (!language) {
-        const countryResponse = await fetch(
-          `https://api.country.is/86.49.101.82`
-        );
+        const countryResponse = await fetch(`https://api.country.is/${req.ip}`);
         const country = await countryResponse.json();
         language = countries[country?.country || 'GB'].language;
       }
