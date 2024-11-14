@@ -39,6 +39,7 @@ export async function getNextQuestion(
     return null;
   }
 
+  const language = user.language || 'cs'; // use DEFAULT_LANGUAGE later
   const lastQuestion = userRecord.lastQuestion;
 
   // if this is the last question in whole bundle, ie. user has completed everything
@@ -69,14 +70,11 @@ export async function getNextQuestion(
     question: runRecord.settings.question,
   };
 
-  if (user.language !== 'cs') {
+  if (language !== 'cs') {
     // get translated question
-    console.log('user language', user.language);
-    console.log('nextQuestionId', nextQuestionId);
-
     const translation = await getQuestionTranslation(
       nextQuestionId,
-      user.language,
+      language,
       context
     );
     translatedData = {
