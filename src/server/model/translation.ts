@@ -10,7 +10,7 @@ export interface TranslationModelContext {
 
 export async function getQuestionTranslation(
   questionId: string,
-  desiredLanguage,
+  desiredLanguage: string,
   { sql }: TranslationModelContext
 ): Promise<QuestionTranslationRecord> {
   const [translation] = (await sql`
