@@ -23,8 +23,9 @@ type Question = {
 export async function getNextQuestion(
   parent: any,
   _: {},
-  { dynamo, runCache, supabase, user }: GraphQLContext
+  context: GraphQLContext
 ): Promise<Question | null> {
+  const { dynamo, runCache, user } = context;
   if (user == null) {
     throw new ValidationError('Unauthorized.');
   }
@@ -70,12 +71,14 @@ export async function getNextQuestion(
 
   if (user.language !== 'cs') {
     // get translated question
-    const translation = await getQuestionTranslation(nextQuestionId, {
-      supabase,
-    });
+    const translation = await getQuestionTranslation(
+      nextQuestionId,
+      user.language,
+      context
+    );
     translatedData = {
       fact: translation.factT,
-      unit: translation.unitT,
+      unit: translation.unitT || '',
       question: translation.qT,
     };
   }

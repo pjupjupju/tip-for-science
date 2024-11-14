@@ -36,8 +36,6 @@ const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 const supabaseKey = process.env.SUPABASE_KEY || process.env.RAZZLE_SUPABASE_KEY;
 const dbPassword = process.env.DB_PASSWORD || process.env.RAZZLE_DB_PASSWORD;
 
-console.log('supabasekey', supabaseKey);
-
 const env = process.env.NODE_ENV;
 
 export async function createServer(): Promise<express.Application> {
