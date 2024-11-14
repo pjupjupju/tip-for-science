@@ -1,18 +1,24 @@
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import * as Sentry from "@sentry/react";
-import { BrowserTracing } from "@sentry/tracing";
+import { loadableReady } from '@loadable/component';
+import * as Sentry from '@sentry/react';
+import { BrowserTracing } from '@sentry/tracing';
 // @ts-ignore
 import { createUploadLink } from 'apollo-upload-client';
 import React from 'react';
-import { hydrate } from 'react-dom';
+import { hydrateRoot, Root } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from 'emotion-theming';
 import fetch from 'unfetch';
 import { App } from './App';
-import { tipForScienceTheme } from './theme';
+import { LanguageProvider } from './LanguageProvider';
+
+declare global {
+  interface Window {
+    tfsRoot: Root;
+  }
+}
 
 Sentry.init({
-  dsn: "https://f68510b1330f420eaffce1b7bc357e1f@o1163471.ingest.sentry.io/6251596",
+  dsn: 'https://f68510b1330f420eaffce1b7bc357e1f@o1163471.ingest.sentry.io/6251596',
   integrations: [new BrowserTracing()],
   tracesSampleRate: 1.0,
 });
@@ -26,16 +32,27 @@ const client = new ApolloClient({
   }),
 });
 
-hydrate(
-  <BrowserRouter>
-    <ApolloProvider client={client}>
-      <ThemeProvider theme={tipForScienceTheme}>
-        <App />
-      </ThemeProvider>
-    </ApolloProvider>
-  </BrowserRouter>,
-  document.getElementById('root')
-);
+loadableReady().then(() => {
+  const content = (
+    <BrowserRouter>
+      <LanguageProvider storage={localStorage}>
+        <ApolloProvider client={client}>
+          <App />
+        </ApolloProvider>
+      </LanguageProvider>
+    </BrowserRouter>
+  );
+
+  if (process.env.NODE_ENV === 'production') {
+    hydrateRoot(document.getElementById('root'), content);
+  } else {
+    if (window.tfsRoot) {
+      window.tfsRoot.render(content);
+    } else {
+      window.tfsRoot = hydrateRoot(document.getElementById('root'), content);
+    }
+  }
+});
 
 // @ts-ignore
 if (module.hot) {

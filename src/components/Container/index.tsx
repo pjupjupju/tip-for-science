@@ -1,5 +1,5 @@
-import { Flex } from 'rebass';
 import React, { ReactNode } from 'react';
+import { Container as BaseContainer, Stack } from '@mui/material';
 
 interface ContainerProps {
   children: ReactNode;
@@ -7,18 +7,29 @@ interface ContainerProps {
 }
 
 const relativePositionStyles = { position: 'relative' };
+const getStyles = (isRelative: boolean) => ({
+  ...(isRelative ? relativePositionStyles : {}),
+  height: '100%',
+  width: '100%',
+  mx: 'auto',
+  '&.MuiContainer-maxWidthMd': {
+    maxWidth: '700px',
+    padding: 0,
+  },
+  p: 0,
+});
+
+const stackStyles = {
+  width: '100%',
+  height: '100%',
+};
 
 const Container = ({ children, isRelative = false }: ContainerProps) => (
-  <Flex
-    maxWidth={['100%', '100%', '700px']}
-    height="100%"
-    mx="auto"
-    width="100%"
-    flexDirection="column"
-    sx={isRelative ? relativePositionStyles : undefined}
-  >
-    {children}
-  </Flex>
+  <BaseContainer maxWidth="md" sx={getStyles(isRelative)}>
+    <Stack p={0} sx={stackStyles}>
+      {children}
+    </Stack>
+  </BaseContainer>
 );
 
 export { Container };

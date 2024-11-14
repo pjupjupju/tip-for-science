@@ -15,7 +15,6 @@ interface TutorialSlideProps extends CommonTutorialProps {
 
 export const TutorialSlide = ({
   stepper: StepperComponent,
-  // step,
   content: Content,
   ...contentProps
 }: TutorialSlideProps) => {

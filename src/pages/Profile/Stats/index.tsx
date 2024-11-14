@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { UserScoreCurve } from '../../../components/UserScoreCurve';
 import { Heading, Flex, Text, Box } from 'rebass';
-
+import { FormattedMessage } from 'react-intl';
 import {
   HIGH_SCORE_QUERY,
   MY_SCORE_QUERY,
@@ -39,26 +39,36 @@ const Stats = ({ user }: { user: User | null }) => {
       </Flex>
     );
   }
-  
-  const stats = data.getUserStats.days.map(
+
+  const stats = data?.getUserStats?.days.map(
     (d: { day: string; score: number }) => ({
       x: d.day,
       y: d.score,
     })
   );
 
-  const highScore = highScoreData.getHighScore;
+  const highScore = highScoreData?.getHighScore;
+  const getMyScore = getMyScoreData?.getMyScore || 0;
 
+  /// TODO (Your score)
   return (
     <>
       <Heading color="secondary" fontSize={[2, 3, 4]} my="4" mx="3">
-        Tvoje skóre:{' '}
+        <FormattedMessage
+          id="app.stats.menu.score"
+          defaultMessage="Your score:"
+          description="Score text"
+        />{' '}
         <Text as="span" color="accent">
-          {getMyScoreData.getMyScore}
+          {getMyScore}
         </Text>
       </Heading>
       <Heading color="secondary" fontSize={[2, 3, 4]} mb="2" mx="3">
-        Vývoj tvého skóre:
+        <FormattedMessage
+          id="app.stats.menu.progress"
+          defaultMessage="Your progress:"
+          description="Progress text"
+        />
       </Heading>
       <Box sx={{ flexGrow: 1, maxHeight: 400 }}>
         {stats.length > 0 ? (
@@ -71,14 +81,21 @@ const Stats = ({ user }: { user: User | null }) => {
             alignItems="center"
           >
             <Text color="white" textAlign="center">
-              Zatím tady nic není. Až začneš hrát, objeví se tady graf tvého
-              postupu.
+              <FormattedMessage
+                id="app.stats.menu.zero"
+                defaultMessage="Nothing to see here (yet). Soon, there will be a chart of your progress!"
+                description="Zero score text"
+              />
             </Text>
           </Flex>
         )}
       </Box>
       <Heading color="secondary" fontSize={[2, 3, 4]} mb="2" mx="3">
-        Top skóre:
+        <FormattedMessage
+          id="app.stats.menu.top"
+          defaultMessage="Top scores:"
+          description="Top score text"
+        />
       </Heading>
       {highScore &&
         highScore
@@ -138,7 +155,7 @@ const Stats = ({ user }: { user: User | null }) => {
             </Text>
             :{' '}
             <Text as="span" color="accent" fontWeight="bold">
-              {getMyScoreData.getMyScore.toFixed(2)}
+              {getMyScore.toFixed(2)}
             </Text>
           </Text>
         )}

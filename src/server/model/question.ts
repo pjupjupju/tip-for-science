@@ -98,6 +98,25 @@ export async function batchCreateQuestions(
   return results;
 }
 
+export async function getAllQuestions({ dynamo }: UserModelContext) {
+    const params = {
+      TableName: TABLE_QUESTION,
+      KeyConditionExpression: 'begins_with(#id, :id) and begins_with(#qsk, :qsk)',
+      ExpressionAttributeNames: {
+        '#id': 'id',
+        '#qsk': 'qsk',
+      },
+      ExpressionAttributeValues: {
+        ':id': 'Q#',
+        ':qsk': 'QDATA#',
+      },
+    };
+  
+    const result = await dynamo.query(params).promise();
+  
+    return result.Items;
+}
+
 export async function getQuestion(id: string, { dynamo }: UserModelContext) {
   const { Item } = await dynamo
     .get({
@@ -412,7 +431,7 @@ export async function exportTipData({
     );
 
     // @ts-ignore
-    stream.pipe(writableStream);
+    stream.pipe(writableStream);  
   }
 
   const writeTipsToStream = (tipsArray, anyWritableStream) => {

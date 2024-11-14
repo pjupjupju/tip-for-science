@@ -3,6 +3,7 @@ import {
   batchSlugify,
   exportData,
   importQuestions,
+  importTranslations,
   saveTip,
   signIn,
   signOut,
@@ -77,6 +78,7 @@ export const typeDefs = /* GraphQL */ gql`
     batchSlugify: String
     exportData: String
     importQuestions: Boolean
+    importTranslations: Boolean
     saveTip(
       id: String!
       tip: Float!
@@ -120,6 +122,7 @@ export const typeDefs = /* GraphQL */ gql`
     score: Float
     createdAt: DateTime!
     updatedAt: DateTime!
+    language: String
   }
 
   enum UserRole {
@@ -142,20 +145,12 @@ export const typeDefs = /* GraphQL */ gql`
   }
 `;
 
-type Tip = {
-  id: string;
-  question: string;
-  previousTips: number[];
-  correctAnswer: number;
-  tip: number;
-  msElapsed: number;
-};
-
 export const resolvers = {
   Mutation: {
     batchSlugify,
     exportData,
     importQuestions,
+    importTranslations,
     saveTip,
     signIn,
     signOut,

@@ -7,6 +7,7 @@ import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import { SlideProps } from './types';
 import { SubmitButton } from '../SubmitButton';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const inputStyles = {
   '::placeholder': {
@@ -30,13 +31,26 @@ const labelStyle = {
   color: 'white',
 };
 
-const question =
-  'Jak vysoká je hlava George Washingtona v sousoší Mt. Rushmore?';
 const image = washington;
-const unit = 'm';
 const previousTips = [28, 105];
 
 const Slide9 = ({ onSubmit = () => {} }: SlideProps) => {
+  const intl = useIntl();
+  const question = intl.formatMessage({
+    id: 'app.tutorial.slide.washingtonq',
+    defaultMessage: "How tall is George Washington's head in the Mt. Rushmore?",
+    description: 'Tut9 washington question',
+  });
+  const unit = intl.formatMessage({
+    id: 'app.tutorial.slide.meter',
+    defaultMessage: 'm',
+    description: 'Tut9 meter',
+  });
+  const placeholder = intl.formatMessage({
+    id: 'app.yourtip',
+    defaultMessage: 'your tip',
+    description: 'Yourtip placeholder',
+  });
   const inputRef = useRef<HTMLInputElement>(null);
   const handleClickSubmit = () => {
     onSubmit(Number(inputRef.current!.value));
@@ -74,7 +88,11 @@ const Slide9 = ({ onSubmit = () => {} }: SlideProps) => {
     <Container>
       <TutorialHeader>
         <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" p={3}>
-          Nyní máš k dispozici i předchozí tipy.
+          <FormattedMessage
+            id="app.tutorial.slide.previousp"
+            defaultMessage="Now you also have the previous tips available as a potential hint:"
+            description="Tut9 previousp"
+          />
           <br />
           {question}
         </Text>
@@ -83,13 +101,17 @@ const Slide9 = ({ onSubmit = () => {} }: SlideProps) => {
       <PreviousTips previousTips={previousTips} />
       <Flex justifyContent="center" alignItems="baseline" p={2}>
         <Label htmlFor="tip" sx={labelStyle}>
-          tip:
+          <FormattedMessage
+            id="app.tip"
+            defaultMessage="tip:"
+            description="Tip"
+          />
         </Label>
         <Input
           id="tip"
           name="tip"
           type="number"
-          placeholder="tvůj tip"
+          placeholder={placeholder}
           sx={inputStyles}
           onKeyDown={handleSubmit}
           ref={inputRef}

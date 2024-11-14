@@ -6,6 +6,7 @@ import { TutorialHeader } from '../TutorialHeader';
 import { Container } from '../Container';
 import { SlideProps } from './types';
 import { SubmitButton } from '../SubmitButton';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const inputStyles = {
   '::placeholder': {
@@ -29,11 +30,25 @@ const labelStyle = {
   color: 'white',
 };
 
-const question = 'Kolik vážil nejtěžší slon?';
 const image = elephant;
-const unit = 'kg';
 
 const Slide3 = ({ onSubmit }: SlideProps) => {
+  const intl = useIntl();
+  const question = intl.formatMessage({
+    id: 'app.tutorial.slide.elephant',
+    defaultMessage: 'How much did the heaviest elephant weight?',
+    description: 'Tut3 eleph',
+  });
+  const unit = intl.formatMessage({
+    id: 'app.unitkg',
+    defaultMessage: 'kg',
+    description: 'unit kg',
+  });
+  const placeholder = intl.formatMessage({
+    id: 'app.yourtip',
+    defaultMessage: 'your tip',
+    description: 'Yourtip placeholder',
+  });
   const inputRef = useRef<HTMLInputElement>(null);
   const handleClickSubmit = () => {
     onSubmit(Number(inputRef.current!.value));
@@ -78,7 +93,11 @@ const Slide3 = ({ onSubmit }: SlideProps) => {
       <Image src={image} sx={imageStyle} />
       <Flex justifyContent="center" alignItems="baseline" p={2} marginTop={3}>
         <Label htmlFor="tip" sx={labelStyle}>
-          tip:
+          <FormattedMessage
+            id="app.tip"
+            defaultMessage="tip:"
+            description="Tip"
+          />
         </Label>
         <Input
           id="tip"
@@ -86,7 +105,7 @@ const Slide3 = ({ onSubmit }: SlideProps) => {
           type="number"
           pattern="[1-9]"
           inputMode="numeric"
-          placeholder="tvůj tip"
+          placeholder={placeholder}
           sx={inputStyles}
           onKeyDown={handleSubmit}
           ref={inputRef}

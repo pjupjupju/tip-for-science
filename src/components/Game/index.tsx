@@ -7,15 +7,10 @@ import { PreviousTips } from './PreviousTips';
 import { Container } from '../Container';
 import { SubmitButton } from '../SubmitButton';
 import { ScoreChart } from '../ScoreChart';
-import {
-  getScore,
-  getScoreSentence,
-  topScoreSentence,
-  highScoreSentence,
-  lowScoreSentence,
-  zeroScoreSentence,
-} from '../../helpers';
+import { getScore } from '../../helpers';
 import { FunFact } from './FunFact';
+import ScoreMessage from '../ScoreMessage';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 export interface Settings {
   question: string;
@@ -92,6 +87,12 @@ const Game = ({
   score,
 }: GameProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const intl = useIntl();
+  const placeholder = intl.formatMessage({
+    id: 'app.yourtip',
+    defaultMessage: 'your tip',
+    description: 'Yourtip placeholder',
+  });
 
   const questionScore =
     typeof currentTip !== 'undefined'
@@ -179,14 +180,18 @@ const Game = ({
       <PreviousTips previousTips={previousTips} unit={unit} />
       <Flex justifyContent="center" alignItems="center" p={2}>
         <Label htmlFor="tip" sx={labelStyle}>
-          tip:
+          <FormattedMessage
+            id="app.tip"
+            defaultMessage="tip:"
+            description="Tip"
+          />
         </Label>
         <Input
           ref={inputRef}
           id="tip"
           name="tip"
           type="number"
-          placeholder="tvůj tip"
+          placeholder={placeholder}
           sx={inputStyles}
           onKeyDown={handleKeyDown}
         />
@@ -212,7 +217,12 @@ const Game = ({
           textAlign="center"
           p={[1, 2, 3]}
         >
-          Skóre: {score.toFixed(2)}
+          <FormattedMessage
+            id="app.game.score"
+            defaultMessage="Score:"
+            description="Score"
+          />{' '}
+          {score.toFixed(2)}
         </Text>
       </Flex>
       <Image src={image} sx={imageStyle} />
@@ -245,19 +255,16 @@ const Game = ({
                 fontSize={[2, 3, 3]}
                 mb={3}
               >
-                {questionScore === 0 && getScoreSentence(zeroScoreSentence)}
+                {questionScore === 0 && <ScoreMessage scoreType="score.zero" />}
                 {questionScore !== null &&
                   questionScore > 0 &&
-                  questionScore < 40 &&
-                  getScoreSentence(lowScoreSentence)}
+                  questionScore < 40 && <ScoreMessage scoreType="score.low" />}
                 {questionScore !== null &&
                   questionScore >= 40 &&
-                  questionScore < 80 &&
-                  getScoreSentence(highScoreSentence)}
+                  questionScore < 80 && <ScoreMessage scoreType="score.high" />}
                 {questionScore !== null &&
                   questionScore >= 80 &&
-                  questionScore < 95 &&
-                  getScoreSentence(topScoreSentence)}
+                  questionScore < 95 && <ScoreMessage scoreType="score.top" />}
               </Text>
               <FunFact correctAnswer={correctAnswer} fact={fact} />
             </Flex>
@@ -277,10 +284,18 @@ const Game = ({
           backgroundColor="neutralFade"
           onClick={handleClickHome}
         >
-          Domů
+          <FormattedMessage
+            id="app.home"
+            defaultMessage="Home"
+            description="Home button"
+          />
         </Button>
         <Button sx={{ flex: 5 }} onClick={handleClickFinish}>
-          Pokračovat
+          <FormattedMessage
+            id="app.game.continue"
+            defaultMessage="Continue"
+            description="Continue"
+          />
         </Button>
       </Flex>
     </Container>
