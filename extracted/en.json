@@ -179,6 +179,10 @@
     "defaultMessage": "Account settings",
     "description": "Settings header"
   },
+  "app.settings.menu.specifygender": {
+    "defaultMessage": "specify (if you like)",
+    "description": "specify gender"
+  },
   "app.settings.menu.woman": {
     "defaultMessage": "Woman",
     "description": "Woman label"
@@ -253,6 +257,9 @@
   "app.signup.validation.emailrequired": {
     "defaultMessage": "E-mail is required"
   },
+  "app.signup.validation.passwordMin": {
+    "defaultMessage": "Password must be at least {min} characters"
+  },
   "app.signup.validation.pwdconfirmation": {
     "defaultMessage": "Please confirm the password"
   },
@@ -264,10 +271,6 @@
   },
   "app.signup.validation.pwdrequired": {
     "defaultMessage": "Password is required"
-  },
-  "app.specifygender": {
-    "defaultMessage": "specify (if you like)",
-    "description": "specify gender"
   },
   "app.stats.menu.home": {
     "defaultMessage": "Home",
@@ -496,8 +499,5 @@
   "app.yourtip": {
     "defaultMessage": "your tip",
     "description": "Yourtip placeholder"
-  },
-  "validation.passwordMin": {
-    "defaultMessage": "Password must be at least {min} characters"
   }
 }

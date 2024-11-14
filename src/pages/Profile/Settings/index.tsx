@@ -35,7 +35,7 @@ const radioLabelStyles = { ...labelStyles, mb: 2 };
 const Settings = ({ user }: { user: User | null }) => {
   const intl = useIntl();
   const placeholder = intl.formatMessage({
-    id: 'app.specifygender',
+    id: 'app.settings.menu.specifygender',
     defaultMessage: 'specify (if you like)',
     description: 'specify gender',
   });
