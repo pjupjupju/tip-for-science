@@ -22,7 +22,7 @@ export const validationMessages = defineMessages({
     defaultMessage: 'Passwords do not match',
   },
   passwordMin: {
-    id: 'validation.passwordMin',
+    id: 'app.signup.validation.passwordMin',
     defaultMessage: 'Password must be at least {min} characters',
   },
 });
