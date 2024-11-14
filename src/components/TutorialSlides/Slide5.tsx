@@ -20,7 +20,7 @@ const Slide5 = ({ handleNextStep, currentTip }: SlideProps) => {
             id="app.tipeval"
             defaultMessage="Your tip: "
             description="Tipeval"
-          />
+          />{' '}
           <NumberFormat
             value={currentTip}
             displayType={'text'}
@@ -53,7 +53,7 @@ const Slide5 = ({ handleNextStep, currentTip }: SlideProps) => {
           id="app.tutorial.slide.chart"
           defaultMessage="In this chart you can see "
           description="Tut5 chart"
-        />
+        />{' '}
         <Text color="accent" as="span">
           <FormattedMessage
             id="app.tutorial.slide.answer"
@@ -71,9 +71,10 @@ const Slide5 = ({ handleNextStep, currentTip }: SlideProps) => {
         </Text>{' '}
         <FormattedMessage
           id="app.tutorial.slide.and"
-          defaultMessage="and "
+          defaultMessage="and"
           description="Tut5 and"
         />
+        {' '}
         <Text color="white" as="span">
           <FormattedMessage
             id="app.tutorial.slide.correct"

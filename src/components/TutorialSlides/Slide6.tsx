@@ -17,15 +17,15 @@ const Slide6 = ({ handleNextStep, currentTip }: SlideProps) => {
         <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" p={3}>
           <FormattedMessage
             id="app.tutorial.slide.youdget"
-            defaultMessage="For your answer you would get "
+            defaultMessage="For your answer you would get"
             description="Tut6 you'd get"
-          />
+          />{' '}
           <Text color="accent" as="span">
-            {' '}
+            
             {typeof currentTip !== 'undefined'
               ? getScore(currentTip, 11000).toFixed(2)
-              : 0}{' '}
-          </Text>
+              : 0}
+          </Text>{' '}
           <FormattedMessage
             id="app.tutorial.slide.points"
             defaultMessage="points."

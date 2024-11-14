@@ -55,13 +55,13 @@ const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
           id="app.tutorial.slide.elemale"
           defaultMessage="The largest male elephant on record weighed "
           description="Tut4 elemale"
-        />
+        />{' '}
         <Text color="white" as="span">
           10 886
-        </Text>
+        </Text>{' '}
         <FormattedMessage
           id="app.tutorial.slide.withers"
-          defaultMessage=" kg and his withers height was 3,96 meters. That made him a meter higher than an average african elephant!"
+          defaultMessage="kg and his withers height was 3,96 meters. That made him a meter higher than an average african elephant!"
           description="Tut4 withers"
         />
       </Text>
