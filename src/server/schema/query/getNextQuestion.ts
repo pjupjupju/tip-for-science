@@ -71,6 +71,9 @@ export async function getNextQuestion(
 
   if (user.language !== 'cs') {
     // get translated question
+    console.log('user language', user.language);
+    console.log('nextQuestionId', nextQuestionId);
+
     const translation = await getQuestionTranslation(
       nextQuestionId,
       user.language,

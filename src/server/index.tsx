@@ -184,8 +184,6 @@ export async function createServer(): Promise<express.Application> {
         language = countries[country?.country || 'GB'].language;
       }
 
-      console.log('LENGUAAAZ', language);
-
       const bootstrap = extractor.collectChunks(
         <ApolloProvider client={client}>
           <StaticRouter location={req.url || '/'}>

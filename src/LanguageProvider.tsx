@@ -38,10 +38,8 @@ const LanguageProvider = ({
         storedLanguage = window.__INITIAL_LANGUAGE__ || DEFAULT_LANGUAGE;
         storage.setItem('userLanguage', storedLanguage);
       }
-      console.log('client side setLanguage', storedLanguage);
       setLanguage(storedLanguage);
     } else {
-      console.log('server side setLanguage', serverLanguage);
       setLanguage(serverLanguage);
     }
   }, [storage, serverLanguage]);
