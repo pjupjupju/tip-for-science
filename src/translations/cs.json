@@ -34,6 +34,7 @@
   "app.settings.menu.anon": "Všechna data budou před vyhodnocením anonymizována.",
   "app.settings.menu.email": "E-mail",
   "app.settings.menu.gender": "Jsem...",
+  "app.settings.menu.specifygender": "zadej (pokud chceš :-)",
   "app.settings.menu.man": "Muž",
   "app.settings.menu.nonbinary": "Nebinární",
   "app.settings.menu.othergender": "Jiné (můžeš upřesnit):",
