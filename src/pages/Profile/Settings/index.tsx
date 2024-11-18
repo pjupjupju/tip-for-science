@@ -1,8 +1,10 @@
 import React, { useRef, useState } from 'react';
+import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { Input, Label, Radio } from '@rebass/forms';
 import { Flex, Text, Box } from 'rebass';
 import { FormattedMessage, useIntl } from 'react-intl';
+import Button from '@mui/material/Button';
 import * as Yup from 'yup';
 import {
   inputStyles,
@@ -13,10 +15,8 @@ import {
   MIN_PASSWORD_LENGTH,
   useYupValidationResolver,
 } from '../../../helpers';
-import { useMutation } from '@apollo/client';
 import { AuthQueryName, UPDATE_USER_MUTATION } from '../../../gql';
 import { User } from '../../../types';
-import Button from '@mui/material/Button';
 import { validationMessages } from './messages';
 
 enum Genders {
@@ -45,26 +45,28 @@ const Settings = ({ user }: { user: User | null }) => {
       .matches(emailRegex, intl.formatMessage(validationMessages.emailInvalid))
       .nullable()
       .transform((value) => (!!value ? value : undefined)),
-    oldPassword: Yup.mixed()
-      .when('newPassword', ([newPassword, schema]) => {
-        return newPassword !== '' && newPassword != null
-          ? schema
-              .string()
-              .required(intl.formatMessage(validationMessages.passwordCurrent))
-          : schema.mixed().notRequired();
+    oldPassword: Yup.string()
+      .when('newPassword', ([newPassword], schema: Yup.StringSchema) => {
+        console.log('newpassword', newPassword);
+        if (typeof newPassword === 'string' && newPassword !== '') {
+          return schema.required(
+            intl.formatMessage(validationMessages.passwordCurrent)
+          );
+        }
+        return schema.notRequired();
       })
       .strict(),
-    confirmNewPassword: Yup.mixed()
-      .when('newPassword', ([confirmNewPassword, schema]) => {
-        return confirmNewPassword !== '' && confirmNewPassword != null
-          ? schema
-              .string()
-              .oneOf(
-                [Yup.ref('newPassword')],
-                intl.formatMessage(validationMessages.passwordNotMatch)
-              )
-              .required()
-          : schema.mixed().notRequired();
+    confirmNewPassword: Yup.string()
+      .when('newPassword', ([newPassword], schema: Yup.StringSchema) => {
+        if (typeof newPassword === 'string' && newPassword !== '') {
+          return schema
+            .oneOf(
+              [Yup.ref('newPassword')],
+              intl.formatMessage(validationMessages.passwordNotMatch)
+            )
+            .required();
+        }
+        return schema.notRequired();
       })
       .strict(),
     newPassword: Yup.string()
@@ -123,6 +125,7 @@ const Settings = ({ user }: { user: User | null }) => {
     age: string;
     gender: string;
   }) => {
+    console.log('baaaa');
     setErrors([]);
     let changeSet = {};
 
@@ -236,7 +239,13 @@ const Settings = ({ user }: { user: User | null }) => {
             ref={otherGenderInputRef}
             placeholder={placeholder}
             mb="2"
-            defaultValue={user.gender}
+            defaultValue={
+              ![Genders.man, Genders.woman, Genders.enby].includes(
+                user.gender as Genders
+              )
+                ? user.gender
+                : undefined
+            }
             sx={otherGenderInputStyles}
           />
         )}
@@ -351,7 +360,11 @@ const Settings = ({ user }: { user: User | null }) => {
             </Text>
           </Flex>
         )}
-        <Button variant="contained" sx={{ flex: 1, color: 'white' }}>
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{ flex: 1, color: 'white' }}
+        >
           <FormattedMessage
             id="app.settings.menu.save"
             defaultMessage="Save"
