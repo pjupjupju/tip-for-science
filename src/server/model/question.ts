@@ -2,6 +2,7 @@ import fs from 'fs';
 import { AWSError, DynamoDB } from 'aws-sdk';
 import { ScanOutput } from 'aws-sdk/clients/dynamodb';
 import { format } from '@fast-csv/format';
+import decamelizeKeys from 'decamelize-keys';
 import { ulid } from 'ulid';
 import {
   INITIAL_GENERATION_NUMBER,
@@ -16,17 +17,17 @@ import {
   DynamoRun,
   DynamoTip,
   ImportedQuestionSettings,
+  ModelContext,
+  PostgresQuestion,
   RunStrategy,
 } from './types';
 import { uploadCsvToS3, RunLock } from '../io';
-interface UserModelContext {
-  dynamo: DynamoDB.DocumentClient;
-}
 
 export async function batchCreateQuestions(
   questions: ImportedQuestionSettings[],
-  { dynamo }: UserModelContext
+  context: ModelContext
 ) {
+  const { dynamo } = context;
   const chunks = sliceIntoChunks(questions, 24);
   const initialQuestionIds: string[] = [];
   const questionIds: string[] = [];
@@ -93,31 +94,31 @@ export async function batchCreateQuestions(
 
   const results = await Promise.all(allPromises);
 
-  await updateUserBatches(initialQuestionIds, questionIds, { dynamo });
+  await updateUserBatches(initialQuestionIds, questionIds, context);
 
   return results;
 }
 
-export async function getAllQuestions({ dynamo }: UserModelContext) {
-    const params = {
-      TableName: TABLE_QUESTION,
-      KeyConditionExpression: 'begins_with(#id, :id) and begins_with(#qsk, :qsk)',
-      ExpressionAttributeNames: {
-        '#id': 'id',
-        '#qsk': 'qsk',
-      },
-      ExpressionAttributeValues: {
-        ':id': 'Q#',
-        ':qsk': 'QDATA#',
-      },
-    };
-  
-    const result = await dynamo.query(params).promise();
-  
-    return result.Items;
+export async function getAllQuestions({ dynamo }: ModelContext) {
+  const params = {
+    TableName: TABLE_QUESTION,
+    KeyConditionExpression: 'begins_with(#id, :id) and begins_with(#qsk, :qsk)',
+    ExpressionAttributeNames: {
+      '#id': 'id',
+      '#qsk': 'qsk',
+    },
+    ExpressionAttributeValues: {
+      ':id': 'Q#',
+      ':qsk': 'QDATA#',
+    },
+  };
+
+  const result = await dynamo.query(params).promise();
+
+  return result.Items;
 }
 
-export async function getQuestion(id: string, { dynamo }: UserModelContext) {
+export async function getQuestion(id: string, { dynamo }: ModelContext) {
   const { Item } = await dynamo
     .get({
       TableName: TABLE_QUESTION,
@@ -131,7 +132,7 @@ export async function getQuestion(id: string, { dynamo }: UserModelContext) {
 export async function getQuestionRun(
   id: string,
   run: number,
-  { dynamo }: UserModelContext
+  { dynamo }: ModelContext
 ) {
   const { Item } = await dynamo
     .get({
@@ -145,7 +146,7 @@ export async function getQuestionRun(
 
 export async function getEnabledQuestionRuns(
   id: string,
-  { dynamo }: UserModelContext
+  { dynamo }: ModelContext
 ): Promise<any | null> {
   const params = {
     TableName: TABLE_QUESTION,
@@ -165,11 +166,9 @@ export async function getEnabledQuestionRuns(
   return result.Items;
 }
 
-export async function createQuestionRun(
-  id: string,
-  { dynamo }: UserModelContext
-) {
-  const question = await getQuestion(id, { dynamo });
+export async function createQuestionRun(id: string, context: ModelContext) {
+  const { dynamo } = context;
+  const question = await getQuestion(id, context);
 
   const runId = question.run + 1;
   const runIndex = runId - 1;
@@ -216,7 +215,7 @@ export async function createQuestionRun(
           return error;
         }
 
-        await updateCurrentHighestRun(id, runId, { dynamo });
+        await updateCurrentHighestRun(id, runId, context);
       }
     )
     .promise();
@@ -254,11 +253,15 @@ export async function createQuestionTip(
     msElapsed: number;
     userId: string;
   },
-  { dynamo, runLock }: { dynamo: DynamoDB.DocumentClient; runLock: RunLock }
+  context: ModelContext & { runLock: RunLock }
 ) {
-  const currentTips = await getCurrentGenerationTips(id, run, generation, {
-    dynamo,
-  });
+  const { dynamo, runLock } = context;
+  const currentTips = await getCurrentGenerationTips(
+    id,
+    run,
+    generation,
+    context
+  );
 
   const currentTipsWithAnswer = currentTips.filter(
     (t: DynamoTip) =>
@@ -304,7 +307,7 @@ export async function createQuestionTip(
         !runLock.getLock(`${id}#${run}#${generation}`)
       ) {
         // We first check, whether RUN is still enabled and whether generation is still the same
-        getQuestionRun(id, run, { dynamo }).then((dbRun) => {
+        getQuestionRun(id, run, context).then((dbRun) => {
           if (dbRun && dbRun.generation === generation) {
             // Lock current Q#RUN#GEN to prevent creating multiple generations
             // we release current generation when we create next generation in future
@@ -321,7 +324,7 @@ export async function createQuestionTip(
                 correctAnswer
               )
             ) {
-              return disableRun(id, run, { dynamo });
+              return disableRun(id, run, context);
             }
 
             // new generation and new previous tips
@@ -330,7 +333,7 @@ export async function createQuestionTip(
               run,
               generation + 1,
               getNewPreviousTips(allGenerationTips, correctAnswer, strategy),
-              { dynamo, runLock }
+              context
             );
           }
         });
@@ -347,7 +350,7 @@ export async function getCurrentGenerationTips(
   questionId: string,
   runId: number,
   generationNumber: number,
-  { dynamo }: UserModelContext
+  { dynamo }: ModelContext
 ): Promise<any | null> {
   const params = {
     TableName: TABLE_QUESTION,
@@ -371,7 +374,7 @@ export async function getCurrentGenerationTips(
 async function updateCurrentHighestRun(
   questionId: string,
   newRunId: number,
-  { dynamo }: UserModelContext
+  { dynamo }: ModelContext
 ): Promise<any> {
   const params = {
     TableName: TABLE_QUESTION,
@@ -385,9 +388,7 @@ async function updateCurrentHighestRun(
   return dynamo.update(params).promise();
 }
 
-export async function exportTipData({
-  dynamo,
-}: UserModelContext): Promise<string> {
+export async function exportTipData({ dynamo }: ModelContext): Promise<string> {
   let downloadUrl: Promise<string> | string;
 
   const baseParams = {
@@ -431,7 +432,7 @@ export async function exportTipData({
     );
 
     // @ts-ignore
-    stream.pipe(writableStream);  
+    stream.pipe(writableStream);
   }
 
   const writeTipsToStream = (tipsArray, anyWritableStream) => {
@@ -499,7 +500,7 @@ async function updateCurrentGeneration(
   runId: string | number,
   newCurrentGeneration: number,
   newPreviousTips: number[],
-  { dynamo, runLock }: UserModelContext & { runLock: RunLock }
+  { dynamo, runLock }: ModelContext & { runLock: RunLock }
 ): Promise<any> {
   const params = {
     TableName: TABLE_QUESTION,
@@ -526,7 +527,7 @@ async function updateCurrentGeneration(
 async function updateUserBatches(
   initialQuestionIds: string[],
   questionIds: string[],
-  { dynamo }: UserModelContext
+  { dynamo }: ModelContext
 ): Promise<any> {
   const params = {
     TableName: TABLE_USER,
@@ -602,7 +603,7 @@ async function updateUserBatches(
 async function disableRun(
   questionId: string,
   runId: string | number,
-  { dynamo }: UserModelContext
+  { dynamo }: ModelContext
 ): Promise<any> {
   const paramsDelete = {
     TableName: TABLE_QUESTION,
@@ -670,4 +671,97 @@ function isGenerationTooCloseToCorrectAnswer(
       return count;
     }, 0)
   );
+}
+
+// --------------------- POSTGRES ----------------------------
+
+export async function getEnabledQuestionRunsV2(
+  id: string,
+  { sql }: ModelContext
+): Promise<any | null> {
+  const result = await sql`
+    SELECT r.*, q.settings
+      FROM "run" r
+      LEFT JOIN "question" q ON r.question_id = q.id
+      WHERE r.question_id = ${id} AND enabled = true;
+    `;
+
+  return result;
+}
+
+export async function getQuestionV2(id: string, { supabase }: ModelContext) {
+  const {
+    data: [question],
+  } = await supabase.from('question').select().eq('id', id);
+
+  return question;
+}
+
+export async function getQuestionWithHighestRun(
+  id: string,
+  { sql }: ModelContext
+): Promise<PostgresQuestion> {
+  const questions = await sql`
+    SELECT 
+      q.*,
+      COALESCE(r.run_num, 0) as run,
+    FROM "question" q
+    LEFT JOIN LATERAL (
+      SELECT *
+      FROM "run"
+      WHERE question_id = q.id
+      ORDER BY run_num DESC
+      LIMIT 1
+    ) r ON true
+    WHERE q.id = ${id}
+  `;
+
+  return questions[0] as PostgresQuestion;
+}
+
+export async function createQuestionRunV2(
+  questionId: string,
+  context: ModelContext
+) {
+  const { supabase } = context;
+  const question = await getQuestionWithHighestRun(questionId, context);
+
+  const runNum = question.run + 1;
+  const runIndex = runNum - 1;
+
+  const id = ulid();
+
+  const params = {
+    id,
+    generation: INITIAL_GENERATION_NUMBER,
+    enabled: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    runNum: runNum,
+    previousTips:
+      question.strategy.initialTips[
+        runIndex % question.strategy.initialTips.length
+      ],
+    strategy: {
+      numTipsToShow:
+        question.strategy.numTipsToShow[
+          runIndex % question.strategy.numTipsToShow.length
+        ],
+      selectionPressure:
+        question.strategy.selectionPressure[
+          runIndex % question.strategy.selectionPressure.length
+        ],
+      tipsPerGeneration:
+        question.strategy.tipsPerGeneration[
+          runIndex % question.strategy.tipsPerGeneration.length
+        ],
+    },
+  };
+
+  const { data } = await supabase
+    .from('run')
+    .insert({ ...decamelizeKeys(params) })
+    .select();
+
+  return { ...params, settings: question.settings };
 }

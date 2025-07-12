@@ -59,7 +59,7 @@ export async function createServer(): Promise<express.Application> {
     `postgresql://postgres.lajqpghdvxavpiygpekv:${dbPassword}@aws-0-eu-central-1.pooler.supabase.com:6543/postgres`
   );
 
-  const runCache = new RunCache(15, 5, { dynamo });
+  const runCache = new RunCache(15, 5, { dynamo, sql, supabase });
   const runLock = new RunLock();
 
   const staticDir =
