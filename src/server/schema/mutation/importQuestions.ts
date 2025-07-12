@@ -9,8 +9,10 @@ const spreadsheetId = process.env.RAZZLE_QUESTIONS_SPREADSHEET;
 export async function importQuestions(
   parent: any,
   _: any,
-  { dynamo, user }: GraphQLContext
+  context: GraphQLContext
 ) {
+  const { dynamo, user } = context;
+
   if (user == null) {
     throw new ValidationError('Unauthorized.');
   }
@@ -29,7 +31,7 @@ export async function importQuestions(
     return true;
   }
 
-  const importData = await batchCreateQuestions(questions, { dynamo });
+  const importData = await batchCreateQuestions(questions, context);
 
   const notImported = importData
     .filter(
