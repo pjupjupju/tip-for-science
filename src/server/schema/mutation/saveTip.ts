@@ -4,6 +4,7 @@ import { getScore } from '../../../helpers';
 import { RunLock } from '../../io';
 import { createQuestionTip, getQuestion, updateScore } from '../../model';
 import { User } from '../../model/types';
+import { GraphQLContext } from '../context';
 
 export async function saveTip(
   parent: any,
@@ -26,13 +27,10 @@ export async function saveTip(
     answered: boolean;
     msElapsed: number;
   },
-  {
-    dynamo,
-    user,
-    runLock,
-  }: { dynamo: DynamoDB.DocumentClient; user: User; runLock: RunLock }
+  context: GraphQLContext
 ) {
-  const question = await getQuestion(id, { dynamo });
+  const { dynamo, user, runLock } = context;
+  const question = await getQuestion(id, context);
   const { strategy, settings } = question;
 
   const runIndex = rId - 1;
@@ -66,7 +64,7 @@ export async function saveTip(
       msElapsed,
       userId: user.id,
     },
-    { dynamo, runLock }
+    context
   );
 
   const questionScore = getScore(tip, settings.correctAnswer);
