@@ -1,3 +1,13 @@
+import { SupabaseClient } from '@supabase/supabase-js';
+import { DynamoDB } from 'aws-sdk';
+import { Sql } from 'postgres';
+
+export interface ModelContext {
+  dynamo: DynamoDB.DocumentClient;
+  sql: Sql;
+  supabase: SupabaseClient;
+}
+
 /**
  * User from db
  */
@@ -106,6 +116,15 @@ export interface DynamoRun {
   strategy: RunStrategy;
 }
 
+export interface PostgresRun {
+  id: string;
+  generation: number;
+  previousTips: number[];
+  runNum: number;
+  settings: QuestionSettings;
+  strategy: RunStrategy;
+}
+
 /**
  * Question from IMPORT
  */
@@ -146,4 +165,12 @@ export enum UserRole {
   player = 'player',
 }
 
+// ------------------ Postgres --------------------
 
+export interface PostgresQuestion {
+  id: string;
+  generation: number;
+  run: number;
+  settings: QuestionSettings;
+  strategy: QuestionStrategy;
+}

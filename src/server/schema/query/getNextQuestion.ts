@@ -55,12 +55,23 @@ export async function getNextQuestion(
     ? userRecord.bundle[userRecord.bundle.indexOf(lastQuestion) + 1]
     : userRecord.bundle[0];
 
-  const nextQuestionRuns = await getEnabledQuestionRuns(nextQuestionId, {
-    dynamo,
+  const nextQuestionRuns = await getEnabledQuestionRuns(nextQuestionId, context);
+
+  // VERSION2
+  /*
+  const nextQuestionRuns = await getEnabledQuestionRunsV2(nextQuestionId, {
+    sql, dynamo
   });
+  */
 
   // get the preferred run from cache
   const runRecord = await runCache.getRun(nextQuestionId, nextQuestionRuns);
+
+  // VERSION2
+  /*
+  // get the preferred run from cache
+  const runRecord = await runCache.getRunV2(nextQuestionId, nextQuestionRuns);
+  */
 
   await updateLastQuestion(user.id, nextQuestionId, { dynamo });
 
