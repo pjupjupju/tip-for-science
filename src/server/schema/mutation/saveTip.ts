@@ -31,7 +31,15 @@ export async function saveTip(
 ) {
   const { dynamo, user, runLock } = context;
   const question = await getQuestion(id, context);
+
   const { strategy, settings } = question;
+
+  // VERSION2
+  /*
+  const question = await getQuestionWithRun(id, rId, context);
+
+  const { strategy, settings, runId } = question;
+  */
 
   const runIndex = rId - 1;
 
@@ -66,6 +74,40 @@ export async function saveTip(
     },
     context
   );
+
+  // VERSION2
+
+  /*
+  await createQuestionTipV2(
+    {
+      tipId,
+      id,
+      tip,
+      runId, // UUID
+      correctAnswer: settings.correctAnswer,
+      strategy: {
+        numTipsToShow:
+          strategy.numTipsToShow[runIndex % strategy.numTipsToShow.length],
+        selectionPressure:
+          strategy.selectionPressure[
+            runIndex % strategy.selectionPressure.length
+          ],
+        tipsPerGeneration:
+          strategy.tipsPerGeneration[
+            runIndex % strategy.tipsPerGeneration.length
+          ],
+      },
+      generation: gId,
+      previousTips,
+      timeLimit: settings.timeLimit,
+      knewAnswer,
+      answered,
+      msElapsed,
+      userId: user.id,
+    },
+    context
+  );
+  */
 
   const questionScore = getScore(tip, settings.correctAnswer);
 
