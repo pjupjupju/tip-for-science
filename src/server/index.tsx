@@ -56,7 +56,8 @@ export async function createServer(): Promise<express.Application> {
   const supabaseUrl = 'https://lajqpghdvxavpiygpekv.supabase.co';
   const supabase = createClient(supabaseUrl, supabaseKey);
   const sql = postgres(
-    `postgresql://postgres.lajqpghdvxavpiygpekv:${dbPassword}@aws-0-eu-central-1.pooler.supabase.com:6543/postgres`
+    `postgresql://postgres.lajqpghdvxavpiygpekv:${dbPassword}@aws-0-eu-central-1.pooler.supabase.com:6543/postgres`,
+    { transform: postgres.toCamel }
   );
 
   const runCache = new RunCache(15, 5, { dynamo, sql, supabase });

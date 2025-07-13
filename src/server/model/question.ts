@@ -6,6 +6,7 @@ import decamelizeKeys from 'decamelize-keys';
 import { ulid } from 'ulid';
 import {
   INITIAL_GENERATION_NUMBER,
+  MAX_GENERATION_NUMBER,
   MAX_PERCENT_TOO_CLOSE_ANSWERS_PER_GEN,
   PERCENTAGE_CONSIDERED_TOO_CLOSE,
   TABLE_QUESTION,
@@ -697,6 +698,31 @@ export async function getQuestionV2(id: string, { supabase }: ModelContext) {
   return question;
 }
 
+export async function getQuestionRunV2(id: string, { supabase }: ModelContext) {
+  const {
+    data: [run],
+  } = await supabase.from('run').select().eq('id', id);
+
+  return run;
+}
+
+export async function getQuestionWithRun(
+  id: string,
+  rId: number,
+  { sql }: ModelContext
+): Promise<PostgresQuestion> {
+  const questions = await sql`
+    SELECT 
+      q.*,
+      r.id as run_id,
+    FROM "question" q
+    INNER JOIN "run" r ON q.id = r.question_run
+    WHERE q.id = ${id} AND r.run_num = ${rId}
+  `;
+
+  return questions[0] as PostgresQuestion;
+}
+
 export async function getQuestionWithHighestRun(
   id: string,
   { sql }: ModelContext
@@ -764,4 +790,143 @@ export async function createQuestionRunV2(
     .select();
 
   return { ...params, settings: question.settings };
+}
+
+export async function getCurrentGenerationTipsV2(
+  questionId: string,
+  runId: string,
+  generationNumber: number,
+  { supabase }: ModelContext
+): Promise<any | null> {
+  const { data } = await supabase
+    .from('tip')
+    .select()
+    .eq('question_id', questionId)
+    .eq('run_id', runId)
+    .eq('generation', generationNumber);
+
+  return data;
+}
+
+export async function createQuestionTipV2(
+  {
+    tipId,
+    id,
+    tip,
+    runId,
+    correctAnswer,
+    strategy,
+    generation,
+    previousTips,
+    timeLimit,
+    knewAnswer,
+    answered,
+    msElapsed,
+    userId,
+  }: {
+    tipId: string;
+    id: string;
+    tip: number;
+    runId: string;
+    correctAnswer: number;
+    strategy: RunStrategy;
+    generation: number;
+    previousTips: number[];
+    timeLimit?: number;
+    knewAnswer: boolean;
+    answered: boolean;
+    msElapsed: number;
+    userId: string;
+  },
+  context: ModelContext & { runLock: RunLock }
+) {
+  const { dynamo, runLock, sql } = context;
+  const currentTips = await getCurrentGenerationTipsV2(
+    id,
+    runId,
+    generation,
+    context
+  );
+
+  const currentTipsWithAnswer = currentTips.filter(
+    (t: DynamoTip) =>
+      !['undefined', 'null'].includes(typeof t.data.tip) &&
+      t.data.answered !== false &&
+      t.data.knewAnswer !== true
+  );
+
+  const params = {
+    id: tipId,
+    question_id: id,
+    runId,
+    generation,
+    tip,
+    previousTips,
+    msElapsed,
+    createdBy: userId,
+    createdAt: new Date().toISOString(),
+    correctAnswer,
+    timeLimit,
+    knewAnswer,
+    answered,
+  };
+
+  await sql.begin(async (sql) => {
+    await sql`
+      insert into contact (
+        id, created_at, generation, tip, run_id, question_id, previous_tips, time_limit, ms_elapsed, knew_answer, answered, created_by
+      ) values (
+        ${params.id}, ${params.createdAt}, ${params.generation}, ${params.tip}, ${params.runId}, ${params.question_id}, ${params.previousTips},
+        ${params.timeLimit}, ${params.msElapsed}, ${params.knewAnswer}, ${params.answered}, ${params.createdBy}
+      )
+    `;
+
+    // If we hit tips per generation threshold, start new generation by updating RUN
+    if (
+      answered !== false &&
+      knewAnswer !== true &&
+      currentTipsWithAnswer.length + 1 >= strategy.tipsPerGeneration &&
+      !runLock.getLock(`${runId}#${generation}`)
+    ) {
+      const [run] =
+        await sql`select * from "run" r where r.id = ${runId} AND r.enabled = true`;
+
+      // We first check, whether RUN is still enabled and whether generation is still the same
+      if (run && run.generation === generation) {
+        // Lock current RUN#GEN to prevent creating multiple generations
+        // we release current generation when we create next generation in future
+        runLock.lock(`${runId}#${generation}`);
+
+        const allGenerationTips = [
+          ...currentTipsWithAnswer.map((t: any) => t.data.tip),
+          tip,
+        ];
+        // If we hit correct answer for too many people in generation or hit max generations, we disable this RUN
+        if (
+          isGenerationTooCloseToCorrectAnswer(
+            allGenerationTips,
+            correctAnswer
+          ) ||
+          generation === MAX_GENERATION_NUMBER
+        ) {
+          await sql`update "run" r set enabled = false WHERE r.id = ${runId}`;
+
+          runLock.unlock(`${runId}#${generation - 1}`);
+          runLock.unlock(`${runId}#${generation}`);
+        } else {
+          // new generation and new previous tips
+          const newPreviousTips = getNewPreviousTips(
+            allGenerationTips,
+            correctAnswer,
+            strategy
+          );
+          await sql`update "run" r set generation = ${
+            generation + 1
+          }, previous_tips = ${newPreviousTips} WHERE r.id = ${runId}`;
+
+          runLock.unlock(`${runId}#${generation - 1}`);
+        }
+      }
+    }
+  });
 }
