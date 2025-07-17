@@ -2,10 +2,11 @@ import { ValidationError } from 'yup';
 import { GraphQLContext } from '..';
 import {
   findUserById,
-  getEnabledQuestionRuns,
+  getEnabledQuestionRunsV2,
   getQuestionTranslation,
   updateLastQuestion,
 } from '../../model';
+import { selectPreviousTipsToDisplay } from '../../../helpers/selectPreviousTipsToDisplay';
 
 type Question = {
   id: string;
@@ -25,7 +26,7 @@ export async function getNextQuestion(
   _: {},
   context: GraphQLContext
 ): Promise<Question | null> {
-  const { dynamo, runCache, user } = context;
+  const { dynamo, runCache, user, sql } = context;
   if (user == null) {
     throw new ValidationError('Unauthorized.');
   }
@@ -55,23 +56,13 @@ export async function getNextQuestion(
     ? userRecord.bundle[userRecord.bundle.indexOf(lastQuestion) + 1]
     : userRecord.bundle[0];
 
-  const nextQuestionRuns = await getEnabledQuestionRuns(nextQuestionId, context);
+  const nextQuestionRuns = await getEnabledQuestionRunsV2(
+    nextQuestionId,
+    context
+  );
 
-  // VERSION2
-  /*
-  const nextQuestionRuns = await getEnabledQuestionRunsV2(nextQuestionId, {
-    sql, dynamo
-  });
-  */
-
-  // get the preferred run from cache
-  const runRecord = await runCache.getRun(nextQuestionId, nextQuestionRuns);
-
-  // VERSION2
-  /*
   // get the preferred run from cache
   const runRecord = await runCache.getRunV2(nextQuestionId, nextQuestionRuns);
-  */
 
   await updateLastQuestion(user.id, nextQuestionId, { dynamo });
 
@@ -98,25 +89,14 @@ export async function getNextQuestion(
   return {
     id: runRecord.id,
     gId: runRecord.generation,
-    rId: runRecord.run,
+    rId: runRecord.runNum,
     image: runRecord.settings.image,
-    previousTips: runRecord.previousTips,
+    previousTips: selectPreviousTipsToDisplay(
+      runRecord.previousTips,
+      runRecord.strategy
+    ),
     correctAnswer: runRecord.settings.correctAnswer,
     timeLimit: runRecord.settings.timeLimit,
     ...translatedData,
   };
-
-  // VERSION2
-  /*
-  return {
-    id: runRecord.id,
-    gId: runRecord.generation,
-    rId: runRecord.run,
-    image: runRecord.settings.image,
-    previousTips: selectPreviousTipsToDisplay(runRecord.previousTips, runRecord.strategy),
-    correctAnswer: runRecord.settings.correctAnswer,
-    timeLimit: runRecord.settings.timeLimit,
-    ...translatedData,
-  };
-  */
 }
