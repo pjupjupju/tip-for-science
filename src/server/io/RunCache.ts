@@ -7,6 +7,7 @@ import {
 } from '../model';
 import { Sql } from 'postgres';
 import { SupabaseClient } from '@supabase/supabase-js';
+import { MAX_GENERATION_NUMBER } from '../../config';
 
 const MAX_ONLINE_PER_RUN = 5;
 
@@ -102,13 +103,28 @@ class RunCache {
     return runs.find((r) => r.run === runId) as DynamoRun; // force as defined, because we know it is
   }
 
+  /**
+   * Determines if a new run chain should be created based on probability
+   * @param maxGenerations - Maximum number of generations for the question
+   * @param generationSize - Size of each generation
+   * @returns boolean indicating whether to create new run chain
+   */
+  private static shouldCreateNewRunChain(
+    maxGenerations: number,
+    generationSize: number
+  ): boolean {
+    const probability = 1 / (maxGenerations * generationSize);
+    return Math.random() < probability;
+  }
+
   async getRunV2(
     questionId: string,
     runs: PostgresRun[]
   ): Promise<PostgresRun> {
     // We simplify run objects, sort them and filter out the full ones
     const sortedRuns = (
-      runs.map((r: PostgresRun) => {
+      // first we filter in case we returned no runs but an empty object with question settings
+      runs.filter(r => r.id).map((r: PostgresRun) => {
         const key = r.id;
         const cachedItem = this.online.get(key);
         if (!cachedItem) {
@@ -126,13 +142,12 @@ class RunCache {
       .filter((r) => r[1] < MAX_ONLINE_PER_RUN);
 
     // If no runs are available, we create a new run
-    if (sortedRuns.length === 0) {
+    if (sortedRuns.length === 0 || RunCache.shouldCreateNewRunChain(MAX_GENERATION_NUMBER, runs[0].strategy.tipsPerGeneration)) {
       // TODO: maybe add new map here isUpdating[question] = true
       // and after await result set it to isUpdating[question] = false
       // if isUpdating question is true, recursively call get fresh run
       // which will somehow fetch the new run created
 
-      // VERSION 2
       const run = await createQuestionRunV2(questionId, {
         dynamo: this.dynamo,
         sql: this.sql,
