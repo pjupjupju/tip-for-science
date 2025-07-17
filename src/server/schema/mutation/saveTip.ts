@@ -1,9 +1,6 @@
-import { DynamoDB } from 'aws-sdk';
 import { ulid } from 'ulid';
 import { getScore } from '../../../helpers';
-import { RunLock } from '../../io';
-import { createQuestionTip, getQuestion, updateScore } from '../../model';
-import { User } from '../../model/types';
+import { createQuestionTipV2, getQuestionWithRun, updateScore } from '../../model';
 import { GraphQLContext } from '../context';
 
 export async function saveTip(
@@ -30,54 +27,16 @@ export async function saveTip(
   context: GraphQLContext
 ) {
   const { dynamo, user, runLock } = context;
-  const question = await getQuestion(id, context);
 
-  const { strategy, settings } = question;
-
-  // VERSION2
-  /*
   const question = await getQuestionWithRun(id, rId, context);
 
   const { strategy, settings, runId } = question;
-  */
 
   const runIndex = rId - 1;
 
   const tipId = ulid();
 
-  await createQuestionTip(
-    {
-      tipId,
-      id,
-      tip,
-      run: rId,
-      correctAnswer: settings.correctAnswer,
-      strategy: {
-        numTipsToShow:
-          strategy.numTipsToShow[runIndex % strategy.numTipsToShow.length],
-        selectionPressure:
-          strategy.selectionPressure[
-            runIndex % strategy.selectionPressure.length
-          ],
-        tipsPerGeneration:
-          strategy.tipsPerGeneration[
-            runIndex % strategy.tipsPerGeneration.length
-          ],
-      },
-      generation: gId,
-      previousTips,
-      timeLimit: settings.timeLimit,
-      knewAnswer,
-      answered,
-      msElapsed,
-      userId: user.id,
-    },
-    context
-  );
 
-  // VERSION2
-
-  /*
   await createQuestionTipV2(
     {
       tipId,
@@ -107,7 +66,6 @@ export async function saveTip(
     },
     context
   );
-  */
 
   const questionScore = getScore(tip, settings.correctAnswer);
 

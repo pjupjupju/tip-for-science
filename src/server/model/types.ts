@@ -174,3 +174,12 @@ export interface PostgresQuestion {
   settings: QuestionSettings;
   strategy: QuestionStrategy;
 }
+
+export interface PostgresQuestionWithRun {
+  id: string;
+  generation: number;
+  run: number;
+  settings: QuestionSettings;
+  strategy: QuestionStrategy;
+  runId: string;
+}

@@ -20,6 +20,7 @@ import {
   ImportedQuestionSettings,
   ModelContext,
   PostgresQuestion,
+  PostgresQuestionWithRun,
   RunStrategy,
 } from './types';
 import { uploadCsvToS3, RunLock } from '../io';
@@ -710,7 +711,7 @@ export async function getQuestionWithRun(
   id: string,
   rId: number,
   { sql }: ModelContext
-): Promise<PostgresQuestion> {
+): Promise<PostgresQuestionWithRun> {
   const questions = await sql`
     SELECT 
       q.*,
@@ -720,7 +721,7 @@ export async function getQuestionWithRun(
     WHERE q.id = ${id} AND r.run_num = ${rId}
   `;
 
-  return questions[0] as PostgresQuestion;
+  return questions[0] as PostgresQuestionWithRun;
 }
 
 export async function getQuestionWithHighestRun(
