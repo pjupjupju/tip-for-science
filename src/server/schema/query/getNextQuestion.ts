@@ -105,4 +105,18 @@ export async function getNextQuestion(
     timeLimit: runRecord.settings.timeLimit,
     ...translatedData,
   };
+
+  // VERSION2
+  /*
+  return {
+    id: runRecord.id,
+    gId: runRecord.generation,
+    rId: runRecord.run,
+    image: runRecord.settings.image,
+    previousTips: selectPreviousTipsToDisplay(runRecord.previousTips, runRecord.strategy),
+    correctAnswer: runRecord.settings.correctAnswer,
+    timeLimit: runRecord.settings.timeLimit,
+    ...translatedData,
+  };
+  */
 }

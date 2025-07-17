@@ -745,11 +745,23 @@ export async function getQuestionWithHighestRun(
   return questions[0] as PostgresQuestion;
 }
 
+function getNewPreviousTipsV2(
+  tips: number[],
+  correctAnswer: number,
+  { selectionPressure }: RunStrategy
+): number[] {
+  const numTipsToRemove = Math.floor(selectionPressure * tips.length);
+  return tips
+    .sort((a, b) => Math.abs(correctAnswer - a) - Math.abs(correctAnswer - b))
+    .slice(0, numTipsToRemove >= 1 ? -numTipsToRemove : tips.length)
+    .sort(() => Math.random() - 0.5);
+}
+
 export async function createQuestionRunV2(
   questionId: string,
   context: ModelContext
 ) {
-  const { supabase } = context;
+  const { sql } = context;
   const question = await getQuestionWithHighestRun(questionId, context);
 
   const runNum = question.run + 1;
@@ -784,12 +796,20 @@ export async function createQuestionRunV2(
     },
   };
 
-  const { data } = await supabase
-    .from('run')
-    .insert({ ...decamelizeKeys(params) })
-    .select();
+  const [data] = await sql`
+    INSERT INTO run (id, created_at, updated_at, enabled, question_id, run_num, generation, strategy, previous_tips) 
+      VALUES (${params.id}, ${params.createdAt}, ${params.updatedAt}, ${
+    params.enabled
+  }, ${questionId}, ${params.runNum},
+      ${params.generation}, ${JSON.stringify(params.strategy)}, ${
+    params.previousTips
+  })
+    ON CONFLICT (question_id, generation) 
+    DO UPDATE SET enabled = EXCLUDED.enabled
+    RETURNING *
+  `;
 
-  return { ...params, settings: question.settings };
+  return { ...params, ...data, settings: question.settings };
 }
 
 export async function getCurrentGenerationTipsV2(
@@ -899,23 +919,18 @@ export async function createQuestionTipV2(
 
         const allGenerationTips = [
           ...currentTipsWithAnswer.map((t: any) => t.data.tip),
-          tip,
+          ...(tip ? [tip] : []),
         ];
+
         // If we hit correct answer for too many people in generation or hit max generations, we disable this RUN
-        if (
-          isGenerationTooCloseToCorrectAnswer(
-            allGenerationTips,
-            correctAnswer
-          ) ||
-          generation === MAX_GENERATION_NUMBER
-        ) {
+        if (generation === MAX_GENERATION_NUMBER) {
           await sql`update "run" r set enabled = false WHERE r.id = ${runId}`;
 
           runLock.unlock(`${runId}#${generation - 1}`);
           runLock.unlock(`${runId}#${generation}`);
         } else {
           // new generation and new previous tips
-          const newPreviousTips = getNewPreviousTips(
+          const newPreviousTips = getNewPreviousTipsV2(
             allGenerationTips,
             correctAnswer,
             strategy
