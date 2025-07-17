@@ -941,6 +941,7 @@ export async function createQuestionTipV2(
           }, previous_tips = ${newPreviousTips} WHERE r.id = ${runId}`;
 
           const generationId = ulid();
+          // save generation snapshot to the database
           await sql`insert into "generation" (
             id, run_id, generation, previous_tips, created_at
           ) values (
