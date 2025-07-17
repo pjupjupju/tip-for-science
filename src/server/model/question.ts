@@ -861,7 +861,7 @@ export async function createQuestionTipV2(
   },
   context: ModelContext & { runLock: RunLock }
 ) {
-  const { dynamo, runLock, sql } = context;
+  const { runLock, sql } = context;
   const currentTips = await getCurrentGenerationTipsV2(
     id,
     runId,
@@ -894,7 +894,7 @@ export async function createQuestionTipV2(
 
   await sql.begin(async (sql) => {
     await sql`
-      insert into contact (
+      insert into "tip" (
         id, created_at, generation, tip, run_id, question_id, previous_tips, time_limit, ms_elapsed, knew_answer, answered, created_by
       ) values (
         ${params.id}, ${params.createdAt}, ${params.generation}, ${params.tip}, ${params.runId}, ${params.question_id}, ${params.previousTips},
@@ -939,6 +939,15 @@ export async function createQuestionTipV2(
           await sql`update "run" r set generation = ${
             generation + 1
           }, previous_tips = ${newPreviousTips} WHERE r.id = ${runId}`;
+
+          const generationId = ulid();
+          await sql`insert into "generation" (
+            id, run_id, generation, previous_tips, created_at
+          ) values (
+            ${generationId}, ${runId}, ${generation + 1}, ${newPreviousTips}, ${
+            params.createdAt
+          }
+          )`;
 
           runLock.unlock(`${runId}#${generation - 1}`);
         }
