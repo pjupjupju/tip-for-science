@@ -2,6 +2,22 @@ import theme from '@rebass/preset';
 import { grey, pink } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
+declare module '@mui/material/styles' {
+  interface Palette {
+    accent: Palette['primary'];
+  }
+  interface PaletteOptions {
+    accent?: PaletteOptions['primary'];
+  }
+}
+
+declare module '@mui/material' {
+  interface ButtonPropsColorOverrides {
+    accent: true;
+  }
+}
+
+
 export const tipForScienceTheme = {
   ...theme,
   radii: { default: 0 },
@@ -128,7 +144,15 @@ export const muiTheme = createTheme({
     },
     secondary: {
       main: grey[800],
-    },},
+    },
+    accent: {
+      main: '#FF4081',
+      contrastText: '#ffffff',
+    },
+    text: {
+      secondary: '#D76B90',
+    },
+  },
   typography: {
     fontFamily: "'Jost', 'Helvetica Neue', sans-serif",
   },
