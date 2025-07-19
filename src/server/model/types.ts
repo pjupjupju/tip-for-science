@@ -183,3 +183,19 @@ export interface PostgresQuestionWithRun {
   strategy: QuestionStrategy;
   runId: string;
 }
+
+export type PostgresTip = {
+  id: string;
+  generation: number;
+  runId: string;
+  questionId: string; 
+  tip: number;
+  correctAnswer: number;
+  previousTips: number[];
+  timeLimit?: number;
+  msElapsed: number;
+  createdBy: string;
+  createdAt: string;
+  knewAnswer: boolean;
+  answered: boolean;
+};

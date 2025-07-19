@@ -26,16 +26,13 @@ export async function saveTip(
   },
   context: GraphQLContext
 ) {
-  const { dynamo, user, runLock } = context;
+  const { dynamo, user } = context;
 
   const question = await getQuestionWithRun(id, rId, context);
 
   const { strategy, settings, runId } = question;
-
   const runIndex = rId - 1;
-
   const tipId = ulid();
-
 
   await createQuestionTipV2(
     {

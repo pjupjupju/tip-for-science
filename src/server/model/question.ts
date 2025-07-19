@@ -21,6 +21,7 @@ import {
   ModelContext,
   PostgresQuestion,
   PostgresQuestionWithRun,
+  PostgresTip,
   RunStrategy,
 } from './types';
 import { uploadCsvToS3, RunLock } from '../io';
@@ -30,6 +31,7 @@ export async function batchCreateQuestions(
   context: ModelContext
 ) {
   const { dynamo } = context;
+
   const chunks = sliceIntoChunks(questions, 24);
   const initialQuestionIds: string[] = [];
   const questionIds: string[] = [];
@@ -677,18 +679,111 @@ function isGenerationTooCloseToCorrectAnswer(
 
 // --------------------- POSTGRES ----------------------------
 
+export async function batchCreateQuestionsV2(
+  questions: ImportedQuestionSettings[],
+  context: ModelContext
+) {
+  const { supabase } = context;
+  const chunks = sliceIntoChunks(questions, 24);
+  const initialQuestionIds: string[] = [];
+  const questionIds: string[] = [];
+  const now = new Date();
+
+  const paramsForEachChunk = chunks.map((chunk) =>
+    chunk.map(
+      ({
+        question,
+        fact,
+        image,
+        isInit,
+        correctAnswer,
+        timeLimit,
+        unit,
+        selectionPressure,
+        tipsPerGeneration,
+        initialTips,
+        numTipsToShow,
+        qIdInSheet,
+      }: ImportedQuestionSettings) => {
+        const id = ulid();
+
+        if (isInit) {
+          initialQuestionIds.push(id);
+        } else {
+          questionIds.push(id);
+        }
+
+        return decamelizeKeys({
+          id,
+          createdAt: now,
+          enabled: true,
+          settings: {
+            fact,
+            question,
+            image,
+            correctAnswer,
+            timeLimit,
+            unit,
+          },
+          strategy: {
+            selectionPressure,
+            tipsPerGeneration,
+            initialTips,
+            numTipsToShow,
+          },
+          isInit,
+          updatedAt: now,
+          idInSheet: qIdInSheet,
+        });
+      }
+    )
+  );
+
+  // TODO: maybe do it in a trasnaction later, because it might happen, that it breaks and we do not know, where we stopped
+  const allPromises = paramsForEachChunk.map((params) =>
+    supabase.from('question').insert(params)
+  );
+
+  const results = await Promise.all(allPromises);
+  await updateUserBatches(initialQuestionIds, questionIds, context);
+
+  return results;
+}
+
+export async function getNotImportedQuestions(
+  questions: ImportedQuestionSettings[],
+  { sql }: ModelContext
+) {
+  const idsInSheet = questions.map((q) => q.qIdInSheet);
+  const result = await sql`
+  SELECT q.id_in_sheet
+    FROM "question" q
+    WHERE q.id_in_sheet = any(${sql.array([...idsInSheet]).value});
+  `;
+
+  const importedSheetIds = (result || []).map((row) => row.idInSheet);
+
+  return questions.filter((q) => !importedSheetIds.includes(q.qIdInSheet));
+}
+
 export async function getEnabledQuestionRunsV2(
   id: string,
   { sql }: ModelContext
 ): Promise<any | null> {
-  const result = await sql`
-    SELECT r.*, q.settings
+  try {
+    const result = await sql`
+      SELECT r.*, q.settings
       FROM "run" r
       LEFT JOIN "question" q ON r.question_id = q.id
-      WHERE r.question_id = ${id} AND enabled = true;
+      WHERE r.question_id = ${id} AND q.enabled = true
     `;
 
-  return result;
+    return result;
+  } catch (e) {
+    console.log(e);
+
+    return [];
+  }
 }
 
 export async function getQuestionV2(id: string, { supabase }: ModelContext) {
@@ -715,9 +810,9 @@ export async function getQuestionWithRun(
   const questions = await sql`
     SELECT 
       q.*,
-      r.id as run_id,
+      r.id as run_id
     FROM "question" q
-    INNER JOIN "run" r ON q.id = r.question_run
+    INNER JOIN "run" r ON q.id = r.question_id
     WHERE q.id = ${id} AND r.run_num = ${rId}
   `;
 
@@ -731,7 +826,7 @@ export async function getQuestionWithHighestRun(
   const questions = await sql`
     SELECT 
       q.*,
-      COALESCE(r.run_num, 0) as run,
+      COALESCE(r.run_num, 0)::integer as run
     FROM "question" q
     LEFT JOIN LATERAL (
       SELECT *
@@ -765,8 +860,8 @@ export async function createQuestionRunV2(
   const { sql } = context;
   const question = await getQuestionWithHighestRun(questionId, context);
 
-  const runNum = question.run + 1;
-  const runIndex = runNum - 1;
+  const runNum = question?.run + 1;
+  const runIndex = question?.run;
 
   const id = ulid();
 
@@ -802,10 +897,10 @@ export async function createQuestionRunV2(
       VALUES (${params.id}, ${params.createdAt}, ${params.updatedAt}, ${
     params.enabled
   }, ${questionId}, ${params.runNum},
-      ${params.generation}, ${JSON.stringify(params.strategy)}, ${
-    params.previousTips
-  })
-    ON CONFLICT (question_id, generation) 
+      ${params.generation}, ${JSON.stringify(
+    decamelizeKeys(params.strategy)
+  )}, ${params.previousTips})
+    ON CONFLICT (question_id, run_num) 
     DO UPDATE SET enabled = EXCLUDED.enabled
     RETURNING *
   `;
@@ -870,10 +965,10 @@ export async function createQuestionTipV2(
   );
 
   const currentTipsWithAnswer = currentTips.filter(
-    (t: DynamoTip) =>
-      !['undefined', 'null'].includes(typeof t.data.tip) &&
-      t.data.answered !== false &&
-      t.data.knewAnswer !== true
+    (t: PostgresTip) =>
+      !['undefined', 'null'].includes(typeof t.tip) &&
+      t.answered !== false &&
+      t.knewAnswer !== true
   );
 
   const params = {
@@ -919,7 +1014,7 @@ export async function createQuestionTipV2(
         runLock.lock(`${runId}#${generation}`);
 
         const allGenerationTips = [
-          ...currentTipsWithAnswer.map((t: any) => t.data.tip),
+          ...currentTipsWithAnswer.map((t: PostgresTip) => t.tip),
           ...(tip ? [tip] : []),
         ];
 
@@ -936,19 +1031,44 @@ export async function createQuestionTipV2(
             correctAnswer,
             strategy
           );
+
           await sql`update "run" r set generation = ${
             generation + 1
           }, previous_tips = ${newPreviousTips} WHERE r.id = ${runId}`;
 
-          const generationId = ulid();
           // save generation snapshot to the database
-          await sql`insert into "generation" (
-            id, run_id, generation, previous_tips, created_at
-          ) values (
-            ${generationId}, ${runId}, ${generation + 1}, ${newPreviousTips}, ${
-            params.createdAt
+          let generationRows = [];
+
+          if (generation === 1) {
+            const oldGenerationId = ulid();
+            generationRows = [
+              ...generationRows,
+              {
+                id: oldGenerationId,
+                runId,
+                generation,
+                previousTips,
+                createdAt: params.createdAt,
+              },
+            ];
           }
-          )`;
+
+          const generationId = ulid();
+
+          generationRows = [
+            ...generationRows,
+            {
+              id: generationId,
+              runId,
+              generation: generation + 1,
+              previousTips: newPreviousTips,
+              createdAt: params.createdAt,
+            },
+          ];
+
+          await sql`insert into "generation" ${sql(
+            decamelizeKeys(generationRows)
+          )}`;
 
           runLock.unlock(`${runId}#${generation - 1}`);
         }

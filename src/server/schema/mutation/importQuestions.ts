@@ -1,6 +1,10 @@
 import { ValidationError } from 'yup';
 import { getQuestionBatch } from '../../io';
-import { batchCreateQuestions } from '../../model';
+import {
+  batchCreateQuestions,
+  batchCreateQuestionsV2,
+  getNotImportedQuestions,
+} from '../../model';
 import { GraphQLContext } from '../context';
 
 // Google spreadsheet ID
@@ -11,7 +15,7 @@ export async function importQuestions(
   _: any,
   context: GraphQLContext
 ) {
-  const { dynamo, user } = context;
+  const { user } = context;
 
   if (user == null) {
     throw new ValidationError('Unauthorized.');
@@ -31,20 +35,17 @@ export async function importQuestions(
     return true;
   }
 
-  const importData = await batchCreateQuestions(questions, context);
+  const importData = await batchCreateQuestionsV2(questions, context);
+  let notImported = [];
 
-  const notImported = importData
-    .filter(
-      (result) =>
-        result['UnprocessedItems'] &&
-        Object.keys(result['UnprocessedItems']).length !== 0
-    )
-    .map((result) =>
-      console.error(
-        'Unprocessed questions for import: ',
-        JSON.stringify(result['UnprocessedItems'])
-      )
+  if (importData.some((chunk) => chunk.error)) {
+    notImported = await getNotImportedQuestions(questions, context);
+
+    console.error(
+      'Unprocessed questions for import: ',
+      JSON.stringify(notImported)
     );
+  }
 
   // return true for successfull import of all questions, false when something did not succeed
   return notImported.length === 0;

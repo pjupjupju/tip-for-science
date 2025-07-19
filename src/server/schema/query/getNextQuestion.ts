@@ -64,7 +64,7 @@ export async function getNextQuestion(
   // get the preferred run from cache
   const runRecord = await runCache.getRunV2(nextQuestionId, nextQuestionRuns);
 
-  await updateLastQuestion(user.id, nextQuestionId, { dynamo });
+  // await updateLastQuestion(user.id, nextQuestionId, { dynamo });
 
   let translatedData = {
     fact: runRecord.settings.fact,
@@ -73,21 +73,24 @@ export async function getNextQuestion(
   };
 
   if (language !== 'cs') {
-    // get translated question
+    // get translated question if present
     const translation = await getQuestionTranslation(
       nextQuestionId,
       language,
       context
     );
-    translatedData = {
-      fact: translation.factT,
-      unit: translation.unitT || '',
-      question: translation.qT,
-    };
+    // did we find a translation?
+    translatedData = translation
+      ? {
+          fact: translation.factT,
+          unit: translation.unitT || '',
+          question: translation.qT,
+        }
+      : translatedData;
   }
 
   return {
-    id: runRecord.id,
+    id: nextQuestionId,
     gId: runRecord.generation,
     rId: runRecord.runNum,
     image: runRecord.settings.image,
