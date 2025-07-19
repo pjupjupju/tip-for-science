@@ -1,4 +1,4 @@
-import { Flex } from 'rebass';
+import Box from '@mui/material/Box';
 import React, { ReactNode } from 'react';
 
 interface TutorialHeaderProps {
@@ -6,20 +6,21 @@ interface TutorialHeaderProps {
   children: ReactNode;
 }
 
-const verticallyCentered = { alignItems: 'center' };
-
 const TutorialHeader = ({
   children,
   centerVertically = true,
 }: TutorialHeaderProps) => (
-  <Flex
-    minHeight="80px"
-    width="100%"
-    justifyContent="center"
-    {...(centerVertically && verticallyCentered)}
+  <Box
+    sx={{
+      display: 'flex',
+      minHeight: '80px',
+      width: '100%',
+      justifyContent: 'center',
+      ...(centerVertically && { alignItems: 'center' }),
+    }}
   >
     {children}
-  </Flex>
+  </Box>
 );
 
 export { TutorialHeader };

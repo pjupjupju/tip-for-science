@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { redirect } from 'react-router-dom';
-import { Box, Flex, Heading, Text } from 'rebass';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { BackButton, Container, Spinner } from '../../components';
 import {
@@ -81,14 +82,15 @@ const Dashboard = ({ user }: DashboardProps) => {
   if (loading) {
     return (
       <Container>
-        <Flex
+        <Box
           width="100%"
           height="100%"
+          display="flex"
           justifyContent="center"
           alignItems="center"
         >
           <Spinner />
-        </Flex>
+        </Box>
       </Container>
     );
   }
@@ -96,30 +98,30 @@ const Dashboard = ({ user }: DashboardProps) => {
   return (
     <Container>
       <Helmet title="Admin dashboard"></Helmet>
-      <Heading color="primary" my={4}>
+      <Typography variant="h4" color="primary" my={4}>
         <FormattedMessage
           id="app.dashboard.menu.dasboard"
           defaultMessage="Dashboard"
           description="Dashboard"
         />
-      </Heading>
-      <Flex flexDirection="column">
-        <Heading fontSize={3} color="white" mb={3}>
+      </Typography>
+      <Box display="flex" flexDirection="column">
+        <Typography variant="h5" color="white" mb={3}>
           <FormattedMessage
             id="app.dashboard.menu.actions"
             defaultMessage="Actions"
             description="Actions button"
           />
-        </Heading>
-        <Flex justifyContent="space-between" alignItems="center">
-          <Flex flex={1} flexDirection="column" mr={1}>
-            <Text color="white" fontFamily="Tahoma">
+        </Typography>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Box flex={1} display="flex" flexDirection="column" mr={1}>
+            <Typography color="white" fontFamily="Tahoma">
               <FormattedMessage
                 id="app.dashboard.menu.export"
                 defaultMessage="Export .csv to S3"
                 description="Export button"
               />
-            </Text>
+            </Typography>
             <Button
               variant="contained"
               sx={buttonStyles}
@@ -127,15 +129,16 @@ const Dashboard = ({ user }: DashboardProps) => {
             >
               {exportLoading ? '... generating' : 'Download'}
             </Button>
-          </Flex>
-          <Flex flex={1} flexDirection="column">
-            <Text color="white" fontFamily="Tahoma">
+          </Box>
+
+          <Box flex={1} display="flex" flexDirection="column">
+            <Typography color="white" fontFamily="Tahoma">
               <FormattedMessage
                 id="app.dashboard.menu.import"
                 defaultMessage="Import from Spreadsheet"
                 description="Import button"
               />
-            </Text>
+            </Typography>
             <Button
               variant="contained"
               disabled={importLoading}
@@ -144,33 +147,43 @@ const Dashboard = ({ user }: DashboardProps) => {
             >
               {importLoading ? '... importing' : 'Import'}
             </Button>
-          </Flex>
-        </Flex>
+          </Box>
+        </Box>
         <Box sx={consoleStyle}>
           {log.map((line, index) => (
-            <Text key={`line-${index}`} fontFamily="monospace">
+            <Typography
+              key={`line-${index}`}
+              fontFamily="monospace"
+              variant="body2"
+            >
+              {' '}
               $: {line}
-            </Text>
+            </Typography>
           ))}
         </Box>
-        <Heading fontSize={3} color="white" mb={3}>
+        <Typography variant="h5" color="white" mb={3}>
           <FormattedMessage
             id="app.dashboard.menu.stats"
             defaultMessage="Stats"
             description="Stats button"
           />
-        </Heading>
-        <Flex flexDirection="column">
-          <Text color="white" fontWeight="bold" fontFamily="Tahoma" mb={3}>
+        </Typography>
+        <Box display="flex" flexDirection="column">
+          <Typography
+            color="white"
+            fontWeight="bold"
+            fontFamily="Tahoma"
+            mb={3}
+          >
             <FormattedMessage
               id="app.dashboard.menu.online"
               defaultMessage="Online users playing: "
               description="Online button"
             />
             {data.getOnlineStats.online}
-          </Text>
-        </Flex>
-      </Flex>
+          </Typography>
+        </Box>
+      </Box>
       <BackButton>
         <FormattedMessage
           id="app.dashboard.footer.home"
