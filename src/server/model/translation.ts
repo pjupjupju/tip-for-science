@@ -5,7 +5,7 @@ import { Sql } from 'postgres';
 
 export interface TranslationModelContext {
   supabase: SupabaseClient;
-  sql: Sql
+  sql: Sql;
 }
 
 export async function getQuestionTranslation(
@@ -20,5 +20,5 @@ export async function getQuestionTranslation(
     LIMIT 1
     `) as QuestionTranslationRecord[];
 
-  return toCamelCase(translation);
+  return translation;
 }

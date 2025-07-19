@@ -117,7 +117,7 @@ export async function createServer(): Promise<express.Application> {
         etag: false,
         immutable: true,
         maxAge: '30days',
-      })
+      }) as any
     );
 
   Sentry.init({
@@ -160,7 +160,7 @@ export async function createServer(): Promise<express.Application> {
         runCache,
         runLock,
       });
-      const context = await createApolloContext({ req, res });
+      const context = await createApolloContext({ req, res: res as any });
       const client = new ApolloClient({
         cache: new InMemoryCache(),
         ssrMode: true,
