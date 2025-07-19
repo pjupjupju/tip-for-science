@@ -5,18 +5,20 @@ import { createTheme } from '@mui/material/styles';
 declare module '@mui/material/styles' {
   interface Palette {
     accent: Palette['primary'];
+    dimmed: Palette['primary'];
   }
   interface PaletteOptions {
     accent?: PaletteOptions['primary'];
+    dimmed?: PaletteOptions['primary'];
   }
 }
 
 declare module '@mui/material' {
   interface ButtonPropsColorOverrides {
     accent: true;
+    dimmed: true;
   }
 }
-
 
 export const tipForScienceTheme = {
   ...theme,
@@ -145,8 +147,11 @@ export const muiTheme = createTheme({
     secondary: {
       main: grey[800],
     },
+    dimmed: {
+      main: '#D76B90',
+    },
     accent: {
-      main: '#FF4081',
+      main: '#5CC9FA',
       contrastText: '#ffffff',
     },
     text: {

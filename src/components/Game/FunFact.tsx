@@ -17,14 +17,18 @@ const FunFact = ({
     <Typography
       align="center"
       color="text.secondary"
-      sx={{ fontSize: { xs: 16, sm: 20 }, mb: 4 }}
+      sx={{ fontSize: { xs: 16, sm: 20, md: 24 }, mb: 4 }}
     >
       {factPieces.length < 2 ? (
         <>{factPieces[0]}</>
       ) : (
         <>
           {factPieces[0]}
-          <Typography component="span" color="white">
+          <Typography
+            component="span"
+            color="white"
+            fontSize={{ xs: 16, sm: 20, md: 24 }}
+          >
             <NumberFormat
               value={correctAnswer}
               displayType={'text'}

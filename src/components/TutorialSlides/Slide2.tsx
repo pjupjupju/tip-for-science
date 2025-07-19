@@ -1,13 +1,14 @@
 import React from 'react';
-import { Box, Text, Flex } from 'rebass';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { getTutorialImageStyle } from '../commonStyleSheets';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
-import elephant from './../../assets/elephantTut.jpg';
 import { SlideProps } from './types';
 import { FormattedMessage } from 'react-intl';
 import { HomeButton } from './HomeButton';
 import { NextButton } from './NextButton';
+import elephant from './../../assets/elephantTut.jpg';
 
 const imageStyle = getTutorialImageStyle(elephant);
 
@@ -15,60 +16,68 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
   return (
     <Container>
       <TutorialHeader>
-        <Text
-          fontSize={[3, 4, 5]}
-          color="secondary"
+        <Typography
+          fontSize={{
+            xs: 16,
+            sm: 20,
+            md: 24,
+          }}
+          color="text.secondary"
           textAlign="center"
-          px={3}
-          py={4}
+          px={1}
+          py={2}
         >
           <FormattedMessage
             id="app.tutorial.slide.guess"
             defaultMessage="Fear not, the correct answers will soon be revealed! But first, why not take a guess..."
             description="Tut2 guess"
           />
-        </Text>
+        </Typography>
       </TutorialHeader>
       <Box sx={imageStyle} />
-      <Text
-        fontSize={[3, 4, 4]}
-        color="secondary"
+      <Typography
+        fontSize={{
+          xs: 16,
+          sm: 20,
+          md: 24,
+        }}
+        color="text.secondary"
         textAlign="center"
-        py={4}
-        px={3}
+        px={1}
+        py={2}
       >
         <FormattedMessage
           id="app.tutorial.slide.ffeleph"
           defaultMessage="The largest known elephant was shot dead in 1956 in Angola. Let's say the previous players of Tip for Science guessed that this colossal creature weighed"
           description="Tut2 ffeleph"
         />{' '}
-        <Text color="primary" as="span">
+        <Typography component="span" color="primary" fontSize={[18, 24, 24]}>
           8 300
-        </Text>
+        </Typography>
         ,{' '}
-        <Text color="primary" as="span">
+        <Typography component="span" color="primary" fontSize={[18, 24, 24]}>
           9 500
-        </Text>
+        </Typography>
         ,{' '}
         <FormattedMessage
           id="app.tutorial.slide.or"
           defaultMessage="or"
           description="Tut2 or"
         />{' '}
-        <Text color="primary" as="span">
+        <Typography component="span" color="primary" fontSize={[18, 24, 24]}>
           15 000{' '}
-        </Text>
+        </Typography>
         <FormattedMessage
           id="app.tutorial.slide.elekg"
           defaultMessage="kg"
           description="Tut2 kg"
         />
         .
-      </Text>
-      <Flex mt="auto" justifyContent="space-between" width="100%">
+      </Typography>
+      <Box mt="auto" display="flex" justifyContent="space-between" width="100%">
         <HomeButton />
         <NextButton handleNextStep={handleNextStep} />
-      </Flex>
+      </Box>
     </Container>
   );
 };

@@ -1,5 +1,7 @@
-import { Flex, Text, Button } from 'rebass';
 import React from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import { Container } from '..';
 import { FormattedMessage } from 'react-intl';
@@ -19,20 +21,21 @@ const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => {
 
   return (
     <Container>
-      <Flex
+      <Box
         p={3}
+        display="flex"
         flexDirection="column"
         alignItems="center"
         justifyContent="center"
         width="100%"
         height="100%"
       >
-        <Text
-          fontSize={4}
+        <Typography
+          fontSize={24}
           fontWeight={500}
           textAlign="center"
           my={2}
-          color="secondary"
+          color="text.secondary"
         >
           <FormattedMessage
             id="app.game.lastquestion"
@@ -45,11 +48,22 @@ const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => {
             defaultMessage="Your score:"
             description="Score text"
           />{' '}
-        </Text>
-        <Text color="accent" as="span" fontSize={6} fontWeight={700}>
+        </Typography>
+        <Typography
+          color="accent.main"
+          component="span"
+          fontSize={36}
+          fontWeight={700}
+        >
           {score.toString()}
-        </Text>
-        <Text fontWeight={500} textAlign="center" my={5} color="secondary">
+        </Typography>
+
+        <Typography
+          fontWeight={500}
+          textAlign="center"
+          my={5}
+          color="text.secondary"
+        >
           <FormattedMessage
             id="app.game.morequestions"
             defaultMessage="When more questions become available, we'll let you know at your registration email."
@@ -61,13 +75,12 @@ const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => {
             defaultMessage="You can check or update it in the Settings."
             description="mail settings"
           />{' '}
-        </Text>
-        <Flex justifyContent="space-between" width="100%" mt={6}>
+        </Typography>
+        <Box display="flex" justifyContent="space-between" width="100%" mt={6}>
           <Button
             onClick={handleClickHome}
-            sx={{ flex: 2 }}
-            mr={1}
-            backgroundColor={'#414141'}
+            sx={{ flex: 2, mr: 1, backgroundColor: '#414141' }}
+            variant="contained"
           >
             <FormattedMessage
               id="app.home"
@@ -75,15 +88,20 @@ const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => {
               description="Home button"
             />
           </Button>
-          <Button onClick={handleClickSettings} sx={{ flex: 2 }}>
+          <Button
+            onClick={handleClickSettings}
+            sx={{ flex: 2 }}
+            color="primary"
+            variant="contained"
+          >
             <FormattedMessage
               id="app.stats.menu.settings"
               defaultMessage="Settings"
               description="Settings link"
             />
           </Button>
-        </Flex>
-      </Flex>
+        </Box>
+      </Box>
     </Container>
   );
 };
