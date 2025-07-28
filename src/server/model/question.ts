@@ -25,6 +25,7 @@ import {
   RunStrategy,
 } from './types';
 import { uploadCsvToS3, RunLock } from '../io';
+import { getRunConfig } from '../io/utils';
 
 export async function batchCreateQuestions(
   questions: ImportedQuestionSettings[],
@@ -865,6 +866,8 @@ export async function createQuestionRunV2(
 
   const id = ulid();
 
+  const strategy = getRunConfig();
+
   const params = {
     id,
     generation: INITIAL_GENERATION_NUMBER,
@@ -876,20 +879,7 @@ export async function createQuestionRunV2(
       question.strategy.initialTips[
         runIndex % question.strategy.initialTips.length
       ],
-    strategy: {
-      numTipsToShow:
-        question.strategy.numTipsToShow[
-          runIndex % question.strategy.numTipsToShow.length
-        ],
-      selectionPressure:
-        question.strategy.selectionPressure[
-          runIndex % question.strategy.selectionPressure.length
-        ],
-      tipsPerGeneration:
-        question.strategy.tipsPerGeneration[
-          runIndex % question.strategy.tipsPerGeneration.length
-        ],
-    },
+    strategy,
   };
 
   const [data] = await sql`
