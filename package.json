@@ -76,6 +76,7 @@
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "types": "tsc -p . --noEmit",
+    "test:initial": "ts-node -P migrations/tsconfig.json migrations/test_initial.ts",
     "migrate:dynamodb": "ts-node -P migrations/tsconfig.json migrations/migrate_dynamodb.ts",
     "user:create:admin": "ts-node -P migrations/tsconfig.json migrations/create_admin.ts",
     "seed:dynamodb": "ts-node -P migrations/tsconfig.json migrations/create_seed_data.ts",
@@ -104,6 +105,7 @@
   "devDependencies": {
     "@babel/core": "^7.22.11",
     "@formatjs/cli": "^6.2.4",
+    "@inquirer/prompts": "^7.9.0",
     "@sentry/types": "^6.18.2",
     "@storybook/addon-actions": "^6.5.9",
     "@storybook/addon-essentials": "^6.5.9",
