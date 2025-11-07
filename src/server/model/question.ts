@@ -25,7 +25,7 @@ import {
   RunStrategy,
 } from './types';
 import { uploadCsvToS3, RunLock } from '../io';
-import { getRunConfig } from '../io/utils';
+import { getInitialTips, getRunConfig } from '../io/utils';
 
 export async function batchCreateQuestions(
   questions: ImportedQuestionSettings[],
@@ -810,7 +810,11 @@ export async function getQuestionWithRun(
 ): Promise<PostgresQuestionWithRun> {
   const questions = await sql`
     SELECT 
-      q.*,
+      q.id,
+      q.settings,
+      q.enabled,
+      q.is_init,
+      r.strategy as strategy,
       r.id as run_id
     FROM "question" q
     INNER JOIN "run" r ON q.id = r.question_id
@@ -868,6 +872,8 @@ export async function createQuestionRunV2(
 
   const strategy = getRunConfig();
 
+  const initialTips = getInitialTips(question.settings.correctAnswer);
+
   const params = {
     id,
     generation: INITIAL_GENERATION_NUMBER,
@@ -875,10 +881,7 @@ export async function createQuestionRunV2(
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     runNum: runNum,
-    previousTips:
-      question.strategy.initialTips[
-        runIndex % question.strategy.initialTips.length
-      ],
+    previousTips: initialTips,
     strategy,
   };
 
@@ -1008,7 +1011,7 @@ export async function createQuestionTipV2(
           ...(tip ? [tip] : []),
         ];
 
-        // If we hit correct answer for too many people in generation or hit max generations, we disable this RUN
+        // If we hit max generations, we disable this RUN
         if (generation === MAX_GENERATION_NUMBER) {
           await sql`update "run" r set enabled = false WHERE r.id = ${runId}`;
 
