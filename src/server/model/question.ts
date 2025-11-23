@@ -872,7 +872,7 @@ export async function createQuestionRunV2(
 
   const strategy = getRunConfig();
 
-  const initialTips = getInitialTips(question.settings.correctAnswer);
+  const initialTips = getInitialTips(question.settings.correctAnswer, strategy);
 
   const params = {
     id,
