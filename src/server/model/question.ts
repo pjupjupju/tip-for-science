@@ -773,7 +773,7 @@ export async function getEnabledQuestionRunsV2(
 ): Promise<any | null> {
   try {
     const result = await sql`
-      SELECT r.*, q.settings
+      SELECT r.*, r.strategy::json AS strategyk, q.settings::json AS settings
       FROM "run" r
       LEFT JOIN "question" q ON r.question_id = q.id
       WHERE r.question_id = ${id} AND q.enabled = true
@@ -887,12 +887,8 @@ export async function createQuestionRunV2(
 
   const [data] = await sql`
     INSERT INTO run (id, created_at, updated_at, enabled, question_id, run_num, generation, strategy, previous_tips) 
-      VALUES (${params.id}, ${params.createdAt}, ${params.updatedAt}, ${
-    params.enabled
-  }, ${questionId}, ${params.runNum},
-      ${params.generation}, ${JSON.stringify(
-    decamelizeKeys(params.strategy)
-  )}, ${params.previousTips})
+      VALUES (${params.id}, ${params.createdAt}, ${params.updatedAt}, ${params.enabled}, ${questionId}, ${params.runNum},
+      ${params.generation}, ${params.strategy as any}, ${params.previousTips})
     ON CONFLICT (question_id, run_num) 
     DO UPDATE SET enabled = EXCLUDED.enabled
     RETURNING *
