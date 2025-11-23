@@ -30,6 +30,8 @@ export async function saveTip(
 
   const question = await getQuestionWithRun(id, rId, context);
 
+  console.log('question with run', JSON.stringify(question))
+
   const { strategy, settings, runId } = question;
   const runIndex = rId - 1;
   const tipId = ulid();
@@ -43,15 +45,11 @@ export async function saveTip(
       correctAnswer: settings.correctAnswer,
       strategy: {
         numTipsToShow:
-          strategy.numTipsToShow[runIndex % strategy.numTipsToShow.length],
+          strategy.numTipsToShow,
         selectionPressure:
-          strategy.selectionPressure[
-            runIndex % strategy.selectionPressure.length
-          ],
+          strategy.selectionPressure,
         tipsPerGeneration:
-          strategy.tipsPerGeneration[
-            runIndex % strategy.tipsPerGeneration.length
-          ],
+          strategy.tipsPerGeneration,
       },
       generation: gId,
       previousTips,

@@ -1,18 +1,20 @@
-type RunConfig = {
-  tipsPerGeneration: number;
-  selectionPressure: number;
-  numTipsToShow: number;
-};
+import { RunConfig } from '../model';
 
-const getGenerationSize = (r: number): number => {
-  if (r < (6 / 13) * 0.95) {
+const getGenerationSize = (): number => {
+  const r = Math.random();
+
+  const p8 = (6 / 13) * 0.95;
+  const p12 = (4 / 13) * 0.95;
+  const p16 = (3 / 13) * 0.95;
+
+  if (r < p8) {
     return 8;
-  } else if (r < (4 / 13) * 0.95) {
+  } else if (r < p8 + p12) {
     return 12;
-  } else if (r < (3 / 13) * 0.95) {
+  } else if (r < p8 + p12 + p16) {
     return 16;
   } else {
-    return 1; // 5% chance
+    return 1;
   }
 };
 
@@ -50,10 +52,9 @@ const getSurvivorsSize = (generationSize: number): number => {
 };
 
 export const getRunConfig = (): RunConfig => {
-  const r = Math.random();
-  const tipsPerGeneration = getGenerationSize(r);
+  const tipsPerGeneration = getGenerationSize();
   const selectionPressure = getSelectionPressure(tipsPerGeneration);
-  const numTipsToShow = getSurvivorsSize(r);
+  const numTipsToShow = getSurvivorsSize(tipsPerGeneration);
 
   return {
     tipsPerGeneration,
@@ -170,20 +171,42 @@ export const generateInitialGeneration = (
   // in R script: if start == 3 ⇒ filler = correct * 1e6, otherwise 0
   const EPS = 1e-9;
   const isHighStart = Math.abs(start - 3) < EPS;
-  const fillerValue = isHighStart ? Math.round(correct * 1_000_000) : 0;
+  const fillerValue = isHighStart ? Math.round(correct * 1000000) : 0;
   const nFill = N - nRepro;
+
+  // DEBUG_CODE
+  if (process.env.TESTING) {
+    console.log('------------- N je ', N);
+    console.log('------------- nRepro je', nRepro);
+    console.log('------------- sCoeficient je ', sCoeficient);
+    console.log('------------- start je ', start);
+    console.log('------------- startSd je ', startSd);
+    console.log('#############');
+    console.log('------------- repExp je ', repExp.join(','));
+    console.log('_________________________________');
+  }
+
   const fillers = nFill > 0 ? Array(nFill).fill(fillerValue) : [];
 
   return [...repExp, ...fillers];
 };
 
-export const getInitialTips = (correctAnswer: number, strategy: RunConfig): number[] => {
+export const getInitialTips = (
+  correctAnswer: number,
+  strategy: RunConfig
+): number[] => {
   if (strategy.tipsPerGeneration === 1) {
+    // DEBUG_CODE
+    if (process.env.TESTING) {
+      console.log('___________ 3. KROK __________');
+      console.log('$$$ resulting generation: ', []);
+      console.log('$$$ resulting size: ', 0);
+    }
     return [];
   }
 
-  const populationSize = randomPick([8, 12, 16]); // 1/3 probability for each
-  const selectionCoeficient = randomPick([0, 0.25, 0.5]); // 1/3 probability for each
+  const populationSize = strategy.tipsPerGeneration;
+  const selectionCoeficient = strategy.selectionPressure;
   const start = randomPick([1 / 3, 3]); // 1/2 probability for each
   const startSd = randomPick([0.05, 0.1, 0.2]); // 1/3 probability for each
 
@@ -194,6 +217,13 @@ export const getInitialTips = (correctAnswer: number, strategy: RunConfig): numb
     startSd,
     correctAnswer
   );
+
+  // DEBUG_CODE
+  if (process.env.TESTING) {
+    console.log('___________ 3. KROK __________');
+    console.log('$$$ resulting generation: ', zeroGeneration.join(','));
+    console.log('$$$ resulting size: ', zeroGeneration.length);
+  }
 
   return applySelection(zeroGeneration, correctAnswer, selectionCoeficient);
 };

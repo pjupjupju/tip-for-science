@@ -166,6 +166,11 @@ export enum UserRole {
 }
 
 // ------------------ Postgres --------------------
+export type RunConfig = {
+  tipsPerGeneration: number;
+  selectionPressure: number;
+  numTipsToShow: number;
+};
 
 export interface PostgresQuestion {
   id: string;
@@ -180,7 +185,7 @@ export interface PostgresQuestionWithRun {
   generation: number;
   run: number;
   settings: QuestionSettings;
-  strategy: QuestionStrategy;
+  strategy: RunConfig;
   runId: string;
 }
 

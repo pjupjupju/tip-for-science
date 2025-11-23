@@ -1,5 +1,5 @@
 import { input, select } from '@inquirer/prompts';
-import { generateInitialGeneration } from '../src/server/io/utils';
+import { getInitialTips, getRunConfig } from '../src/server/io/utils';
 
 async function generate() {
   const correctAnswer = await input({
@@ -11,45 +11,25 @@ async function generate() {
     required: true,
   });
 
-  const populationSize = await select({
-    message: 'Select population size:',
-    choices: [
-      { name: '8', value: 8 },
-      { name: '12', value: 12 },
-      { name: '16', value: 16 },
-    ],
-  }) as number;
+  for (let i = 0; i < 100; i++) {
+    const strategy = getRunConfig();
 
-  const start = await select({
-    message: 'Select relative start:',
-    choices: [
-      { name: '1/3', value: 1 / 3 },
-      { name: '3', value: 3 },
-    ],
-  }) as number;
+    console.log('___________ 1. KROK __________');
+    console.log('++++++++++++++ gen size je ', strategy.tipsPerGeneration);
+    console.log('++++++++++++++ pressure je ', strategy.selectionPressure);
+    console.log('++++++++++++++ tips to show je ', strategy.numTipsToShow);
+    console.log('++++++++++++++++++++++++++++++++++++++++++++++++++');
+    console.log('\n');
+    console.log('___________ 2. KROK __________');
+    getInitialTips(parseInt(correctAnswer), strategy);
+    console.log('\n');
+  }
 
-  const startSd = await select({
-    message: 'Select start standard deviation:',
-    choices: [
-      { name: '0.05', value: 0.05 },
-      { name: '0.1', value: 0.1 },
-      { name: '0.2', value: 0.2 },
-    ],
-  }) as number;
-
-  const sCoeficient = 0.25;
-
-  const initialTips = generateInitialGeneration(
-    populationSize,
-    sCoeficient,
-    start,
-    startSd,
-    parseInt(correctAnswer)
-  );
+  console.log('\n');
+  console.log('\n');
 
   console.log(
-    `✅ Generated initial tips for correct answer "${correctAnswer}": `,
-    initialTips.join(', ')
+    `✅ Generated initial runs for correct answer "${correctAnswer}". `
   );
 }
 
