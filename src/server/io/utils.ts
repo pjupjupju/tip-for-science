@@ -18,7 +18,7 @@ const getGenerationSize = (r: number): number => {
 
 const getSelectionPressure = (generationSize: number): number => {
   if (generationSize === 1) {
-    return 0;
+    return 1;
   }
 
   const options = [0, 0.25, 0.5];
@@ -177,7 +177,11 @@ export const generateInitialGeneration = (
   return [...repExp, ...fillers];
 };
 
-export const getInitialTips = (correctAnswer: number): number[] => {
+export const getInitialTips = (correctAnswer: number, strategy: RunConfig): number[] => {
+  if (strategy.tipsPerGeneration === 1) {
+    return [];
+  }
+
   const populationSize = randomPick([8, 12, 16]); // 1/3 probability for each
   const selectionCoeficient = randomPick([0, 0.25, 0.5]); // 1/3 probability for each
   const start = randomPick([1 / 3, 3]); // 1/2 probability for each
