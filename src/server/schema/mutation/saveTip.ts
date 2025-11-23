@@ -30,8 +30,6 @@ export async function saveTip(
 
   const question = await getQuestionWithRun(id, rId, context);
 
-  console.log('question with run', JSON.stringify(question))
-
   const { strategy, settings, runId } = question;
   const runIndex = rId - 1;
   const tipId = ulid();
