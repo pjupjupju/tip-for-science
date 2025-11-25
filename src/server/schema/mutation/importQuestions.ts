@@ -1,7 +1,6 @@
 import { ValidationError } from 'yup';
 import { getQuestionBatch } from '../../io';
 import {
-  batchCreateQuestions,
   batchCreateQuestionsV2,
   getNotImportedQuestions,
 } from '../../model';
@@ -22,11 +21,9 @@ export async function importQuestions(
   }
 
   // only allow user who is admin, so first load user role
-
   const questions = await getQuestionBatch(
     spreadsheetId,
     'import',
-    'import-strategy'
   );
 
   if (questions.length === 0) {
