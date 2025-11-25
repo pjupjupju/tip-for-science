@@ -48,10 +48,6 @@ export async function batchCreateQuestions(
           correctAnswer,
           timeLimit,
           unit,
-          selectionPressure,
-          tipsPerGeneration,
-          initialTips,
-          numTipsToShow,
         }: ImportedQuestionSettings) => {
           const id = ulid();
 
@@ -75,10 +71,10 @@ export async function batchCreateQuestions(
                   unit,
                 },
                 strategy: {
-                  selectionPressure,
-                  tipsPerGeneration,
-                  initialTips,
-                  numTipsToShow,
+                  selectionPressure: [],
+                  tipsPerGeneration: [],
+                  initialTips: [],
+                  numTipsToShow: [],
                 },
                 isInit,
                 qsk: `QDATA#${id}`,
@@ -700,10 +696,6 @@ export async function batchCreateQuestionsV2(
         correctAnswer,
         timeLimit,
         unit,
-        selectionPressure,
-        tipsPerGeneration,
-        initialTips,
-        numTipsToShow,
         qIdInSheet,
       }: ImportedQuestionSettings) => {
         const id = ulid();
@@ -726,12 +718,7 @@ export async function batchCreateQuestionsV2(
             timeLimit,
             unit,
           },
-          strategy: {
-            selectionPressure,
-            tipsPerGeneration,
-            initialTips,
-            numTipsToShow,
-          },
+          strategy: {},
           isInit,
           updatedAt: now,
           idInSheet: qIdInSheet,
@@ -887,7 +874,9 @@ export async function createQuestionRunV2(
 
   const [data] = await sql`
     INSERT INTO run (id, created_at, updated_at, enabled, question_id, run_num, generation, strategy, previous_tips) 
-      VALUES (${params.id}, ${params.createdAt}, ${params.updatedAt}, ${params.enabled}, ${questionId}, ${params.runNum},
+      VALUES (${params.id}, ${params.createdAt}, ${params.updatedAt}, ${
+    params.enabled
+  }, ${questionId}, ${params.runNum},
       ${params.generation}, ${params.strategy as any}, ${params.previousTips})
     ON CONFLICT (question_id, run_num) 
     DO UPDATE SET enabled = EXCLUDED.enabled

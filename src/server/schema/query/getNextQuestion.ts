@@ -64,7 +64,7 @@ export async function getNextQuestion(
   // get the preferred run from cache
   const runRecord = await runCache.getRunV2(nextQuestionId, nextQuestionRuns);
 
-  // await updateLastQuestion(user.id, nextQuestionId, { dynamo });
+  await updateLastQuestion(user.id, nextQuestionId, { dynamo });
 
   let translatedData = {
     fact: runRecord.settings.fact,

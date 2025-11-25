@@ -137,10 +137,6 @@ export type ImportedQuestionSettings = {
   fact: string;
   unit: string;
   isInit: boolean;
-  selectionPressure: number[];
-  tipsPerGeneration: number[];
-  initialTips: number[][];
-  numTipsToShow: number[];
 };
 
 export type ImportedTranslationSettings = {
