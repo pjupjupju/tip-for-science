@@ -176,14 +176,14 @@ export const generateInitialGeneration = (
 
   // DEBUG_CODE
   if (process.env.TESTING) {
-    console.log('------------- N je ', N);
-    console.log('------------- nRepro je', nRepro);
-    console.log('------------- sCoeficient je ', sCoeficient);
-    console.log('------------- start je ', start);
-    console.log('------------- startSd je ', startSd);
+    console.log('------------- N: ', N);
+    console.log('------------- surviving: ', nRepro);
+    console.log('------------- selection: ', sCoeficient);
+    console.log('------------- start: ', start);
+    console.log('------------- startSd: ', startSd);
     console.log('#############');
-    console.log('------------- repExp je ', repExp.join(','));
-    console.log('_________________________________');
+    console.log('------------- tips: ', repExp.join(','));
+    console.log('+++++++++++++++++++++++++++++++++');
   }
 
   const fillers = nFill > 0 ? Array(nFill).fill(fillerValue) : [];
@@ -198,7 +198,7 @@ export const getInitialTips = (
   if (strategy.tipsPerGeneration === 1) {
     // DEBUG_CODE
     if (process.env.TESTING) {
-      console.log('___________ 3. KROK __________');
+      console.log('___________ 3. STEP __________');
       console.log('$$$ resulting generation: ', []);
       console.log('$$$ resulting size: ', 0);
     }
@@ -220,7 +220,7 @@ export const getInitialTips = (
 
   // DEBUG_CODE
   if (process.env.TESTING) {
-    console.log('___________ 3. KROK __________');
+    console.log('___________ 3. STEP __________');
     console.log('$$$ resulting generation: ', zeroGeneration.join(','));
     console.log('$$$ resulting size: ', zeroGeneration.length);
   }
