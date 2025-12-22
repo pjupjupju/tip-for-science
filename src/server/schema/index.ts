@@ -9,6 +9,7 @@ import {
   signOut,
   signUp,
   updateUser,
+  wipeBatches,
 } from './mutation';
 import {
   getHighScore,
@@ -99,6 +100,7 @@ export const typeDefs = /* GraphQL */ gql`
       age: Int
       gender: String
     ): Boolean!
+    wipeBatches: Boolean
   }
 
   union SignUpResult = SignInSuccess | ValidationError
@@ -156,6 +158,7 @@ export const resolvers = {
     signOut,
     signUp,
     updateUser,
+    wipeBatches,
   },
   Query: {
     getHighScore,

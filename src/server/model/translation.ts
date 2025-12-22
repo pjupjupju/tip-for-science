@@ -1,5 +1,4 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import toCamelCase from 'camelcase-keys';
 import { QuestionTranslationRecord } from './types';
 import { Sql } from 'postgres';
 
