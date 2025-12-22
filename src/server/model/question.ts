@@ -3,6 +3,7 @@ import { AWSError, DynamoDB } from 'aws-sdk';
 import { ScanOutput } from 'aws-sdk/clients/dynamodb';
 import { format } from '@fast-csv/format';
 import decamelizeKeys from 'decamelize-keys';
+import toCamelCase from 'camelcase-keys';
 import { ulid } from 'ulid';
 import {
   INITIAL_GENERATION_NUMBER,
@@ -772,6 +773,12 @@ export async function getEnabledQuestionRunsV2(
 
     return [];
   }
+}
+
+export async function getQuestionCorpusV2(supabase: ModelContext['supabase']) {
+  const { data } = await supabase.from('question').select();
+
+  return data.map(item => toCamelCase(item));
 }
 
 export async function getQuestionV2(id: string, { supabase }: ModelContext) {
