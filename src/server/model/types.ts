@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { DynamoDB } from 'aws-sdk';
+import { String } from 'aws-sdk/clients/cloudwatchevents';
 import { Sql } from 'postgres';
 
 export interface ModelContext {
@@ -123,6 +124,7 @@ export interface PostgresRun {
   runNum: number;
   settings: QuestionSettings;
   strategy: RunStrategy;
+  createdAt: string;
 }
 
 /**
@@ -189,7 +191,7 @@ export type PostgresTip = {
   id: string;
   generation: number;
   runId: string;
-  questionId: string; 
+  questionId: string;
   tip: number;
   correctAnswer: number;
   previousTips: number[];
