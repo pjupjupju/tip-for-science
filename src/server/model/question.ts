@@ -764,7 +764,7 @@ export async function getEnabledQuestionRunsV2(
       SELECT r.*, r.strategy::json AS strategyk, q.settings::json AS settings
       FROM "run" r
       LEFT JOIN "question" q ON r.question_id = q.id
-      WHERE r.question_id = ${id} AND q.enabled = true
+      WHERE r.question_id = ${id} AND r.enabled = true
     `;
 
     return result;

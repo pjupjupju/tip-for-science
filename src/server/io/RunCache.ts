@@ -9,7 +9,7 @@ import { Sql } from 'postgres';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { MAX_GENERATION_NUMBER } from '../../config';
 
-const MAX_ONLINE_PER_RUN = 5;
+const MAX_ONLINE_PER_RUN = 500;
 
 // TODO: create reusable context type in server folder or server/types
 interface ServerContext {
@@ -122,27 +122,37 @@ class RunCache {
     runs: PostgresRun[]
   ): Promise<PostgresRun> {
     // We simplify run objects, sort them and filter out the full ones
-    const sortedRuns = (
+    const sortedRuns =
       // first we filter in case we returned no runs but an empty object with question settings
-      runs.filter(r => r.id).map((r: PostgresRun) => {
-        const key = r.id;
-        const cachedItem = this.online.get(key);
-        if (!cachedItem) {
-          this.online.set(key, 0);
-          return [r.runNum, 0];
-        }
+      (
+        runs
+          .filter((r) => r.id)
+          .sort((a, b) => a.createdAt.toString().localeCompare(b.createdAt.toString()))
+          .map((r: PostgresRun) => {
+            const key = r.id;
+            const cachedItem = this.online.get(key);
+            if (!cachedItem) {
+              this.online.set(key, 0);
+              return [r.runNum, 0];
+            }
 
-        // TODO: debug run cache, because it might work weirdly
-        // console.log(`RUN no. ${r.run}: `, cachedItem);
+            // TODO: debug run cache, because it might work weirdly
+            // console.log(`RUN no. ${r.run}: `, cachedItem);
 
-        return [r.runNum, cachedItem];
-      }) as [number, number][]
-    )
-      .sort((a: [number, number], b: [number, number]) => a[0] - b[0])
-      .filter((r) => r[1] < MAX_ONLINE_PER_RUN);
+            return [r.runNum, cachedItem];
+          }) as [number, number][]
+      )
+        //  .sort((a: [number, number], b: [number, number]) => a[0] - b[0])
+        .filter((r) => r[1] < MAX_ONLINE_PER_RUN);
 
     // If no runs are available, we create a new run
-    if (sortedRuns.length === 0 || RunCache.shouldCreateNewRunChain(MAX_GENERATION_NUMBER, runs[0].strategy.tipsPerGeneration)) {
+    if (
+      sortedRuns.length === 0 ||
+      RunCache.shouldCreateNewRunChain(
+        MAX_GENERATION_NUMBER,
+        runs[0].strategy.tipsPerGeneration
+      )
+    ) {
       // TODO: maybe add new map here isUpdating[question] = true
       // and after await result set it to isUpdating[question] = false
       // if isUpdating question is true, recursively call get fresh run

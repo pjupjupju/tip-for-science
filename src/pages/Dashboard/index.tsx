@@ -92,9 +92,6 @@ const Dashboard = ({ user }: DashboardProps) => {
     importQuestions();
   };
 
-  const handleClickWipe = () => {
-    wipeBatches();
-  };
 
   if (!user || user.role !== UserRole.admin) {
     redirect('/');
