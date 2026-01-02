@@ -103,6 +103,7 @@ export type RunStrategy = {
   selectionPressure: number;
   tipsPerGeneration: number;
   numTipsToShow: number;
+  maxGenerations: number;
 };
 
 export interface DynamoRun {
@@ -168,6 +169,7 @@ export type RunConfig = {
   tipsPerGeneration: number;
   selectionPressure: number;
   numTipsToShow: number;
+  maxGenerations: number;
 };
 
 export interface PostgresQuestion {

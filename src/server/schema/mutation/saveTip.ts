@@ -1,6 +1,10 @@
 import { ulid } from 'ulid';
 import { getScore } from '../../../helpers';
-import { createQuestionTipV2, getQuestionWithRun, updateScore } from '../../model';
+import {
+  createQuestionTipV2,
+  getQuestionWithRun,
+  updateScore,
+} from '../../model';
 import { GraphQLContext } from '../context';
 
 export async function saveTip(
@@ -31,7 +35,6 @@ export async function saveTip(
   const question = await getQuestionWithRun(id, rId, context);
 
   const { strategy, settings, runId } = question;
-  const runIndex = rId - 1;
   const tipId = ulid();
 
   await createQuestionTipV2(
@@ -42,12 +45,10 @@ export async function saveTip(
       runId, // UUID
       correctAnswer: settings.correctAnswer,
       strategy: {
-        numTipsToShow:
-          strategy.numTipsToShow,
-        selectionPressure:
-          strategy.selectionPressure,
-        tipsPerGeneration:
-          strategy.tipsPerGeneration,
+        maxGenerations: strategy.maxGenerations,
+        numTipsToShow: strategy.numTipsToShow,
+        selectionPressure: strategy.selectionPressure,
+        tipsPerGeneration: strategy.tipsPerGeneration,
       },
       generation: gId,
       previousTips,
