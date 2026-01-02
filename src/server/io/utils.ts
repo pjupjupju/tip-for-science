@@ -1,3 +1,4 @@
+import { MAX_GENERATION_NUMBER } from '../../config';
 import { RunConfig } from '../model';
 
 const getGenerationSize = (): number => {
@@ -51,12 +52,35 @@ const getSurvivorsSize = (generationSize: number): number => {
   }
 };
 
-export const getRunConfig = (): RunConfig => {
+const getMaxGenerations = (runNum: number): number => {
+  if (runNum > 1) {
+    return MAX_GENERATION_NUMBER;
+  }
+
+  const r = Math.random();
+  const p1 = 0.1;
+  const p2 = 0.2;
+  const p3 = 0.3;
+
+  if (r < p1) {
+    return 2;
+  } else if (r < p1 + p2) {
+    return 10;
+  } else if (r < p1 + p2 + p3) {
+    return 3;
+  } else {
+    return 6;
+  }
+};
+
+export const getRunConfig = (runNum: number): RunConfig => {
+  const maxGenerations = getMaxGenerations(runNum);
   const tipsPerGeneration = getGenerationSize();
   const selectionPressure = getSelectionPressure(tipsPerGeneration);
   const numTipsToShow = getSurvivorsSize(tipsPerGeneration);
 
   return {
+    maxGenerations,
     tipsPerGeneration,
     selectionPressure,
     numTipsToShow,

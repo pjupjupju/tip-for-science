@@ -860,11 +860,10 @@ export async function createQuestionRunV2(
   const question = await getQuestionWithHighestRun(questionId, context);
 
   const runNum = question?.run + 1;
-  const runIndex = question?.run;
 
   const id = ulid();
 
-  const strategy = getRunConfig();
+  const strategy = getRunConfig(runNum);
 
   const initialTips = getInitialTips(question.settings.correctAnswer, strategy);
 
@@ -1004,7 +1003,7 @@ export async function createQuestionTipV2(
         ];
 
         // If we hit max generations, we disable this RUN
-        if (generation === MAX_GENERATION_NUMBER) {
+        if (generation === strategy.maxGenerations) {
           await sql`update "run" r set enabled = false WHERE r.id = ${runId}`;
 
           runLock.unlock(`${runId}#${generation - 1}`);

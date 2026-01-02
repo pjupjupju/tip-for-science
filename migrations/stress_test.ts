@@ -75,7 +75,6 @@ async function generate() {
     });
 
     const { strategy, settings, runId } = question;
-    const runIndex = rId - 1;
     const tipId = ulid();
 
     const tip = generateTip(runRecord.settings.correctAnswer);
@@ -88,6 +87,7 @@ async function generate() {
         runId, // UUID
         correctAnswer: settings.correctAnswer,
         strategy: {
+          maxGenerations: strategy.maxGenerations,
           numTipsToShow: strategy.numTipsToShow,
           selectionPressure: strategy.selectionPressure,
           tipsPerGeneration: strategy.tipsPerGeneration,

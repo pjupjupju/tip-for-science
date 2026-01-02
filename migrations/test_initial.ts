@@ -13,7 +13,7 @@ async function generate() {
   });
 
   for (let i = 0; i < 100; i++) {
-    const strategy = getRunConfig();
+    const strategy = getRunConfig(i + 1);
 
     console.log(`🧚🏻‍♀️ run # ${i + 1} 🧚🏻‍♀️`);
     console.log('___________ 1. STEP __________');
