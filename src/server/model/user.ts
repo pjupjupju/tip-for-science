@@ -1,5 +1,6 @@
 import { AWSError, DynamoDB } from 'aws-sdk';
 import { ScanOutput } from 'aws-sdk/clients/dynamodb';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { ulid } from 'ulid';
 import * as yup from 'yup';
 import {
@@ -20,6 +21,10 @@ import { getQuestionCorpusV2 } from './question';
 
 interface UserModelContext {
   dynamo: DynamoDB.DocumentClient;
+}
+
+function generateIpipBundle(supabase: SupabaseClient) {
+  return [];
 }
 
 export async function createUser(
@@ -44,15 +49,18 @@ export async function createUser(
     .filter((q: any) => !q.isInit)
     .map((q: any) => q.id);
   const bundle = generateQuestionBundle(initialQuestions, restQuestions);
+  const ipipBundle = generateIpipBundle(supabase);
 
   const user: User = {
     bundle,
+    ipipBundle,
     createdAt: new Date().toISOString(),
     email: args.email,
     id,
     language: args.language,
     country: args.country,
     lastQuestion: null,
+    lastIpipQuestion: null,
     userskey: `USER#${id}`,
     password: args.password,
     role: args.role,
