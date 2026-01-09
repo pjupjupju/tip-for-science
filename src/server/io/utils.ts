@@ -232,7 +232,7 @@ export const getInitialTips = (
   const populationSize = strategy.tipsPerGeneration;
   const selectionCoeficient = strategy.selectionPressure;
   const start = randomPick([1 / 3, 3]); // 1/2 probability for each
-  const startSd = randomPick([0.05, 0.1, 0.2]); // 1/3 probability for each
+  const startSd = randomPick([0.1, 0.2, 0.4]); // 1/3 probability for each
 
   const zeroGeneration = generateInitialGeneration(
     populationSize,
