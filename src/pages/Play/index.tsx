@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useReducer } from 'react';
+import React, { useEffect, useRef, useReducer, useCallback } from 'react';
 import { redirect, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, NetworkStatus } from '@apollo/client';
 import { Flex } from 'rebass';
@@ -143,6 +143,28 @@ const Play = ({ user }: PlayProps) => {
     }
   }, [questionId]);
 
+  const runChecks = () => {
+    let isQuestionnaireNext = true;
+    if (questionId === 'questionIdThatGoesBeforeQuestionnaire') {
+      isQuestionnaireNext = true;
+    }
+
+    return { isQuestionnaireNext };
+  };
+
+  const onFinish = useCallback(() => {
+    const { isQuestionnaireNext } = runChecks();
+    if (isQuestionnaireNext) {
+      console.log('doing it');
+      navigate('/ipip');
+    } else {
+      refetch();
+      dispatch({
+        type: ActionType.GAME_FINISH,
+      });
+    }
+  }, [redirect, refetch, dispatch]);
+
   if (!user) {
     redirect('/');
   }
@@ -178,12 +200,7 @@ const Play = ({ user }: PlayProps) => {
         onIsTooClose={onIsTooClose}
         onHome={onHome}
         onSubmit={onSubmit}
-        onFinish={() => {
-          refetch();
-          dispatch({
-            type: ActionType.GAME_FINISH,
-          });
-        }}
+        onFinish={onFinish}
       />
     </>
   );

@@ -4,6 +4,7 @@ import {
   exportData,
   importQuestions,
   importTranslations,
+  saveQuestionnaireAnswer,
   saveTip,
   signIn,
   signOut,
@@ -80,6 +81,10 @@ export const typeDefs = /* GraphQL */ gql`
     exportData: String
     importQuestions: Boolean
     importTranslations: Boolean
+    saveQuestionnaireAnswer(
+      questionId: Int!
+      value: Int!
+    ): String
     saveTip(
       id: String!
       tip: Float!
@@ -153,6 +158,7 @@ export const resolvers = {
     exportData,
     importQuestions,
     importTranslations,
+    saveQuestionnaireAnswer,
     saveTip,
     signIn,
     signOut,
