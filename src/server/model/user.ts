@@ -3,6 +3,7 @@ import { ScanOutput } from 'aws-sdk/clients/dynamodb';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { ulid } from 'ulid';
 import * as yup from 'yup';
+import toCamelCase from 'camelcase-keys';
 import {
   TABLE_USER,
   USERS_BY_EMAIL_INDEX,
@@ -21,10 +22,16 @@ import { getQuestionCorpusV2 } from './question';
 
 interface UserModelContext {
   dynamo: DynamoDB.DocumentClient;
+  supabase: SupabaseClient;
 }
 
-function generateIpipBundle(supabase: SupabaseClient) {
-  return [];
+async function generateIpipBundle(supabase: SupabaseClient): Promise<number[]> {
+  const { data } = await supabase.from('ipip_questionnaire').select('id');
+
+  return generateQuestionBundle(
+    [],
+    data.map((item) => item.id)
+  );
 }
 
 export async function createUser(
@@ -49,7 +56,7 @@ export async function createUser(
     .filter((q: any) => !q.isInit)
     .map((q: any) => q.id);
   const bundle = generateQuestionBundle(initialQuestions, restQuestions);
-  const ipipBundle = generateIpipBundle(supabase);
+  const ipipBundle = await generateIpipBundle(supabase);
 
   const user: User = {
     bundle,
@@ -70,7 +77,7 @@ export async function createUser(
   };
 
   // check if user does not exist
-  const foundUser = await findUserByEmail(user.email, { dynamo });
+  const foundUser = await findUserByEmail(user.email, { dynamo, supabase });
 
   if (foundUser) {
     throw new yup.ValidationError('This email already exists', null, 'email');
@@ -470,7 +477,7 @@ export async function executeTransactWriteUser(
   });
 }
 
-export async function wipeAllBatches({ dynamo }: UserModelContext) {
+export async function wipeAllBatches({ dynamo, supabase }: UserModelContext) {
   const params = {
     TableName: TABLE_USER,
     FilterExpression:
@@ -483,6 +490,10 @@ export async function wipeAllBatches({ dynamo }: UserModelContext) {
   };
 
   let users: string[] = [];
+
+  const { data: ipipData } = await supabase
+    .from('ipip_questionnaire')
+    .select('id');
 
   const onScanUsersAndUpdateBundles = async (
     err: AWSError,
@@ -503,9 +514,16 @@ export async function wipeAllBatches({ dynamo }: UserModelContext) {
             Update: {
               TableName: TABLE_USER,
               Key: { id, userskey: `USER#${id}` },
-              UpdateExpression: 'set bundle = :bundle',
+              UpdateExpression:
+                'set bundle = :bundle, lastQuestion = :lastQuestion, ipipBundle = :ipipBundle, lastIpipQuestion = :lastIpipQuestion',
               ExpressionAttributeValues: {
                 ':bundle': [],
+                ':lastQuestion': null,
+                ':ipipBundle': generateQuestionBundle(
+                  [],
+                  ipipData.map((item) => item.id)
+                ),
+                ':lastIpipQuestion': null,
               },
             },
           }))

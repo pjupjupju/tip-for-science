@@ -12,18 +12,19 @@ import {
   Divider,
 } from '@mui/material';
 
-const questionnaire = [
-  { id: 12, item: 'Myslím si že flopec není úplný dingus.' },
-  { id: 15, item: 'Někdy chci pejsku prodat na maso.' },
-  { id: 34, item: 'Na každém šprochu pravdy trochu.' },
-  { id: 35, item: 'Přidávám sem otázky jen aby se muselo scrollovat.' },
-  { id: 39, item: 'Karamel je cukr co se už neuzdraví.' },
-  { id: 45, item: 'Blíží se rok apo... kalypsy 🤸🏽' },
-];
+type QuestionnaireItem = {
+  id: number;
+  item: string;
+  value?: number;
+};
+
+interface QuestionnaireProps {
+  questionnaire: QuestionnaireItem[];
+}
 
 const SCALE = [1, 2, 3, 4, 5] as const;
 
-const Questionnaire = () => {
+const Questionnaire = ({ questionnaire }: QuestionnaireProps) => {
   const [answers, setAnswers] = React.useState<Record<number, number>>({});
   const [showValidation, setShowValidation] = React.useState(false);
 
