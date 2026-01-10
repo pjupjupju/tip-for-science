@@ -11,13 +11,13 @@ export async function getQuestionnaire(
   _: {},
   context: GraphQLContext
 ): Promise<Questionnaire[]> {
-  const { dynamo, runCache, user, sql } = context;
+  const { dynamo, user } = context;
 
   if (user == null) {
     throw new ValidationError('Unauthorized.');
   }
 
-  const userRecord = await findUserById(user.id, { dynamo });
+  const userRecord = await findUserById(user.id, context);
 
   if (userRecord == null) {
     throw new ValidationError('User does not exist.');

@@ -19,6 +19,7 @@ import {
   getNextQuestion,
   getUserStats,
   viewer,
+  getQuestionnaire,
 } from './query';
 import * as types from './types';
 
@@ -38,6 +39,12 @@ export const typeDefs = /* GraphQL */ gql`
     correctAnswer: Float!
     timeLimit: Int
     unit: String!
+  }
+
+  type QuestionnaireItem {
+    id: Int!
+    item: String!
+    value: Int
   }
 
   type Tip {
@@ -72,6 +79,7 @@ export const typeDefs = /* GraphQL */ gql`
     getMyScore: Float!
     getNextQuestion: Question
     getOnlineStats: OnlineStats!
+    getQuestionnaire: [QuestionnaireItem!]!
     getUserStats: Stats!
     viewer: Viewer!
   }
@@ -171,6 +179,7 @@ export const resolvers = {
     getNextQuestion,
     getMyScore,
     getOnlineStats,
+    getQuestionnaire,
     getUserStats,
     viewer,
   },
