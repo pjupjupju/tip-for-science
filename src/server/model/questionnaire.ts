@@ -52,9 +52,9 @@ export async function getCurrentQuestionnaire(
   const data = await sql<Questionnaire[]>`
     SELECT q.id, COALESCE(t.translation, q.item) AS item
       FROM "ipip_questionnaire" q
-      LEFT JOIN "ipip_questionnaire_translation" t ON t.question_id = q.id AND t.lang = ${language}
+      LEFT JOIN "ipip_questionnaire_translation" t ON t.item_id = q.id AND t.lang = ${language}
       LEFT JOIN "ipip_answer" a ON a.question_id = q.id AND a.user_id = ${userId}
-      WHERE q.id_in_sheet = any(${sql.array([...nextQuestionIds]).value});
+      WHERE q.id = any(${sql.array([...nextQuestionIds]).value});
   `;
 
   return data;

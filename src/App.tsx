@@ -64,7 +64,7 @@ const AppLayout = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/consent" element={<Consent />} />
-        <Route path="/ipip" element={<Ipip />} />
+        <Route path="/ipip" element={<Ipip user={user} />} />
         {user && user.role === 'admin' && (
           <Route path="/dashboard" element={<Dashboard user={user} />} />
         )}
