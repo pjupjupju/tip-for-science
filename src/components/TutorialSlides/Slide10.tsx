@@ -14,6 +14,7 @@ import { HomeButton } from './HomeButton';
 import { NextButton } from './NextButton';
 import { FormattedMessage, useIntl } from 'react-intl';
 import ScoreMessage from '../ScoreMessage';
+import { tutorialText } from './styles';
 
 const imageStyle = getTutorialImageStyle(washington);
 
@@ -56,12 +57,7 @@ const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
           />{' '}
           <Typography
             component="span"
-            color="text.secondary"
-            fontSize={{
-              xs: 20,
-              sm: 24,
-              md: 28,
-            }}
+            sx={tutorialText}
           >
             {' '}
             {questionScore === 0 && <ScoreMessage scoreType="score.zero" />}
@@ -87,7 +83,9 @@ const Slide10 = ({ handleNextStep, currentTip }: SlideProps) => {
           />
         )}
       </Box>
-      <FunFact correctAnswer={correctAnswer} fact={fact} />
+      <Box px={2}>
+        <FunFact correctAnswer={correctAnswer} fact={fact} />
+      </Box>
       <Box mt="auto" display="flex" justifyContent="space-between" width="100%">
         <HomeButton />
         <NextButton handleNextStep={handleNextStep} />

@@ -6,19 +6,14 @@ import { SlideProps } from './types';
 import { HomeButton } from './HomeButton';
 import { NextButton } from './NextButton';
 import { FormattedMessage } from 'react-intl';
+import { tutorialText } from './styles';
 
 const Slide11 = ({ handleNextStep }: SlideProps) => {
   return (
     <Container>
       <Box p="4" my="auto">
         <Typography
-          fontSize={{
-            xs: 24,
-            sm: 28,
-            md: 32,
-          }}
-          color="text.secondary"
-          textAlign="center"
+          sx={tutorialText}
           mb={4}
           mt={4}
         >
@@ -29,13 +24,7 @@ const Slide11 = ({ handleNextStep }: SlideProps) => {
           />
         </Typography>
         <Typography
-          fontSize={{
-            xs: 24,
-            sm: 28,
-            md: 32,
-          }}
-          color="text.secondary"
-          textAlign="center"
+          sx={tutorialText}
           mb={4}
         >
           <FormattedMessage
@@ -45,13 +34,7 @@ const Slide11 = ({ handleNextStep }: SlideProps) => {
           />
         </Typography>
         <Typography
-          fontSize={{
-            xs: 24,
-            sm: 28,
-            md: 32,
-          }}
-          color="text.secondary"
-          textAlign="center"
+          sx={tutorialText}
           mb={4}
         >
           {' '}

@@ -15,6 +15,7 @@ import { HomeButton } from './HomeButton';
 import { NextButton } from './NextButton';
 import { useIntl } from 'react-intl';
 import ScoreMessage from '../ScoreMessage';
+import { tutorialText } from './styles';
 
 const imageStyle = getTutorialImageStyle(jupiter);
 
@@ -42,8 +43,8 @@ const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
       <TutorialHeader>
         <Typography
           fontSize={{
-            xs: 24,
-            sm: 28,
+            xs: 20,
+            sm: 24,
             md: 32,
           }}
           color="accent.main"
@@ -59,12 +60,7 @@ const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
           {unit}?{' '}
           <Typography
             component="span"
-            color="text.secondary"
-            fontSize={{
-              xs: 24,
-              sm: 28,
-              md: 32,
-            }}
+            sx={tutorialText}
           >
             {' '}
             {questionScore === 0 && <ScoreMessage scoreType="score.zero" />}

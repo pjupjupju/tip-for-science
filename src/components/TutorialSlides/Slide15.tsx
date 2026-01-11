@@ -10,6 +10,7 @@ import { AUTH_QUERY } from '../../gql';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import { FormattedMessage } from 'react-intl';
+import { tutorialText } from './styles';
 import logo from './../../assets/logoskoly.png';
 
 const Slide15 = () => {
@@ -63,16 +64,7 @@ const Slide15 = () => {
         }}
       />
 
-      <Typography
-        fontSize={{
-          xs: 20,
-          sm: 24,
-          md: 28,
-        }}
-        color="text.secondary"
-        textAlign="center"
-        sx={{ px: 3, py: 2 }}
-      >
+      <Typography sx={{ tutorialText, px: 3, py: 2 }}>
         <FormattedMessage
           id="app.tutorial.slide.byeb"
           defaultMessage="Tip for Science was created by evolutionary biologists {lineBreak}

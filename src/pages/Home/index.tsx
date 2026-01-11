@@ -54,6 +54,7 @@ const Home = ({ user, onLogOut }: HomeProps) => {
         justifyContent="center"
         height="100%"
         width="100%"
+        boxSizing="border-box"
         p={3}
       >
         <Box
