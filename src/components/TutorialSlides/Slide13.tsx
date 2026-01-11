@@ -1,6 +1,8 @@
 import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { Flex, Image, Text } from 'rebass';
-import { Label, Input } from '@rebass/forms';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
 import jupiter from './../../assets/jupiterTut.jpg';
 import { PreviousTips } from '../Game';
 import { Container } from '../Container';
@@ -8,36 +10,6 @@ import { TutorialHeader } from '../TutorialHeader';
 import { SlideProps } from './types';
 import { SubmitButton } from '../SubmitButton';
 import { FormattedMessage, useIntl } from 'react-intl';
-
-const imageStyle = {
-  maxWidth: '100%',
-  alignSelf: 'center',
-  objectFit: 'contain',
-};
-
-const inputStyles = {
-  '::placeholder': {
-    color: 'white',
-  },
-  color: 'white',
-  flex: 1,
-  mx: 3,
-};
-
-const inputStyles2 = {
-  '::placeholder': {
-    color: '#000',
-  },
-  color: '#000',
-  background: 'white',
-};
-
-const labelStyle = {
-  flexGrow: 0,
-  flexShrink: 0,
-  width: 'auto',
-  color: 'white',
-};
 
 const previousTips = [80000, 1000, 500, 20000];
 const timeLimit = 20;
@@ -111,37 +83,93 @@ const Slide13 = ({ onSubmit }: SlideProps) => {
   return (
     <Container isRelative={true}>
       <TutorialHeader>
-        <Text fontSize={[3, 4, 5]} color="secondary" textAlign="center" p={3}>
+        <Typography
+          fontSize={{
+            xs: 24,
+            sm: 28,
+            md: 32,
+          }}
+          color="text.secondary"
+          textAlign="center"
+          p={3}
+        >
+          {' '}
           {question}
-        </Text>
+        </Typography>
       </TutorialHeader>
-      <Image src={jupiter} sx={imageStyle} />
+      <Box
+        component="img"
+        src={jupiter}
+        alt="Jupiter"
+        sx={{
+          maxWidth: '100%',
+          alignSelf: 'center',
+          objectFit: 'contain',
+        }}
+      />
       <PreviousTips previousTips={previousTips} unit={unit} />
-      <Flex justifyContent="center" alignItems="center" p={2}>
-        <Label htmlFor="tip" sx={labelStyle}>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        p={2}
+        width="100%"
+      >
+        <InputLabel
+          htmlFor="tip"
+          sx={{
+            flexGrow: 0,
+            flexShrink: 0,
+            width: 'auto',
+            color: 'white',
+            mr: 2,
+          }}
+        >
           <FormattedMessage
             id="app.tip"
             defaultMessage="tip:"
             description="Tip"
           />
-        </Label>
-        <Input
+        </InputLabel>
+        <OutlinedInput
           id="tip"
           name="tip"
           type="number"
           placeholder={placeholder}
-          sx={inputStyles}
+          inputRef={inputRef}
           onKeyDown={handleSubmit}
-          ref={inputRef}
+          sx={{
+            color: 'white',
+            mx: 2,
+            flex: 1,
+            minWidth: '120px',
+            input: {
+              color: 'white',
+              '&::placeholder': {
+                color: 'white',
+                opacity: 0.8,
+              },
+            },
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'white',
+            },
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'white',
+            },
+            '&.Mui-focused': {
+              boxShadow: 'none',
+            },
+          }}
         />
-        <Text color="white" mr={2}>
+        <Typography color="white" mr={4}>
           {unit}
-        </Text>{' '}
+        </Typography>{' '}
         <SubmitButton onClick={handleClickSubmit} timeLimit={timeLimit} />
-      </Flex>
+      </Box>
       {timeLimitEnded && (
-        <Flex
+        <Box
           p={3}
+          display="flex"
           flexDirection="column"
           alignItems="center"
           justifyContent="center"
@@ -152,22 +180,42 @@ const Slide13 = ({ onSubmit }: SlideProps) => {
             height: '100%',
           }}
         >
-          <Text fontWeight={500} textAlign="center" my={1} color="white">
+          <Typography
+            fontWeight={500}
+            textAlign="center"
+            my={1}
+            color="white"
+            fontSize={{
+              xs: 16,
+              sm: 20,
+              md: 24,
+            }}
+          >
             <FormattedMessage
               id="app.tutorial.slide.timesup"
               defaultMessage="Time’s up! But this time, you can still submit your answer here:"
               description="Tut13 times up"
             />
-          </Text>
-          <Input
+          </Typography>
+          <OutlinedInput
             id="tip2"
-            name="tip"
+            name="tip2"
             type="number"
-            placeholder="tvůj tip"
-            sx={inputStyles2}
+            placeholder={placeholder}
             onKeyDown={handleSubmit}
+            sx={{
+              color: 'black',
+              background: 'white',
+              mt: 2,
+              input: {
+                color: '#000',
+                '&::placeholder': {
+                  color: '#000',
+                },
+              },
+            }}
           />
-        </Flex>
+        </Box>
       )}
     </Container>
   );
