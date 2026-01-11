@@ -1,3 +1,14 @@
+import { SupabaseClient } from '@supabase/supabase-js';
+import { DynamoDB } from 'aws-sdk';
+import { String } from 'aws-sdk/clients/cloudwatchevents';
+import { Sql } from 'postgres';
+
+export interface ModelContext {
+  dynamo: DynamoDB.DocumentClient;
+  sql: Sql;
+  supabase: SupabaseClient;
+}
+
 /**
  * User from db
  */
@@ -92,6 +103,7 @@ export type RunStrategy = {
   selectionPressure: number;
   tipsPerGeneration: number;
   numTipsToShow: number;
+  maxGenerations: number;
 };
 
 export interface DynamoRun {
@@ -106,6 +118,16 @@ export interface DynamoRun {
   strategy: RunStrategy;
 }
 
+export interface PostgresRun {
+  id: string;
+  generation: number;
+  previousTips: number[];
+  runNum: number;
+  settings: QuestionSettings;
+  strategy: RunStrategy;
+  createdAt: string;
+}
+
 /**
  * Question from IMPORT
  */
@@ -118,10 +140,6 @@ export type ImportedQuestionSettings = {
   fact: string;
   unit: string;
   isInit: boolean;
-  selectionPressure: number[];
-  tipsPerGeneration: number[];
-  initialTips: number[][];
-  numTipsToShow: number[];
 };
 
 export type ImportedTranslationSettings = {
@@ -146,4 +164,43 @@ export enum UserRole {
   player = 'player',
 }
 
+// ------------------ Postgres --------------------
+export type RunConfig = {
+  tipsPerGeneration: number;
+  selectionPressure: number;
+  numTipsToShow: number;
+  maxGenerations: number;
+};
 
+export interface PostgresQuestion {
+  id: string;
+  generation: number;
+  run: number;
+  settings: QuestionSettings;
+  strategy: QuestionStrategy;
+}
+
+export interface PostgresQuestionWithRun {
+  id: string;
+  generation: number;
+  run: number;
+  settings: QuestionSettings;
+  strategy: RunConfig;
+  runId: string;
+}
+
+export type PostgresTip = {
+  id: string;
+  generation: number;
+  runId: string;
+  questionId: string;
+  tip: number;
+  correctAnswer: number;
+  previousTips: number[];
+  timeLimit?: number;
+  msElapsed: number;
+  createdBy: string;
+  createdAt: string;
+  knewAnswer: boolean;
+  answered: boolean;
+};

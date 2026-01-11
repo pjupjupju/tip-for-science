@@ -13,3 +13,4 @@ export * from './signInMutation';
 export * from './signOutMutation';
 export * from './signUpMutation';
 export * from './updateUserMutation';
+export * from './wipeBatchesMutation';

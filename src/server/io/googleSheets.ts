@@ -21,7 +21,6 @@ function getToken() {
 async function getQuestionBatch(
   spreadsheetId: string,
   sheetName: string,
-  strategySheetName: string
 ): Promise<ImportedQuestionSettings[]> {
   const googleJwt = getToken();
   const sheets = google.sheets('v4');
@@ -30,12 +29,6 @@ async function getQuestionBatch(
       auth: googleJwt,
       spreadsheetId,
       range: `${sheetName}!A1:L`,
-    });
-
-    const strategyResponse = await sheets.spreadsheets.values.get({
-      auth: googleJwt,
-      spreadsheetId,
-      range: `${strategySheetName}!A1:F`,
     });
 
     // Getting rowData - settings and data of all rows/cells
@@ -56,9 +49,6 @@ async function getQuestionBatch(
 
     // Slice only rows of finds
     const rows = response!.data!.values!.slice(1);
-    const strategyRows = strategyResponse!
-      .data!.values!.slice(1)
-      .filter((r) => typeof r[0] !== 'undefined');
 
     if (rows.length === 0) {
       console.log('No data found inside spreadsheet.');
@@ -74,10 +64,6 @@ async function getQuestionBatch(
       correctAnswer: Number(r[2].replace(',', '.')),
       timeLimit: isNaN(parseInt(r[6])) ? undefined : parseInt(r[6]),
       isInit: r[7].toLowerCase() === 'true',
-      selectionPressure: JSON.parse(strategyRows[index][1]),
-      tipsPerGeneration: JSON.parse(strategyRows[index][2]),
-      initialTips: JSON.parse(strategyRows[index][3]),
-      numTipsToShow: JSON.parse(strategyRows[index][4]),
     }));
   } catch (e) {
     console.error(e);

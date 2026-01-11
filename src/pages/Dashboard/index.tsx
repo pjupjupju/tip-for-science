@@ -11,8 +11,10 @@ import {
   EXPORT_MUTATION,
   IMPORT_MUTATION,
   ONLINE_STATS_QUERY,
+  WIPE_BATCHES_MUTATION,
 } from '../../gql';
 import { User, UserRole } from '../../types';
+import { WipeBatchesButton } from './WipeBatchesButton';
 
 const buttonStyles = { width: '50%', my: 2 };
 
@@ -52,6 +54,22 @@ const Dashboard = ({ user }: DashboardProps) => {
     }
   );
 
+  const [wipeBatches, { loading: wipeBatchesLoading }] = useMutation(
+    WIPE_BATCHES_MUTATION,
+    {
+      onCompleted: ({ wipeBatches }) => {
+        setLog([
+          ...log,
+          JSON.stringify(
+            wipeBatches
+              ? 'All user question were deleted.'
+              : 'Error: Some user question batches were not deleted.'
+          ),
+        ]);
+      },
+    }
+  );
+
   const [exportData, { loading: exportLoading }] = useMutation(
     EXPORT_MUTATION,
     {
@@ -74,6 +92,7 @@ const Dashboard = ({ user }: DashboardProps) => {
   const handleClickImport = () => {
     importQuestions();
   };
+
 
   if (!user || user.role !== UserRole.admin) {
     redirect('/');
