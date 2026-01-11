@@ -25,7 +25,6 @@ const GameOverScreen = ({ onContinue }: GameOverScreenProps) => {
       <Container>
         <Box
           sx={{
-            p: 3,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -36,7 +35,7 @@ const GameOverScreen = ({ onContinue }: GameOverScreenProps) => {
         >
           <Typography
             sx={{
-              fontSize: 24,
+              fontSize: 'clamp(36px, 6vw, 72px)',
               textAlign: 'center',
               my: 2,
               color: 'white',

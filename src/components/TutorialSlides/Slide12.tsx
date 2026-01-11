@@ -6,27 +6,17 @@ import { SlideProps } from './types';
 import { HomeButton } from './HomeButton';
 import { NextButton } from './NextButton';
 import { FormattedMessage } from 'react-intl';
+import { tutorialText } from './styles';
 
 const Slide12 = ({ handleNextStep }: SlideProps) => {
   return (
     <Container>
       <Box p="4" my="auto">
-        <Typography
-          fontSize={{
-            xs: 24,
-            sm: 28,
-            md: 32,
-          }}
-          color="text.secondary"
-          textAlign="center"
-          mb={4}
-          mt={4}
-        >
+        <Typography sx={tutorialText} mb={4} mt={4}>
           <FormattedMessage
             id="app.tutorial.slide.apes"
-            defaultMessage="This game is one big experiment in cultural evolution. Interested
-            us how this species of extremely cooperative apes finds the optimum
-            strategy when only group intelligence is available."
+            defaultMessage="This game is one big experiment in cultural evolution. We are interested in how extremely cooperative apes find the best strategy
+using only group intelligence."
             description="Tut12 apes"
           />
         </Typography>

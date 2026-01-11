@@ -12,11 +12,11 @@ const getStyles = (isRelative: boolean) => ({
   height: '100%',
   width: '100%',
   mx: 'auto',
+  px: { xs: 2, sm: 3 },
+  boxSizing: 'border-box',
   '&.MuiContainer-maxWidthMd': {
     maxWidth: '700px',
-    padding: 0,
   },
-  p: 0,
 });
 
 const stackStyles = {

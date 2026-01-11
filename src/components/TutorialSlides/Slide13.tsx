@@ -10,6 +10,7 @@ import { TutorialHeader } from '../TutorialHeader';
 import { SlideProps } from './types';
 import { SubmitButton } from '../SubmitButton';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { tutorialText } from './styles';
 
 const previousTips = [80000, 1000, 500, 20000];
 const timeLimit = 20;
@@ -84,13 +85,7 @@ const Slide13 = ({ onSubmit }: SlideProps) => {
     <Container isRelative={true}>
       <TutorialHeader>
         <Typography
-          fontSize={{
-            xs: 24,
-            sm: 28,
-            md: 32,
-          }}
-          color="text.secondary"
-          textAlign="center"
+          sx={tutorialText}
           p={3}
         >
           {' '}
@@ -113,6 +108,7 @@ const Slide13 = ({ onSubmit }: SlideProps) => {
         alignItems="center"
         justifyContent="center"
         p={2}
+        boxSizing="border-box"
         width="100%"
       >
         <InputLabel
@@ -193,7 +189,7 @@ const Slide13 = ({ onSubmit }: SlideProps) => {
           >
             <FormattedMessage
               id="app.tutorial.slide.timesup"
-              defaultMessage="Time’s up! But this time, you can still submit your answer here:"
+              defaultMessage="Time's up! But this time, you can still submit your answer here:"
               description="Tut13 times up"
             />
           </Typography>

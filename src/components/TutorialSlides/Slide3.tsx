@@ -100,6 +100,7 @@ const Slide3 = ({ onSubmit }: SlideProps) => {
         width="100%"
         maxWidth="960px"
         mx="auto"
+        boxSizing="border-box"
       >
         <InputLabel
           htmlFor="tip"

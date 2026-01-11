@@ -4,6 +4,7 @@ import { SlideProps } from './types';
 import { NextButton } from './NextButton';
 import { HomeButton } from './HomeButton';
 import { FormattedMessage } from 'react-intl';
+import { tutorialText } from './styles';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
@@ -11,16 +12,7 @@ const Slide7 = ({ handleNextStep }: SlideProps) => {
   return (
     <Container>
       <Box p="4" my="auto">
-        <Typography
-          fontSize={{
-            xs: 24,
-            sm: 28,
-            md: 32,
-          }}
-          color="text.secondary"
-          textAlign="center"
-          mb={4}
-        >
+        <Typography sx={tutorialText} mb={4}>
           {' '}
           <FormattedMessage
             id="app.tutorial.slide.evolution"
@@ -28,16 +20,7 @@ const Slide7 = ({ handleNextStep }: SlideProps) => {
             description="Tut7 evolution"
           />
         </Typography>
-        <Typography
-          fontSize={{
-            xs: 24,
-            sm: 28,
-            md: 32,
-          }}
-          color="text.secondary"
-          textAlign="center"
-          mb={4}
-        >
+        <Typography sx={tutorialText} mb={4}>
           {' '}
           <FormattedMessage
             id="app.tutorial.slide.population"
@@ -45,16 +28,7 @@ const Slide7 = ({ handleNextStep }: SlideProps) => {
             description="Tut7 population"
           />
         </Typography>
-        <Typography
-          fontSize={{
-            xs: 24,
-            sm: 28,
-            md: 32,
-          }}
-          color="text.secondary"
-          textAlign="center"
-          mb={4}
-        >
+        <Typography sx={tutorialText} mb={4}>
           {' '}
           <FormattedMessage
             id="app.tutorial.slide.survive"
@@ -62,15 +36,7 @@ const Slide7 = ({ handleNextStep }: SlideProps) => {
             description="Tut7 survive"
           />
         </Typography>
-        <Typography
-          fontSize={{
-            xs: 24,
-            sm: 28,
-            md: 32,
-          }}
-          color="text.secondary"
-          textAlign="center"
-        >
+        <Typography sx={tutorialText} mb={4}>
           {' '}
           <FormattedMessage
             id="app.tutorial.slide.shown"
@@ -78,15 +44,7 @@ const Slide7 = ({ handleNextStep }: SlideProps) => {
             description="Tut7 shown"
           />
         </Typography>
-        <Typography
-          fontSize={{
-            xs: 24,
-            sm: 28,
-            md: 32,
-          }}
-          color="text.secondary"
-          textAlign="center"
-        >
+        <Typography sx={tutorialText} mb={4}>
           {' '}
           <FormattedMessage
             id="app.tutorial.slide.notshown"

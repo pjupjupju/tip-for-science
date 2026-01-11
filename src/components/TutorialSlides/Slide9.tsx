@@ -10,6 +10,7 @@ import { SlideProps } from './types';
 import { SubmitButton } from '../SubmitButton';
 import { FormattedMessage, useIntl } from 'react-intl';
 import washington from './../../assets/washingtonTut.jpg';
+import { tutorialText } from './styles';
 
 const imageStyle = {
   maxWidth: '100%',
@@ -72,16 +73,7 @@ const Slide9 = ({ onSubmit = () => {} }: SlideProps) => {
   return (
     <Container>
       <TutorialHeader>
-        <Typography
-          fontSize={{
-            xs: 20,
-            sm: 24,
-            md: 28,
-          }}
-          color="text.secondary"
-          textAlign="center"
-          p={3}
-        >
+        <Typography sx={tutorialText} p={3}>
           {' '}
           <FormattedMessage
             id="app.tutorial.slide.previousp"
@@ -109,6 +101,7 @@ const Slide9 = ({ onSubmit = () => {} }: SlideProps) => {
         width="100%"
         maxWidth="960px"
         mx="auto"
+        boxSizing="border-box"
       >
         <InputLabel
           htmlFor="tip"
