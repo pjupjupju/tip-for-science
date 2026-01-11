@@ -5,6 +5,7 @@ import {
   importQuestions,
   importTranslations,
   saveQuestionnaireAnswer,
+  saveQuestionnaireBatch,
   saveTip,
   signIn,
   signOut,
@@ -45,6 +46,11 @@ export const typeDefs = /* GraphQL */ gql`
     id: Int!
     item: String!
     value: Int
+  }
+
+  input QuestionnaireItemInput {
+    questionId: Int!
+    value: Int!
   }
 
   type Tip {
@@ -93,6 +99,9 @@ export const typeDefs = /* GraphQL */ gql`
       questionId: Int!
       value: Int!
     ): String
+    saveQuestionnaireBatch(
+      items: [QuestionnaireItemInput!]!
+    ): String
     saveTip(
       id: String!
       tip: Float!
@@ -138,6 +147,8 @@ export const typeDefs = /* GraphQL */ gql`
     createdAt: DateTime!
     updatedAt: DateTime!
     language: String
+    nextQuestionnaireAfterQuestion: String
+    ipipBundle: [Int!]!
   }
 
   enum UserRole {
@@ -167,6 +178,7 @@ export const resolvers = {
     importQuestions,
     importTranslations,
     saveQuestionnaireAnswer,
+    saveQuestionnaireBatch,
     saveTip,
     signIn,
     signOut,

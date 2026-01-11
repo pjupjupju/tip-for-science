@@ -7,12 +7,10 @@ import { QUESTIONNAIRE_QUERY } from '../../gql';
 import { Spinner } from '../../components';
 
 const Ipip = ({ user }) => {
-  const { loading, data, networkStatus } = useQuery(QUESTIONNAIRE_QUERY, {
+  const { loading, data } = useQuery(QUESTIONNAIRE_QUERY, {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'network-only',
   });
-
-  console.log('data', data);
 
   if (!user) {
     redirect('/');
@@ -28,7 +26,10 @@ const Ipip = ({ user }) => {
 
   return (
     <Container>
-      <Questionnaire questionnaire={data.getQuestionnaire}  />
+      <Questionnaire
+        completeBundle={user.ipipBundle}
+        questionnaire={data.getQuestionnaire}
+      />
     </Container>
   );
 };
