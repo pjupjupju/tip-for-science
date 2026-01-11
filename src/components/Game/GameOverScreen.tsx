@@ -1,9 +1,11 @@
 import React from 'react';
-import { Text, Flex, Button } from 'rebass';
 import { useNavigate } from 'react-router-dom';
 import { TranslucentBox } from '../TranslucentBox';
 import { Container } from '../Container';
 import { FormattedMessage } from 'react-intl';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 interface GameOverScreenProps {
   onContinue: Function;
@@ -21,37 +23,55 @@ const GameOverScreen = ({ onContinue }: GameOverScreenProps) => {
   return (
     <TranslucentBox>
       <Container>
-        <Flex
-          p={3}
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          width="100%"
-          height="100%"
+        <Box
+          sx={{
+            p: 3,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+            height: '100%',
+          }}
         >
-          <Text
-            fontSize={6}
-            fontWeight={700}
-            textAlign="center"
-            my={2}
-            color="white"
+          <Typography
+            sx={{
+              fontSize: 24,
+              textAlign: 'center',
+              my: 2,
+              color: 'white',
+            }}
           >
             GAME OVER
-          </Text>
-          <Text fontWeight={500} textAlign="center" my={2} color="white">
+          </Typography>
+          <Typography
+            align="center"
+            sx={{
+              fontWeight: 500,
+              my: 2,
+              color: 'white',
+            }}
+          >
             <FormattedMessage
               id="app.game.gameover"
               defaultMessage="Time’s up! You can continue with the next question or take a break."
               description="Game over"
             />
-          </Text>
+          </Typography>
 
-          <Flex justifyContent="space-between" width="100%" mt={6}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              width: '100%',
+              mt: 6,
+            }}
+          >
             <Button
               onClick={handleClickHome}
-              sx={{ flex: 1 }}
-              mr={1}
-              backgroundColor={'#414141'}
+              variant="contained"
+              color="secondary"
+              sx={{ flex: 1, mr: 1 }}
             >
               <FormattedMessage
                 id="app.tutorial.menu.home"
@@ -59,15 +79,19 @@ const GameOverScreen = ({ onContinue }: GameOverScreenProps) => {
                 description="Tut home button"
               />
             </Button>
-            <Button onClick={handleClickPlay} sx={{ flex: 3 }}>
+            <Button
+              onClick={handleClickPlay}
+              variant="contained"
+              sx={{ flex: 3 }}
+            >
               <FormattedMessage
                 id="app.game.continue"
                 defaultMessage="Continue"
                 description="Continue"
               />
             </Button>
-          </Flex>
-        </Flex>
+          </Box>
+        </Box>
       </Container>
     </TranslucentBox>
   );

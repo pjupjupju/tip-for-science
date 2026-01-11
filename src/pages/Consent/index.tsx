@@ -1,6 +1,7 @@
 import React from 'react';
 import Helmet from 'react-helmet';
-import { Text } from 'rebass';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { Container } from './../../components/Container';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -14,10 +15,11 @@ const Consent = () => {
   return (
     <Container>
       <Helmet title={helmet}></Helmet>
-      <Text color="secondary" my="6">
-        <FormattedMessage
-          id="app.consent"
-          defaultMessage="I hereby consent to Mgr. Pavlína Hillerová (hillerovap@natur.cuni.cz) processing my personal data, specifically: {lineBreak}
+      <Box my={6}>
+        <Typography variant="body1" color="text.secondary" fontSize={[16, 20]}>
+          <FormattedMessage
+            id="app.consent"
+            defaultMessage="I hereby consent to Mgr. Pavlína Hillerová (hillerovap@natur.cuni.cz) processing my personal data, specifically: {lineBreak}
           - my email address {lineBreak}
           - personal information derived from my responses to questions in the questionnaires, {lineBreak}
         for the purposes of a study on cultural transmission. {lineBreak}
@@ -29,12 +31,13 @@ const Consent = () => {
         - I can request that my personal data not be processed until the validity of the above requests is resolved, {lineBreak}
         - I have the right to lodge a complaint with the supervisory authority, {lineBreak}
         - I may withdraw my consent at any time by requesting deletion of my profile via email to hillerovap@natur.cuni.cz."
-          description="Consent"
-          values={{
-            lineBreak: <br />,
-          }}
-        />
-      </Text>
+            description="Consent"
+            values={{
+              lineBreak: <br />,
+            }}
+          />
+        </Typography>
+      </Box>
     </Container>
   );
 };

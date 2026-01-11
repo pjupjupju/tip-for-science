@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Flex } from 'rebass';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import { CommonTutorialProps } from '../TutorialSlide';
 
 const dotStyles = {
@@ -17,11 +18,11 @@ const activeDotStyles = {
   ...dotStyles,
   transform: 'scale(1.2)',
   transformOrigin: 'center',
-  backgroundColor: 'secondary',
+  backgroundColor: 'dimmed.main',
 };
 
 const Dot = ({ isActive }: { isActive: boolean }) => (
-  <Box as="li" sx={isActive ? activeDotStyles : dotStyles} />
+  <Box component="li" sx={isActive ? activeDotStyles : dotStyles} />
 );
 
 export const Stepper = ({
@@ -30,10 +31,10 @@ export const Stepper = ({
 }: Pick<CommonTutorialProps, 'step' | 'length'>) => {
   const items = new Array(length).fill(0);
   return (
-    <Flex justifyContent="center" my={2} p={1}>
+    <Stack direction="row" spacing={1} justifyContent="center" my={1} p={0.5}>
       {items.map((_, index) => (
         <Dot key={`dot-index-${index}`} isActive={step === index} />
       ))}
-    </Flex>
+    </Stack>
   );
 };
