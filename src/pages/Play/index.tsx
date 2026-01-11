@@ -145,7 +145,7 @@ const Play = ({ user }: PlayProps) => {
 
   const runChecks = () => {
     let isQuestionnaireNext = true;
-    if (questionId === 'questionIdThatGoesBeforeQuestionnaire') {
+    if (questionId === user.nextQuestionnaireAfterQuestion) {
       isQuestionnaireNext = true;
     }
 
@@ -155,7 +155,6 @@ const Play = ({ user }: PlayProps) => {
   const onFinish = useCallback(() => {
     const { isQuestionnaireNext } = runChecks();
     if (isQuestionnaireNext) {
-      console.log('doing it');
       navigate('/ipip');
     } else {
       refetch();

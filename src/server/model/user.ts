@@ -215,6 +215,23 @@ export async function updateLastQuestion(
   return dynamo.update(params).promise();
 }
 
+export async function updateLastIpipQuestion(
+  userId: string,
+  newLastIpipQuestion: number,
+  { dynamo }: UserModelContext
+): Promise<any> {
+  const params = {
+    TableName: TABLE_USER,
+    Key: { id: userId, userskey: `USER#${userId}` },
+    UpdateExpression: 'set lastIpipQuestion = :newLastIpipQuestion',
+    ExpressionAttributeValues: {
+      ':newLastIpipQuestion': newLastIpipQuestion,
+    },
+  };
+
+  return dynamo.update(params).promise();
+}
+
 export async function updateScore(
   userId: string,
   scoreAddition: number,
