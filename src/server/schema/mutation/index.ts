@@ -3,6 +3,7 @@ export * from './exportData';
 export * from './importQuestions';
 export * from './importTranslations';
 export * from './saveQuestionnaireAnswer';
+export * from './saveQuestionnaireBatch';
 export * from './saveTip';
 export * from './signIn';
 export * from './signOut';
