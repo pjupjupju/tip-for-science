@@ -31,6 +31,7 @@ import {
   radioGroupStyles,
 } from './styles';
 import { QuestionnaireDone } from './QuestionnaireDone';
+import { NoMoreQuestions } from './NoMoreQuestions';
 
 type QuestionnaireItem = {
   id: number;
@@ -49,6 +50,10 @@ const getPageNumber = (
   completeBundle: number[],
   batch: QuestionnaireItem[]
 ) => {
+  if (batch.length === 0) {
+    return 0;
+  }
+
   const lastOrdinal = completeBundle.indexOf(batch[batch.length - 1].id) + 1;
   return lastOrdinal / QUESTIONNAIRE_BUNDLE_SIZE;
 };
@@ -119,6 +124,10 @@ const Questionnaire = ({
     return <QuestionnaireDone pageNum={pageNum} pages={pages} />;
   }
 
+  if (questionnaire.length === 0 && pageNum === 0) {
+    return <NoMoreQuestions />;
+  }
+
   return (
     <Box sx={mediumBPadding}>
       <Box sx={headerStyles}>
@@ -132,8 +141,18 @@ const Questionnaire = ({
           alignItems="center"
         >
           <Typography variant="body2" color="#FFFFFF" mb={1}>
-            Vyber pro každé tvrzení, do jaké míry s ním souhlasíš či
-            nesouhlasíš.
+            {pageNum === 1 ? (
+              <>
+                'Níže jsou uvedena tvrzení, která popisují různé způsoby
+                myšlení, prožívání a chování. U každého tvrzení označte, do jaké
+                míry pro vás obecně platí. Nejde o to, jak se cítíte právě teď,
+                ale jaký/á obvykle jste.
+              </>
+            ) : (
+              <>
+                Označte, do jaké míry pro vás jednotlivá tvrzení obecně platí.
+              </>
+            )}
           </Typography>
           <Typography variant="body2" color="#FFFFFF" mb={1}>
             Strana <b>{pageNum}</b> / <b>{pages}</b>
