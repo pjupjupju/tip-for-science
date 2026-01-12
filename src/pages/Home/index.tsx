@@ -134,22 +134,6 @@ const Home = ({ user, onLogOut }: HomeProps) => {
           )}
         </Stack>
       </Box>
-      <Typography
-        mt="auto"
-        mb={4}
-        color="neutralFade"
-        textAlign="center"
-        fontSize={12}
-      >
-        <FormattedMessage
-          id="app.home.footer.beta"
-          defaultMessage="This is just a beta version. If you encounter any bug,{lineBreak} contact us at tipforscience@protonmail.com"
-          description="Beta warning"
-          values={{
-            lineBreak: <br />,
-          }}
-        />
-      </Typography>
     </Container>
   );
 };
