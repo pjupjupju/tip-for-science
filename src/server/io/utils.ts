@@ -1,5 +1,5 @@
 import { MAX_GENERATION_NUMBER } from '../../config';
-import { RunConfig } from '../model';
+import { type User, RunConfig } from '../model';
 
 const getGenerationSize = (): number => {
   const r = Math.random();
@@ -250,4 +250,15 @@ export const getInitialTips = (
   }
 
   return applySelection(zeroGeneration, correctAnswer, selectionCoeficient);
+};
+
+export const getNextQuestionnaireCursor = (user: User) => {
+  const { ipipBundle, lastIpipQuestion, bundle } = user;
+
+  if (ipipBundle[ipipBundle.length - 1] === lastIpipQuestion) {
+    return null;
+  }
+
+  // 100th question
+  return bundle[99];
 };

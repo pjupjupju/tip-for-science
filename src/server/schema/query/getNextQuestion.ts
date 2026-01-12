@@ -26,11 +26,11 @@ export async function getNextQuestion(
   _: {},
   context: GraphQLContext
 ): Promise<Question | null> {
-  const { dynamo, runCache, user, sql } = context;
+  const { dynamo, runCache, user } = context;
   if (user == null) {
     throw new ValidationError('Unauthorized.');
   }
-  const userRecord = await findUserById(user.id, { dynamo });
+  const userRecord = await findUserById(user.id, context);
 
   if (userRecord == null) {
     throw new ValidationError('User does not exist.');
@@ -64,7 +64,7 @@ export async function getNextQuestion(
   // get the preferred run from cache
   const runRecord = await runCache.getRunV2(nextQuestionId, nextQuestionRuns);
 
-  await updateLastQuestion(user.id, nextQuestionId, { dynamo });
+  await updateLastQuestion(user.id, nextQuestionId, context);
 
   let translatedData = {
     fact: runRecord.settings.fact,

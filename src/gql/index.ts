@@ -1,6 +1,7 @@
 export * from './authQuery';
 export * from './batchSlugifyMutation';
 export * from './exportMutation';
+export * from './getQuestionnaireQuery';
 export * from './getUserStats';
 export * from './highScoreQuery';
 export * from './myScoreQuery';
@@ -9,6 +10,8 @@ export * from './importTranslationsMutation';
 export * from './questionQuery';
 export * from './onlineQuery';
 export * from './saveMutation';
+export * from './saveQuestionnaireAnswerMutation';
+export * from './saveQuestionnaireBatchMutation';
 export * from './signInMutation';
 export * from './signOutMutation';
 export * from './signUpMutation';

@@ -1,6 +1,7 @@
 import { IResolverObject } from 'graphql-tools';
 import { GraphQLContext } from '../context';
-import { findUserById } from '../../model';
+import { type User as UserType, findUserById } from '../../model';
+import { getNextQuestionnaireCursor } from '../../io/utils';
 
 export const Viewer: IResolverObject<any, GraphQLContext> = {
   id: () => 1,
@@ -11,5 +12,11 @@ export const Viewer: IResolverObject<any, GraphQLContext> = {
     }
 
     return findUserById(context.user.id, context);
+  },
+};
+
+export const User: IResolverObject<any, GraphQLContext> = {
+  nextQuestionnaireAfterQuestion: (userObj: UserType, _args: any, _context) => {
+    return getNextQuestionnaireCursor(userObj) ?? null;
   },
 };

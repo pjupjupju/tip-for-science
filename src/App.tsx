@@ -13,6 +13,7 @@ import { Play } from './pages/Play';
 import { Profile } from './pages/Profile';
 import { SignIn } from './pages/SignIn';
 import { Consent } from './pages/Consent';
+import { Ipip } from './pages/Ipip';
 import { AuthQueryName, AUTH_QUERY, SIGN_OUT_MUTATION } from './gql';
 import { Spinner } from './components';
 import { SignUp } from './pages/SignUp';
@@ -63,6 +64,7 @@ const AppLayout = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/consent" element={<Consent />} />
+        <Route path="/ipip" element={<Ipip user={user} />} />
         {user && user.role === 'admin' && (
           <Route path="/dashboard" element={<Dashboard user={user} />} />
         )}

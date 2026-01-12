@@ -14,11 +14,13 @@ export interface ModelContext {
  */
 export interface User {
   bundle: string[];
+  ipipBundle: number[];
   createdAt: string;
   id: string;
   userskey: string;
   email: string;
   lastQuestion: string | null;
+  lastIpipQuestion: number | null;
   gender?: string | void;
   age?: number | void;
   password: string;
@@ -203,4 +205,10 @@ export type PostgresTip = {
   createdAt: string;
   knewAnswer: boolean;
   answered: boolean;
+};
+
+export type Questionnaire = {
+  id: number;
+  item: string;
+  value?: number;
 };
