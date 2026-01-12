@@ -154,7 +154,7 @@ const Play = ({ user }: PlayProps) => {
 
   const onFinish = useCallback(() => {
     const { isQuestionnaireNext } = runChecks();
-    if (isQuestionnaireNext) {
+    if (1 > 0 || isQuestionnaireNext) {
       navigate('/ipip');
     } else {
       refetch();
