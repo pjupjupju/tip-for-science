@@ -80,7 +80,7 @@ const Slide3 = ({ onSubmit }: SlideProps) => {
           {question}
         </Typography>
       </TutorialHeader>
-      <Box // TODO: image is not centered the same way as the submit panel, small screen results in button out of screen
+      <Box
         component="img"
         src={elephant}
         alt="elephant"
