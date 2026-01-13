@@ -21,6 +21,9 @@ sessions
 export-tipdata**.csv
 /migrations/**.txt
 
+# typescript
+tsconfig.tsbuildinfo
+
 # production
 /build
 
