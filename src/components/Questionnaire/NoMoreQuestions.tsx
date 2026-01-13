@@ -24,10 +24,10 @@ const contentStackStyles = { p: { xs: 2, sm: 3 } };
 
 const buttonStyles = { flex: 3 };
 
-const NoMoreQuestions = () => {
+const NoMoreQuestions = ({ onFinish }) => {
   const navigate = useNavigate();
   const handleClickPlay = () => {
-    navigate('/play');
+    onFinish();
   };
   const handleClickHome = () => {
     navigate('/');

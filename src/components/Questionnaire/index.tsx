@@ -41,6 +41,7 @@ type QuestionnaireItem = {
 
 interface QuestionnaireProps {
   completeBundle: number[];
+  onFinish: () => void;
   questionnaire: QuestionnaireItem[];
 }
 
@@ -60,6 +61,7 @@ const getPageNumber = (
 
 const Questionnaire = ({
   completeBundle,
+  onFinish,
   questionnaire,
 }: QuestionnaireProps) => {
   const [answers, setAnswers] = React.useState<Record<number, number>>(
@@ -121,11 +123,11 @@ const Questionnaire = ({
   };
 
   if (allIpipDone) {
-    return <QuestionnaireDone pageNum={pageNum} pages={pages} />;
+    return <QuestionnaireDone onFinish={onFinish} pageNum={pageNum} pages={pages} />;
   }
 
   if (questionnaire.length === 0 && pageNum === 0) {
-    return <NoMoreQuestions />;
+    return <NoMoreQuestions onFinish={onFinish} />;
   }
 
   return (
