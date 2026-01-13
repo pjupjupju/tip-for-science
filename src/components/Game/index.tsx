@@ -11,6 +11,7 @@ import { getScore } from '../../helpers';
 import { FunFact } from './FunFact';
 import ScoreMessage from '../ScoreMessage';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { HomeButton } from '../TutorialSlides/HomeButton';
 
 export interface Settings {
   question: string;
@@ -278,18 +279,7 @@ const Game = ({
         mt={['auto', 'auto', 1]}
         mb={[0, 0, 4]}
       >
-        <Button
-          sx={{ flex: 1 }}
-          mr="1"
-          backgroundColor="neutralFade"
-          onClick={handleClickHome}
-        >
-          <FormattedMessage
-            id="app.home"
-            defaultMessage="Home"
-            description="Home button"
-          />
-        </Button>
+        <HomeButton />
         <Button sx={{ flex: 5 }} onClick={handleClickFinish}>
           <FormattedMessage
             id="app.game.continue"
