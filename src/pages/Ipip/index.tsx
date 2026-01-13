@@ -1,20 +1,15 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
-import { redirect } from 'react-router-dom';
 import { Container } from './../../components/Container';
 import { Questionnaire } from '../../components/Questionnaire';
 import { QUESTIONNAIRE_QUERY } from '../../gql';
 import { Spinner } from '../../components';
 
-const Ipip = ({ user }) => {
+const Ipip = ({ onQuestionnaireFinish, user }) => {
   const { loading, data } = useQuery(QUESTIONNAIRE_QUERY, {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'network-only',
   });
-
-  if (!user) {
-    redirect('/');
-  }
 
   if (loading || !data.getQuestionnaire) {
     return (
@@ -29,6 +24,7 @@ const Ipip = ({ user }) => {
       <Questionnaire
         completeBundle={user.ipipBundle}
         questionnaire={data.getQuestionnaire}
+        onFinish={onQuestionnaireFinish}
       />
     </Container>
   );

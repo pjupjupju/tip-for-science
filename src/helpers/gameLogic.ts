@@ -1,3 +1,5 @@
+import { User } from '../types';
+
 const getScore = (currentTip: number, correctAnswer: number): number => {
   if (currentTip < 0.5 * correctAnswer || currentTip > 2 * correctAnswer) {
     return 0;
