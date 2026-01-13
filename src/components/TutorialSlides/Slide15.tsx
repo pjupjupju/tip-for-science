@@ -13,6 +13,14 @@ import { FormattedMessage } from 'react-intl';
 import { tutorialText } from './styles';
 import logo from './../../assets/logoskoly.png';
 
+const headerTextStyles = { ...tutorialText, p: 1 };
+const mainTextStyles = {
+  ...tutorialText,
+  px: 3,
+  py: 2,
+  fontSize: { xs: 12, sm: 16, md: 20 },
+};
+
 const Slide15 = () => {
   const { loading, data } = useQuery(AUTH_QUERY, {
     fetchPolicy: 'cache-first',
@@ -32,16 +40,7 @@ const Slide15 = () => {
   return (
     <Container>
       <TutorialHeader>
-        <Typography
-          fontSize={{
-            xs: 20,
-            sm: 24,
-            md: 28,
-          }}
-          color="text.secondary"
-          textAlign="center"
-          sx={{ p: 4 }}
-        >
+        <Typography sx={headerTextStyles}>
           <FormattedMessage
             id="app.tutorial.slide.ready"
             defaultMessage="That's it! You're now ready to play for real!"
@@ -64,7 +63,7 @@ const Slide15 = () => {
         }}
       />
 
-      <Typography sx={{ tutorialText, px: 3, py: 2 }}>
+      <Typography sx={mainTextStyles}>
         <FormattedMessage
           id="app.tutorial.slide.byeb"
           defaultMessage="Tip for Science was created by evolutionary biologists {lineBreak}
