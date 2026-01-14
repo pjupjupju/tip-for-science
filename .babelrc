@@ -1,4 +1,9 @@
 {
+  // THIS IS DEPRECATED UNUSED FILE, WILL BE DELETED LATER TODO: REMOVE IF DEPLOY OK
   "presets": ["razzle/babel"],
-  "plugins": ["@loadable/babel-plugin"]
+  "plugins": ["@loadable/babel-plugin",
+    "@babel/plugin-transform-optional-chaining",
+    "@babel/plugin-transform-nullish-coalescing-operator",
+    "@babel/plugin-transform-logical-assignment-operators"
+  ]
 }

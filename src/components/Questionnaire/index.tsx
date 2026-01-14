@@ -1,17 +1,15 @@
 import React from 'react';
-import {
-  Box,
-  Paper,
-  Typography,
-  LinearProgress,
-  Button,
-  Alert,
-  Stack,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  Divider,
-} from '@mui/material';
+import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import LinearProgress from '@mui/material/LinearProgress';
+import Paper from '@mui/material/Paper';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import { useMutation } from '@apollo/client';
 import {
   AuthQueryName,
@@ -31,6 +29,7 @@ import {
   radioGroupStyles,
 } from './styles';
 import { QuestionnaireDone } from './QuestionnaireDone';
+import { NoMoreQuestions } from './NoMoreQuestions';
 
 type QuestionnaireItem = {
   id: number;
@@ -40,6 +39,7 @@ type QuestionnaireItem = {
 
 interface QuestionnaireProps {
   completeBundle: number[];
+  onFinish: () => void;
   questionnaire: QuestionnaireItem[];
 }
 
@@ -49,12 +49,17 @@ const getPageNumber = (
   completeBundle: number[],
   batch: QuestionnaireItem[]
 ) => {
+  if (batch.length === 0) {
+    return 0;
+  }
+
   const lastOrdinal = completeBundle.indexOf(batch[batch.length - 1].id) + 1;
   return lastOrdinal / QUESTIONNAIRE_BUNDLE_SIZE;
 };
 
 const Questionnaire = ({
   completeBundle,
+  onFinish,
   questionnaire,
 }: QuestionnaireProps) => {
   const [answers, setAnswers] = React.useState<Record<number, number>>(
@@ -116,7 +121,13 @@ const Questionnaire = ({
   };
 
   if (allIpipDone) {
-    return <QuestionnaireDone pageNum={pageNum} pages={pages} />;
+    return (
+      <QuestionnaireDone onFinish={onFinish} pageNum={pageNum} pages={pages} />
+    );
+  }
+
+  if (questionnaire.length === 0 && pageNum === 0) {
+    return <NoMoreQuestions onFinish={onFinish} />;
   }
 
   return (
@@ -129,13 +140,24 @@ const Questionnaire = ({
         <Stack
           direction="row"
           justifyContent="space-between"
-          alignItems="center"
+          alignItems="flex-start"
+          gap={2}
         >
           <Typography variant="body2" color="#FFFFFF" mb={1}>
-            Vyber pro každé tvrzení, do jaké míry s ním souhlasíš či
-            nesouhlasíš.
+            {pageNum === 1 ? (
+              <>
+                Níže jsou uvedena tvrzení, která popisují různé způsoby
+                myšlení, prožívání a chování. U každého tvrzení označte, do jaké
+                míry pro vás obecně platí. Nejde o to, jak se cítíte právě teď,
+                ale jaký/á obvykle jste.
+              </>
+            ) : (
+              <>
+                Označte, do jaké míry pro vás jednotlivá tvrzení obecně platí.
+              </>
+            )}
           </Typography>
-          <Typography variant="body2" color="#FFFFFF" mb={1}>
+          <Typography variant="body2" color="#FFFFFF" mb={1} flexShrink={0}>
             Strana <b>{pageNum}</b> / <b>{pages}</b>
           </Typography>
         </Stack>
@@ -163,10 +185,10 @@ const Questionnaire = ({
                   {idx + 1 + (pageNum - 1) * 10}. {q.item}
                 </Typography>
                 <Stack direction="row" justifyContent="space-between" mb={0.5}>
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography variant="caption" color="secondary">
                     Úplně nesouhlasím
                   </Typography>
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography variant="caption" color="secondary">
                     Úplně souhlasím
                   </Typography>
                 </Stack>

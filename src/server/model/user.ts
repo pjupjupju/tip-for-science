@@ -3,7 +3,6 @@ import { ScanOutput } from 'aws-sdk/clients/dynamodb';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { ulid } from 'ulid';
 import * as yup from 'yup';
-import toCamelCase from 'camelcase-keys';
 import {
   TABLE_USER,
   USERS_BY_EMAIL_INDEX,

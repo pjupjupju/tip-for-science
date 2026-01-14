@@ -24,7 +24,7 @@ const contentStackStyles = { p: { xs: 2, sm: 3 } };
 
 const buttonStyles = { flex: 3 };
 
-const QuestionnaireDone = ({ onFinish, pageNum, pages }) => {
+const NoMoreQuestions = ({ onFinish }) => {
   const navigate = useNavigate();
   const handleClickPlay = () => {
     onFinish();
@@ -40,12 +40,9 @@ const QuestionnaireDone = ({ onFinish, pageNum, pages }) => {
           Dotazník
         </Typography>
 
-        <Stack direction="row" justifyContent="space-between" alignItems="top">
+        <Stack direction="row" justifyContent="flex-start" alignItems="top">
           <Typography variant="body2" color="#FFFFFF" mb={1}>
-            Hotovo, skvělá práce 🎉! 
-          </Typography>
-          <Typography variant="body2" color="#FFFFFF" mb={1} minWidth="90px">
-            Strana <b>{pageNum}</b> / <b>{pages}</b>
+            Hotovo, víc toho tady není 🎉!
           </Typography>
         </Stack>
 
@@ -109,4 +106,4 @@ const QuestionnaireDone = ({ onFinish, pageNum, pages }) => {
   );
 };
 
-export { QuestionnaireDone };
+export { NoMoreQuestions };

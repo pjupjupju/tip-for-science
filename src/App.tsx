@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Flex } from 'rebass';
+import Stack from '@mui/material/Stack';
 import { useMutation, useQuery } from '@apollo/client';
 import Helmet from 'react-helmet';
 import { ThemeProvider } from 'emotion-theming';
-import { GlobalStyles } from '@mui/material';
+import GlobalStyles from '@mui/material/GlobalStyles';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import './index.css';
 import { About } from './pages/About';
@@ -37,16 +37,16 @@ const AppLayout = () => {
 
   if (loading) {
     return (
-      <Flex
+      <Stack
         justifyContent="center"
         alignItems="center"
         height="100%"
         width="100%"
-        p="3"
+        p={3}
       >
         <Helmet titleTemplate="Loading..."></Helmet>
         <Spinner />
-      </Flex>
+      </Stack>
     );
   }
 
@@ -64,7 +64,6 @@ const AppLayout = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/consent" element={<Consent />} />
-        <Route path="/ipip" element={<Ipip user={user} />} />
         {user && user.role === 'admin' && (
           <Route path="/dashboard" element={<Dashboard user={user} />} />
         )}

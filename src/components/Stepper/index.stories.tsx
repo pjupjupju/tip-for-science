@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'rebass';
+import Button from '@mui/material/Button';
 import { Stepper } from './';
 
 const length = 10;

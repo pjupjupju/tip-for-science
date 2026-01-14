@@ -260,5 +260,12 @@ export const getNextQuestionnaireCursor = (user: User) => {
   }
 
   // 100th question
-  return bundle[99];
+  return bundle[2];
 };
+
+export const isQuestionnaireActive = (user: User) => {
+  const nextQuestionnaireAt = getNextQuestionnaireCursor(user);
+  
+  return nextQuestionnaireAt === user.lastQuestion;
+};
+
