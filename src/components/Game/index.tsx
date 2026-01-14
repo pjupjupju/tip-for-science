@@ -2,6 +2,7 @@ import React, { KeyboardEvent, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Image, Text } from 'rebass';
 import Box from '@mui/material/Box';
+import NewButton from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { Label, Input } from '@rebass/forms';
 
@@ -14,7 +15,6 @@ import { ScoreChart } from '../ScoreChart';
 import { getScore } from '../../helpers';
 import { FunFact } from './FunFact';
 import ScoreMessage from '../ScoreMessage';
-import { HomeButton } from '../TutorialSlides/HomeButton';
 
 export interface Settings {
   question: string;
@@ -64,6 +64,8 @@ const labelStyle = {
   width: 'auto',
   color: 'white',
 };
+
+const homeButtonStyles = { flex: 1, marginRight: 1, borderRadius: 0 };
 
 const isTooClose = (score: number): boolean => score >= 95;
 
@@ -320,7 +322,18 @@ const Game = ({
         justifyContent="space-between"
         {...actionsContainerStyles}
       >
-        <HomeButton />
+        <NewButton
+          variant="contained"
+          onClick={handleClickHome}
+          color="secondary"
+          sx={homeButtonStyles}
+        >
+          <FormattedMessage
+            id="app.home"
+            defaultMessage="Home"
+            description="Home button"
+          />
+        </NewButton>
         <Button sx={{ flex: 5 }} onClick={handleClickFinish}>
           <FormattedMessage
             id="app.game.continue"
