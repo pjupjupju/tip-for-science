@@ -1,16 +1,19 @@
 import React, { KeyboardEvent, useRef } from 'react';
-import { Box, Button, Flex, Image, Text } from 'rebass';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Button, Image, Text } from 'rebass';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import { Label, Input } from '@rebass/forms';
+
 import { TooCloseDialog } from './TooCloseDialog';
 import { GameOverScreen } from './GameOverScreen';
 import { PreviousTips } from './PreviousTips';
-import { Container } from '../Container';
+import { Container, containerXpadding } from '../Container';
 import { SubmitButton } from '../SubmitButton';
 import { ScoreChart } from '../ScoreChart';
 import { getScore } from '../../helpers';
 import { FunFact } from './FunFact';
 import ScoreMessage from '../ScoreMessage';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { HomeButton } from '../TutorialSlides/HomeButton';
 
 export interface Settings {
@@ -35,13 +38,9 @@ interface GameProps {
   score: number;
 }
 
-const headerStyles = {
-  minHeight: 60,
-  width: '100%',
-  justifyContent: 'center',
-  alignItems: 'center',
-  flexShrink: 0,
-  flexGrow: 0,
+const actionsContainerStyles = {
+  marginTop: { xs: 'auto', sm: 'auto', md: 1 },
+  marginBottom: { xs: 0, sm: 0, md: 4 },
 };
 
 const inputStyles = {
@@ -165,42 +164,56 @@ const Game = ({
   };
 
   return !isSubmitted ? (
-    <Container>
-      <Flex sx={headerStyles}>
-        <Text
-          fontSize={[3, 4, 5]}
-          fontWeight="bold"
-          color="secondary"
-          textAlign="center"
-          p={3}
+    <Container noPadding>
+      <Stack width="100%" gap={1} px={containerXpadding} boxSizing="border-box">
+        <Stack
+          minHeight={60}
+          width="100%"
+          justifyContent="center"
+          alignItems="center"
+          flexShrink={0}
+          flexGrow={0}
         >
-          {question}
-        </Text>
-      </Flex>
-      <Image src={image} sx={imageStyle} />
-      <PreviousTips previousTips={previousTips} unit={unit} />
-      <Flex justifyContent="center" alignItems="center" p={2}>
-        <Label htmlFor="tip" sx={labelStyle}>
-          <FormattedMessage
-            id="app.tip"
-            defaultMessage="tip:"
-            description="Tip"
+          <Text
+            fontSize={[3, 4, 5]}
+            fontWeight="bold"
+            color="secondary"
+            textAlign="center"
+            p={3}
+          >
+            {question}
+          </Text>
+        </Stack>
+        <Image src={image} sx={imageStyle} />
+        <PreviousTips previousTips={previousTips} unit={unit} />
+        <Stack
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          p={2}
+        >
+          <Label htmlFor="tip" sx={labelStyle}>
+            <FormattedMessage
+              id="app.tip"
+              defaultMessage="tip:"
+              description="Tip"
+            />
+          </Label>
+          <Input
+            ref={inputRef}
+            id="tip"
+            name="tip"
+            type="number"
+            placeholder={placeholder}
+            sx={inputStyles}
+            onKeyDown={handleKeyDown}
           />
-        </Label>
-        <Input
-          ref={inputRef}
-          id="tip"
-          name="tip"
-          type="number"
-          placeholder={placeholder}
-          sx={inputStyles}
-          onKeyDown={handleKeyDown}
-        />
-        <Text color="white" mr={4}>
-          {unit}
-        </Text>
-        <SubmitButton onClick={handleClickSubmit} timeLimit={timeLimit} />
-      </Flex>{' '}
+          <Text color="white" mr={4}>
+            {unit}
+          </Text>
+          <SubmitButton onClick={handleClickSubmit} timeLimit={timeLimit} />
+        </Stack>{' '}
+      </Stack>
       {isKnewItDialogOpen && (
         <TooCloseDialog
           onGuessed={handleTooCloseDialogClick(false)}
@@ -209,75 +222,103 @@ const Game = ({
       )}
     </Container>
   ) : (
-    <Container>
-      <Flex sx={headerStyles}>
-        <Text
-          fontSize={[3, 4, 4]}
-          fontWeight="bold"
-          color="secondary"
-          textAlign="center"
-          p={[1, 2, 3]}
-        >
-          <FormattedMessage
-            id="app.game.score"
-            defaultMessage="Score:"
-            description="Score"
-          />{' '}
-          {score.toFixed(2)}
-        </Text>
-      </Flex>
-      <Image src={image} sx={imageStyle} />
-      <Flex
+    <Container noPadding>
+      <Stack
         justifyContent="center"
         alignItems="center"
-        flexDirection="column"
+        direction="column"
         flexGrow={1}
         flexShrink={1}
+        gap={1}
+        width="100%"
+        px={containerXpadding}
+        boxSizing="border-box"
       >
-        {typeof currentTip !== 'undefined' ? (
-          <>
-            <Box width="100%" height="200px">
-              <ScoreChart
-                currentTip={currentTip}
-                correctAnswer={correctAnswer}
-                previousTips={previousTips}
-              />
-            </Box>
-            <Flex
-              justifyContent="center"
-              alignItems="center"
-              flexDirection="column"
-              flexGrow={1}
-              flexShrink={1}
-            >
-              <Text
-                textAlign="center"
-                color="graphScore"
-                fontSize={[2, 3, 3]}
-                mb={3}
+        <Stack
+          minHeight={60}
+          width="100%"
+          justifyContent="center"
+          alignItems="center"
+          flexShrink={0}
+          flexGrow={0}
+        >
+          <Text
+            fontSize={[3, 4, 4]}
+            fontWeight="bold"
+            color="secondary"
+            textAlign="center"
+            p={[1, 2, 3]}
+          >
+            <FormattedMessage
+              id="app.game.score"
+              defaultMessage="Score:"
+              description="Score"
+            />{' '}
+            {score.toFixed(2)}
+          </Text>
+        </Stack>
+        <Image src={image} sx={imageStyle} />
+        <Stack
+          justifyContent="center"
+          alignItems="center"
+          direction="column"
+          flexGrow={1}
+          flexShrink={1}
+          width="100%"
+        >
+          {typeof currentTip !== 'undefined' ? (
+            <>
+              <Box width="100%" height="200px">
+                <ScoreChart
+                  currentTip={currentTip}
+                  correctAnswer={correctAnswer}
+                  previousTips={previousTips}
+                />
+              </Box>
+              <Stack
+                justifyContent="center"
+                alignItems="center"
+                direction="column"
+                flexGrow={1}
+                flexShrink={1}
               >
-                {questionScore === 0 && <ScoreMessage scoreType="score.zero" />}
-                {questionScore !== null &&
-                  questionScore > 0 &&
-                  questionScore < 40 && <ScoreMessage scoreType="score.low" />}
-                {questionScore !== null &&
-                  questionScore >= 40 &&
-                  questionScore < 80 && <ScoreMessage scoreType="score.high" />}
-                {questionScore !== null &&
-                  questionScore >= 80 &&
-                  questionScore < 95 && <ScoreMessage scoreType="score.top" />}
-              </Text>
-              <FunFact correctAnswer={correctAnswer} fact={fact} />
-            </Flex>
-          </>
-        ) : (
-          <GameOverScreen onContinue={onFinish} />
-        )}
-      </Flex>
-      <Flex
+                <Text
+                  textAlign="center"
+                  color="graphScore"
+                  fontSize={[2, 3, 3]}
+                  mb={3}
+                >
+                  {questionScore === 0 && (
+                    <ScoreMessage scoreType="score.zero" />
+                  )}
+                  {questionScore !== null &&
+                    questionScore > 0 &&
+                    questionScore < 40 && (
+                      <ScoreMessage scoreType="score.low" />
+                    )}
+                  {questionScore !== null &&
+                    questionScore >= 40 &&
+                    questionScore < 80 && (
+                      <ScoreMessage scoreType="score.high" />
+                    )}
+                  {questionScore !== null &&
+                    questionScore >= 80 &&
+                    questionScore < 95 && (
+                      <ScoreMessage scoreType="score.top" />
+                    )}
+                </Text>
+                <FunFact correctAnswer={correctAnswer} fact={fact} />
+              </Stack>
+            </>
+          ) : (
+            <GameOverScreen onContinue={onFinish} />
+          )}
+        </Stack>
+      </Stack>
+      <Stack
+        direction="row"
         justifyContent="space-between"
-        mt={['auto', 'auto', 1]}
-        mb={[0, 0, 4]}
+        {...actionsContainerStyles}
       >
         <HomeButton />
         <Button sx={{ flex: 5 }} onClick={handleClickFinish}>
@@ -287,7 +328,7 @@ const Game = ({
             description="Continue"
           />
         </Button>
-      </Flex>
+      </Stack>
     </Container>
   );
 };

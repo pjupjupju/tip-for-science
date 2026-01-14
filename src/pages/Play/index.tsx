@@ -7,9 +7,9 @@ import {
   NetworkStatus,
   useLazyQuery,
 } from '@apollo/client';
-import { Flex } from 'rebass';
+
 import { Ipip } from '../Ipip';
-import { Container, Game, NoMoreQuestions, Spinner } from './../../components';
+import { Game, LoadingContainer, NoMoreQuestions } from './../../components';
 import { MY_SCORE_QUERY, QUESTION_QUERY, SAVE_MUTATION } from '../../gql';
 import { User } from '../../types';
 
@@ -74,7 +74,10 @@ const initState = {
   isQuestionnaire: false,
 };
 
-const getInitState = (user: User) => ({ ...initState, isQuestionnaire: !!user.isQuestionnaireActive });
+const getInitState = (user: User) => ({
+  ...initState,
+  isQuestionnaire: !!user.isQuestionnaireActive,
+});
 
 const runChecks = (user: User, questionId: string) => {
   let isQuestionnaireNext = false;
@@ -205,18 +208,7 @@ const Play = ({ user }: PlayProps) => {
   }
 
   if (loading || scoreLoading || networkStatus === NetworkStatus.refetch) {
-    return (
-      <Container>
-        <Flex
-          width="100%"
-          height="100%"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Spinner />
-        </Flex>
-      </Container>
-    );
+    return <LoadingContainer />;
   }
 
   if (!isQuestionnaire && data?.getNextQuestion == null) {
