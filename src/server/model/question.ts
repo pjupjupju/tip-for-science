@@ -977,8 +977,8 @@ export async function createQuestionTipV2(
     answered,
   };
 
-  await sql.begin(async (sql) => {
-    await sql`
+  await sql.begin(async (t) => {
+    await t`
       insert into "tip" (
         id, created_at, generation, tip, run_id, question_id, previous_tips, time_limit, ms_elapsed, knew_answer, answered, created_by
       ) values (
@@ -995,7 +995,7 @@ export async function createQuestionTipV2(
       !runLock.getLock(`${runId}#${generation}`)
     ) {
       const [run] =
-        await sql`select * from "run" r where r.id = ${runId} AND r.enabled = true`;
+        await t`select * from "run" r where r.id = ${runId} AND r.enabled = true`;
 
       // We first check, whether RUN is still enabled and whether generation is still the same
       if (run && run.generation === generation) {
@@ -1014,7 +1014,7 @@ export async function createQuestionTipV2(
           console.log(
             `because generation is ${generation} and max generation is ${strategy.maxGenerations}`
           );
-          await sql`update "run" r set enabled = false, updated_at = ${now} WHERE r.id = ${runId}`;
+          await t`update "run" r set enabled = false, updated_at = ${now} WHERE r.id = ${runId}`;
 
           runLock.unlock(`${runId}#${generation - 1}`);
           runLock.unlock(`${runId}#${generation}`);
@@ -1026,7 +1026,7 @@ export async function createQuestionTipV2(
             strategy
           );
 
-          await sql`update "run" r set generation = ${
+          await t`update "run" r set generation = ${
             generation + 1
           }, previous_tips = ${newPreviousTips} WHERE r.id = ${runId}`;
 
@@ -1060,7 +1060,7 @@ export async function createQuestionTipV2(
             },
           ];
 
-          await sql`insert into "generation" ${sql(
+          await t`insert into "generation" ${sql(
             decamelizeKeys(generationRows)
           )}`;
 
