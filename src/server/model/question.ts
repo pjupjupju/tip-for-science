@@ -884,7 +884,6 @@ export async function createQuestionRunV2(
     strategy,
   };
 
-  console.log('creating new run');
   const [data] = await sql`
     INSERT INTO run (id, created_at, created_by, updated_at, enabled, question_id, run_num, generation, strategy, previous_tips) 
       VALUES (${params.id}, ${params.createdAt}, ${params.createdBy}, ${
@@ -895,7 +894,6 @@ export async function createQuestionRunV2(
       DO UPDATE SET enabled = EXCLUDED.enabled
     RETURNING *
   `;
-  console.log('created with data: ', data);
 
   return { ...params, ...data, settings: question.settings };
 }
@@ -1014,10 +1012,6 @@ export async function createQuestionTipV2(
 
         // If we hit max generations, we disable this RUN
         if (generation === strategy.maxGenerations) {
-          console.log('closing run', runId);
-          console.log(
-            `because generation is ${generation} and max generation is ${strategy.maxGenerations}`
-          );
           await t`update "run" r set enabled = false, updated_at = ${now} WHERE r.id = ${runId}`;
 
           runLock.unlock(`${runId}#${generation - 1}`);

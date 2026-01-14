@@ -2,6 +2,8 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 import NumberFormat from 'react-number-format';
 
+const fontSizes = { xs: 16, sm: 20, md: 24 };
+
 const FunFact = ({
   correctAnswer,
   fact,
@@ -17,7 +19,8 @@ const FunFact = ({
     <Typography
       align="center"
       color="text.secondary"
-      sx={{ fontSize: { xs: 16, sm: 20, md: 24 }, mb: 4 }}
+      fontSize={fontSizes}
+      mb={4}
     >
       {factPieces.length < 2 ? (
         <>{factPieces[0]}</>
@@ -27,7 +30,7 @@ const FunFact = ({
           <Typography
             component="span"
             color="white"
-            fontSize={{ xs: 16, sm: 20, md: 24 }}
+            fontSize={fontSizes}
           >
             <NumberFormat
               value={correctAnswer}

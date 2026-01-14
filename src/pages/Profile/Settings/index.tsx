@@ -47,7 +47,6 @@ const Settings = ({ user }: { user: User | null }) => {
       .transform((value) => (!!value ? value : undefined)),
     oldPassword: Yup.string()
       .when('newPassword', ([newPassword], schema: Yup.StringSchema) => {
-        console.log('newpassword', newPassword);
         if (typeof newPassword === 'string' && newPassword !== '') {
           return schema.required(
             intl.formatMessage(validationMessages.passwordCurrent)
@@ -125,7 +124,6 @@ const Settings = ({ user }: { user: User | null }) => {
     age: string;
     gender: string;
   }) => {
-    console.log('baaaa');
     setErrors([]);
     let changeSet = {};
 
