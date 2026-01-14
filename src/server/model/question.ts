@@ -859,6 +859,7 @@ export async function createQuestionRunV2(
 ) {
   const { sql } = context;
   const question = await getQuestionWithHighestRun(questionId, context);
+  console.log('creating new run while the existing question+run are:', JSON.stringify(question));
 
   const runNum = question?.run + 1;
 
