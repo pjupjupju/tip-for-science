@@ -93,6 +93,12 @@ export const muiTheme = createTheme({
           boxShadow: 'none',
           fontWeight: 600,
           textTransform: 'none',
+          '&.Mui-disabled': {
+            color: grey[400],
+            borderColor: grey[700],
+            backgroundColor: grey[800],
+            opacity: 0.35,
+          },
         },
       },
     },
@@ -136,6 +142,22 @@ export const muiTheme = createTheme({
       styleOverrides: {
         root: {
           color: grey[800],
+        },
+      },
+    },
+    MuiRadio: {
+      defaultProps: {
+        color: 'primary',
+      },
+      styleOverrides: {
+        root: {
+          color: grey[800],
+          '&.Mui-checked': {
+            color: pink[500],
+          },
+          '&.Mui-disabled': {
+            color: grey[300],
+          },
         },
       },
     },
