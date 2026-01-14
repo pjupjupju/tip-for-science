@@ -859,7 +859,10 @@ export async function createQuestionRunV2(
 ) {
   const { sql } = context;
   const question = await getQuestionWithHighestRun(questionId, context);
-  console.log('creating new run while the existing question+run are:', JSON.stringify(question));
+  console.log(
+    'creating new run while the existing question+run are:',
+    JSON.stringify(question)
+  );
 
   const runNum = question?.run + 1;
 
@@ -881,17 +884,18 @@ export async function createQuestionRunV2(
     strategy,
   };
 
-  console.log('creating new run :: TODO put back ON CONFLICT statement');
+  console.log('creating new run');
   const [data] = await sql`
     INSERT INTO run (id, created_at, created_by, updated_at, enabled, question_id, run_num, generation, strategy, previous_tips) 
       VALUES (${params.id}, ${params.createdAt}, ${params.createdBy}, ${
     params.updatedAt
   }, ${params.enabled}, ${questionId}, ${params.runNum},
       ${params.generation}, ${params.strategy as any}, ${params.previousTips})
+      ON CONFLICT (question_id, run_num)
+      DO UPDATE SET enabled = EXCLUDED.enabled
     RETURNING *
   `;
-  //     ON CONFLICT (question_id, run_num)
-  //     DO UPDATE SET enabled = EXCLUDED.enabled
+  console.log('created with data: ', data);
 
   return { ...params, ...data, settings: question.settings };
 }
