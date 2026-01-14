@@ -3,6 +3,7 @@ import { DynamoDB } from 'aws-sdk';
 import { createClient } from '@supabase/supabase-js';
 import postgres from 'postgres';
 import { ulid } from 'ulid';
+import { ValidationError } from 'yup';
 import {
   createQuestionTipV2,
   findUserByEmail,
@@ -46,9 +47,12 @@ async function generate() {
 
   const user = await findUserByEmail('carpathian.outlaw@gmail.com', {
     dynamo,
+    supabase,
   });
 
-  // correct: runRecord.settings.correctAnswer,
+  if (!user) {
+    throw new ValidationError('User not found!');
+  }
 
   for (let i = 0; i < 500; i++) {
     const nextQuestionRuns = await getEnabledQuestionRunsV2(questionId, {
@@ -58,7 +62,11 @@ async function generate() {
     });
 
     // get the preferred run from cache
-    const runRecord = await runCache.getRunV2(questionId, nextQuestionRuns);
+    const runRecord = await runCache.getRunV2(
+      questionId,
+      nextQuestionRuns,
+      user.id
+    );
 
     const rId = runRecord.runNum;
     const gId = runRecord.generation;
