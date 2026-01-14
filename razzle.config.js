@@ -2,6 +2,29 @@ const LoadableWebpackPlugin = require("@loadable/webpack-plugin");
 const path = require("path");
 
 const appSrc = path.resolve(__dirname, './src');
+const muiPath = path.resolve(__dirname, "node_modules/@mui");
+const emotionPath = path.resolve(__dirname, "node_modules/@emotion");
+
+function findBabelRule(rules) {
+  for (const rule of rules) {
+    if (!rule) continue;
+
+    if (rule.oneOf) {
+      const found = findBabelRule(rule.oneOf);
+      if (found) return found;
+    }
+
+    if (rule.loader && rule.loader.includes("babel-loader")) return rule;
+
+    if (rule.use) {
+      const uses = Array.isArray(rule.use) ? rule.use : [rule.use];
+      for (const u of uses) {
+        if (u && u.loader && u.loader.includes("babel-loader")) return rule;
+      }
+    }
+  }
+  return null;
+}
 
 module.exports = {
   modifyWebpackConfig(opts) {
@@ -22,8 +45,22 @@ module.exports = {
         })
       );
     }
+
+    const babelRule = findBabelRule(config.module.rules);
+    if (!babelRule) {
+      console.log("❌ Babel rule not found");
+      return config;
+    }
+
+    babelRule.test = /\.(js|mjs|jsx|ts|tsx)$/;
+
+    babelRule.include = [appSrc, muiPath, emotionPath];
+
+    delete babelRule.exclude;
+
     return config;
   },
+  // Probably deprecated TODO: remove is deploy ok with modifyWebpackConfig
   modify: (config, { dev, target }) => {
     let resConfig =
       target === 'web'
@@ -38,6 +75,11 @@ module.exports = {
 
     const babelRule = resConfig.module.rules[1];
     babelRule.test = /\.(js|mjs|jsx|ts|tsx)$/;
+    console.log('babelrule', babelRule);
+    babelRule.include = [appSrc, muiPath, emotionPath];
+
+    console.log(resConfig.module.rules)
+
 
     if (!dev) {
       resConfig =

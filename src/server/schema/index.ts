@@ -149,6 +149,7 @@ export const typeDefs = /* GraphQL */ gql`
     language: String
     nextQuestionnaireAfterQuestion: String
     ipipBundle: [Int!]!
+    isQuestionnaireActive: Boolean!
   }
 
   enum UserRole {

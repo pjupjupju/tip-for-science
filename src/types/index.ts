@@ -10,4 +10,5 @@ export interface User {
   age?: number;
   gender?: string;
   nextQuestionnaireAfterQuestion?: string;
+  isQuestionnaireActive?: boolean;
 }

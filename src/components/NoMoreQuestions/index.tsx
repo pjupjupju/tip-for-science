@@ -1,10 +1,10 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import { Container } from '..';
-import { FormattedMessage } from 'react-intl';
 
 interface NoMoreQuestionsProps {
   score: Number;
