@@ -1,10 +1,11 @@
 import React, { KeyboardEvent, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Button, Image, Text } from 'rebass';
 import Box from '@mui/material/Box';
-import NewButton from '@mui/material/Button';
+import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
-import { Label, Input } from '@rebass/forms';
+import Typography from '@mui/material/Typography';
 
 import { TooCloseDialog } from './TooCloseDialog';
 import { GameOverScreen } from './GameOverScreen';
@@ -43,29 +44,57 @@ const actionsContainerStyles = {
   marginBottom: { xs: 0, sm: 0, md: 4 },
 };
 
-const inputStyles = {
-  '::placeholder': {
-    color: 'white',
-  },
-  color: 'white',
-  flex: 1,
-  mx: 3,
-};
+const questionFontSizes = { xs: 18, sm: 24, md: 28 };
+const scoreMessageFontSizes = { xs: 18, sm: 18, md: 22 };
 
-const imageStyle = {
-  maxWidth: '80%',
+const imageStyles = {
+  maxWidth: '100%',
   alignSelf: 'center',
   objectFit: 'contain',
 };
 
-const labelStyle = {
+const scoreStyles = {
+  fontSize: { xs: 18, sm: 20, md: 24 },
+  p: { xs: 1, sm: 2, md: 3 },
+};
+
+const inputStyles = {
+  color: 'white',
+  flex: 1,
+  minWidth: '120px',
+  borderRadius: 0,
+  input: {
+    padding: '8px 12px',
+    height: '23px',
+    color: 'white',
+    '&::placeholder': {
+      color: 'white',
+      opacity: 0.8,
+    },
+  },
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'white',
+  },
+  '&:hover .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'white',
+  },
+  '&.Mui-focused': {
+    boxShadow: 'none',
+  },
+};
+
+const labelStyles = {
   flexGrow: 0,
   flexShrink: 0,
   width: 'auto',
   color: 'white',
 };
 
-const homeButtonStyles = { flex: 1, marginRight: 1, borderRadius: 0 };
+const homeButtonStyles = {
+  flex: 1,
+  borderRadius: { xs: 0, sm: 1 },
+};
+const continueButtonStyles = { flex: 5, borderRadius: { xs: 0, sm: 1 } };
 
 const isTooClose = (score: number): boolean => score >= 95;
 
@@ -176,43 +205,51 @@ const Game = ({
           flexShrink={0}
           flexGrow={0}
         >
-          <Text
-            fontSize={[3, 4, 5]}
+          <Typography
+            fontSize={questionFontSizes}
             fontWeight="bold"
-            color="secondary"
+            color="text.secondary"
             textAlign="center"
             p={3}
           >
             {question}
-          </Text>
+          </Typography>
         </Stack>
-        <Image src={image} sx={imageStyle} />
+        <Box
+          component="img"
+          src={image}
+          alt={`Question: ${question}, image.`}
+          sx={imageStyles}
+        />
         <PreviousTips previousTips={previousTips} unit={unit} />
         <Stack
           direction="row"
           justifyContent="center"
           alignItems="center"
           p={2}
+          gap={2}
         >
-          <Label htmlFor="tip" sx={labelStyle}>
+          <InputLabel htmlFor="tip" sx={labelStyles}>
             <FormattedMessage
               id="app.tip"
               defaultMessage="tip:"
               description="Tip"
             />
-          </Label>
-          <Input
-            ref={inputRef}
+          </InputLabel>
+          <OutlinedInput
             id="tip"
             name="tip"
             type="number"
+            inputRef={inputRef}
+            onKeyDown={handleKeyDown}
             placeholder={placeholder}
             sx={inputStyles}
-            onKeyDown={handleKeyDown}
           />
-          <Text color="white" mr={4}>
-            {unit}
-          </Text>
+          {!!unit && unit !== '' && (
+            <Typography color="white" ml={-1} mr={2}>
+              {unit}
+            </Typography>
+          )}
           <SubmitButton onClick={handleClickSubmit} timeLimit={timeLimit} />
         </Stack>{' '}
       </Stack>
@@ -244,12 +281,11 @@ const Game = ({
           flexShrink={0}
           flexGrow={0}
         >
-          <Text
-            fontSize={[3, 4, 4]}
+          <Typography
+            {...scoreStyles}
             fontWeight="bold"
-            color="secondary"
+            color="text.secondary"
             textAlign="center"
-            p={[1, 2, 3]}
           >
             <FormattedMessage
               id="app.game.score"
@@ -257,9 +293,14 @@ const Game = ({
               description="Score"
             />{' '}
             {score.toFixed(2)}
-          </Text>
+          </Typography>
         </Stack>
-        <Image src={image} sx={imageStyle} />
+        <Box
+          component="img"
+          src={image}
+          alt={`Question: ${question}, image.`}
+          sx={imageStyles}
+        />
         <Stack
           justifyContent="center"
           alignItems="center"
@@ -284,10 +325,10 @@ const Game = ({
                 flexGrow={1}
                 flexShrink={1}
               >
-                <Text
+                <Typography
                   textAlign="center"
-                  color="graphScore"
-                  fontSize={[2, 3, 3]}
+                  color="expressive"
+                  fontSize={scoreMessageFontSizes}
                   mb={3}
                 >
                   {questionScore === 0 && (
@@ -308,7 +349,7 @@ const Game = ({
                     questionScore < 95 && (
                       <ScoreMessage scoreType="score.top" />
                     )}
-                </Text>
+                </Typography>
                 <FunFact correctAnswer={correctAnswer} fact={fact} />
               </Stack>
             </>
@@ -318,11 +359,12 @@ const Game = ({
         </Stack>
       </Stack>
       <Stack
+        gap={1}
         direction="row"
         justifyContent="space-between"
         {...actionsContainerStyles}
       >
-        <NewButton
+        <Button
           variant="contained"
           onClick={handleClickHome}
           color="secondary"
@@ -333,8 +375,12 @@ const Game = ({
             defaultMessage="Home"
             description="Home button"
           />
-        </NewButton>
-        <Button sx={{ flex: 5 }} onClick={handleClickFinish}>
+        </Button>
+        <Button
+          variant="contained"
+          sx={continueButtonStyles}
+          onClick={handleClickFinish}
+        >
           <FormattedMessage
             id="app.game.continue"
             defaultMessage="Continue"

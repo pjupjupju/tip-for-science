@@ -1,15 +1,19 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
+
 import { TranslucentBox } from '../TranslucentBox';
 import { Container } from '../Container';
-import { FormattedMessage } from 'react-intl';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 
 interface GameOverScreenProps {
   onContinue: Function;
 }
+
+const leftButtonStyles = { flex: 1 };
+const rightButtonStyles = { flex: 3 };
 
 const GameOverScreen = ({ onContinue }: GameOverScreenProps) => {
   const navigate = useNavigate();
@@ -23,34 +27,23 @@ const GameOverScreen = ({ onContinue }: GameOverScreenProps) => {
   return (
     <TranslucentBox>
       <Container>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%',
-            height: '100%',
-          }}
+        <Stack
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+          width="100%"
+          height="100%"
         >
           <Typography
-            sx={{
-              fontSize: 'clamp(36px, 6vw, 72px)',
-              textAlign: 'center',
-              my: 2,
-              color: 'white',
-            }}
+            fontSize="clamp(36px, 6vw, 60px)"
+            textAlign="center"
+            fontWeight={600}
+            marginY={2}
+            color="white"
           >
             GAME OVER
           </Typography>
-          <Typography
-            align="center"
-            sx={{
-              fontWeight: 500,
-              my: 2,
-              color: 'white',
-            }}
-          >
+          <Typography align="center" fontWeight={500} marginY={2} color="white">
             <FormattedMessage
               id="app.game.gameover"
               defaultMessage="Time’s up! You can continue with the next question or take a break."
@@ -58,19 +51,18 @@ const GameOverScreen = ({ onContinue }: GameOverScreenProps) => {
             />
           </Typography>
 
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              width: '100%',
-              mt: 6,
-            }}
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            width="100%"
+            marginTop={6}
+            gap={1}
           >
             <Button
               onClick={handleClickHome}
               variant="contained"
               color="secondary"
-              sx={{ flex: 1, mr: 1 }}
+              sx={leftButtonStyles}
             >
               <FormattedMessage
                 id="app.tutorial.menu.home"
@@ -81,7 +73,7 @@ const GameOverScreen = ({ onContinue }: GameOverScreenProps) => {
             <Button
               onClick={handleClickPlay}
               variant="contained"
-              sx={{ flex: 3 }}
+              sx={rightButtonStyles}
             >
               <FormattedMessage
                 id="app.game.continue"
@@ -89,8 +81,8 @@ const GameOverScreen = ({ onContinue }: GameOverScreenProps) => {
                 description="Continue"
               />
             </Button>
-          </Box>
-        </Box>
+          </Stack>
+        </Stack>
       </Container>
     </TranslucentBox>
   );

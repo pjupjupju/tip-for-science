@@ -6,10 +6,12 @@ declare module '@mui/material/styles' {
   interface Palette {
     accent: Palette['primary'];
     dimmed: Palette['primary'];
+    expressive: Palette['primary'];
   }
   interface PaletteOptions {
     accent?: PaletteOptions['primary'];
     dimmed?: PaletteOptions['primary'];
+    expressive?: PaletteOptions['primary'];
   }
 }
 
@@ -175,6 +177,9 @@ export const muiTheme = createTheme({
     accent: {
       main: '#5CC9FA',
       contrastText: '#ffffff',
+    },
+    expressive: {
+      main: '#fdf41c',
     },
     text: {
       secondary: '#D76B90',
