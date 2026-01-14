@@ -119,7 +119,8 @@ class RunCache {
 
   async getRunV2(
     questionId: string,
-    runs: PostgresRun[]
+    runs: PostgresRun[],
+    userId: string
   ): Promise<PostgresRun> {
     // We simplify run objects, sort them and filter out the full ones
     const sortedRuns =
@@ -127,7 +128,9 @@ class RunCache {
       (
         runs
           .filter((r) => r.id)
-          .sort((a, b) => a.createdAt.toString().localeCompare(b.createdAt.toString()))
+          .sort((a, b) =>
+            a.createdAt.toString().localeCompare(b.createdAt.toString())
+          )
           .map((r: PostgresRun) => {
             const key = r.id;
             const cachedItem = this.online.get(key);
@@ -158,7 +161,7 @@ class RunCache {
       // if isUpdating question is true, recursively call get fresh run
       // which will somehow fetch the new run created
 
-      const run = await createQuestionRunV2(questionId, {
+      const run = await createQuestionRunV2(questionId, userId, {
         dynamo: this.dynamo,
         sql: this.sql,
         supabase: this.supabase,

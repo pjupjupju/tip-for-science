@@ -778,7 +778,7 @@ export async function getEnabledQuestionRunsV2(
 export async function getQuestionCorpusV2(supabase: ModelContext['supabase']) {
   const { data } = await supabase.from('question').select();
 
-  return data.map(item => toCamelCase(item));
+  return data.map((item) => toCamelCase(item));
 }
 
 export async function getQuestionV2(id: string, { supabase }: ModelContext) {
@@ -854,6 +854,7 @@ function getNewPreviousTipsV2(
 
 export async function createQuestionRunV2(
   questionId: string,
+  userId: string,
   context: ModelContext
 ) {
   const { sql } = context;
@@ -872,22 +873,24 @@ export async function createQuestionRunV2(
     generation: INITIAL_GENERATION_NUMBER,
     enabled: true,
     createdAt: new Date().toISOString(),
+    createdBy: userId,
     updatedAt: new Date().toISOString(),
     runNum: runNum,
     previousTips: initialTips,
     strategy,
   };
 
+  console.log('creating new run :: TODO put back ON CONFLICT statement');
   const [data] = await sql`
-    INSERT INTO run (id, created_at, updated_at, enabled, question_id, run_num, generation, strategy, previous_tips) 
-      VALUES (${params.id}, ${params.createdAt}, ${params.updatedAt}, ${
-    params.enabled
-  }, ${questionId}, ${params.runNum},
+    INSERT INTO run (id, created_at, created_by, updated_at, enabled, question_id, run_num, generation, strategy, previous_tips) 
+      VALUES (${params.id}, ${params.createdAt}, ${params.createdBy}, ${
+    params.updatedAt
+  }, ${params.enabled}, ${questionId}, ${params.runNum},
       ${params.generation}, ${params.strategy as any}, ${params.previousTips})
-    ON CONFLICT (question_id, run_num) 
-    DO UPDATE SET enabled = EXCLUDED.enabled
     RETURNING *
   `;
+  //     ON CONFLICT (question_id, run_num)
+  //     DO UPDATE SET enabled = EXCLUDED.enabled
 
   return { ...params, ...data, settings: question.settings };
 }
@@ -955,6 +958,8 @@ export async function createQuestionTipV2(
       t.knewAnswer !== true
   );
 
+  const now = new Date().toISOString();
+
   const params = {
     id: tipId,
     question_id: id,
@@ -964,7 +969,7 @@ export async function createQuestionTipV2(
     previousTips,
     msElapsed,
     createdBy: userId,
-    createdAt: new Date().toISOString(),
+    createdAt: now,
     correctAnswer,
     timeLimit,
     knewAnswer,
@@ -1004,7 +1009,11 @@ export async function createQuestionTipV2(
 
         // If we hit max generations, we disable this RUN
         if (generation === strategy.maxGenerations) {
-          await sql`update "run" r set enabled = false WHERE r.id = ${runId}`;
+          console.log('closing run', runId);
+          console.log(
+            `because generation is ${generation} and max generation is ${strategy.maxGenerations}`
+          );
+          await sql`update "run" r set enabled = false, updated_at = ${now} WHERE r.id = ${runId}`;
 
           runLock.unlock(`${runId}#${generation - 1}`);
           runLock.unlock(`${runId}#${generation}`);

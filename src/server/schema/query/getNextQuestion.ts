@@ -26,7 +26,7 @@ export async function getNextQuestion(
   _: {},
   context: GraphQLContext
 ): Promise<Question | null> {
-  const { dynamo, runCache, user } = context;
+  const { runCache, user } = context;
   if (user == null) {
     throw new ValidationError('Unauthorized.');
   }
@@ -62,7 +62,11 @@ export async function getNextQuestion(
   );
 
   // get the preferred run from cache
-  const runRecord = await runCache.getRunV2(nextQuestionId, nextQuestionRuns);
+  const runRecord = await runCache.getRunV2(
+    nextQuestionId,
+    nextQuestionRuns,
+    user.id
+  );
 
   await updateLastQuestion(user.id, nextQuestionId, context);
 
