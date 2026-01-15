@@ -12,7 +12,6 @@ import { Play } from './pages/Play';
 import { Profile } from './pages/Profile';
 import { SignIn } from './pages/SignIn';
 import { Consent } from './pages/Consent';
-import { Ipip } from './pages/Ipip';
 import { AuthQueryName, AUTH_QUERY, SIGN_OUT_MUTATION } from './gql';
 import { Spinner } from './components';
 import { SignUp } from './pages/SignUp';

@@ -6,7 +6,9 @@ import { renderToStringWithData } from '@apollo/client/react/ssr';
 import { DynamoDB } from 'aws-sdk';
 import { createClient } from '@supabase/supabase-js';
 import postgres from 'postgres';
-import { renderStylesToString } from 'emotion-server';
+import createCache from '@emotion/cache';
+import createEmotionServer from '@emotion/server/create-instance';
+import { CacheProvider } from '@emotion/react';
 import { ChunkExtractor } from '@loadable/server';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
@@ -183,17 +185,25 @@ export async function createServer(): Promise<express.Application> {
         language = countries[country?.country || 'GB'].language;
       }
 
+      const cache = createCache({ key: 'css' });
+      const { extractCriticalToChunks, constructStyleTagsFromChunks } =
+        createEmotionServer(cache);
+
       const bootstrap = extractor.collectChunks(
-        <ApolloProvider client={client}>
-          <StaticRouter location={req.url || '/'}>
-            <LanguageProvider serverLanguage={language}>
-              <App />
-            </LanguageProvider>
-          </StaticRouter>
-        </ApolloProvider>
+        <CacheProvider value={cache}>
+          <ApolloProvider client={client}>
+            <StaticRouter location={req.url || '/'}>
+              <LanguageProvider serverLanguage={language}>
+                <App />
+              </LanguageProvider>
+            </StaticRouter>
+          </ApolloProvider>
+        </CacheProvider>
       );
 
       const result = await renderToStringWithData(bootstrap);
+      const emotionChunks = extractCriticalToChunks(result);
+      const emotionStyleTags = constructStyleTagsFromChunks(emotionChunks);
 
       const initialState = client.extract();
 
@@ -225,7 +235,8 @@ export async function createServer(): Promise<express.Application> {
           `<!doctype html>${renderToString(
             <Document
               initialLanguage={language}
-              content={renderStylesToString(result)}
+              emotionStyleTags={emotionStyleTags}
+              content={result}
               helmet={helmet}
               css={cssLinksFromAssets(assets, 'client')}
               state={initialState}

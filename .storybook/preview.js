@@ -1,7 +1,7 @@
 import React from 'react';
+import { ThemeProvider } from '@mui/material/styles';
 import { MemoryRouter } from 'react-router-dom';
-import { ThemeProvider } from 'emotion-theming';
-import { tipForScienceTheme } from '../src/theme';
+import { muiTheme } from '../src/theme';
 import '../src/index.css';
 
 export const parameters = {
@@ -20,7 +20,7 @@ export const parameters = {
 
 const wrapper = (storyFn) => (
   <MemoryRouter>
-    <ThemeProvider theme={tipForScienceTheme}>{storyFn()}</ThemeProvider>
+    <ThemeProvider theme={muiTheme}>{storyFn()}</ThemeProvider>
   </MemoryRouter>
 );
 
