@@ -59,7 +59,7 @@ const WipeBatchesButton = ({ mutation, loading, buttonStyles }) => {
   return (
     <>
       <Button variant="contained" sx={buttonStyles} onClick={handleOpen}>
-        {loading ? '... deleting' : 'Delete batches'}
+        {loading ? '... deleting' : 'Delete'}
       </Button>
 
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">

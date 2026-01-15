@@ -18,8 +18,6 @@ const commonProperties = {
   pointBorderColor: { theme: 'background' },
 };
 
-console.log('ResponsiveLine typeof:', typeof ResponsiveLine, ResponsiveLine);
-
 const UserScoreCurve = ({ stats }: UserScoreCurveProps) => {
   const data = [
     {

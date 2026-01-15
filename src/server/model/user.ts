@@ -518,9 +518,7 @@ export async function wipeAllBatches({ dynamo, supabase }: UserModelContext) {
     if (err) {
       console.error('Unable to scan the table. Error:', JSON.stringify(err));
     } else {
-      const additionalUsers = (data as any).Items.filter(
-        ({ bundle }: { bundle: string[] }) => bundle.length > 0
-      );
+      const additionalUsers = (data as any).Items;
 
       if (additionalUsers.length > 0) {
         const chunks = sliceIntoChunks(additionalUsers, 24);
@@ -531,8 +529,9 @@ export async function wipeAllBatches({ dynamo, supabase }: UserModelContext) {
               TableName: TABLE_USER,
               Key: { id, userskey: `USER#${id}` },
               UpdateExpression:
-                'set bundle = :bundle, lastQuestion = :lastQuestion, ipipBundle = :ipipBundle, lastIpipQuestion = :lastIpipQuestion',
+                'set bundle = :bundle, lastQuestion = :lastQuestion, ipipBundle = :ipipBundle, lastIpipQuestion = :lastIpipQuestion, score = :score',
               ExpressionAttributeValues: {
+                ':score': 0,
                 ':bundle': [],
                 ':lastQuestion': null,
                 ':ipipBundle': generateQuestionBundle(

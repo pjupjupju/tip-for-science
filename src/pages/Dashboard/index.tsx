@@ -4,6 +4,7 @@ import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { redirect } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { BackButton, Container, Spinner } from '../../components';
@@ -93,7 +94,6 @@ const Dashboard = ({ user }: DashboardProps) => {
     importQuestions();
   };
 
-
   if (!user || user.role !== UserRole.admin) {
     redirect('/');
   }
@@ -132,8 +132,8 @@ const Dashboard = ({ user }: DashboardProps) => {
             description="Actions button"
           />
         </Typography>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Box flex={1} display="flex" flexDirection="column" mr={1}>
+        <Stack direction="row" alignItems="center" gap={2}>
+          <Box flex={1} display="flex" flexDirection="column">
             <Typography color="white" fontFamily="Tahoma">
               <FormattedMessage
                 id="app.dashboard.menu.export"
@@ -167,7 +167,22 @@ const Dashboard = ({ user }: DashboardProps) => {
               {importLoading ? '... importing' : 'Import'}
             </Button>
           </Box>
-        </Box>
+
+          <Box flex={1} display="flex" flexDirection="column">
+            <Typography color="white" fontFamily="Tahoma">
+              <FormattedMessage
+                id="app.dashboard.menu.wipe"
+                defaultMessage="Wipe batches"
+                description="Wipe batches button"
+              />
+            </Typography>
+            <WipeBatchesButton
+              mutation={wipeBatches}
+              loading={wipeBatchesLoading}
+              buttonStyles={buttonStyles}
+            />
+          </Box>
+        </Stack>
         <Box sx={consoleStyle}>
           {log.map((line, index) => (
             <Typography
