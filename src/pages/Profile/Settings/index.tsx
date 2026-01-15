@@ -1,14 +1,20 @@
 import React, { useRef, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { useForm } from 'react-hook-form';
-import { Input, Label, Radio } from '@rebass/forms';
-import { Flex, Text, Box } from 'rebass';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { Controller, useForm } from 'react-hook-form';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { FormattedMessage, useIntl } from 'react-intl';
 import * as Yup from 'yup';
+
 import {
-  inputStyles,
   labelStyles,
+  settingInputStyles,
 } from '../../../components/commonStyleSheets';
 import {
   emailRegex,
@@ -29,8 +35,18 @@ enum Genders {
 const getOtherGender = (gender: string) =>
   gender == null ? '' : Genders.other;
 
-const otherGenderInputStyles = { ...inputStyles, mt: 2 };
-const radioLabelStyles = { ...labelStyles, mb: 2 };
+const otherGenderInputStyles = { ...settingInputStyles, mt: 2, width: '100%' };
+const radioLabelStyles = { color: 'white', cursor: 'pointer' };
+const radioStyles = {
+  padding: 0,
+  '&:hover': { backgroundColor: 'transparent' },
+  color: 'grey.500',
+
+  '&.Mui-checked': {
+    color: 'primary.main',
+  },
+};
+const alertStyles = { backgroundColor: '#15de46' };
 
 const Settings = ({ user }: { user: User | null }) => {
   const intl = useIntl();
@@ -47,7 +63,6 @@ const Settings = ({ user }: { user: User | null }) => {
       .transform((value) => (!!value ? value : undefined)),
     oldPassword: Yup.string()
       .when('newPassword', ([newPassword], schema: Yup.StringSchema) => {
-        console.log('newpassword', newPassword);
         if (typeof newPassword === 'string' && newPassword !== '') {
           return schema.required(
             intl.formatMessage(validationMessages.passwordCurrent)
@@ -95,7 +110,7 @@ const Settings = ({ user }: { user: User | null }) => {
   const [log, setLog] = useState<boolean | undefined>();
   const [errors, setErrors] = useState<Array<{ error: string }>>([]);
   const resolver = useYupValidationResolver(validationSchema, setErrors);
-  const { register, handleSubmit, watch } = useForm({
+  const { control, register, handleSubmit, watch } = useForm({
     resolver,
     defaultValues: {
       email: user.email,
@@ -125,7 +140,6 @@ const Settings = ({ user }: { user: User | null }) => {
     age: string;
     gender: string;
   }) => {
-    console.log('baaaa');
     setErrors([]);
     let changeSet = {};
 
@@ -162,83 +176,114 @@ const Settings = ({ user }: { user: User | null }) => {
   };
 
   return (
-    <Flex
-      as="form"
+    <Stack
+      component="form"
       onSubmit={handleSubmit(onSubmit)}
       width="100%"
       flexGrow={1}
-      flexDirection="column"
+      direction="column"
+      boxSizing="border-box"
+      px={2}
     >
-      <Text color="secondary" my={3}>
+      <Typography color="text.secondary" my={2}>
         <FormattedMessage
           id="app.settings.menu.anon"
           defaultMessage="All data will be anonymized before evaluation."
           description="Anon text"
         />
-      </Text>
-      <Text color="secondary" fontSize={3} mt={1} px={3}>
+      </Typography>
+      <Typography color="text.secondary" fontSize={18} fontWeight={600} mt={1}>
         <FormattedMessage
           id="app.settings.menu.otherinfo"
           defaultMessage="Additional (voluntary) info"
           description="Otherinfo text"
         />
-      </Text>
+      </Typography>
 
       <Box my={3}>
-        <Label htmlFor="gender" sx={radioLabelStyles}>
+        <InputLabel htmlFor="gender" sx={labelStyles}>
           <FormattedMessage
             id="app.settings.menu.gender"
             defaultMessage="I am..."
             description="Gender label"
           />
-        </Label>
-        <Label color="white">
-          <Radio
-            {...register('gender')}
-            name="gender"
-            id="woman"
-            value="woman"
-          />
-          <FormattedMessage
-            id="app.settings.menu.woman"
-            defaultMessage="Woman"
-            description="Woman label"
-          />
-        </Label>
-        <Label color="white">
-          <Radio {...register('gender')} name="gender" id="man" value="man" />
-          <FormattedMessage
-            id="app.settings.menu.man"
-            defaultMessage="Man"
-            description="Man label"
-          />
-        </Label>
-        <Label color="white">
-          <Radio {...register('gender')} name="gender" id="enby" value="enby" />
-          <FormattedMessage
-            id="app.settings.menu.nonbinary"
-            defaultMessage="Nonbinary"
-            description="Nonbinary label"
-          />
-        </Label>
-        <Label color="white">
-          <Radio
-            {...register('gender')}
-            name="gender"
-            id="other"
-            value="other"
-          />
-          <FormattedMessage
-            id="app.settings.menu.othergender"
-            defaultMessage="Other (feel free to specify):"
-            description="Othergender label"
-          />
-        </Label>
+        </InputLabel>
+        <Controller
+          name="gender"
+          control={control}
+          render={({ field }) => (
+            <RadioGroup
+              name={field.name}
+              value={field.value ?? ''}
+              onChange={(_, value) => field.onChange(value)}
+            >
+              <Stack direction="row" alignItems="center" gap={1}>
+                <Radio
+                  {...register('gender')}
+                  id="woman"
+                  value="woman"
+                  sx={radioStyles}
+                />
+                <InputLabel htmlFor="woman" sx={radioLabelStyles}>
+                  <FormattedMessage
+                    id="app.settings.menu.woman"
+                    defaultMessage="Woman"
+                    description="Woman label"
+                  />
+                </InputLabel>
+              </Stack>
+              <Stack direction="row" alignItems="center" gap={1}>
+                <Radio
+                  {...register('gender')}
+                  id="man"
+                  value="man"
+                  sx={radioStyles}
+                />
+                <InputLabel htmlFor="man" sx={radioLabelStyles}>
+                  <FormattedMessage
+                    id="app.settings.menu.man"
+                    defaultMessage="Man"
+                    description="Man label"
+                  />
+                </InputLabel>
+              </Stack>
+              <Stack direction="row" alignItems="center" gap={1}>
+                <Radio
+                  {...register('gender')}
+                  id="enby"
+                  value="enby"
+                  sx={radioStyles}
+                />
+                <InputLabel htmlFor="enby" sx={radioLabelStyles}>
+                  <FormattedMessage
+                    id="app.settings.menu.nonbinary"
+                    defaultMessage="Nonbinary"
+                    description="Nonbinary label"
+                  />
+                </InputLabel>
+              </Stack>
+              <Stack direction="row" alignItems="center" gap={1}>
+                <Radio
+                  {...register('gender')}
+                  id="other"
+                  value="other"
+                  sx={radioStyles}
+                />
+                <InputLabel htmlFor="other" sx={radioLabelStyles}>
+                  <FormattedMessage
+                    id="app.settings.menu.othergender"
+                    defaultMessage="Other (feel free to specify):"
+                    description="Othergender label"
+                  />
+                </InputLabel>
+              </Stack>
+            </RadioGroup>
+          )}
+        />
         {watchGender === 'other' && (
-          <Input
+          <OutlinedInput
             ref={otherGenderInputRef}
             placeholder={placeholder}
-            mb="2"
             defaultValue={
               ![Genders.man, Genders.woman, Genders.enby].includes(
                 user.gender as Genders
@@ -250,115 +295,118 @@ const Settings = ({ user }: { user: User | null }) => {
           />
         )}
       </Box>
-      <Label htmlFor="age" sx={labelStyles}>
+      <InputLabel htmlFor="age" sx={labelStyles}>
         <FormattedMessage
           id="app.settings.menu.age"
           defaultMessage="Age:"
           description="Age label"
         />
-      </Label>
-      <Input
+      </InputLabel>
+      <OutlinedInput
         id="age"
         type="number"
         name="age"
         min={18}
         max={120}
-        mb={2}
-        sx={inputStyles}
+        sx={settingInputStyles}
         {...register('age')}
       />
-      {errors.length > 0 && (
-        <Box>
-          {errors.map((item: { error: string }, index) => (
-            <Text color="red" key={`error-${index}`}>
-              {item.error}
-            </Text>
-          ))}
-        </Box>
-      )}
-      <Text color="secondary" fontSize={3} mt={4} mb={3} px={3}>
+      <Typography
+        color="text.secondary"
+        fontSize={18}
+        fontWeight={600}
+        mt={3}
+        mb={2}
+      >
         <FormattedMessage
           id="app.settings.menu.settings"
           defaultMessage="Account settings"
           description="Settings header"
         />
-      </Text>
-      <Label htmlFor="email" sx={labelStyles}>
+      </Typography>
+      <InputLabel htmlFor="email" sx={labelStyles}>
         <FormattedMessage
           id="app.settings.menu.email"
           defaultMessage="E-mail"
           description="Email label"
         />
-      </Label>
-      <Input
+      </InputLabel>
+      <OutlinedInput
         id="email"
         type="text"
         placeholder="e-mail"
-        mb={2}
-        sx={inputStyles}
+        sx={settingInputStyles}
         {...register('email')}
       />
-      <Label htmlFor="oldPassword" sx={labelStyles}>
+      <InputLabel htmlFor="oldPassword" sx={labelStyles}>
         <FormattedMessage
           id="app.settings.menu.passwordcur"
           defaultMessage="Current password"
           description="PasswordCur label"
         />
-      </Label>
-      <Input
+      </InputLabel>
+      <OutlinedInput
         autoComplete="new-password"
         id="oldPassword"
         type="password"
-        mb={2}
-        sx={inputStyles}
+        sx={settingInputStyles}
         {...register('oldPassword')}
       />
-      <Label htmlFor="newPassword" sx={labelStyles}>
+      <InputLabel htmlFor="newPassword" sx={labelStyles}>
         <FormattedMessage
           id="app.settings.menu.passwordnew"
           defaultMessage="New password"
           description="PasswordNew label"
         />
-      </Label>
-      <Input
+      </InputLabel>
+      <OutlinedInput
         id="newPassword"
         type="password"
-        mb={2}
-        sx={inputStyles}
+        sx={settingInputStyles}
         {...register('newPassword')}
       />
-      <Label htmlFor="confirmNewPassword" sx={labelStyles}>
+      <InputLabel htmlFor="confirmNewPassword" sx={labelStyles}>
         <FormattedMessage
           id="app.settings.menu.passwordnew2"
           defaultMessage="Reenter new password"
           description="PasswordNew2 label"
         />
-      </Label>
-      <Input
+      </InputLabel>
+      <OutlinedInput
         id="confirmNewPassword"
         type="password"
-        mb={2}
-        sx={inputStyles}
+        sx={settingInputStyles}
         {...register('confirmNewPassword')}
       />
 
-      <Flex mt="auto" flexDirection="column" width="100%" mb="2">
+      {errors.length > 0 && (
+        <Box>
+          {errors.map((item: { error: string }, index) => (
+            <Typography color="red" key={`error-${index}`}>
+              {item.error}
+            </Typography>
+          ))}
+        </Box>
+      )}
+
+      <Stack mt="auto" direction="column" width="100%" mb={2}>
         {log === true && (
-          <Flex
+          <Stack
+            direction="row"
             px={3}
             mb={2}
             height="39px"
-            backgroundColor="#15de46"
+            sx={alertStyles}
             alignItems="center"
           >
-            <Text>
+            <Typography>
               <FormattedMessage
                 id="app.settings.menu.saved"
                 defaultMessage="✓ Settings updated"
                 description="Settingsupdated label"
               />
-            </Text>
-          </Flex>
+            </Typography>
+          </Stack>
         )}
         <Button
           type="submit"
@@ -371,8 +419,8 @@ const Settings = ({ user }: { user: User | null }) => {
             description="Save label"
           />
         </Button>
-      </Flex>
-    </Flex>
+      </Stack>
+    </Stack>
   );
 };
 

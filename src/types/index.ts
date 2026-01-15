@@ -9,4 +9,6 @@ export interface User {
   slug: string;
   age?: number;
   gender?: string;
+  nextQuestionnaireAfterQuestion?: string;
+  isQuestionnaireActive?: boolean;
 }

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Box, Button, Text } from 'rebass';
+import Box from '@mui/material/Button';
+import Button from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { TutorialSlide } from './';
 import { Stepper } from '../Stepper';
 import { action } from '@storybook/addon-actions';
@@ -7,19 +9,21 @@ import { action } from '@storybook/addon-actions';
 const length = 10;
 const StorySlide1 = () => (
   <Box>
-    <Text color="secondary">this is slide number 1</Text>
+    <Typography color="secondary">this is slide number 1</Typography>
   </Box>
 );
-const StorySlide2 = ({ step, setStep }: any) =>  <Box>
-<Text color="secondary">this is slide number {step + 1}</Text>
-<Button
-  onClick={() => {
-    setStep(step === length - 1 ? 0 : step + 1);
-  }}
->
-  Next
-</Button>
-</Box>;
+const StorySlide2 = ({ step, setStep }: any) => (
+  <Box>
+    <Typography color="secondary">this is slide number {step + 1}</Typography>
+    <Button
+      onClick={() => {
+        setStep(step === length - 1 ? 0 : step + 1);
+      }}
+    >
+      Next
+    </Button>
+  </Box>
+);
 
 export default { title: 'component/TutorialSlide', component: TutorialSlide };
 export const Default = () => (
@@ -42,9 +46,7 @@ export const WithSteps = () => {
       length={3}
       handleNextStep={setStep}
       onSubmit={action('submit-tip')}
-      content={
-       StorySlide2
-      }
+      content={StorySlide2}
     />
   );
 };

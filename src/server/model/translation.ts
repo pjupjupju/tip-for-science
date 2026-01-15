@@ -1,11 +1,10 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import toCamelCase from 'camelcase-keys';
 import { QuestionTranslationRecord } from './types';
 import { Sql } from 'postgres';
 
 export interface TranslationModelContext {
   supabase: SupabaseClient;
-  sql: Sql
+  sql: Sql;
 }
 
 export async function getQuestionTranslation(
@@ -20,5 +19,5 @@ export async function getQuestionTranslation(
     LIMIT 1
     `) as QuestionTranslationRecord[];
 
-  return toCamelCase(translation);
+  return translation;
 }

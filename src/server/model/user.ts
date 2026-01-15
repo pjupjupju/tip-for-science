@@ -1,19 +1,36 @@
 import { AWSError, DynamoDB } from 'aws-sdk';
 import { ScanOutput } from 'aws-sdk/clients/dynamodb';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { ulid } from 'ulid';
 import * as yup from 'yup';
 import {
   TABLE_USER,
-  TABLE_QUESTION,
   USERS_BY_EMAIL_INDEX,
   PLAYERS_BY_HIGHSCORE,
 } from '../../config';
 import { generateQuestionBundle, sliceIntoChunks } from '../../helpers';
 import { getUniqueSlug } from '../io';
-import { ProgressItem, User, UserRole, UserSettings } from './types';
+import {
+  ModelContext,
+  ProgressItem,
+  User,
+  UserRole,
+  UserSettings,
+} from './types';
+import { getQuestionCorpusV2 } from './question';
 
 interface UserModelContext {
   dynamo: DynamoDB.DocumentClient;
+  supabase: SupabaseClient;
+}
+
+async function generateIpipBundle(supabase: SupabaseClient): Promise<number[]> {
+  const { data } = await supabase.from('ipip_questionnaire').select('id');
+
+  return generateQuestionBundle(
+    [],
+    data.map((item) => item.id)
+  );
 }
 
 export async function createUser(
@@ -24,11 +41,11 @@ export async function createUser(
     language: string;
     country: string;
   },
-  { dynamo }: UserModelContext
+  { dynamo, supabase }: ModelContext
 ) {
   const id = ulid();
 
-  const questions = await getQuestionCorpus(dynamo);
+  const questions = await getQuestionCorpusV2(supabase);
   const currentIndex = await getCurrentUserIndex(dynamo);
 
   const initialQuestions = questions
@@ -38,15 +55,18 @@ export async function createUser(
     .filter((q: any) => !q.isInit)
     .map((q: any) => q.id);
   const bundle = generateQuestionBundle(initialQuestions, restQuestions);
+  const ipipBundle = await generateIpipBundle(supabase);
 
   const user: User = {
     bundle,
+    ipipBundle,
     createdAt: new Date().toISOString(),
     email: args.email,
     id,
     language: args.language,
     country: args.country,
     lastQuestion: null,
+    lastIpipQuestion: null,
     userskey: `USER#${id}`,
     password: args.password,
     role: args.role,
@@ -56,10 +76,10 @@ export async function createUser(
   };
 
   // check if user does not exist
-  const foundUser = await findUserByEmail(user.email, { dynamo });
+  const foundUser = await findUserByEmail(user.email, { dynamo, supabase });
 
   if (foundUser) {
-    throw new yup.ValidationError('Tento email už existuje', null, 'email');
+    throw new yup.ValidationError('This email already exists', null, 'email');
   }
 
   await executeTransactWriteUser(user, currentIndex, dynamo);
@@ -188,6 +208,23 @@ export async function updateLastQuestion(
     UpdateExpression: 'set lastQuestion = :newLastQuestion',
     ExpressionAttributeValues: {
       ':newLastQuestion': newLastQuestion,
+    },
+  };
+
+  return dynamo.update(params).promise();
+}
+
+export async function updateLastIpipQuestion(
+  userId: string,
+  newLastIpipQuestion: number,
+  { dynamo }: UserModelContext
+): Promise<any> {
+  const params = {
+    TableName: TABLE_USER,
+    Key: { id: userId, userskey: `USER#${userId}` },
+    UpdateExpression: 'set lastIpipQuestion = :newLastIpipQuestion',
+    ExpressionAttributeValues: {
+      ':newLastIpipQuestion': newLastIpipQuestion,
     },
   };
 
@@ -391,26 +428,6 @@ async function getCurrentUserIndex(dynamo: DynamoDB.DocumentClient) {
   return Item?.currentIndex || 0;
 }
 
-async function getQuestionCorpus(
-  dynamo: DynamoDB.DocumentClient
-): Promise<any | null> {
-  const params = {
-    TableName: TABLE_QUESTION,
-    IndexName: 'QER_GSI',
-    KeyConditionExpression: '#gsipk = :gsipk',
-    ExpressionAttributeNames: {
-      '#gsipk': 'gsi_pk',
-    },
-    ExpressionAttributeValues: {
-      ':gsipk': 'Q',
-    },
-  };
-
-  const result = await dynamo.query(params).promise();
-
-  return result.Items;
-}
-
 export async function executeTransactWriteUser(
   user: User,
   index,
@@ -474,4 +491,81 @@ export async function executeTransactWriteUser(
       return resolve(response);
     });
   });
+}
+
+export async function wipeAllBatches({ dynamo, supabase }: UserModelContext) {
+  const params = {
+    TableName: TABLE_USER,
+    FilterExpression:
+      'begins_with(#userskey, :userskey) and #role <> :adminrole',
+    ExpressionAttributeNames: { '#role': 'role', '#userskey': 'userskey' },
+    ExpressionAttributeValues: {
+      ':userskey': 'USER#',
+      ':adminrole': 'admin',
+    },
+  };
+
+  let users: string[] = [];
+
+  const { data: ipipData } = await supabase
+    .from('ipip_questionnaire')
+    .select('id');
+
+  const onScanUsersAndUpdateBundles = async (
+    err: AWSError,
+    data: ScanOutput
+  ): Promise<void> => {
+    if (err) {
+      console.error('Unable to scan the table. Error:', JSON.stringify(err));
+    } else {
+      const additionalUsers = (data as any).Items.filter(
+        ({ bundle }: { bundle: string[] }) => bundle.length > 0
+      );
+
+      if (additionalUsers.length > 0) {
+        const chunks = sliceIntoChunks(additionalUsers, 24);
+
+        const paramsForEachChunk = chunks.map((chunk) =>
+          chunk.map(({ id }) => ({
+            Update: {
+              TableName: TABLE_USER,
+              Key: { id, userskey: `USER#${id}` },
+              UpdateExpression:
+                'set bundle = :bundle, lastQuestion = :lastQuestion, ipipBundle = :ipipBundle, lastIpipQuestion = :lastIpipQuestion',
+              ExpressionAttributeValues: {
+                ':bundle': [],
+                ':lastQuestion': null,
+                ':ipipBundle': generateQuestionBundle(
+                  [],
+                  ipipData.map((item) => item.id)
+                ),
+                ':lastIpipQuestion': null,
+              },
+            },
+          }))
+        );
+
+        const allPromises = paramsForEachChunk.map((paramsForChunk) =>
+          dynamo
+            .transactWrite({
+              TransactItems: paramsForChunk,
+            })
+            .promise()
+        );
+
+        await Promise.all(allPromises);
+      }
+
+      users = [...users, ...additionalUsers];
+
+      if (typeof data.LastEvaluatedKey !== 'undefined') {
+        dynamo.scan(
+          { ...params, ExclusiveStartKey: data.LastEvaluatedKey },
+          onScanUsersAndUpdateBundles
+        );
+      }
+    }
+  };
+
+  dynamo.scan(params, onScanUsersAndUpdateBundles);
 }

@@ -1,37 +1,69 @@
 import React, { ReactNode } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { Link as RouterLink, Route, Routes } from 'react-router-dom';
-import { Flex, Link, Text, Box } from 'rebass';
+import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+
 import { Stats } from './Stats';
 import { Settings } from './Settings';
 import { Container } from '../../components';
 import { User } from '../../types';
 import Helmet from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
+
+const topBarStyles = { backgroundColor: 'dimmed.main' };
+const linkStyles = {
+  color: '#fff',
+  fontWeight: 700,
+  fontSize: 14,
+  padding: '8px',
+  textDecoration: 'none',
+
+  '&:hover': {
+    color: 'primary.main',
+    textDecoration: 'none',
+  },
+
+  '&:focus': {
+    textDecoration: 'none',
+  },
+
+  '&:visited': {
+    textDecoration: 'none',
+  },
+};
 
 const NavbarLink = ({
   children,
   ...rest
 }: {
   children: ReactNode;
-  [key: string]: any;
+  to: string;
 }) => (
-  <Link variant="nav" as={RouterLink} {...rest}>
+  <Link sx={linkStyles} component={RouterLink} {...rest}>
     {children}
   </Link>
 );
 
 const Profile = ({ user }: { user: User | null }) => (
-  <Container>
+  <Container noPadding>
     <Helmet title="Profil"></Helmet>
-    <Flex flexDirection="column" height="100%">
-      <Flex px={2} color="white" bg="secondary" alignItems="center">
-        <Text p={2} fontWeight="bold">
+    <Stack direction="column" height="100%">
+      <Stack
+        direction="row"
+        px={1}
+        color="white"
+        sx={topBarStyles}
+        alignItems="center"
+      >
+        <Typography p={1} fontWeight="bold">
           <FormattedMessage
             id="app.stats.menu.profile"
             defaultMessage="Profile"
             description="Profile text"
           />
-        </Text>
+        </Typography>
         <Box mx="auto" />
         <NavbarLink to="/profile/stats">
           <FormattedMessage
@@ -54,13 +86,13 @@ const Profile = ({ user }: { user: User | null }) => (
             description="Home link"
           />
         </NavbarLink>
-      </Flex>
+      </Stack>
       <Routes>
         <Route index element={<Stats user={user} />} />
         <Route path="stats" element={<Stats user={user} />} />
         <Route path="settings" element={<Settings user={user} />} />
       </Routes>
-    </Flex>
+    </Stack>
   </Container>
 );
 

@@ -1,12 +1,13 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
-import { Flex, Heading, Text } from 'rebass';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 import { useNavigate } from 'react-router-dom';
 import { MenuButton, Container } from '../../components';
 import { TargetImage } from '../../components/TargetImage';
 import { User, UserRole } from '../../types';
-import { Stack } from '@mui/material';
 
 interface HomeProps {
   user: User | null;
@@ -47,19 +48,22 @@ const Home = ({ user, onLogOut }: HomeProps) => {
     <Container>
       <Helmet title="Home"></Helmet>
       <TargetImage />
-      <Flex
+      <Box
+        display="flex"
         flexDirection="column"
         justifyContent="center"
         height="100%"
         width="100%"
-        p="3"
+        boxSizing="border-box"
+        p={3}
       >
-        <Flex
+        <Box
           sx={{ flexGrow: 2 }}
-          justifyContent="center"
+          display="flex"
           flexDirection="column"
+          justifyContent="center"
         >
-          <Heading
+          <Typography
             textAlign="left"
             color="#D6D6D6"
             fontWeight={900}
@@ -69,8 +73,8 @@ const Home = ({ user, onLogOut }: HomeProps) => {
           >
             TIP FOR <br />
             SCIENCE
-          </Heading>
-        </Flex>
+          </Typography>
+        </Box>
         <Stack flexDirection="column" flexGrow={1} flexShrink={0} spacing={1}>
           <Stack direction="row" spacing={1}>
             <MenuButton sx={buttonStyles} onClick={handleClickAbout}>
@@ -129,23 +133,7 @@ const Home = ({ user, onLogOut }: HomeProps) => {
             </MenuButton>
           )}
         </Stack>
-      </Flex>
-      <Text
-        mt="auto"
-        mb={4}
-        color="neutralFade"
-        textAlign="center"
-        fontSize={1}
-      >
-        <FormattedMessage
-          id="app.home.footer.beta"
-          defaultMessage="This is just a beta version. If you encounter any bug,{lineBreak} contact us at tipforscience@protonmail.com"
-          description="Beta warning"
-          values={{
-            lineBreak: <br />,
-          }}
-        />
-      </Text>
+      </Box>
     </Container>
   );
 };

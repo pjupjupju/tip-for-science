@@ -56,10 +56,11 @@ export async function createServer(): Promise<express.Application> {
   const supabaseUrl = 'https://lajqpghdvxavpiygpekv.supabase.co';
   const supabase = createClient(supabaseUrl, supabaseKey);
   const sql = postgres(
-    `postgresql://postgres.lajqpghdvxavpiygpekv:${dbPassword}@aws-0-eu-central-1.pooler.supabase.com:6543/postgres`
+    `postgresql://postgres.lajqpghdvxavpiygpekv:${dbPassword}@aws-0-eu-central-1.pooler.supabase.com:6543/postgres`,
+    { transform: postgres.toCamel, prepare: false }
   );
 
-  const runCache = new RunCache(15, 5, { dynamo });
+  const runCache = new RunCache(15, 5, { dynamo, sql, supabase });
   const runLock = new RunLock();
 
   const staticDir =
@@ -116,7 +117,7 @@ export async function createServer(): Promise<express.Application> {
         etag: false,
         immutable: true,
         maxAge: '30days',
-      })
+      }) as any
     );
 
   Sentry.init({
@@ -159,7 +160,7 @@ export async function createServer(): Promise<express.Application> {
         runCache,
         runLock,
       });
-      const context = await createApolloContext({ req, res });
+      const context = await createApolloContext({ req, res: res as any });
       const client = new ApolloClient({
         cache: new InMemoryCache(),
         ssrMode: true,

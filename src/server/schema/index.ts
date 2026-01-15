@@ -4,11 +4,14 @@ import {
   exportData,
   importQuestions,
   importTranslations,
+  saveQuestionnaireAnswer,
+  saveQuestionnaireBatch,
   saveTip,
   signIn,
   signOut,
   signUp,
   updateUser,
+  wipeBatches,
 } from './mutation';
 import {
   getHighScore,
@@ -17,6 +20,7 @@ import {
   getNextQuestion,
   getUserStats,
   viewer,
+  getQuestionnaire,
 } from './query';
 import * as types from './types';
 
@@ -36,6 +40,17 @@ export const typeDefs = /* GraphQL */ gql`
     correctAnswer: Float!
     timeLimit: Int
     unit: String!
+  }
+
+  type QuestionnaireItem {
+    id: Int!
+    item: String!
+    value: Int
+  }
+
+  input QuestionnaireItemInput {
+    questionId: Int!
+    value: Int!
   }
 
   type Tip {
@@ -70,6 +85,7 @@ export const typeDefs = /* GraphQL */ gql`
     getMyScore: Float!
     getNextQuestion: Question
     getOnlineStats: OnlineStats!
+    getQuestionnaire: [QuestionnaireItem!]!
     getUserStats: Stats!
     viewer: Viewer!
   }
@@ -79,6 +95,13 @@ export const typeDefs = /* GraphQL */ gql`
     exportData: String
     importQuestions: Boolean
     importTranslations: Boolean
+    saveQuestionnaireAnswer(
+      questionId: Int!
+      value: Int!
+    ): String
+    saveQuestionnaireBatch(
+      items: [QuestionnaireItemInput!]!
+    ): String
     saveTip(
       id: String!
       tip: Float!
@@ -99,6 +122,7 @@ export const typeDefs = /* GraphQL */ gql`
       age: Int
       gender: String
     ): Boolean!
+    wipeBatches: Boolean
   }
 
   union SignUpResult = SignInSuccess | ValidationError
@@ -123,6 +147,9 @@ export const typeDefs = /* GraphQL */ gql`
     createdAt: DateTime!
     updatedAt: DateTime!
     language: String
+    nextQuestionnaireAfterQuestion: String
+    ipipBundle: [Int!]!
+    isQuestionnaireActive: Boolean!
   }
 
   enum UserRole {
@@ -151,17 +178,21 @@ export const resolvers = {
     exportData,
     importQuestions,
     importTranslations,
+    saveQuestionnaireAnswer,
+    saveQuestionnaireBatch,
     saveTip,
     signIn,
     signOut,
     signUp,
     updateUser,
+    wipeBatches,
   },
   Query: {
     getHighScore,
     getNextQuestion,
     getMyScore,
     getOnlineStats,
+    getQuestionnaire,
     getUserStats,
     viewer,
   },

@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
-import { Box, Flex } from 'rebass';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 
 export interface CommonTutorialProps {
   step: number;
@@ -19,13 +20,13 @@ export const TutorialSlide = ({
   ...contentProps
 }: TutorialSlideProps) => {
   return (
-    <Flex flexDirection="column" alignItems="center" width="100%" height="100%">
+    <Stack direction="column" alignItems="center" width="100%" height="100%">
       <Content {...contentProps} />
       {StepperComponent && (
-        <Box p={2}>
+        <Box p={1}>
           <StepperComponent {...contentProps} />
         </Box>
       )}
-    </Flex>
+    </Stack>
   );
 };

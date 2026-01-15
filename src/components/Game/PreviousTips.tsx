@@ -1,7 +1,8 @@
 import React from 'react';
-import { Text, Flex } from 'rebass';
 import NumberFormat from 'react-number-format';
 import { FormattedMessage } from 'react-intl';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 interface PreviousTipsProps {
   previousTips?: number[];
@@ -10,35 +11,35 @@ interface PreviousTipsProps {
 
 const previousTipStyle = {
   background: '#e91e63',
-  mr: 1,
-  px: 2,
-  py: 1,
+  px: 1,
+  py: 0.5,
 };
 
 const PreviousTips = ({ previousTips, unit }: PreviousTipsProps) =>
   previousTips != null && previousTips.length !== 0 ? (
     <>
-      <Text textAlign="center" color="#FF0070" my={1}>
+      <Typography align="center" color="primary" my= "0.5">
         <FormattedMessage
           id="app.previoustis"
           defaultMessage="Previous tips: "
           description="Previous tips"
         />
-      </Text>
-      <Flex justifyContent="center">
+      </Typography>
+      <Box display="flex" justifyContent="center">
         {previousTips.map((previousTip, index) => (
-          <Text
-            sx={previousTipStyle}
+          <Typography
             key={`previous-tip-${index}-${previousTip}`}
+            sx={previousTipStyle}
+            mr={index + 1 !== previousTips.length ? 0.5 : 0}
           >
             <NumberFormat
               value={previousTip}
               displayType={'text'}
               thousandSeparator={' '}
             />
-          </Text>
+          </Typography>
         ))}
-      </Flex>
+      </Box>
     </>
   ) : null;
 

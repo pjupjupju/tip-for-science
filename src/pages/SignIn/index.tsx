@@ -1,27 +1,24 @@
 import React, { useState } from 'react';
-import { Flex, Box, Text, Heading } from 'rebass';
-import { Label, Input } from '@rebass/forms';
+import Helmet from 'react-helmet';
+import InputLabel from '@mui/material/InputLabel';
+import HrefLink from '@mui/material/Link';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { FormattedMessage, useIntl } from 'react-intl';
+
 import { MenuButton, Container } from '../../components';
 import { useMutation } from '@apollo/client';
 import { AuthQueryName, SIGN_IN_MUTATION } from '../../gql';
-import Helmet from 'react-helmet';
+import {
+  labelStyles,
+  settingInputStyles,
+} from '../../components/commonStyleSheets';
 
 const buttonStyles = {
   my: 3,
-};
-const inputStyles = {
-  '::placeholder': {
-    color: 'white',
-  },
-  color: 'white',
-};
-
-const labelStyles = {
-  color: 'white',
-  fontWeight: 600,
 };
 
 const SignIn = () => {
@@ -60,21 +57,19 @@ const SignIn = () => {
   };
 
   return (
-    <Container>
+    <Container noPadding>
       <Helmet title={helmet}></Helmet>
-      <Flex
-        flexDirection="column"
+      <Stack
+        direction="column"
         justifyContent="center"
         height="100%"
         width="100%"
-        p="3"
+        boxSizing="border-box"
+        p={3}
       >
-        <Flex
-          sx={{ flexGrow: 2 }}
-          justifyContent="center"
-          flexDirection="column"
-        >
-          <Heading
+        <Stack flexGrow={2} justifyContent="center" flexDirection="column">
+          <Typography
+            variant="h1"
             textAlign="left"
             color="#D6D6D6"
             fontWeight={900}
@@ -84,59 +79,57 @@ const SignIn = () => {
           >
             TIP FOR <br />
             SCIENCE
-          </Heading>
-        </Flex>
-        <Flex justifyContent="center">
-          <Text color="white" fontSize="1">
+          </Typography>
+        </Stack>
+        <Stack direction="row" justifyContent="center">
+          <Typography color="white" fontSize={14}>
             <FormattedMessage
               id="app.signin.menu.noacc"
               defaultMessage="No account yet?"
               description="SignIn NoAcc text"
             />{' '}
-            <Link to="/signup" style={{ color: '#FF0070' }}>
+            <HrefLink component={Link} to="/signup" color="primary">
               <FormattedMessage
                 id="app.signin.menu.create"
                 defaultMessage="Create an account"
                 description="SignIn CreateAcc link"
               />
-            </Link>
-          </Text>
-        </Flex>
-        <Flex
-          as="form"
+            </HrefLink>
+          </Typography>
+        </Stack>
+        <Stack
+          component="form"
           onSubmit={handleSubmit(onSubmit)}
-          flexDirection="column"
+          direction="column"
           justifyContent="center"
           width="100%"
-          p="1"
+          boxSizing="border-box"
         >
-          <Label htmlFor="email" sx={labelStyles}>
+          <InputLabel htmlFor="email" sx={labelStyles}>
             <FormattedMessage
               id="app.signin.menu.email"
               defaultMessage="E-mail"
               description="SignIn E-mail label"
             />
-          </Label>
-          <Input
+          </InputLabel>
+          <OutlinedInput
             id="email"
             type="text"
             placeholder="e-mail"
-            mb={2}
-            sx={inputStyles}
+            sx={settingInputStyles}
             {...register('email')}
           />
-          <Label htmlFor="password" sx={labelStyles}>
+          <InputLabel htmlFor="password" sx={labelStyles}>
             <FormattedMessage
               id="app.signin.menu.password"
               defaultMessage="Password"
               description="SignIn Password label"
             />
-          </Label>
-          <Input
+          </InputLabel>
+          <OutlinedInput
             id="password"
             type="password"
-            mb={2}
-            sx={inputStyles}
+            sx={settingInputStyles}
             {...register('password')}
           />
           <MenuButton type="submit" sx={buttonStyles} primary>
@@ -147,26 +140,28 @@ const SignIn = () => {
             />
           </MenuButton>
           {errors.length > 0 && (
-            <Box>
-              {errors.map((item: { error: string }) => (
-                <Text color="red">{item.error}</Text>
+            <Stack my={1} direction="column">
+              {errors.map((item: { error: string }, index) => (
+                <Typography color="red" key={`error-${index}`}>
+                  {item.error}
+                </Typography>
               ))}
-            </Box>
+            </Stack>
           )}
 
-          <Flex justifyContent="center" my="2">
-            <Text color="white" fontSize="1">
-              <Link to="/" style={{ color: '#D76B90' }}>
+          <Stack direction="row" justifyContent="center" my={1}>
+            <Typography color="white" fontSize={14}>
+              <HrefLink component={Link} color="text.secondary" to="/">
                 <FormattedMessage
                   id="app.signin.menu.home"
                   defaultMessage="Home"
                   description="SignIn Home link"
                 />
-              </Link>
-            </Text>
-          </Flex>
-        </Flex>
-      </Flex>
+              </HrefLink>
+            </Typography>
+          </Stack>
+        </Stack>
+      </Stack>
     </Container>
   );
 };

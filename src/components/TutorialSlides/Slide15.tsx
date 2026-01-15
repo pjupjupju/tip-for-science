@@ -1,21 +1,24 @@
 import { useQuery } from '@apollo/client';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Flex, Image, Text } from 'rebass';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { HomeButton, Spinner } from '..';
 import { AUTH_QUERY } from '../../gql';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
-import logo from './../../assets/logoskoly.png';
 import { FormattedMessage } from 'react-intl';
+import { tutorialText } from './styles';
+import logo from './../../assets/logoskoly.png';
 
-const imageStyle = {
-  minHeight: '210px',
-  maxHeight: '350px',
-  width: 'auto',
-  alignSelf: 'center',
-  px: [4, 4, 6],
-  py: 3,
+const headerTextStyles = { ...tutorialText, p: 1 };
+const mainTextStyles = {
+  ...tutorialText,
+  px: 3,
+  py: 2,
+  fontSize: { xs: 12, sm: 16, md: 20 },
 };
 
 const Slide15 = () => {
@@ -37,35 +40,57 @@ const Slide15 = () => {
   return (
     <Container>
       <TutorialHeader>
-        <Text fontSize={[4, 4, 5]} color="secondary" textAlign="center" p={4}>
+        <Typography sx={headerTextStyles}>
           <FormattedMessage
             id="app.tutorial.slide.ready"
             defaultMessage="That's it! You're now ready to play for real!"
             description="Tut15 ready"
           />
-        </Text>
+        </Typography>
       </TutorialHeader>
-      <Image src={logo} sx={imageStyle} />
-      <Text fontSize={[2, 3, 4]} color="secondary" textAlign="center" p={3}>
+
+      <Box
+        component="img"
+        src={logo}
+        alt="logo"
+        sx={{
+          minHeight: '210px',
+          maxHeight: '350px',
+          width: 'auto',
+          alignSelf: 'center',
+          px: { xs: 4, md: 6 },
+          py: 3,
+        }}
+      />
+
+      <Typography sx={mainTextStyles}>
         <FormattedMessage
           id="app.tutorial.slide.byeb"
           defaultMessage="Tip for Science was created by evolutionary biologists {lineBreak}
             from Charles University."
           description="Tut15 by EB"
-          values={{
-            lineBreak: <br />,
-          }}
+          values={{ lineBreak: <br /> }}
         />
-      </Text>
-      <Flex marginTop={'auto'}>
+      </Typography>
+
+      <Stack
+        direction="row"
+        spacing={2}
+        width="100%"
+        mt="auto"
+        justifyContent="center"
+        alignItems="center"
+      >
         <HomeButton />
-        {loading && (
-          <Flex justifyContent="center">
-            <Spinner />
-          </Flex>
-        )}
+
+        {loading && <Spinner />}
+
         {!loading && isLoggedIn && !isAdmin && (
-          <Button onClick={handleClickPlay} sx={{ flex: 3 }}>
+          <Button
+            onClick={handleClickPlay}
+            variant="contained"
+            sx={{ flex: 3 }}
+          >
             <FormattedMessage
               id="app.tutorial.slide.play"
               defaultMessage="Play"
@@ -73,8 +98,13 @@ const Slide15 = () => {
             />
           </Button>
         )}
+
         {!loading && !isLoggedIn && (
-          <Button onClick={handleClickSignUp} sx={{ flex: 3 }}>
+          <Button
+            onClick={handleClickSignUp}
+            variant="contained"
+            sx={{ flex: 3 }}
+          >
             <FormattedMessage
               id="app.tutorial.slide.signin"
               defaultMessage="Sign in"
@@ -82,7 +112,7 @@ const Slide15 = () => {
             />
           </Button>
         )}
-      </Flex>
+      </Stack>
     </Container>
   );
 };
