@@ -47,6 +47,7 @@ const radioStyles = {
   },
 };
 const alertStyles = { backgroundColor: '#15de46' };
+const submitButtonStyles = { flex: 1, color: 'white' };
 
 const Settings = ({ user }: { user: User | null }) => {
   const intl = useIntl();
@@ -311,6 +312,15 @@ const Settings = ({ user }: { user: User | null }) => {
         sx={settingInputStyles}
         {...register('age')}
       />
+      <Stack direction="row" justifyContent="center">
+        <Button type="submit" variant="contained" sx={submitButtonStyles}>
+          <FormattedMessage
+            id="app.settings.menu.save"
+            defaultMessage="Save"
+            description="Save label"
+          />
+        </Button>
+      </Stack>
       <Typography
         color="text.secondary"
         fontSize={18}
@@ -408,11 +418,7 @@ const Settings = ({ user }: { user: User | null }) => {
             </Typography>
           </Stack>
         )}
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{ flex: 1, color: 'white' }}
-        >
+        <Button type="submit" variant="contained" sx={submitButtonStyles}>
           <FormattedMessage
             id="app.settings.menu.save"
             defaultMessage="Save"

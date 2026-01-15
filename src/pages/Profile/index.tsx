@@ -1,10 +1,9 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Link as RouterLink, Route, Routes } from 'react-router-dom';
+import { NavLink, Route, Routes, NavLinkProps } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
+import Link, { LinkProps } from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 
 import { Stats } from './Stats';
 import { Settings } from './Settings';
@@ -14,10 +13,6 @@ import Helmet from 'react-helmet';
 
 const topBarStyles = { backgroundColor: 'dimmed.main' };
 const linkStyles = {
-  color: '#fff',
-  fontWeight: 700,
-  fontSize: 14,
-  padding: '8px',
   textDecoration: 'none',
 
   '&:hover': {
@@ -32,16 +27,22 @@ const linkStyles = {
   '&:visited': {
     textDecoration: 'none',
   },
+
+  '&.active': {
+    color: 'grey.900',
+  },
 };
 
-const NavbarLink = ({
-  children,
-  ...rest
-}: {
-  children: ReactNode;
-  to: string;
-}) => (
-  <Link sx={linkStyles} component={RouterLink} {...rest}>
+const NavbarLink = ({ children, ...rest }: LinkProps & NavLinkProps) => (
+  <Link
+    sx={linkStyles}
+    component={NavLink}
+    fontSize={14}
+    fontWeight={700}
+    color="#fff"
+    p="8px"
+    {...rest}
+  >
     {children}
   </Link>
 );
@@ -57,13 +58,14 @@ const Profile = ({ user }: { user: User | null }) => (
         sx={topBarStyles}
         alignItems="center"
       >
-        <Typography p={1} fontWeight="bold">
+        <NavbarLink fontSize={18} to="/">
+          {'← '}
           <FormattedMessage
-            id="app.stats.menu.profile"
-            defaultMessage="Profile"
-            description="Profile text"
+            id="app.stats.menu.home"
+            defaultMessage="Home"
+            description="Home link"
           />
-        </Typography>
+        </NavbarLink>
         <Box mx="auto" />
         <NavbarLink to="/profile/stats">
           <FormattedMessage
@@ -77,13 +79,6 @@ const Profile = ({ user }: { user: User | null }) => (
             id="app.stats.menu.settings"
             defaultMessage="Settings"
             description="Settings link"
-          />
-        </NavbarLink>
-        <NavbarLink to="/">
-          <FormattedMessage
-            id="app.stats.menu.home"
-            defaultMessage="Home"
-            description="Home link"
           />
         </NavbarLink>
       </Stack>
