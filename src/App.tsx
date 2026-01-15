@@ -3,7 +3,6 @@ import { Route, Routes } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import { useMutation, useQuery } from '@apollo/client';
 import Helmet from 'react-helmet';
-import { ThemeProvider } from 'emotion-theming';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import './index.css';
@@ -19,7 +18,7 @@ import { Spinner } from './components';
 import { SignUp } from './pages/SignUp';
 import { Dashboard } from './pages/Dashboard';
 import { Page404 } from './pages/Page404';
-import { muiTheme, resetStyles, tipForScienceTheme } from './theme';
+import { muiTheme, resetStyles } from './theme';
 
 const AppLayout = () => {
   const { loading, data } = useQuery(AUTH_QUERY);
@@ -76,10 +75,8 @@ const AppLayout = () => {
 const globalStyles = <GlobalStyles styles={resetStyles} />;
 
 export const App = () => (
-  <ThemeProvider theme={tipForScienceTheme}>
-    <MuiThemeProvider theme={muiTheme}>
-      {globalStyles}
-      <AppLayout />
-    </MuiThemeProvider>
-  </ThemeProvider>
+  <MuiThemeProvider theme={muiTheme}>
+    {globalStyles}
+    <AppLayout />
+  </MuiThemeProvider>
 );

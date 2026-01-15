@@ -1,15 +1,24 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
-import { UserScoreCurve } from '../../../components/UserScoreCurve';
-import { Heading, Flex, Text, Box } from 'rebass';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import { FormattedMessage } from 'react-intl';
 import {
   HIGH_SCORE_QUERY,
   MY_SCORE_QUERY,
   MY_USER_STATS_QUERY,
 } from '../../../gql';
+import { UserScoreCurve } from '../../../components/UserScoreCurve';
 import { Spinner } from '../../../components';
 import { User } from '../../../types';
+
+const headingFontSizes = {
+  xs: 16,
+  sm: 20,
+  md: 24,
+};
+const chartWrapperStyles = { flexGrow: 1, maxHeight: 400, minHeight: 400 };
 
 const Stats = ({ user }: { user: User | null }) => {
   const { loading, data } = useQuery(MY_USER_STATS_QUERY, {
@@ -28,15 +37,15 @@ const Stats = ({ user }: { user: User | null }) => {
 
   if (loading || scoreLoading || highScoreLoading) {
     return (
-      <Flex
+      <Stack
         justifyContent="center"
         alignItems="center"
         height="100%"
         width="100%"
-        p="3"
+        p={4}
       >
         <Spinner />
-      </Flex>
+      </Stack>
     );
   }
 
@@ -52,114 +61,149 @@ const Stats = ({ user }: { user: User | null }) => {
 
   /// TODO (Your score)
   return (
-    <>
-      <Heading color="secondary" fontSize={[2, 3, 4]} my="4" mx="3">
+    <Stack direction="column" gap={2} pt={2}>
+      <Typography
+        color="text.secondary"
+        variant="h3"
+        fontSize={headingFontSizes}
+        mx={2}
+      >
         <FormattedMessage
           id="app.stats.menu.score"
           defaultMessage="Your score:"
           description="Score text"
         />{' '}
-        <Text as="span" color="accent">
+        <Typography
+          fontSize="inherit"
+          fontWeight="inherit"
+          fontFamily="inherit"
+          component="span"
+          color="accent"
+        >
           {getMyScore}
-        </Text>
-      </Heading>
-      <Heading color="secondary" fontSize={[2, 3, 4]} mb="2" mx="3">
+        </Typography>
+      </Typography>
+      <Typography
+        color="text.secondary"
+        variant="h3"
+        fontSize={headingFontSizes}
+        mx={2}
+      >
         <FormattedMessage
           id="app.stats.menu.progress"
           defaultMessage="Your progress:"
           description="Progress text"
         />
-      </Heading>
-      <Box sx={{ flexGrow: 1, maxHeight: 400 }}>
+      </Typography>
+      <Box sx={chartWrapperStyles}>
         {stats.length > 0 ? (
           <UserScoreCurve stats={stats} />
         ) : (
-          <Flex
+          <Stack
             width="100%"
             height="100%"
             justifyContent="center"
             alignItems="center"
           >
-            <Text color="white" textAlign="center">
+            <Typography color="white" textAlign="center">
               <FormattedMessage
                 id="app.stats.menu.zero"
                 defaultMessage="Nothing to see here (yet). Soon, there will be a chart of your progress!"
                 description="Zero score text"
               />
-            </Text>
-          </Flex>
+            </Typography>
+          </Stack>
         )}
       </Box>
-      <Heading color="secondary" fontSize={[2, 3, 4]} mb="2" mx="3">
+      <Typography
+        color="text.secondary"
+        variant="h3"
+        fontSize={headingFontSizes}
+        mx={2}
+      >
         <FormattedMessage
           id="app.stats.menu.top"
           defaultMessage="Top scores:"
           description="Top score text"
         />
-      </Heading>
-      {highScore &&
-        highScore
-          .slice(0, 5)
-          .map((player: { score: number; slug: string }, index: number) => (
-            <Text key={`player-${player.slug}`} color="secondary">
-              <Text fontWeight="bold" as="span" color="accent" ml="5">
-                {/* eslint-disable jsx-a11y/accessible-emoji */}
-                {index === 0 && (
-                  <Text
-                    as="span"
-                    ml="-24px"
-                    aria-label="champion"
-                    role="img"
-                    sx={{ position: 'absolute' }}
-                  >
-                    🏆
-                  </Text>
-                )}{' '}
-                {index + 1}.
-              </Text>{' '}
-              <Text
-                as="span"
-                color={player.slug === user.slug ? 'primary' : 'secondary'}
-                fontWeight={player.slug === user.slug ? 'bold' : 'normal'}
-              >
-                {player.slug}
-              </Text>
-              :{' '}
-              <Text
-                as="span"
+      </Typography>
+      <Stack>
+        {highScore &&
+          highScore
+            .slice(0, 5)
+            .map((player: { score: number; slug: string }, index: number) => (
+              <Typography key={`player-${player.slug}`} color="text.secondary">
+                <Typography
+                  fontWeight="bold"
+                  component="span"
+                  color="accent"
+                  ml={5}
+                >
+                  {/* eslint-disable jsx-a11y/accessible-emoji */}
+                  {index === 0 && (
+                    <Typography
+                      component="span"
+                      ml="-24px"
+                      aria-label="champion"
+                      role="img"
+                      position="absolute"
+                    >
+                      🏆
+                    </Typography>
+                  )}{' '}
+                  {index + 1}.
+                </Typography>{' '}
+                <Typography
+                  component="span"
+                  color={
+                    player.slug === user.slug ? 'primary' : 'text.secondary'
+                  }
+                  fontWeight={player.slug === user.slug ? 'bold' : 'normal'}
+                >
+                  {player.slug}
+                </Typography>
+                :{' '}
+                <Typography
+                  component="span"
+                  color="accent"
+                  fontWeight={player.slug === user.slug ? 'bold' : 'normal'}
+                >
+                  {player.score.toFixed(2)}
+                </Typography>
+              </Typography>
+            ))}
+        {highScore &&
+          highScore.slice(0, 5).filter((player) => player.slug === user.slug)
+            .length === 0 && (
+            <Typography color="text.secondary">
+              <Typography
+                fontWeight="bold"
+                component="span"
                 color="accent"
-                fontWeight={player.slug === user.slug ? 'bold' : 'normal'}
+                ml={5}
               >
-                {player.score.toFixed(2)}
-              </Text>
-            </Text>
-          ))}
-      {highScore &&
-        highScore.slice(0, 5).filter((player) => player.slug === user.slug)
-          .length === 0 && (
-          <Text color="secondary">
-            <Text fontWeight="bold" as="span" color="accent" ml="5">
-              {/* eslint-disable jsx-a11y/accessible-emoji */}
-              <Text
-                as="span"
-                ml="-24px"
-                aria-label="champion"
-                role="img"
-                sx={{ position: 'absolute' }}
-              >
-                🎮
-              </Text>
-            </Text>{' '}
-            <Text as="span" color="primary" fontWeight="bold">
-              {user.slug}
-            </Text>
-            :{' '}
-            <Text as="span" color="accent" fontWeight="bold">
-              {getMyScore.toFixed(2)}
-            </Text>
-          </Text>
-        )}
-    </>
+                {/* eslint-disable jsx-a11y/accessible-emoji */}
+                <Typography
+                  component="span"
+                  ml="-24px"
+                  aria-label="champion"
+                  role="img"
+                  position="absolute"
+                >
+                  🎮
+                </Typography>
+              </Typography>{' '}
+              <Typography component="span" color="primary" fontWeight="bold">
+                {user.slug}
+              </Typography>
+              :{' '}
+              <Typography component="span" color="accent" fontWeight="bold">
+                {getMyScore.toFixed(2)}
+              </Typography>
+            </Typography>
+          )}
+      </Stack>
+    </Stack>
   );
 };
 
