@@ -69,7 +69,7 @@ const QuestionnaireDone = ({ onFinish, pageNum, pages }) => {
           </Typography>
           <Typography variant="body2" color="#FFFFFF" mb={1}>
             Všechny otázky dotazníku jsi vyplnil*a a teď můžeš dále pokračovat
-            ve hře nebo na hlavní obrazovku.
+            ve hře, nebo na hlavní obrazovku.
           </Typography>
           <Stack
             width="100%"
