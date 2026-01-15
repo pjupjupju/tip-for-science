@@ -9,6 +9,26 @@ interface ScoreChartProps {
   previousTips?: number[];
 }
 
+const chartMargin = {
+  top: 50,
+  right: 50,
+  bottom: 50,
+  left: 50,
+};
+
+function uniqMarkers(markers: CartesianMarkerProps[]) {
+  const seen = new Set<string>();
+  const out: CartesianMarkerProps[] = [];
+
+  for (const m of markers) {
+    const key = `${m.axis}:${String(m.value)}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(m);
+  }
+  return out;
+}
+
 const ScoreChart = ({
   currentTip,
   correctAnswer,
@@ -74,7 +94,7 @@ const ScoreChart = ({
       })
     );
 
-    return [...baseMarkers, ...previousTipsMarkers];
+    return uniqMarkers([...baseMarkers, ...previousTipsMarkers]);
   }, [currentTip, correctAnswer, previousTips, score]);
 
   const data = [
@@ -134,7 +154,7 @@ const ScoreChart = ({
         max: correctAnswer * 2.5,
       }}
       axisBottom={{
-        tickValues: [currentTip, correctAnswer],
+        tickValues: Array.from(new Set([currentTip, correctAnswer])),
       }}
       axisLeft={{
         tickValues: [0, 100],
@@ -143,12 +163,7 @@ const ScoreChart = ({
         legendOffset: -15,
       }}
       data={data}
-      margin={{
-        top: 50,
-        right: 50,
-        bottom: 50,
-        left: 50,
-      }}
+      margin={chartMargin}
       enableGridX={false}
       enableGridY={false}
       enablePoints={false}
