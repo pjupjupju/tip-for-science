@@ -55,8 +55,9 @@ const SignUp = () => {
 
   const navigate = useNavigate();
 
-  const [signUp] = useMutation(SIGN_UP_MUTATION, {
+  const [signUp, { loading }] = useMutation(SIGN_UP_MUTATION, {
     refetchQueries: [AuthQueryName],
+    awaitRefetchQueries: true,
     onCompleted: ({ signUp: { __typename, ...data } }) => {
       // console.log(data);
     },
@@ -72,7 +73,7 @@ const SignUp = () => {
     });
 
     if (data && !data.signUp.errors) {
-      navigate('/');
+      navigate('/profile/settings');
     } else {
       setErrors(data!.signUp!.errors);
     }
@@ -185,7 +186,7 @@ const SignUp = () => {
               .
             </Typography>
           </Stack>
-          <MenuButton type="submit" primary>
+          <MenuButton loading={loading} type="submit" primary>
             <FormattedMessage
               id="app.signup.menu.create"
               defaultMessage="Create"

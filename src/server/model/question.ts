@@ -957,6 +957,7 @@ export async function createQuestionTipV2(
   const currentTipsWithAnswer = currentTips.filter(
     (t: PostgresTip) =>
       !['undefined', 'null'].includes(typeof t.tip) &&
+      t.tip !== 0 &&
       t.answered !== false &&
       t.knewAnswer !== true
   );

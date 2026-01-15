@@ -42,7 +42,7 @@ const QuestionnaireDone = ({ onFinish, pageNum, pages }) => {
 
         <Stack direction="row" justifyContent="space-between" alignItems="top">
           <Typography variant="body2" color="#FFFFFF" mb={1}>
-            Hotovo, skvělá práce 🎉! 
+            Hotovo, skvělá práce! 🎉 
           </Typography>
           <Typography variant="body2" color="#FFFFFF" mb={1} minWidth="90px">
             Strana <b>{pageNum}</b> / <b>{pages}</b>
@@ -68,7 +68,7 @@ const QuestionnaireDone = ({ onFinish, pageNum, pages }) => {
             Děkujeme!
           </Typography>
           <Typography variant="body2" color="#FFFFFF" mb={1}>
-            Všechny otázky dotazníku jsi vyplnil/a a teď můžeš dále pokračovat
+            Všechny otázky dotazníku jsi vyplnil*a a teď můžeš dále pokračovat
             ve hře nebo na hlavní obrazovku.
           </Typography>
           <Stack
