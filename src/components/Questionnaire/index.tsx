@@ -146,15 +146,20 @@ const Questionnaire = ({
           <Typography variant="body2" color="#FFFFFF" mb={1}>
             {pageNum === 1 ? (
               <>
-                Níže jsou uvedena tvrzení, která popisují různé způsoby
-                myšlení, prožívání a chování. U každého tvrzení označte, do jaké
-                míry pro vás obecně platí. Nejde o to, jak se cítíte právě teď,
-                ale jaký/á obvykle jste.
+                <p>
+                  Nyní přichází krátká pauza. Ale neboj, po vyplnění tohoto
+                  krátkého osobnostního dotazníku na Tebe čeká ještě několik
+                  otázek k tipování.
+                </p>
+                <p>
+                  Níže jsou uvedena tvrzení, která popisují různé způsoby
+                  myšlení, prožívání a chování. U každého tvrzení označ, do jaké
+                  míry pro Tebe obecně platí. Nejde o to, jak se cítíš právě
+                  teď, ale jaký*á obvykle jsi.
+                </p>
               </>
             ) : (
-              <>
-                Označte, do jaké míry pro vás jednotlivá tvrzení obecně platí.
-              </>
+              <>Označ, do jaké míry pro vás jednotlivá tvrzení obecně platí.</>
             )}
           </Typography>
           <Typography variant="body2" color="#FFFFFF" mb={1} flexShrink={0}>
@@ -164,7 +169,7 @@ const Questionnaire = ({
 
         {showValidation && (
           <Alert severity="warning" sx={mediumBMargin}>
-            Vyplň prosím všechny otázky, než budeš pokračovat.
+            Vyplň prosím všechny odpovědi, než budeš pokračovat.
           </Alert>
         )}
 
