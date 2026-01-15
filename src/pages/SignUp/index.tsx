@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import { Flex, Link as HrefLink, Box, Text, Heading } from 'rebass';
-import { Label, Input } from '@rebass/forms';
+import Helmet from 'react-helmet';
+import InputLabel from '@mui/material/InputLabel';
+import HrefLink from '@mui/material/Link';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { FormattedMessage, useIntl } from 'react-intl';
+
 import { Container, MenuButton } from '../../components';
 import { AuthQueryName, SIGN_UP_MUTATION } from '../../gql';
 import {
@@ -13,8 +18,7 @@ import {
   emailRegex,
   useYupValidationResolver,
 } from '../../helpers';
-import { inputStyles, labelStyles } from '../../components/commonStyleSheets';
-import Helmet from 'react-helmet';
+import { settingInputStyles, labelStyles } from '../../components/commonStyleSheets';
 import { validationMessages } from './messages';
 
 const SignUp = () => {
@@ -33,7 +37,9 @@ const SignUp = () => {
       .required(intl.formatMessage(validationMessages.passwordRequired))
       .min(
         MIN_PASSWORD_LENGTH,
-        intl.formatMessage(validationMessages.passwordMin, { min: MIN_PASSWORD_LENGTH })
+        intl.formatMessage(validationMessages.passwordMin, {
+          min: MIN_PASSWORD_LENGTH,
+        })
       ),
     confirmPassword: Yup.string()
       .required(intl.formatMessage(validationMessages.passwordConfirmation))
@@ -73,21 +79,19 @@ const SignUp = () => {
   };
 
   return (
-    <Container>
+    <Container noPadding>
       <Helmet title={helmet}></Helmet>
-      <Flex
-        flexDirection="column"
+      <Stack
+        direction="column"
         justifyContent="center"
         height="100%"
         width="100%"
-        p="3"
+        boxSizing="border-box"
+        p={3}
       >
-        <Flex
-          sx={{ flexGrow: 2 }}
-          justifyContent="center"
-          flexDirection="column"
-        >
-          <Heading
+        <Stack flexGrow={2} justifyContent="center" flexDirection="column">
+          <Typography
+            variant="h1"
             textAlign="left"
             color="#D6D6D6"
             fontWeight={900}
@@ -97,88 +101,81 @@ const SignUp = () => {
           >
             TIP FOR <br />
             SCIENCE
-          </Heading>
-        </Flex>
-        <Flex justifyContent="center">
-          <Text color="white" fontSize="1">
+          </Typography>
+        </Stack>
+        <Stack direction="row" justifyContent="center">
+          <Typography color="white" fontSize={14}>
             <FormattedMessage
               id="app.signup.menu.acount"
               defaultMessage="Already have an account?"
               description="SignUp Account text"
             />{' '}
-            <Link to="/signin" style={{ color: '#FF0070' }}>
+            <HrefLink component={Link} to="/signin" color="primary">
               <FormattedMessage
                 id="app.signup.menu.login"
                 defaultMessage="Log in"
                 description="SignUp Login text"
               />
-            </Link>{' '}
-          </Text>
-        </Flex>
+            </HrefLink>{' '}
+          </Typography>
+        </Stack>
 
-        <Flex
-          as="form"
+        <Stack
+          component="form"
           onSubmit={handleSubmit(onSubmit)}
-          flexDirection="column"
+          direction="column"
           justifyContent="center"
           width="100%"
-          p="1"
+          boxSizing="border-box"
         >
-          <Label htmlFor="email" sx={labelStyles}>
+          <InputLabel htmlFor="email" sx={labelStyles}>
             <FormattedMessage
               id="app.signup.menu.email"
               defaultMessage="E-mail"
               description="SignUp Email label"
             />
-          </Label>
-          <Input
+          </InputLabel>
+          <OutlinedInput
             id="email"
             type="text"
             placeholder="e-mail"
-            mb={2}
-            sx={inputStyles}
+            sx={settingInputStyles}
             {...register('email')}
           />
-          <Label htmlFor="password" sx={labelStyles}>
+          <InputLabel htmlFor="password" sx={labelStyles}>
             <FormattedMessage
               id="app.signup.menu.password"
               defaultMessage="Password"
               description="SignUp Password label"
             />
-          </Label>
-          <Input
+          </InputLabel>
+          <OutlinedInput
             id="password"
             type="password"
-            mb={2}
-            sx={inputStyles}
+            sx={settingInputStyles}
             {...register('password')}
           />
-          <Label htmlFor="password" sx={labelStyles}>
+          <InputLabel htmlFor="password" sx={labelStyles}>
             <FormattedMessage
               id="app.signup.menu.passwordagain"
               defaultMessage="Repeat password"
               description="SignUp Repeat Password label"
             />
-          </Label>
-          <Input
+          </InputLabel>
+          <OutlinedInput
             id="confirmPassword"
             type="password"
-            mb={2}
-            sx={inputStyles}
+            sx={settingInputStyles}
             {...register('confirmPassword')}
           />
-          <Flex justifyContent="center" my={2}>
-            <Text color="white" fontSize="1">
+          <Stack direction="row" justifyContent="center" my={2}>
+            <Typography color="white" fontSize={14}>
               <FormattedMessage
                 id="app.signup.menu.agree"
                 defaultMessage="By clicking on Create you agree with"
                 description="SignUp Agree text"
               />{' '}
-              <HrefLink
-                href="/consent"
-                target="_blank"
-                style={{ color: '#D76B90' }}
-              >
+              <HrefLink href="/consent" target="_blank" color="text.secondary">
                 <FormattedMessage
                   id="app.signup.menu.processing"
                   defaultMessage="processing of personal data"
@@ -186,8 +183,8 @@ const SignUp = () => {
                 />
               </HrefLink>
               .
-            </Text>
-          </Flex>
+            </Typography>
+          </Stack>
           <MenuButton type="submit" primary>
             <FormattedMessage
               id="app.signup.menu.create"
@@ -196,28 +193,28 @@ const SignUp = () => {
             />
           </MenuButton>
           {errors.length > 0 && (
-            <Box>
+            <Stack my={1} direction="column">
               {errors.map((item: { error: string }, index) => (
-                <Text color="red" key={`error-${index}`}>
+                <Typography color="red" key={`error-${index}`}>
                   {item.error}
-                </Text>
+                </Typography>
               ))}
-            </Box>
+            </Stack>
           )}
 
-          <Flex justifyContent="center" my="2">
-            <Text color="white" fontSize="1">
-              <Link to="/" style={{ color: '#D76B90' }}>
+          <Stack direction="row" justifyContent="center" my={1}>
+            <Typography color="white" fontSize={14}>
+              <HrefLink component={Link} color="text.secondary" to="/">
                 <FormattedMessage
                   id="app.signup.menu.home"
                   defaultMessage="Home"
                   description="SignUp Home link"
                 />
-              </Link>
-            </Text>
-          </Flex>
-        </Flex>
-      </Flex>
+              </HrefLink>
+            </Typography>
+          </Stack>
+        </Stack>
+      </Stack>
     </Container>
   );
 };

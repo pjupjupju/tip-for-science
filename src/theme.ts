@@ -1,4 +1,3 @@
-import theme from '@rebass/preset';
 import { grey, pink } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
@@ -22,30 +21,17 @@ declare module '@mui/material' {
   }
 }
 
-export const tipForScienceTheme = {
-  ...theme,
-  radii: { default: 0 },
-  buttons: {
-    ...(theme as any).buttons,
-    primary: { ...(theme as any).buttons.primary, cursor: 'pointer' },
-  },
-  colors: {
-    background: 'black',
-    primary: '#FF0070',
-    secondary: '#D76B90',
-    neutralFade: '#414141',
-    accent: '#5CC9FA',
-    graphScore: '#fdf41c',
-  },
-  fonts: {
-    ...(theme as any).fonts,
-    // todo: why this doesn't work - because mismatch of emotion/rebass/react versions, outdated
-    body: 'Jost',
-    heading: 'Raleway',
-  },
+// relic of rebass theme, later we should getColor() on MUI theme
+export const tipForSciencePalette = {
+  background: 'black',
+  primary: '#FF0070',
+  secondary: '#D76B90',
+  neutralFade: '#414141',
+  accent: '#5CC9FA',
+  graphScore: '#fdf41c',
 };
 
-export const getColor = (colorId: string) => tipForScienceTheme.colors[colorId];
+export const getColor = (colorId: string) => tipForSciencePalette[colorId];
 
 export const resetStyles = `
 body,
@@ -187,5 +173,23 @@ export const muiTheme = createTheme({
   },
   typography: {
     fontFamily: "'Jost', 'Helvetica Neue', sans-serif",
+    h1: {
+      fontFamily: '"Raleway", sans-serif',
+    },
+    h2: {
+      fontFamily: '"Raleway", sans-serif',
+    },
+    h3: {
+      fontFamily: '"Raleway", sans-serif',
+    },
+    h4: {
+      fontFamily: '"Raleway", sans-serif',
+    },
+    h5: {
+      fontFamily: '"Raleway", sans-serif',
+    },
+    h6: {
+      fontFamily: '"Raleway", sans-serif',
+    },
   },
 });

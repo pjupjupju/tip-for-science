@@ -7,11 +7,37 @@ const getTutorialImageStyle = (imagePath: string) => ({
   backgroundRepeat: 'no-repeat',
 });
 
-const inputStyles = {
-  '::placeholder': {
-    color: 'white',
-  },
+const settingInputStyles = {
+  borderRadius: 0,
+  backgroundColor: 'transparent',
+  mb: 1,
   color: 'white',
+
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: '#fff',
+    borderRadius: 0,
+  },
+
+  '&:hover .MuiOutlinedInput-notchedOutline': {
+    borderColor: '#fff',
+  },
+
+  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+    borderColor: '#fff',
+  },
+
+  '&.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+    borderColor: '#fff',
+  },
+
+  '& .MuiOutlinedInput-input': {
+    padding: '8px 10px',
+    height: 'auto',
+
+    '&::placeholder': {
+      color: 'white',
+    },
+  },
 };
 
 const labelStyles = {
@@ -19,4 +45,4 @@ const labelStyles = {
   fontWeight: 600,
 };
 
-export { getTutorialImageStyle, inputStyles, labelStyles };
+export { getTutorialImageStyle, labelStyles, settingInputStyles };

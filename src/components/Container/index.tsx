@@ -15,7 +15,7 @@ const getStyles = (isRelative: boolean, noPadding: boolean) => ({
   height: '100%',
   width: '100%',
   mx: 'auto',
-  px: noPadding ? 0 : containerXpadding,
+  p: noPadding ? '0 !important' : containerXpadding,
   boxSizing: 'border-box',
   '&.MuiContainer-maxWidthMd': {
     maxWidth: '700px',
