@@ -1,17 +1,19 @@
 import React from 'react';
-import { Image } from 'rebass';
+import Box from '@mui/material/Box';
+import { keyframes } from '@emotion/react';
 import target from '../../assets/target.svg';
-import { keyframes } from 'emotion';
 
 const float = keyframes`
-  0% {transform: translate(0 ,0px); }
-  50% {transform: translate(0, 15px); }
-  100% {transform: translate(0, -0px); }
+  0% { transform: translate(0, 0px); }
+  50% { transform: translate(0, 15px); }
+  100% { transform: translate(0, 0px); }
 `;
 
 const TargetImage = () => (
-  <Image
+  <Box
+    component="img"
     src={target}
+    alt="target animation"
     sx={{
       position: 'absolute',
       opacity: 0.05,
@@ -22,7 +24,6 @@ const TargetImage = () => (
       zIndex: -1,
       animation: `${float} 10s ease-in-out infinite`,
     }}
-    alt="target animation"
   />
 );
 

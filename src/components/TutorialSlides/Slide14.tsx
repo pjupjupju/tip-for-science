@@ -1,5 +1,7 @@
 import React from 'react';
-import { Text, Box, Flex } from 'rebass';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import NumberFormat from 'react-number-format';
 import { Container } from '../Container';
 import { ScoreChart } from '../ScoreChart';
@@ -13,6 +15,7 @@ import { HomeButton } from './HomeButton';
 import { NextButton } from './NextButton';
 import { useIntl } from 'react-intl';
 import ScoreMessage from '../ScoreMessage';
+import { tutorialText } from './styles';
 
 const imageStyle = getTutorialImageStyle(jupiter);
 
@@ -38,14 +41,28 @@ const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
   return (
     <Container>
       <TutorialHeader>
-        <Text fontSize={[3, 4, 5]} color="accent" textAlign="center" p={3}>
+        <Typography
+          fontSize={{
+            xs: 20,
+            sm: 24,
+            md: 32,
+          }}
+          color="accent.main"
+          textAlign="center"
+          sx={{ px: 2, py: 3 }}
+        >
+          {' '}
           <NumberFormat
             value={currentTip}
             displayType={'text'}
             thousandSeparator={' '}
           />{' '}
           {unit}?{' '}
-          <Text color="secondary" as="span">
+          <Typography
+            component="span"
+            sx={tutorialText}
+          >
+            {' '}
             {questionScore === 0 && <ScoreMessage scoreType="score.zero" />}
             {questionScore !== null &&
               questionScore > 0 &&
@@ -56,10 +73,11 @@ const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
             {questionScore !== null &&
               questionScore >= 80 &&
               questionScore < 95 && <ScoreMessage scoreType="score.top" />}
-          </Text>
-        </Text>
+          </Typography>
+        </Typography>
       </TutorialHeader>
       <Box sx={imageStyle} />
+
       <Box width="100%" height="200px">
         {typeof currentTip !== 'undefined' && (
           <ScoreChart
@@ -69,11 +87,17 @@ const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
           />
         )}
       </Box>
+
       <FunFact correctAnswer={correctAnswer} fact={fact} />
-      <Flex mt="auto" justifyContent="space-between" width="100%">
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        width="100%"
+        mt="auto"
+      >
         <HomeButton />
         <NextButton handleNextStep={handleNextStep} />
-      </Flex>
+      </Stack>
     </Container>
   );
 };

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Text, Flex } from 'rebass';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import elephant from './../../assets/elephantTut.jpg';
@@ -27,9 +28,27 @@ const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
   return (
     <Container>
       <TutorialHeader>
-        <Text fontSize={[3, 4, 5]} color="accent" textAlign="center" p={2}>
+        <Typography
+          fontSize={{
+            xs: 24,
+            sm: 28,
+            md: 32,
+          }}
+          color="accent.main"
+          textAlign="center"
+          p={2}
+        >
+          {' '}
           {currentTip} {unit}?{' '}
-          <Text color="secondary" as="span">
+          <Typography
+            component="span"
+            color="text.secondary"
+            fontSize={{
+              xs: 24,
+              sm: 28,
+              md: 32,
+            }}
+          >
             {questionScore === 0 && <ScoreMessage scoreType="score.zero" />}
             {questionScore !== null &&
               questionScore > 0 &&
@@ -40,13 +59,17 @@ const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
             {questionScore !== null &&
               questionScore >= 80 &&
               questionScore < 95 && <ScoreMessage scoreType="score.top" />}
-          </Text>
-        </Text>
+          </Typography>
+        </Typography>
       </TutorialHeader>
       <Box sx={imageStyle} />
-      <Text
-        fontSize={[3, 4, 4]}
-        color="secondary"
+      <Typography
+        fontSize={{
+          xs: 16,
+          sm: 20,
+          md: 24,
+        }}
+        color="text.secondary"
         textAlign="center"
         py={4}
         px={3}
@@ -56,19 +79,27 @@ const Slide4 = ({ handleNextStep, currentTip }: SlideProps) => {
           defaultMessage="The largest male elephant on record weighed "
           description="Tut4 elemale"
         />{' '}
-        <Text color="white" as="span">
+        <Typography
+          component="span"
+          color="white"
+          fontSize={{
+            xs: 16,
+            sm: 20,
+            md: 24,
+          }}
+        >
           10 886
-        </Text>{' '}
+        </Typography>{' '}
         <FormattedMessage
           id="app.tutorial.slide.withers"
           defaultMessage="kg and his withers height was 3,96 meters. That made him a meter higher than an average african elephant!"
           description="Tut4 withers"
         />
-      </Text>
-      <Flex mt="auto" justifyContent="space-between" width="100%">
+      </Typography>
+      <Box mt="auto" display="flex" justifyContent="space-between" width="100%">
         <HomeButton />
         <NextButton handleNextStep={handleNextStep} />
-      </Flex>
+      </Box>
     </Container>
   );
 };

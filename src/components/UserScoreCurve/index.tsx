@@ -30,8 +30,6 @@ const UserScoreCurve = ({ stats }: UserScoreCurveProps) => {
     },
   ];
 
-  // console.log('data: ', data);
-
   return (
     <ResponsiveLine
       data={data}

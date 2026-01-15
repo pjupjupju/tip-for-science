@@ -1,5 +1,6 @@
 import React, { FC, useReducer } from 'react';
-import { Box, Flex } from 'rebass';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import {
   TutorialSlide,
   CommonTutorialProps,
@@ -69,18 +70,12 @@ const Tutorial = ({ slideList }: TutorialProps) => {
   };
 
   return (
-    <Flex
-      flexDirection="column"
+    <Stack
+      direction="column"
       justifyContent="flex-end"
-      height="100%"
-      width="100%"
+      sx={{ width: '100%', height: '100%' }}
     >
-      <Box
-        sx={{
-          flexGrow: 1,
-          flexShrink: 0,
-        }}
-      >
+      <Box sx={{ flexGrow: 1, flexShrink: 0 }}>
         <TutorialSlide
           {...slideList[step]}
           step={step}
@@ -90,7 +85,7 @@ const Tutorial = ({ slideList }: TutorialProps) => {
           currentTip={currentTip}
         />
       </Box>
-    </Flex>
+    </Stack>
   );
 };
 

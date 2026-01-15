@@ -1,6 +1,7 @@
 export * from "./BackButton";
 export * from "./Container";
 export * from "./Game";
+export * from "./LoadingContainer";
 export * from "./TutorialSlides/HomeButton";
 export * from "./MenuButton";
 export * from './NoMoreQuestions';

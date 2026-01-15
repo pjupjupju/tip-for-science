@@ -1,26 +1,24 @@
 import React from 'react';
-import { Box, Button, Text } from 'rebass';
+import Box from '@mui/material/Button';
+import Button from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { Tutorial } from './';
 import { Stepper } from '../../../components/Stepper';
 
 const StorySlide1 = ({ step, handleNextStep, length }: any) => (
   <Box>
-    <Text color="secondary">this is slide number {step + 1} of {length}</Text>
-    <Button
-      onClick={handleNextStep}
-    >
-      Next
-    </Button>
+    <Typography color="secondary">
+      this is slide number {step + 1} of {length}
+    </Typography>
+    <Button onClick={handleNextStep}>Next</Button>
   </Box>
 );
 const StorySlide2 = ({ step, handleNextStep, length }: any) => (
   <Box>
-    <Text color="secondary">this is slide number {step + 1} of {length}</Text>
-    <Button
-      onClick={handleNextStep}
-    >
-      Next
-    </Button>
+    <Typography color="secondary">
+      this is slide number {step + 1} of {length}
+    </Typography>
+    <Button onClick={handleNextStep}>Next</Button>
   </Box>
 );
 const list = [

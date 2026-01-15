@@ -1,63 +1,75 @@
 import React from 'react';
-import { Image, Text, Flex } from 'rebass';
-import washington from './../../assets/washingtonTutF.jpg';
-import elephant from './../../assets/elephantTutF.jpg';
-import jupiter from './../../assets/jupiterTutF.jpg';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { SlideProps } from './types';
 import { Container } from '../Container';
 import { TutorialHeader } from '../TutorialHeader';
 import { FormattedMessage } from 'react-intl';
 import { HomeButton } from './HomeButton';
 import { NextButton } from './NextButton';
+import washington from './../../assets/washingtonTutF.jpg';
+import elephant from './../../assets/elephantTutF.jpg';
+import jupiter from './../../assets/jupiterTutF.jpg';
+
+const imageStyles = {
+  width: ['calc(15vh)', 'calc(20vh)'],
+  height: ['calc(15vh)', 'calc(20vh)'],
+  borderRadius: '50%',
+  flexShrink: 0,
+};
 
 const Slide1 = ({ handleNextStep }: SlideProps) => {
   return (
     <Container>
       <TutorialHeader centerVertically={false}>
-        <Text
-          fontSize={[3, 4, 5]}
-          color="secondary"
+        <Typography
+          fontSize={{
+            xs: 16,
+            sm: 20,
+            md: 24,
+          }}
+          color="text.secondary"
           textAlign="center"
           fontWeight="bold"
-          mb={4}
-          p={4}
+          mb={2}
+          p={2}
         >
           <FormattedMessage
             id="app.tutorial.slide.curious"
             defaultMessage="Are you curious..."
             description="Tut1 curious"
           />
-        </Text>
+        </Typography>
       </TutorialHeader>
-      <Flex flexDirection="column" pt={3} pb={4}>
-        <Flex justifyContent="center" alignItems="center">
-          <Image
-            src={elephant}
-            sx={{
-              width: ['calc(15vh)', 'calc(20vh)'],
-              height: ['calc(15vh)', 'calc(20vh)'],
-              borderRadius: '50%',
-              flexShrink: 0,
-            }}
-          />
-          <Text
-            fontSize={[3, 4, 4]}
-            color="secondary"
+
+      <Box display="flex" flexDirection="column" pt={3} pb={4}>
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <Box component="img" src={elephant} alt="elephant" sx={imageStyles} />
+          <Typography
+fontSize={{
+  xs: 16,
+  sm: 20,
+  md: 24,
+}}            color="text.secondary"
             textAlign="center"
-            mb={4}
-            p={4}
+            mb={2}
+            p={2}
           >
             <FormattedMessage
               id="app.tutorial.slide.eleph"
               defaultMessage="...to find out the weight of the heaviest elephant ever recorded in the annals of history?"
               description="Tut1 elephant"
             />
-          </Text>
-        </Flex>
-        <Flex justifyContent="center" alignItems="center">
-          <Text
-            fontSize={[3, 4, 4]}
-            color="secondary"
+          </Typography>
+        </Box>
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <Typography
+            fontSize={{
+              xs: 16,
+              sm: 20,
+              md: 24,
+            }}
+            color="text.secondary"
             textAlign="center"
             mb={4}
             p={4}
@@ -67,46 +79,40 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
               defaultMessage="...about the monumental size of George Washington's head at Mount Rushmore?"
               description="Tut1 washington"
             />
-          </Text>
-          <Image
+          </Typography>
+          <Box
+            component="img"
             src={washington}
-            sx={{
-              width: ['calc(15vh)', 'calc(20vh)'],
-              height: ['calc(15vh)', 'calc(20vh)'],
-              borderRadius: '50%',
-              flexShrink: 0,
-            }}
+            alt="washington"
+            sx={imageStyles}
           />
-        </Flex>
-        <Flex justifyContent="center" alignItems="center">
-          <Image
-            src={jupiter}
-            sx={{
-              width: ['calc(15vh)', 'calc(20vh)'],
-              height: ['calc(15vh)', 'calc(20vh)'],
-              borderRadius: '50%',
-              flexShrink: 0,
+        </Box>
+
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <Box component="img" src={jupiter} alt="jupiter" sx={imageStyles} />
+          <Typography
+            fontSize={{
+              xs: 16,
+              sm: 20,
+              md: 24,
             }}
-          />
-          <Text
-            fontSize={[3, 4, 4]}
-            color="secondary"
+            color="text.secondary"
             textAlign="center"
-            mb={4}
-            p={4}
+            mb={2}
+            p={2}
           >
             <FormattedMessage
               id="app.tutorial.slide.jupiter1"
               defaultMessage="...how swiftly does Jupiter race across the space?"
               description="Tut1 jupiter"
             />
-          </Text>
-        </Flex>
-      </Flex>
-      <Flex mt="auto" justifyContent="space-between" width="100%">
+          </Typography>
+        </Box>
+      </Box>
+      <Box mt="auto" display="flex" justifyContent="space-between" width="100%">
         <HomeButton />
         <NextButton handleNextStep={handleNextStep} />
-      </Flex>
+      </Box>
     </Container>
   );
 };

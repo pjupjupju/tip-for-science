@@ -16,6 +16,9 @@ export const AUTH_QUERY = gql`
         age
         gender
         language
+        isQuestionnaireActive
+        nextQuestionnaireAfterQuestion
+        ipipBundle
       }
     }
   }

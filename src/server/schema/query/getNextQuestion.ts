@@ -2,10 +2,11 @@ import { ValidationError } from 'yup';
 import { GraphQLContext } from '..';
 import {
   findUserById,
-  getEnabledQuestionRuns,
+  getEnabledQuestionRunsV2,
   getQuestionTranslation,
   updateLastQuestion,
 } from '../../model';
+import { selectPreviousTipsToDisplay } from '../../../helpers/selectPreviousTipsToDisplay';
 
 type Question = {
   id: string;
@@ -25,11 +26,11 @@ export async function getNextQuestion(
   _: {},
   context: GraphQLContext
 ): Promise<Question | null> {
-  const { dynamo, runCache, user } = context;
+  const { runCache, user } = context;
   if (user == null) {
     throw new ValidationError('Unauthorized.');
   }
-  const userRecord = await findUserById(user.id, { dynamo });
+  const userRecord = await findUserById(user.id, context);
 
   if (userRecord == null) {
     throw new ValidationError('User does not exist.');
@@ -55,14 +56,19 @@ export async function getNextQuestion(
     ? userRecord.bundle[userRecord.bundle.indexOf(lastQuestion) + 1]
     : userRecord.bundle[0];
 
-  const nextQuestionRuns = await getEnabledQuestionRuns(nextQuestionId, {
-    dynamo,
-  });
+  const nextQuestionRuns = await getEnabledQuestionRunsV2(
+    nextQuestionId,
+    context
+  );
 
   // get the preferred run from cache
-  const runRecord = await runCache.getRun(nextQuestionId, nextQuestionRuns);
+  const runRecord = await runCache.getRunV2(
+    nextQuestionId,
+    nextQuestionRuns,
+    user.id
+  );
 
-  await updateLastQuestion(user.id, nextQuestionId, { dynamo });
+  await updateLastQuestion(user.id, nextQuestionId, context);
 
   let translatedData = {
     fact: runRecord.settings.fact,
@@ -71,25 +77,31 @@ export async function getNextQuestion(
   };
 
   if (language !== 'cs') {
-    // get translated question
+    // get translated question if present
     const translation = await getQuestionTranslation(
       nextQuestionId,
       language,
       context
     );
-    translatedData = {
-      fact: translation.factT,
-      unit: translation.unitT || '',
-      question: translation.qT,
-    };
+    // did we find a translation?
+    translatedData = translation
+      ? {
+          fact: translation.factT,
+          unit: translation.unitT || '',
+          question: translation.qT,
+        }
+      : translatedData;
   }
 
   return {
-    id: runRecord.id,
+    id: nextQuestionId,
     gId: runRecord.generation,
-    rId: runRecord.run,
+    rId: runRecord.runNum,
     image: runRecord.settings.image,
-    previousTips: runRecord.previousTips,
+    previousTips: selectPreviousTipsToDisplay(
+      runRecord.previousTips,
+      runRecord.strategy
+    ),
     correctAnswer: runRecord.settings.correctAnswer,
     timeLimit: runRecord.settings.timeLimit,
     ...translatedData,

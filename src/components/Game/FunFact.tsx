@@ -1,6 +1,8 @@
 import React from 'react';
-import { Text } from 'rebass';
+import Typography from '@mui/material/Typography';
 import NumberFormat from 'react-number-format';
+
+const fontSizes = { xs: 16, sm: 20, md: 24 };
 
 const FunFact = ({
   correctAnswer,
@@ -14,23 +16,32 @@ const FunFact = ({
     : [fact];
 
   return (
-    <Text textAlign="center" color="secondary" fontSize={[2, 3, 3]} mb={4}>
+    <Typography
+      align="center"
+      color="text.secondary"
+      fontSize={fontSizes}
+      mb={4}
+    >
       {factPieces.length < 2 ? (
         <>{factPieces[0]}</>
       ) : (
         <>
           {factPieces[0]}
-          <Text as="span" color="white">
+          <Typography
+            component="span"
+            color="white"
+            fontSize={fontSizes}
+          >
             <NumberFormat
               value={correctAnswer}
               displayType={'text'}
               thousandSeparator={' '}
             />
-          </Text>
+          </Typography>
           {factPieces[1]}
         </>
       )}
-    </Text>
+    </Typography>
   );
 };
 

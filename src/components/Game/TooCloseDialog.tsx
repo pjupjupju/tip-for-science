@@ -1,8 +1,9 @@
 import React from 'react';
-import { Flex, Text } from 'rebass';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { Container } from '../Container';
 import { TranslucentBox } from '../TranslucentBox';
-import Button from '@mui/material/Button';
 import { FormattedMessage } from 'react-intl';
 
 const TooCloseDialog = ({
@@ -22,15 +23,22 @@ const TooCloseDialog = ({
   return (
     <TranslucentBox>
       <Container>
-        <Flex
+        <Box
           p={3}
+          display="flex"
           flexDirection="column"
           alignItems="center"
           justifyContent="center"
           width="100%"
           height="100%"
         >
-          <Text fontWeight={500} textAlign="center" my={3} color="white">
+          <Typography
+            variant="body1"
+            fontWeight={500}
+            textAlign="center"
+            color="white"
+            my={3}
+          >
             <FormattedMessage
               id="app.game.tooclose"
               defaultMessage="Wow! That was REALLY close! Did you actually know the correct answer, or did you just make an amazing guess?"
@@ -42,8 +50,13 @@ const TooCloseDialog = ({
               defaultMessage="Don't worry, this won't affect your score, but it helps us with data analysis. :)"
               description="Don't worry"
             />
-          </Text>
-          <Flex justifyContent="space-between" width="100%">
+          </Typography>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            width="100%"
+            mt={2}
+          >
             <Button onClick={handleClickGuessed}>
               <FormattedMessage
                 id="app.game.guessed"
@@ -58,8 +71,8 @@ const TooCloseDialog = ({
                 description="Knew"
               />
             </Button>
-          </Flex>
-        </Flex>
+          </Box>
+        </Box>
       </Container>
     </TranslucentBox>
   );

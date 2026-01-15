@@ -1,35 +1,30 @@
 import React from 'react';
-import { Text, Box, Flex } from 'rebass';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { Container } from '../Container';
 import { SlideProps } from './types';
 import { HomeButton } from './HomeButton';
 import { NextButton } from './NextButton';
 import { FormattedMessage } from 'react-intl';
+import { tutorialText } from './styles';
 
 const Slide12 = ({ handleNextStep }: SlideProps) => {
   return (
     <Container>
       <Box p="4" my="auto">
-        <Text
-          fontSize={[3, 4, 5]}
-          color="secondary"
-          textAlign="center"
-          mb="4"
-          mt="4"
-        >
+        <Typography sx={tutorialText} mb={4} mt={4}>
           <FormattedMessage
             id="app.tutorial.slide.apes"
-            defaultMessage="This game is one big experiment in cultural evolution. Interested
-            us how this species of extremely cooperative apes finds the optimum
-            strategy when only group intelligence is available."
+            defaultMessage="This game is one big experiment in cultural evolution. We are interested in how extremely cooperative apes find the best strategy
+using only group intelligence."
             description="Tut12 apes"
           />
-        </Text>
+        </Typography>
       </Box>
-      <Flex mt="auto" justifyContent="space-between" width="100%">
+      <Box mt="auto" display="flex" justifyContent="space-between" width="100%">
         <HomeButton />
         <NextButton handleNextStep={handleNextStep} />
-      </Flex>
+      </Box>
     </Container>
   );
 };

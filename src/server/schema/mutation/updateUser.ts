@@ -19,14 +19,16 @@ export async function updateUser(
     age?: number;
     gender?: string;
   },
-  { dynamo, user }: GraphQLContext
+  context: GraphQLContext
 ) {
+  const { dynamo, user } = context;
+
   if (user == null) {
     throw new ValidationError('Unauthorized.');
   }
 
   const { oldPassword, newPassword, ...rest } = changeSet;
-  const userRecord = await findUserById(user.id, { dynamo });
+  const userRecord = await findUserById(user.id, context);
 
   if (
     newPassword != null &&
@@ -41,7 +43,7 @@ export async function updateUser(
     settings = { ...settings, password: hashSync(newPassword, 10) };
   }
 
-  await updateUserSettings(user.id, settings, { dynamo });
+  await updateUserSettings(user.id, settings, context);
 
   return true;
 }

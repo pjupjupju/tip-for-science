@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
+import { CartesianMarkerProps } from '@nivo/core';
 import { ResponsiveLine } from '@nivo/line';
 import { getScore } from '../../helpers';
-import { CartesianMarkerProps } from '@nivo/core';
 
 interface ScoreChartProps {
   currentTip: number;
