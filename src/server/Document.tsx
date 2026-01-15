@@ -3,6 +3,7 @@ import { HelmetData } from 'react-helmet';
 
 interface DocumentProps {
   content: string;
+  emotionStyleTags: string;
   helmet: HelmetData;
   state: any;
   css: React.ReactNode;
@@ -14,6 +15,7 @@ interface DocumentProps {
 
 export function Document({
   content,
+  emotionStyleTags,
   css,
   helmet,
   state,
@@ -34,6 +36,7 @@ export function Document({
         {helmet.title.toComponent()}
         {helmet.meta.toComponent()}
         {helmet.link.toComponent()}
+        <div dangerouslySetInnerHTML={{ __html: emotionStyleTags }} />
         {css}
         {linkTags}
         {styleTags}

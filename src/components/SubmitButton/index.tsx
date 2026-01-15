@@ -1,5 +1,5 @@
 import React from 'react';
-import { animated, useSpring } from 'react-spring';
+import { animated, useSpring } from '@react-spring/web';
 import Button, { ButtonProps } from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { FormattedMessage } from 'react-intl';

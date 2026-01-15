@@ -4,6 +4,7 @@ const path = require("path");
 const appSrc = path.resolve(__dirname, './src');
 const muiPath = path.resolve(__dirname, "node_modules/@mui");
 const emotionPath = path.resolve(__dirname, "node_modules/@emotion");
+const reactSpringPath = path.resolve(__dirname, 'node_modules/@react-spring');
 
 function findBabelRule(rules) {
   for (const rule of rules) {
@@ -46,6 +47,12 @@ module.exports = {
       );
     }
 
+    config.module.rules.unshift({
+      test: /\.mjs$/,
+      include: /node_modules\/@nivo/,
+      type: 'javascript/auto',
+    });
+
     const babelRule = findBabelRule(config.module.rules);
     if (!babelRule) {
       console.log("❌ Babel rule not found");
@@ -54,7 +61,7 @@ module.exports = {
 
     babelRule.test = /\.(js|mjs|jsx|ts|tsx)$/;
 
-    babelRule.include = [appSrc, muiPath, emotionPath];
+    babelRule.include = [appSrc, muiPath, emotionPath, reactSpringPath];
 
     delete babelRule.exclude;
 

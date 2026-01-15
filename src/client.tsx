@@ -1,5 +1,7 @@
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import { loadableReady } from '@loadable/component';
+import { CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
 import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
 // @ts-ignore
@@ -32,15 +34,19 @@ const client = new ApolloClient({
   }),
 });
 
+const emotionCache = createCache({ key: 'css' });
+
 loadableReady().then(() => {
   const content = (
-    <BrowserRouter>
-      <LanguageProvider storage={localStorage}>
-        <ApolloProvider client={client}>
-          <App />
-        </ApolloProvider>
-      </LanguageProvider>
-    </BrowserRouter>
+    <CacheProvider value={emotionCache}>
+      <BrowserRouter>
+        <LanguageProvider storage={localStorage}>
+          <ApolloProvider client={client}>
+            <App />
+          </ApolloProvider>
+        </LanguageProvider>
+      </BrowserRouter>
+    </CacheProvider>
   );
 
   if (process.env.NODE_ENV === 'production') {
