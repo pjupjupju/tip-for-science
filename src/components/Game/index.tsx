@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useRef } from 'react';
+import React, { KeyboardEvent, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -332,22 +332,25 @@ const Game = ({
                   mb={3}
                 >
                   {questionScore === 0 && (
-                    <ScoreMessage scoreType="score.zero" />
+                    <ScoreMessage question={question} scoreType="score.zero" />
                   )}
                   {questionScore !== null &&
                     questionScore > 0 &&
                     questionScore < 40 && (
-                      <ScoreMessage scoreType="score.low" />
+                      <ScoreMessage question={question} scoreType="score.low" />
                     )}
                   {questionScore !== null &&
                     questionScore >= 40 &&
                     questionScore < 80 && (
-                      <ScoreMessage scoreType="score.high" />
+                      <ScoreMessage
+                        question={question}
+                        scoreType="score.high"
+                      />
                     )}
                   {questionScore !== null &&
                     questionScore >= 80 &&
                     questionScore < 95 && (
-                      <ScoreMessage scoreType="score.top" />
+                      <ScoreMessage question={question} scoreType="score.top" />
                     )}
                 </Typography>
                 <FunFact correctAnswer={correctAnswer} fact={fact} />

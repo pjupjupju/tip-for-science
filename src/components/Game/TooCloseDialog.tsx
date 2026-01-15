@@ -31,6 +31,7 @@ const TooCloseDialog = ({
           justifyContent="center"
           width="100%"
           height="100%"
+          zIndex={3}
         >
           <Typography
             variant="body1"
@@ -57,14 +58,14 @@ const TooCloseDialog = ({
             width="100%"
             mt={2}
           >
-            <Button onClick={handleClickGuessed}>
+            <Button variant="contained" onClick={handleClickGuessed}>
               <FormattedMessage
                 id="app.game.guessed"
                 defaultMessage="I guessed"
                 description="Guessed"
               />
             </Button>
-            <Button onClick={handleClickKnewIt}>
+            <Button variant="contained" onClick={handleClickKnewIt}>
               <FormattedMessage
                 id="app.game.knew"
                 defaultMessage="I knew"

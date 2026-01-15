@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 const types = {
@@ -63,6 +64,7 @@ const messages = defineMessages({
 
 interface ScoreMessageProps {
   scoreType: keyof typeof types;
+  question: string;
 }
 
 const getRandomScoreId = (
@@ -72,9 +74,13 @@ const getRandomScoreId = (
   return `${scoreType}.${randomIndex}` as keyof typeof messages;
 };
 
-const ScoreMessage = ({ scoreType }: ScoreMessageProps) => {
+const ScoreMessage = ({ scoreType, question }: ScoreMessageProps) => {
   const intl = useIntl();
-  return <>{intl.formatMessage(messages[getRandomScoreId(scoreType)])}</>;
+  const message = useMemo(
+    () => intl.formatMessage(messages[getRandomScoreId(scoreType)]),
+    [scoreType, question, intl]
+  );
+  return <>{message}</>;
 };
 
 export default ScoreMessage;
