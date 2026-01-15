@@ -17,7 +17,7 @@ import {
 import { User, UserRole } from '../../types';
 import { WipeBatchesButton } from './WipeBatchesButton';
 
-const buttonStyles = { width: '50%', my: 2 };
+const buttonStyles = { width: { xs: '100% ', sm: 150 }, my: 2 };
 
 const consoleStyle = {
   px: 2,
@@ -132,7 +132,7 @@ const Dashboard = ({ user }: DashboardProps) => {
             description="Actions button"
           />
         </Typography>
-        <Stack direction="row" alignItems="center" gap={2}>
+        <Stack direction="row" alignItems="flex-end" gap={2}>
           <Box flex={1} display="flex" flexDirection="column">
             <Typography color="white" fontFamily="Tahoma">
               <FormattedMessage
