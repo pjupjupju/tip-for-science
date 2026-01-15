@@ -82,11 +82,7 @@ module.exports = {
 
     const babelRule = resConfig.module.rules[1];
     babelRule.test = /\.(js|mjs|jsx|ts|tsx)$/;
-    console.log('babelrule', babelRule);
     babelRule.include = [appSrc, muiPath, emotionPath];
-
-    console.log(resConfig.module.rules)
-
 
     if (!dev) {
       resConfig =

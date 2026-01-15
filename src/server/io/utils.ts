@@ -255,6 +255,10 @@ export const getInitialTips = (
 export const getNextQuestionnaireCursor = (user: User) => {
   const { ipipBundle, lastIpipQuestion, bundle } = user;
 
+  if (!ipipBundle) {
+    return null;
+  }
+
   if (ipipBundle[ipipBundle.length - 1] === lastIpipQuestion) {
     return null;
   }
