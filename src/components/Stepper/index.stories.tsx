@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from 'rebass';
 import { Stepper } from './';
 
-const length = 10;
+const length = 8;
 export default { title: 'component/Stepper', component: Stepper };
 export const Default = () => {
   const [active, setActive] = useState(0);
