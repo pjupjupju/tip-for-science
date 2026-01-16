@@ -46,11 +46,12 @@ const Slide1 = ({ handleNextStep }: SlideProps) => {
         <Box display="flex" justifyContent="center" alignItems="center">
           <Box component="img" src={elephant} alt="elephant" sx={imageStyles} />
           <Typography
-fontSize={{
-  xs: 16,
-  sm: 20,
-  md: 24,
-}}            color="text.secondary"
+            fontSize={{
+              xs: 16,
+              sm: 20,
+              md: 24,
+            }}
+            color="text.secondary"
             textAlign="center"
             mb={2}
             p={2}
