@@ -58,21 +58,26 @@ const Slide14 = ({ handleNextStep, currentTip }: SlideProps) => {
             thousandSeparator={' '}
           />{' '}
           {unit}?{' '}
-          <Typography
-            component="span"
-            sx={tutorialText}
-          >
+          <Typography component="span" sx={tutorialText}>
             {' '}
-            {questionScore === 0 && <ScoreMessage scoreType="score.zero" />}
+            {questionScore === 0 && (
+              <ScoreMessage question="Slide14" scoreType="score.zero" />
+            )}
             {questionScore !== null &&
               questionScore > 0 &&
-              questionScore < 40 && <ScoreMessage scoreType="score.low" />}
+              questionScore < 40 && (
+                <ScoreMessage question="Slide14" scoreType="score.low" />
+              )}
             {questionScore !== null &&
               questionScore >= 40 &&
-              questionScore < 80 && <ScoreMessage scoreType="score.high" />}
+              questionScore < 80 && (
+                <ScoreMessage question="Slide14" scoreType="score.high" />
+              )}
             {questionScore !== null &&
               questionScore >= 80 &&
-              questionScore < 95 && <ScoreMessage scoreType="score.top" />}
+              questionScore < 95 && (
+                <ScoreMessage question="Slide14" scoreType="score.top" />
+              )}
           </Typography>
         </Typography>
       </TutorialHeader>
