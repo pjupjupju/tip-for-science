@@ -30,6 +30,8 @@
   "app.kgunit": "kg",
   "app.notfound": "404 - Stránka nenalezena",
   "app.previoustis": "Předchozí tipy:",
+  "app.questionnaire.button.home": "Domů",
+  "app.questionnaire.button.play": "Hrát",
   "app.settings.menu.age": "Věk:",
   "app.settings.menu.anon": "Všechna data budou před vyhodnocením anonymizována.",
   "app.settings.menu.email": "E-mail",
