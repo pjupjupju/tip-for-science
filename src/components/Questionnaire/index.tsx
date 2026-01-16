@@ -142,26 +142,29 @@ const Questionnaire = ({
           justifyContent="space-between"
           alignItems="flex-start"
           gap={2}
+          my={2}
         >
-          <Typography variant="body2" color="#FFFFFF" mb={1}>
+          <Stack direction="column" gap={2} mb={1}>
             {pageNum === 1 ? (
               <>
-                <p>
+                <Typography component="p" variant="body2" color="#FFFFFF">
                   Nyní přichází krátká pauza. Ale neboj, po vyplnění tohoto
                   krátkého osobnostního dotazníku na Tebe čeká ještě několik
                   otázek k tipování.
-                </p>
-                <p>
+                </Typography>
+                <Typography component="p" variant="body2" color="#FFFFFF">
                   Níže jsou uvedena tvrzení, která popisují různé způsoby
                   myšlení, prožívání a chování. U každého tvrzení označ, do jaké
                   míry pro Tebe obecně platí. Nejde o to, jak se cítíš právě
                   teď, ale jaký*á obvykle jsi.
-                </p>
+                </Typography>
               </>
             ) : (
-              <>Označ, do jaké míry pro vás jednotlivá tvrzení obecně platí.</>
+              <Typography component="p" variant="body2" color="#FFFFFF">
+                Označ, do jaké míry pro vás jednotlivá tvrzení obecně platí.
+              </Typography>
             )}
-          </Typography>
+          </Stack>
           <Typography variant="body2" color="#FFFFFF" mb={1} flexShrink={0}>
             Strana <b>{pageNum}</b> / <b>{pages}</b>
           </Typography>
