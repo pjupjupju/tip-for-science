@@ -9,6 +9,8 @@ export * from './importMutation';
 export * from './importTranslationsMutation';
 export * from './questionQuery';
 export * from './onlineQuery';
+export * from './requestPasswordResetMutation';
+export * from './resetPasswordMutation';
 export * from './saveMutation';
 export * from './saveQuestionnaireAnswerMutation';
 export * from './saveQuestionnaireBatchMutation';

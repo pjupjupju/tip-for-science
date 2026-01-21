@@ -19,11 +19,6 @@ import {
 } from './types';
 import { getQuestionCorpusV2 } from './question';
 
-interface UserModelContext {
-  dynamo: DynamoDB.DocumentClient;
-  supabase: SupabaseClient;
-}
-
 async function generateIpipBundle(supabase: SupabaseClient): Promise<number[]> {
   const { data } = await supabase.from('ipip_questionnaire').select('id');
 
@@ -41,8 +36,9 @@ export async function createUser(
     language: string;
     country: string;
   },
-  { dynamo, supabase }: ModelContext
+  context: ModelContext
 ) {
+  const { dynamo, supabase } = context;
   const id = ulid();
 
   const questions = await getQuestionCorpusV2(supabase);
@@ -76,7 +72,7 @@ export async function createUser(
   };
 
   // check if user does not exist
-  const foundUser = await findUserByEmail(user.email, { dynamo, supabase });
+  const foundUser = await findUserByEmail(user.email, context);
 
   if (foundUser) {
     throw new yup.ValidationError('This email already exists', null, 'email');
@@ -89,7 +85,7 @@ export async function createUser(
 
 export async function findUserById(
   id: string,
-  { dynamo }: UserModelContext
+  { dynamo }: ModelContext
 ): Promise<User | null> {
   const { Item } = await dynamo
     .get({
@@ -103,7 +99,7 @@ export async function findUserById(
 
 export async function findUserByEmail(
   email: string,
-  { dynamo }: UserModelContext
+  { dynamo }: ModelContext
 ): Promise<User | null> {
   const { Items } = await dynamo
     .query({
@@ -126,7 +122,7 @@ export async function findUserByEmail(
 export async function updateUserSettings(
   userId: string,
   settings: UserSettings,
-  { dynamo }: UserModelContext
+  { dynamo }: ModelContext
 ): Promise<any> {
   if (Object.keys(settings).length === 0) {
     return new Promise(null);
@@ -180,7 +176,7 @@ export async function updateQuestionBundle(
   userId: string,
   newQuestionList: string[],
   oldBundle: string[],
-  { dynamo }: UserModelContext
+  { dynamo }: ModelContext
 ): Promise<any> {
   const restBundle = generateQuestionBundle([], newQuestionList);
 
@@ -200,7 +196,7 @@ export async function updateQuestionBundle(
 export async function updateLastQuestion(
   userId: string,
   newLastQuestion: string,
-  { dynamo }: UserModelContext
+  { dynamo }: ModelContext
 ): Promise<any> {
   const params = {
     TableName: TABLE_USER,
@@ -217,7 +213,7 @@ export async function updateLastQuestion(
 export async function updateLastIpipQuestion(
   userId: string,
   newLastIpipQuestion: number,
-  { dynamo }: UserModelContext
+  { dynamo }: ModelContext
 ): Promise<any> {
   const params = {
     TableName: TABLE_USER,
@@ -235,7 +231,7 @@ export async function updateScore(
   userId: string,
   scoreAddition: number,
   { tipId, questionId }: ProgressItem,
-  { dynamo }: UserModelContext
+  { dynamo }: ModelContext
 ): Promise<any> {
   const updateAndInsertParams = [
     {
@@ -317,7 +313,7 @@ export async function getUserProgress(
 
 export async function batchSlugifyUsers({
   dynamo,
-}: UserModelContext): Promise<any> {
+}: ModelContext): Promise<any> {
   const currentDbIndex = await getCurrentUserIndex(dynamo);
   let currentIndex = currentDbIndex;
 
@@ -493,7 +489,7 @@ export async function executeTransactWriteUser(
   });
 }
 
-export async function wipeAllBatches({ dynamo, supabase }: UserModelContext) {
+export async function wipeAllBatches({ dynamo, supabase }: ModelContext) {
   const params = {
     TableName: TABLE_USER,
     FilterExpression:
@@ -567,4 +563,118 @@ export async function wipeAllBatches({ dynamo, supabase }: UserModelContext) {
   };
 
   dynamo.scan(params, onScanUsersAndUpdateBundles);
+}
+
+export async function invalidatePasswordResetRequests(
+  userId: string,
+  context: ModelContext
+): Promise<boolean> {
+  const { sql } = context;
+
+  await sql`
+    UPDATE 
+      password_reset_request
+      set revoked_at = now()
+    WHERE user_id = ${userId}
+      and used_at IS NULL
+      and revoked_at IS NULL
+      and expires_at > now()`;
+
+  return true;
+}
+
+type PasswordResetRequestParams = {
+  id: string;
+  userId: string;
+  tokenHash: string;
+  expiresAt: Date;
+  ip: string;
+  userAgent?: string;
+};
+
+export async function createPasswordResetRequest(
+  {
+    id,
+    userId,
+    tokenHash,
+    expiresAt,
+    ip,
+    userAgent,
+  }: PasswordResetRequestParams,
+  { sql }: ModelContext
+): Promise<boolean> {
+  const now = new Date();
+
+  await sql`
+    INSERT into password_reset_request (id, user_id, token_hash, created_at, expires_at, request_ip, user_agent)
+    values (${id}, ${userId}, ${tokenHash}, ${now}, ${expiresAt}, ${ip}, ${
+    userAgent ?? null
+  })
+  `;
+
+  return true;
+}
+
+export async function getPasswordResetRequest(id, { sql }: ModelContext) {
+  return sql`
+    SELECT id, user_id, token_hash, expires_at, used_at, revoked_at
+    FROM password_reset_request
+    WHERE id = ${id}
+    LIMIT 1
+  `.then((r) => r[0]);
+}
+
+export async function isOverLimitPasswordResets(
+  userId: string,
+  { sql }: ModelContext
+) {
+  const [r] = await sql`
+    WITH last_24h AS (
+      SELECT
+        COUNT(*)::int as cnt_24h,
+        MAX(created_at) as last_created_at,
+        BOOL_OR(used_at IS NULL AND revoked_at IS NULL AND expires_at > now()) as has_active
+      FROM password_reset_request
+      WHERE user_id = ${userId}
+        AND created_at > now() - interval '24 hours'
+    )
+    SELECT
+      cnt_24h,
+      has_active,
+      last_created_at,
+      (last_created_at + interval '24 hours') as next_allowed_at
+    FROM last_24h
+  `;
+  return r?.cnt24h >= 2 && r?.hasActive;
+}
+
+export async function resetUserPassword(
+  userId,
+  requestId,
+  password,
+  { dynamo, sql }
+) {
+  const params = {
+    TableName: TABLE_USER,
+    Key: { id: userId, userskey: `USER#${userId}` },
+    UpdateExpression: 'set password = :password',
+    ExpressionAttributeValues: {
+      ':password': password,
+    },
+  };
+
+  await dynamo.update(params).promise();
+
+  await sql.begin(async (tx) => {
+    await tx`UPDATE password_reset_request SET used_at = now() WHERE id = ${requestId}`;
+    await tx`
+      UPDATE password_reset_request
+      SET revoked_at = now()
+      WHERE user_id = ${userId}
+        AND id <> ${requestId}
+        AND used_at IS NULL
+        AND revoked_at IS NULL
+        AND expires_at > now()
+    `;
+  });
 }

@@ -4,5 +4,6 @@ declare namespace NodeJS {
     RAZZLE_PUBLIC_DIR: string;
     RAZZLE_SUPABASE_KEY: string;
     RAZZLE_DB_PASSWORD: string;
+    RAZZLE_MAILER_API_KEY: string;
   }
 }

@@ -6,14 +6,15 @@ import Helmet from 'react-helmet';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import './index.css';
+import { AuthQueryName, AUTH_QUERY, SIGN_OUT_MUTATION } from './gql';
+import { Spinner } from './components';
 import { About } from './pages/About';
 import { Home } from './pages/Home';
 import { Play } from './pages/Play';
 import { Profile } from './pages/Profile';
 import { SignIn } from './pages/SignIn';
 import { Consent } from './pages/Consent';
-import { AuthQueryName, AUTH_QUERY, SIGN_OUT_MUTATION } from './gql';
-import { Spinner } from './components';
+import { ResetPassword } from './pages/ResetPassword';
 import { SignUp } from './pages/SignUp';
 import { Dashboard } from './pages/Dashboard';
 import { Page404 } from './pages/Page404';
@@ -61,6 +62,7 @@ const AppLayout = () => {
         <Route path="/profile/*" element={<Profile user={user} />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/consent" element={<Consent />} />
         {user && user.role === 'admin' && (
           <Route path="/dashboard" element={<Dashboard user={user} />} />

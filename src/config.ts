@@ -1,3 +1,6 @@
+// General
+export const PRODUCTION_APP_ORIGIN = 'https://tipforscience.org'
+
 // AWS configuration
 export const S3_BUCKET_NAME = 'tfsstorage';
 export const AWS_REGION = 'eu-central-1';
@@ -19,3 +22,7 @@ export const MAX_GENERATION_NUMBER = 10;
 export const MAX_PERCENT_TOO_CLOSE_ANSWERS_PER_GEN = 50;
 export const PERCENTAGE_CONSIDERED_TOO_CLOSE = 5;
 export const QUESTIONNAIRE_BUNDLE_SIZE = 10;
+
+// EMAILS
+export const EMAIL_FROM = 'tfsapp@gmail.com';
+export const EMAIL_FROM_NAME = "TipForScience.org"

@@ -4,5 +4,6 @@ export * from './RunLock';
 export * from './enums';
 export * from './getUniqueSlug';
 export * from './googleSheets';
+export * from './mailer';
 export * from './runMigrations';
 export * from './uploadCsvToS3';

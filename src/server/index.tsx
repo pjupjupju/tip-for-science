@@ -139,9 +139,9 @@ export async function createServer(): Promise<express.Application> {
 
   // RequestHandler creates a separate execution context using domains, so that every
   // transaction/span/breadcrumb is attached to its own Hub instance
-  server.use(Sentry.Handlers.requestHandler());
+  server.use(Sentry.Handlers.requestHandler() as any);
   // TracingHandler creates a trace for every incoming request
-  server.use(Sentry.Handlers.tracingHandler());
+  server.use(Sentry.Handlers.tracingHandler() as any);
 
   app.applyMiddleware({ app: server, path: '/api' });
 
