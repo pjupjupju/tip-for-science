@@ -10778,13 +10778,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/history@npm:*":
-  version: 4.7.7
-  resolution: "@types/history@npm:4.7.7"
-  checksum: 10c0/b294f78e29b8c82cbd00c25ef8d7ae686426b2bf3f75c34d95a8e8219afebd1abd750ffce9048bad2cd22293329dd3491fb75196b4f801d64131c9640acc2011
-  languageName: node
-  linkType: hard
-
 "@types/hoist-non-react-statics@npm:^3.0.1":
   version: 3.3.1
   resolution: "@types/hoist-non-react-statics@npm:3.3.1"
@@ -11231,27 +11224,6 @@ __metadata:
   dependencies:
     "@types/react": "npm:*"
   checksum: 10c0/f7b3bb2151d992a108ae46fed876fb9c8119108397d9a01d150c5642782997542c8b3c52e742b56e8689b7dbfa62ca9cfc76aa7e05dec4e60c652f7ef53fa783
-  languageName: node
-  linkType: hard
-
-"@types/react-router-dom@npm:^5.1.4":
-  version: 5.1.7
-  resolution: "@types/react-router-dom@npm:5.1.7"
-  dependencies:
-    "@types/history": "npm:*"
-    "@types/react": "npm:*"
-    "@types/react-router": "npm:*"
-  checksum: 10c0/cfa720fb79221d9b85d7800ab4bec10c1dfb6f7154ec0fb7fd70848f6ffd29b3a4b8e6c71b5c767c58c3269722d1187c4e644484c2afefc4bb8e28330218dd0e
-  languageName: node
-  linkType: hard
-
-"@types/react-router@npm:*":
-  version: 5.1.8
-  resolution: "@types/react-router@npm:5.1.8"
-  dependencies:
-    "@types/history": "npm:*"
-    "@types/react": "npm:*"
-  checksum: 10c0/546336313b1ebee1eab11e67ef63b0cbdd778b72c8261ce2b10385c571996acbd5617a5f7cd79ba62c7b4105029b58484dd139bf7d9e610525ef1a40d05cb5e1
   languageName: node
   linkType: hard
 
@@ -34888,7 +34860,6 @@ __metadata:
     "@types/react": "npm:^18.0.26"
     "@types/react-dom": "npm:^18.0.9"
     "@types/react-helmet": "npm:^6.1.0"
-    "@types/react-router-dom": "npm:^5.1.4"
     "@types/session-file-store": "npm:^1.2.2"
     "@types/testing-library__jest-dom": "npm:^5.9.2"
     "@types/testing-library__react": "npm:^10.2.0"
