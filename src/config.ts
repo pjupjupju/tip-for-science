@@ -26,3 +26,4 @@ export const QUESTIONNAIRE_BUNDLE_SIZE = 10;
 // EMAILS
 export const EMAIL_FROM = 'tipforscienceapp@gmail.com';
 export const EMAIL_FROM_NAME = "Tip for Science"
+export const EMAIL_LOGO_URL = 'https://tfsstorage.s3.eu-central-1.amazonaws.com/img/logo192.png';
