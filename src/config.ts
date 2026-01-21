@@ -24,5 +24,5 @@ export const PERCENTAGE_CONSIDERED_TOO_CLOSE = 5;
 export const QUESTIONNAIRE_BUNDLE_SIZE = 10;
 
 // EMAILS
-export const EMAIL_FROM = 'tfsapp@gmail.com';
-export const EMAIL_FROM_NAME = "TipForScience.org"
+export const EMAIL_FROM = 'tipforscienceapp@gmail.com';
+export const EMAIL_FROM_NAME = "Tip for Science"
