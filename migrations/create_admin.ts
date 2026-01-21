@@ -36,7 +36,9 @@ async function createUser() {
     country: 'CZ',
     score: 0,
     lastQuestion: null,
+    lastIpipQuestion: null,
     bundle: [],
+    ipipBundle: [],
   };
 
   const dbUser = await db

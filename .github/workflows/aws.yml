@@ -83,7 +83,7 @@ jobs:
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg DB_PASSWORD="${{ secrets.SUPABASE_PASSWORD }}" --build-arg SUPABASE_KEY="${{ secrets.SUPABASE_KEY }}" --build-arg QUESTIONS_SPREADSHEET="${{ secrets.QUESTIONS_SPREADSHEET }}" .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg DB_PASSWORD="${{ secrets.SUPABASE_PASSWORD }}" --build-arg SUPABASE_KEY="${{ secrets.SUPABASE_KEY }}" --build-arg QUESTIONS_SPREADSHEET="${{ secrets.QUESTIONS_SPREADSHEET }}" --build-arg MAILER_API_KEY="${{ secrets.MAILER_API_KEY }}" .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 

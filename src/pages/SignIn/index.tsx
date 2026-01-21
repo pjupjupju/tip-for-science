@@ -132,6 +132,7 @@ const SignIn = () => {
             sx={settingInputStyles}
             {...register('password')}
           />
+          <Stack direction="row" justifyContent="center" my={2}></Stack>
           <MenuButton type="submit" sx={buttonStyles} primary>
             <FormattedMessage
               id="app.signin.menu.login"
@@ -149,7 +150,31 @@ const SignIn = () => {
             </Stack>
           )}
 
-          <Stack direction="row" justifyContent="center" my={1}>
+          <Stack
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+            my={1}
+          >
+            <Typography color="white" fontSize={14}>
+              <FormattedMessage
+                id="app.signin.menu.forgottenpassword"
+                defaultMessage="Or you can reset"
+                description="Forgotten password help text"
+              />{' '}
+              <HrefLink
+                component={Link}
+                to="/reset-password"
+                color="text.secondary"
+              >
+                <FormattedMessage
+                  id="app.signup.menu.forgottenpasswordlink"
+                  defaultMessage="forgotten password"
+                  description="Forgotten password link"
+                />
+              </HrefLink>
+              .
+            </Typography>
             <Typography color="white" fontSize={14}>
               <HrefLink component={Link} color="text.secondary" to="/">
                 <FormattedMessage

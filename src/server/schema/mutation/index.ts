@@ -2,6 +2,8 @@ export * from './batchSlugify';
 export * from './exportData';
 export * from './importQuestions';
 export * from './importTranslations';
+export * from './requestPasswordReset';
+export * from './resetPassword';
 export * from './saveQuestionnaireAnswer';
 export * from './saveQuestionnaireBatch';
 export * from './saveTip';

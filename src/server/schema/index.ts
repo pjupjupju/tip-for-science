@@ -4,6 +4,8 @@ import {
   exportData,
   importQuestions,
   importTranslations,
+  requestPasswordReset,
+  resetPassword,
   saveQuestionnaireAnswer,
   saveQuestionnaireBatch,
   saveTip,
@@ -95,13 +97,14 @@ export const typeDefs = /* GraphQL */ gql`
     exportData: String
     importQuestions: Boolean
     importTranslations: Boolean
-    saveQuestionnaireAnswer(
-      questionId: Int!
-      value: Int!
-    ): String
-    saveQuestionnaireBatch(
-      items: [QuestionnaireItemInput!]!
-    ): String
+    requestPasswordReset(email: String!): RequestPasswordResetResult!
+    resetPassword(
+      id: String!
+      token: String!
+      newPassword: String!
+    ): ResetPasswordResult!
+    saveQuestionnaireAnswer(questionId: Int!, value: Int!): String
+    saveQuestionnaireBatch(items: [QuestionnaireItemInput!]!): String
     saveTip(
       id: String!
       tip: Float!
@@ -127,6 +130,10 @@ export const typeDefs = /* GraphQL */ gql`
 
   union SignUpResult = SignInSuccess | ValidationError
   union SignInResult = SignInSuccess | ValidationError
+  union RequestPasswordResetResult =
+      RequestPasswordResetSuccess
+    | ValidationError
+  union ResetPasswordResult = ResetPasswordSuccess | ValidationError
 
   type SignInSuccess {
     viewer: Viewer!
@@ -134,6 +141,14 @@ export const typeDefs = /* GraphQL */ gql`
 
   type SignOutResult {
     viewer: Viewer!
+  }
+
+  type ResetPasswordSuccess {
+    result: Boolean!
+  }
+
+  type RequestPasswordResetSuccess {
+    result: Boolean!
   }
 
   type User {
@@ -178,6 +193,8 @@ export const resolvers = {
     exportData,
     importQuestions,
     importTranslations,
+    requestPasswordReset,
+    resetPassword,
     saveQuestionnaireAnswer,
     saveQuestionnaireBatch,
     saveTip,
