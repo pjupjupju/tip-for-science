@@ -50,17 +50,17 @@ export async function requestPasswordReset(
   const normalized = email.trim().toLowerCase();
   const user = await findUserByEmail(normalized, context);
 
-  const isOverLimit = await isOverLimitPasswordResets(user.id, context);
-  if (isOverLimit) {
-    throw new Error('Limit for password resets hit for 24 hours.');
-  }
-
   // Return true if user does not exist, so attacker cannot check for accounts
   if (!user) {
     return {
       type: 'RequestPasswordResetSuccess',
       result: true,
     };
+  }
+
+  const isOverLimit = await isOverLimitPasswordResets(user.id, context);
+  if (isOverLimit) {
+    throw new Error('Limit for password resets hit for 24 hours.');
   }
 
   // Invalidate old requests

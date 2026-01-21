@@ -1,7 +1,11 @@
 import { hashSync } from 'bcryptjs';
 import crypto from 'crypto';
 import * as yup from 'yup';
-import { getPasswordResetRequest, resetUserPassword } from '../../model';
+import {
+  findUserById,
+  getPasswordResetRequest,
+  resetUserPassword,
+} from '../../model';
 import { GraphQLContext } from '../context';
 
 function sha256(s: string) {
@@ -28,24 +32,49 @@ export async function resetPassword(
       abortEarly: false,
     });
 
-    const { user } = context;
     const requestRecord = await getPasswordResetRequest(id, context);
 
     if (!requestRecord) {
-      throw new Error('Invalid or expired token');
+      throw new yup.ValidationError(
+        [new yup.ValidationError('Invalid or expired token', args, 'token')],
+        args,
+        'token'
+      );
     }
 
     if (requestRecord.usedAt || requestRecord.revokedAt) {
-      throw new Error('Invalid or expired token');
+      throw new yup.ValidationError(
+        [new yup.ValidationError('Invalid or expired token', args, 'token')],
+        args,
+        'token'
+      );
     }
     if (new Date(requestRecord.expiresAt).getTime() < Date.now()) {
-      throw new Error('Invalid or expired token');
+      throw new yup.ValidationError(
+        [new yup.ValidationError('Invalid or expired token', args, 'token')],
+        args,
+        'token'
+      );
     }
 
     const tokenHash = sha256(token);
 
     if (tokenHash !== requestRecord.tokenHash) {
-      throw new Error('Invalid or expired token');
+      throw new yup.ValidationError(
+        [new yup.ValidationError('Invalid or expired token', args, 'token')],
+        args,
+        'token'
+      );
+    }
+
+    const user = await findUserById(requestRecord.userId, context);
+
+    if (!user) {
+      throw new yup.ValidationError(
+        [new yup.ValidationError('Invalid or expired token', args, 'token')],
+        args,
+        'token'
+      );
     }
 
     const passwordHash = hashSync(newPassword, 10);

@@ -48,6 +48,7 @@ const PasswordUpdateForm = ({ id, token }: PasswordUpdateFormProps) => {
   });
 
   const [errors, setErrors] = useState<Array<{ error: string }>>([]);
+  const [isComplete, setIsComplete] = useState(false);
   const resolver = useYupValidationResolver(validationSchema, setErrors);
   const { register, handleSubmit } = useForm({ resolver });
 
@@ -70,7 +71,7 @@ const PasswordUpdateForm = ({ id, token }: PasswordUpdateFormProps) => {
     });
 
     if (data && !data.resetPassword.errors) {
-      navigate('/signin');
+      setIsComplete(true);
     } else {
       setErrors(data!.resetPassword!.errors);
     }
@@ -85,65 +86,90 @@ const PasswordUpdateForm = ({ id, token }: PasswordUpdateFormProps) => {
       width="100%"
       boxSizing="border-box"
     >
-      <InputLabel htmlFor="password" sx={labelStyles}>
-        <FormattedMessage
-          id="app.reset.menu.password"
-          defaultMessage="New Password"
-          description="Reset password new password label"
-        />
-      </InputLabel>
-      <OutlinedInput
-        id="password"
-        type="password"
-        sx={settingInputStyles}
-        {...register('password')}
-      />
-      <InputLabel htmlFor="password" sx={labelStyles}>
-        <FormattedMessage
-          id="app.reset.menu.passwordagain"
-          defaultMessage="Repeat new password"
-          description="Reset password repeat new password label"
-        />
-      </InputLabel>
-      <OutlinedInput
-        id="confirmPassword"
-        type="password"
-        sx={settingInputStyles}
-        {...register('confirmPassword')}
-      />
-      <MenuButton loading={loading} type="submit" primary>
-        <FormattedMessage
-          id="app.reset.menu.change"
-          defaultMessage="Change password"
-          description="Reset password button text"
-        />
-      </MenuButton>
-      {errors.length > 0 && (
-        <Stack my={1} direction="column">
-          {errors.map((item: { error: string }, index) => (
-            <Typography color="red" key={`error-${index}`}>
-              {item.error}
+      {isComplete ? (
+        <>
+          <Stack direction="row" justifyContent="center" my={3}>
+            <Typography color="white">
+              <FormattedMessage
+                id="app.reset.menu.sent"
+                defaultMessage="Your password has been successfully updated. You can now return and"
+                description="Password reset success text"
+              />{' '}
+              <HrefLink component={Link} color="text.secondary" to="/signin">
+                <FormattedMessage
+                  id="app.signup.menu.login"
+                  defaultMessage="Log in"
+                  description="SignUp Login text"
+                />
+              </HrefLink>
+              .
             </Typography>
-          ))}
-        </Stack>
-      )}
-
-      <Stack direction="row" justifyContent="center" my={1}>
-        <Typography color="white" fontSize={14}>
-          <FormattedMessage
-            id="app.reset.menu.backtext"
-            defaultMessage="If you didn't intend to reset you password, you can go back"
-            description="Reset password go home text"
-          />{' '}
-          <HrefLink component={Link} color="text.secondary" to="/">
+          </Stack>
+        </>
+      ) : (
+        <>
+          <InputLabel htmlFor="password" sx={labelStyles}>
             <FormattedMessage
-              id="app.reset.menu.home"
-              defaultMessage="Home"
-              description="Reset password home link"
+              id="app.reset.menu.password"
+              defaultMessage="New Password"
+              description="Reset password new password label"
             />
-          </HrefLink>
-        </Typography>
-      </Stack>
+          </InputLabel>
+          <OutlinedInput
+            id="password"
+            type="password"
+            sx={settingInputStyles}
+            {...register('password')}
+          />
+          <InputLabel htmlFor="password" sx={labelStyles}>
+            <FormattedMessage
+              id="app.reset.menu.passwordagain"
+              defaultMessage="Repeat new password"
+              description="Reset password repeat new password label"
+            />
+          </InputLabel>
+          <OutlinedInput
+            id="confirmPassword"
+            type="password"
+            sx={settingInputStyles}
+            {...register('confirmPassword')}
+          />
+          <MenuButton loading={loading} type="submit" primary>
+            <FormattedMessage
+              id="app.reset.menu.change"
+              defaultMessage="Change password"
+              description="Reset password button text"
+            />
+          </MenuButton>
+          {errors.length > 0 && (
+            <Stack my={1} direction="column">
+              {errors.map((item: { error: string }, index) => (
+                <Typography color="red" key={`error-${index}`}>
+                  {item.error}
+                </Typography>
+              ))}
+            </Stack>
+          )}
+
+          <Stack direction="row" justifyContent="center" my={1}>
+            <Typography color="white" fontSize={14}>
+              <FormattedMessage
+                id="app.reset.menu.backtext"
+                defaultMessage="If you didn't intend to reset you password, you can go back"
+                description="Reset password go home text"
+              />{' '}
+              <HrefLink component={Link} color="text.secondary" to="/">
+                <FormattedMessage
+                  id="app.reset.menu.home"
+                  defaultMessage="Home"
+                  description="Reset password home link"
+                />
+              </HrefLink>
+              .
+            </Typography>
+          </Stack>
+        </>
+      )}
     </Stack>
   );
 };
