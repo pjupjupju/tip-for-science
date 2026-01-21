@@ -39,6 +39,10 @@
     "defaultMessage": "Stats",
     "description": "Stats button"
   },
+  "app.dashboard.menu.wipe": {
+    "defaultMessage": "Wipe batches",
+    "description": "Wipe batches button"
+  },
   "app.game.checkmail": {
     "defaultMessage": "You can check or update it in the Settings.",
     "description": "mail settings"
@@ -83,10 +87,6 @@
     "defaultMessage": "Home",
     "description": "Home button"
   },
-  "app.home.footer.beta": {
-    "defaultMessage": "This is just a beta version. If you encounter any bug,{lineBreak} contact us at tipforscience@protonmail.com",
-    "description": "Beta warning"
-  },
   "app.home.menu.dashboard": {
     "defaultMessage": "Dashboard",
     "description": "Dashboard button"
@@ -122,6 +122,50 @@
   "app.previoustis": {
     "defaultMessage": "Previous tips:",
     "description": "Previous tips"
+  },
+  "app.questionnaire.button.home": {
+    "defaultMessage": "Home",
+    "description": "Questionnaire go to main page button"
+  },
+  "app.questionnaire.button.play": {
+    "defaultMessage": "Play",
+    "description": "Questionnaire play next question button"
+  },
+  "app.reset": {
+    "defaultMessage": "Reset password",
+    "description": "Reset password page title"
+  },
+  "app.reset.menu.backtext": {
+    "defaultMessage": "If you didn't intend to reset you password, you can go back",
+    "description": "Reset password go home text"
+  },
+  "app.reset.menu.change": {
+    "defaultMessage": "Change password",
+    "description": "Reset password button text"
+  },
+  "app.reset.menu.email": {
+    "defaultMessage": "E-mail",
+    "description": "Request reset password email label"
+  },
+  "app.reset.menu.home": {
+    "defaultMessage": "Home",
+    "description": "Reset password home link"
+  },
+  "app.reset.menu.password": {
+    "defaultMessage": "New Password",
+    "description": "Reset password new password label"
+  },
+  "app.reset.menu.passwordagain": {
+    "defaultMessage": "Repeat new password",
+    "description": "Reset password repeat new password label"
+  },
+  "app.reset.menu.request": {
+    "defaultMessage": "Request password reset",
+    "description": "Request password change button text"
+  },
+  "app.reset.menu.sent": {
+    "defaultMessage": "Password reset request successfully sent. You can return to",
+    "description": "Password reset request sent text"
   },
   "app.settings.menu.age": {
     "defaultMessage": "Age:",
@@ -199,6 +243,10 @@
     "defaultMessage": "E-mail",
     "description": "SignIn E-mail label"
   },
+  "app.signin.menu.forgottenpassword": {
+    "defaultMessage": "Or you can reset",
+    "description": "Forgotten password help text"
+  },
   "app.signin.menu.home": {
     "defaultMessage": "Home",
     "description": "SignIn Home link"
@@ -230,6 +278,10 @@
   "app.signup.menu.email": {
     "defaultMessage": "E-mail",
     "description": "SignUp Email label"
+  },
+  "app.signup.menu.forgottenpasswordlink": {
+    "defaultMessage": "forgotten password",
+    "description": "Forgotten password link"
   },
   "app.signup.menu.home": {
     "defaultMessage": "Home",
@@ -275,10 +327,6 @@
   "app.stats.menu.home": {
     "defaultMessage": "Home",
     "description": "Home link"
-  },
-  "app.stats.menu.profile": {
-    "defaultMessage": "Profile",
-    "description": "Profile text"
   },
   "app.stats.menu.progress": {
     "defaultMessage": "Your progress:",
@@ -333,7 +381,7 @@
     "description": "Tut5 answer"
   },
   "app.tutorial.slide.apes": {
-    "defaultMessage": "This game is one big experiment in cultural evolution. Interested us how this species of extremely cooperative apes finds the optimum strategy when only group intelligence is available.",
+    "defaultMessage": "This game is one big experiment in cultural evolution. We are interested in how extremely cooperative apes find the best strategy using only group intelligence.",
     "description": "Tut12 apes"
   },
   "app.tutorial.slide.byeb": {
@@ -465,7 +513,7 @@
     "description": "Tut7 survive"
   },
   "app.tutorial.slide.timesup": {
-    "defaultMessage": "Time’s up! But this time, you can still submit your answer here:",
+    "defaultMessage": "Time's up! But this time, you can still submit your answer here:",
     "description": "Tut13 times up"
   },
   "app.tutorial.slide.wash": {
@@ -499,12 +547,6 @@
   "app.yourtip": {
     "defaultMessage": "your tip",
     "description": "Yourtip placeholder"
-  },
-  "generate": {
-    "defaultMessage": "Generate"
-  },
-  "save": {
-    "defaultMessage": "Save"
   },
   "score.high.0": {
     "defaultMessage": "Someone's got a knack for this 😳"
