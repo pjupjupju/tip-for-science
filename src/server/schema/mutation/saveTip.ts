@@ -1,7 +1,7 @@
 import { ulid } from 'ulid';
 import { getScore } from '../../../helpers';
 import {
-  createQuestionTipV2,
+  createQuestionTip,
   getQuestionWithRun,
   updateScore,
 } from '../../model';
@@ -37,7 +37,7 @@ export async function saveTip(
   const { strategy, settings, runId } = question;
   const tipId = ulid();
 
-  await createQuestionTipV2(
+  await createQuestionTip(
     {
       tipId,
       id,

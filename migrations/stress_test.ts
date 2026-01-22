@@ -5,9 +5,9 @@ import postgres from 'postgres';
 import { ulid } from 'ulid';
 import { ValidationError } from 'yup';
 import {
-  createQuestionTipV2,
+  createQuestionTip,
   findUserByEmail,
-  getEnabledQuestionRunsV2,
+  getEnabledQuestionRuns,
   getQuestionWithRun,
 } from '../src/server/model';
 import { RunCache, RunLock } from '../src/server/io';
@@ -48,6 +48,7 @@ async function generate() {
   const user = await findUserByEmail('carpathian.outlaw@gmail.com', {
     dynamo,
     supabase,
+    sql,
   });
 
   if (!user) {
@@ -55,14 +56,14 @@ async function generate() {
   }
 
   for (let i = 0; i < 500; i++) {
-    const nextQuestionRuns = await getEnabledQuestionRunsV2(questionId, {
+    const nextQuestionRuns = await getEnabledQuestionRuns(questionId, {
       sql,
       dynamo,
       supabase,
     });
 
     // get the preferred run from cache
-    const runRecord = await runCache.getRunV2(
+    const runRecord = await runCache.getRun(
       questionId,
       nextQuestionRuns,
       user.id
@@ -87,7 +88,7 @@ async function generate() {
 
     const tip = generateTip(runRecord.settings.correctAnswer);
 
-    await createQuestionTipV2(
+    await createQuestionTip(
       {
         tipId,
         id: questionId,

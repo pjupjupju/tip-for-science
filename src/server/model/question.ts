@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { AWSError, DynamoDB } from 'aws-sdk';
+import { AWSError } from 'aws-sdk';
 import { ScanOutput } from 'aws-sdk/clients/dynamodb';
 import { format } from '@fast-csv/format';
 import decamelizeKeys from 'decamelize-keys';
@@ -7,16 +7,11 @@ import toCamelCase from 'camelcase-keys';
 import { ulid } from 'ulid';
 import {
   INITIAL_GENERATION_NUMBER,
-  MAX_GENERATION_NUMBER,
-  MAX_PERCENT_TOO_CLOSE_ANSWERS_PER_GEN,
-  PERCENTAGE_CONSIDERED_TOO_CLOSE,
   TABLE_QUESTION,
   TABLE_USER,
 } from '../../config';
 import { generateQuestionBundle, sliceIntoChunks } from '../../helpers';
 import {
-  DynamoQuestion,
-  DynamoRun,
   DynamoTip,
   ImportedQuestionSettings,
   ModelContext,
@@ -27,368 +22,6 @@ import {
 } from './types';
 import { uploadCsvToS3, RunLock } from '../io';
 import { getInitialTips, getRunConfig } from '../io/utils';
-
-export async function batchCreateQuestions(
-  questions: ImportedQuestionSettings[],
-  context: ModelContext
-) {
-  const { dynamo } = context;
-
-  const chunks = sliceIntoChunks(questions, 24);
-  const initialQuestionIds: string[] = [];
-  const questionIds: string[] = [];
-
-  const paramsForEachChunk = chunks.map((chunk) => ({
-    RequestItems: {
-      [TABLE_QUESTION]: chunk.map(
-        ({
-          question,
-          fact,
-          image,
-          isInit,
-          correctAnswer,
-          timeLimit,
-          unit,
-        }: ImportedQuestionSettings) => {
-          const id = ulid();
-
-          if (isInit) {
-            initialQuestionIds.push(`Q#${id}`);
-          } else {
-            questionIds.push(`Q#${id}`);
-          }
-
-          return {
-            PutRequest: {
-              Item: {
-                id: `Q#${id}`,
-                run: 0,
-                settings: {
-                  fact,
-                  question,
-                  image,
-                  correctAnswer,
-                  timeLimit,
-                  unit,
-                },
-                strategy: {
-                  selectionPressure: [],
-                  tipsPerGeneration: [],
-                  initialTips: [],
-                  numTipsToShow: [],
-                },
-                isInit,
-                qsk: `QDATA#${id}`,
-                gsi_pk: `Q`,
-                gsi_sk: `QDATA#${id}`,
-              },
-            },
-          };
-        }
-      ),
-    },
-  }));
-
-  // TODO: maybe do it in a trasnaction later, because it might happen, that it breaks and we do not know, where we stopped
-  const allPromises = paramsForEachChunk.map((params) =>
-    dynamo.batchWrite(params).promise()
-  );
-
-  const results = await Promise.all(allPromises);
-
-  await updateUserBatches(initialQuestionIds, questionIds, context);
-
-  return results;
-}
-
-export async function getAllQuestions({ dynamo }: ModelContext) {
-  const params = {
-    TableName: TABLE_QUESTION,
-    KeyConditionExpression: 'begins_with(#id, :id) and begins_with(#qsk, :qsk)',
-    ExpressionAttributeNames: {
-      '#id': 'id',
-      '#qsk': 'qsk',
-    },
-    ExpressionAttributeValues: {
-      ':id': 'Q#',
-      ':qsk': 'QDATA#',
-    },
-  };
-
-  const result = await dynamo.query(params).promise();
-
-  return result.Items;
-}
-
-export async function getQuestion(id: string, { dynamo }: ModelContext) {
-  const { Item } = await dynamo
-    .get({
-      TableName: TABLE_QUESTION,
-      Key: { id, qsk: `QDATA#${id.split('#')[1]}` },
-    })
-    .promise();
-
-  return Item as DynamoQuestion;
-}
-
-export async function getQuestionRun(
-  id: string,
-  run: number,
-  { dynamo }: ModelContext
-) {
-  const { Item } = await dynamo
-    .get({
-      TableName: TABLE_QUESTION,
-      Key: { id, qsk: `${id}#true#R#${run}` },
-    })
-    .promise();
-
-  return Item as DynamoRun;
-}
-
-export async function getEnabledQuestionRuns(
-  id: string,
-  { dynamo }: ModelContext
-): Promise<any | null> {
-  const params = {
-    TableName: TABLE_QUESTION,
-    KeyConditionExpression: '#id = :id and begins_with(#qsk, :qsk)',
-    ExpressionAttributeNames: {
-      '#id': 'id',
-      '#qsk': 'qsk',
-    },
-    ExpressionAttributeValues: {
-      ':id': id,
-      ':qsk': `${id}#true`,
-    },
-  };
-
-  const result = await dynamo.query(params).promise();
-
-  return result.Items;
-}
-
-export async function createQuestionRun(id: string, context: ModelContext) {
-  const { dynamo } = context;
-  const question = await getQuestion(id, context);
-
-  const runId = question.run + 1;
-  const runIndex = runId - 1;
-
-  const params = {
-    id: question.id,
-    qsk: `${question.id}#true#R#${runId}`,
-    gsi_pk: `${question.id}#true#R#${runId}`,
-    gsi_sk: `${question.id}#R#${runId}`,
-    generation: INITIAL_GENERATION_NUMBER,
-    previousTips:
-      question.strategy.initialTips[
-        runIndex % question.strategy.initialTips.length
-      ],
-    run: runId,
-    settings: question.settings,
-    strategy: {
-      numTipsToShow:
-        question.strategy.numTipsToShow[
-          runIndex % question.strategy.numTipsToShow.length
-        ],
-      selectionPressure:
-        question.strategy.selectionPressure[
-          runIndex % question.strategy.selectionPressure.length
-        ],
-      tipsPerGeneration:
-        question.strategy.tipsPerGeneration[
-          runIndex % question.strategy.tipsPerGeneration.length
-        ],
-    },
-  };
-
-  // TODO: add transaction Put and Update!
-  await dynamo
-    .put(
-      {
-        ReturnValues: 'ALL_OLD',
-        TableName: TABLE_QUESTION,
-        Item: params,
-      },
-      async (error) => {
-        if (error) {
-          console.error(error);
-          return error;
-        }
-
-        await updateCurrentHighestRun(id, runId, context);
-      }
-    )
-    .promise();
-
-  return params;
-}
-
-export async function createQuestionTip(
-  {
-    tipId,
-    id,
-    tip,
-    run,
-    correctAnswer,
-    strategy,
-    generation,
-    previousTips,
-    timeLimit,
-    knewAnswer,
-    answered,
-    msElapsed,
-    userId,
-  }: {
-    tipId: string;
-    id: string;
-    tip: number;
-    run: number;
-    correctAnswer: number;
-    strategy: RunStrategy;
-    generation: number;
-    previousTips: number[];
-    timeLimit?: number;
-    knewAnswer: boolean;
-    answered: boolean;
-    msElapsed: number;
-    userId: string;
-  },
-  context: ModelContext & { runLock: RunLock }
-) {
-  const { dynamo, runLock } = context;
-  const currentTips = await getCurrentGenerationTips(
-    id,
-    run,
-    generation,
-    context
-  );
-
-  const currentTipsWithAnswer = currentTips.filter(
-    (t: DynamoTip) =>
-      !['undefined', 'null'].includes(typeof t.data.tip) &&
-      t.data.answered !== false &&
-      t.data.knewAnswer !== true
-  );
-
-  const params = {
-    id,
-    qsk: `T#${tipId}`,
-    gsi_pk: `${id}#R#${run}#G#${generation}`,
-    gsi_sk: `T#${tipId}`,
-    run,
-    generation,
-    data: {
-      tip,
-      previousTips,
-      msElapsed,
-      createdBy: userId,
-      createdAt: new Date().toISOString(),
-      correctAnswer,
-      timeLimit,
-      knewAnswer,
-      answered,
-    },
-  };
-
-  // TODO: maybe consider mutex and/or transaction here
-  return dynamo
-    .put({
-      ReturnValues: 'ALL_OLD',
-      TableName: TABLE_QUESTION,
-      Item: params,
-    })
-    .promise()
-    .then(() => {
-      // If we hit tips per generation threshold, start new generation by updating RUN
-      if (
-        answered !== false &&
-        knewAnswer !== true &&
-        currentTipsWithAnswer.length + 1 >= strategy.tipsPerGeneration &&
-        !runLock.getLock(`${id}#${run}#${generation}`)
-      ) {
-        // We first check, whether RUN is still enabled and whether generation is still the same
-        getQuestionRun(id, run, context).then((dbRun) => {
-          if (dbRun && dbRun.generation === generation) {
-            // Lock current Q#RUN#GEN to prevent creating multiple generations
-            // we release current generation when we create next generation in future
-            runLock.lock(`${id}#${run}#${generation}`);
-
-            const allGenerationTips = [
-              ...currentTipsWithAnswer.map((t: any) => t.data.tip),
-              tip,
-            ];
-            // If we hit correct answer for too many people in generation, we disable this RUN
-            if (
-              isGenerationTooCloseToCorrectAnswer(
-                allGenerationTips,
-                correctAnswer
-              )
-            ) {
-              return disableRun(id, run, context);
-            }
-
-            // new generation and new previous tips
-            return updateCurrentGeneration(
-              id,
-              run,
-              generation + 1,
-              getNewPreviousTips(allGenerationTips, correctAnswer, strategy),
-              context
-            );
-          }
-        });
-      }
-    })
-    .catch((error) => {
-      if (error) {
-        console.error('Dynamo put operation failed: ', error);
-      }
-    });
-}
-
-export async function getCurrentGenerationTips(
-  questionId: string,
-  runId: number,
-  generationNumber: number,
-  { dynamo }: ModelContext
-): Promise<any | null> {
-  const params = {
-    TableName: TABLE_QUESTION,
-    IndexName: 'QER_GSI',
-    KeyConditionExpression: '#gsipk = :gsipk and begins_with(#gsisk, :gsisk)',
-    ExpressionAttributeNames: {
-      '#gsipk': 'gsi_pk',
-      '#gsisk': 'gsi_sk',
-    },
-    ExpressionAttributeValues: {
-      ':gsisk': 'T#',
-      ':gsipk': `${questionId}#R#${runId}#G#${generationNumber}`,
-    },
-  };
-
-  const result = await dynamo.query(params).promise();
-
-  return result.Items;
-}
-
-async function updateCurrentHighestRun(
-  questionId: string,
-  newRunId: number,
-  { dynamo }: ModelContext
-): Promise<any> {
-  const params = {
-    TableName: TABLE_QUESTION,
-    Key: { id: questionId, qsk: `QDATA#${questionId.split('#')[1]}` },
-    UpdateExpression: 'set run = :newRunId',
-    ExpressionAttributeValues: {
-      ':newRunId': newRunId,
-    },
-  };
-
-  return dynamo.update(params).promise();
-}
 
 export async function exportTipData({ dynamo }: ModelContext): Promise<string> {
   let downloadUrl: Promise<string> | string;
@@ -497,35 +130,6 @@ export async function exportTipData({ dynamo }: ModelContext): Promise<string> {
   return downloadUrl;
 }
 
-async function updateCurrentGeneration(
-  questionId: string,
-  runId: string | number,
-  newCurrentGeneration: number,
-  newPreviousTips: number[],
-  { dynamo, runLock }: ModelContext & { runLock: RunLock }
-): Promise<any> {
-  const params = {
-    TableName: TABLE_QUESTION,
-    Key: { id: questionId, qsk: `${questionId}#true#R#${runId}` },
-    UpdateExpression:
-      'set generation = :newCurrentGeneration, previousTips = :previousTips',
-    ExpressionAttributeValues: {
-      ':newCurrentGeneration': newCurrentGeneration,
-      ':previousTips': newPreviousTips,
-    },
-  };
-
-  try {
-    await dynamo.update(params).promise();
-  } catch (e) {
-    console.error('Update DynamoDB generation failed: ', e);
-  } finally {
-    if (newCurrentGeneration - 2 >= INITIAL_GENERATION_NUMBER) {
-      runLock.unlock(`${questionId}#${runId}#${newCurrentGeneration - 2}`);
-    }
-  }
-}
-
 async function updateUserBatches(
   initialQuestionIds: string[],
   questionIds: string[],
@@ -602,82 +206,9 @@ async function updateUserBatches(
   dynamo.scan(params, onScanUsersAndUpdateBundles);
 }
 
-async function disableRun(
-  questionId: string,
-  runId: string | number,
-  { dynamo }: ModelContext
-): Promise<any> {
-  const paramsDelete = {
-    TableName: TABLE_QUESTION,
-    Key: { id: questionId, qsk: `${questionId}#true#R#${runId}` },
-    ReturnValues: 'ALL_OLD',
-  };
-
-  return dynamo
-    .delete(paramsDelete, (error, data) => {
-      if (error) {
-        console.error('Dynamo delete operation failed: ', error);
-      }
-
-      if (data.Attributes) {
-        const { Attributes } = data;
-        const paramsInsert = {
-          TableName: TABLE_QUESTION,
-          Item: {
-            ...Attributes,
-            qsk: Attributes!.qsk.replace('true', 'false'),
-            gsi_pk: Attributes!.qsk.replace('true', 'false'),
-          },
-        };
-
-        return dynamo
-          .put(paramsInsert, (err) => {
-            if (err) {
-              console.error('Dynamo reInsert operation failed: ', err);
-            }
-          })
-          .promise();
-      }
-    })
-    .promise();
-}
-
-function getNewPreviousTips(
-  tips: number[],
-  correctAnswer: number,
-  { selectionPressure }: RunStrategy
-): number[] {
-  // TODO: do we want to use Math.floor? How do we make sure, we never create FLOAT? This is probably not app's job
-  // TODO: apply numTipsToShow if it differs from how many we have after applying selection
-  const numTipsToRemove = Math.floor(selectionPressure * tips.length);
-  return tips
-    .sort((a, b) => Math.abs(correctAnswer - a) - Math.abs(correctAnswer - b))
-    .slice(0, numTipsToRemove >= 1 ? -numTipsToRemove : tips.length)
-    .sort(() => Math.random() - 0.5);
-}
-
-// TODO: get rid of this ANY
-function isGenerationTooCloseToCorrectAnswer(
-  tips: number[],
-  correctAnswer: number
-): boolean {
-  // Fraction of correct answer which is considered to be too close
-  const fraction = (correctAnswer * PERCENTAGE_CONSIDERED_TOO_CLOSE) / 100;
-
-  return (
-    (tips.length * MAX_PERCENT_TOO_CLOSE_ANSWERS_PER_GEN) / 100 <=
-    tips.reduce((count: number, t: number) => {
-      if (Math.abs(correctAnswer - t) <= fraction) {
-        return count + 1;
-      }
-      return count;
-    }, 0)
-  );
-}
-
 // --------------------- POSTGRES ----------------------------
 
-export async function batchCreateQuestionsV2(
+export async function batchCreateQuestions(
   questions: ImportedQuestionSettings[],
   context: ModelContext
 ) {
@@ -755,7 +286,7 @@ export async function getNotImportedQuestions(
   return questions.filter((q) => !importedSheetIds.includes(q.qIdInSheet));
 }
 
-export async function getEnabledQuestionRunsV2(
+export async function getEnabledQuestionRuns(
   id: string,
   { sql }: ModelContext
 ): Promise<any | null> {
@@ -775,13 +306,13 @@ export async function getEnabledQuestionRunsV2(
   }
 }
 
-export async function getQuestionCorpusV2(supabase: ModelContext['supabase']) {
+export async function getQuestionCorpus(supabase: ModelContext['supabase']) {
   const { data } = await supabase.from('question').select();
 
   return data.map((item) => toCamelCase(item));
 }
 
-export async function getQuestionV2(id: string, { supabase }: ModelContext) {
+export async function getQuestion(id: string, { supabase }: ModelContext) {
   const {
     data: [question],
   } = await supabase.from('question').select().eq('id', id);
@@ -789,7 +320,7 @@ export async function getQuestionV2(id: string, { supabase }: ModelContext) {
   return question;
 }
 
-export async function getQuestionRunV2(id: string, { supabase }: ModelContext) {
+export async function getQuestionRun(id: string, { supabase }: ModelContext) {
   const {
     data: [run],
   } = await supabase.from('run').select().eq('id', id);
@@ -840,19 +371,25 @@ export async function getQuestionWithHighestRun(
   return questions[0] as PostgresQuestion;
 }
 
-function getNewPreviousTipsV2(
+function logDist(t: number, correctAnswer: number) {
+  if (t <= 0 || correctAnswer <= 0) return Number.POSITIVE_INFINITY;
+  return Math.abs(Math.log(t / correctAnswer));
+}
+
+function getNewPreviousTips(
   tips: number[],
   correctAnswer: number,
   { selectionPressure }: RunStrategy
 ): number[] {
   const numTipsToRemove = Math.floor(selectionPressure * tips.length);
   return tips
-    .sort((a, b) => Math.abs(correctAnswer - a) - Math.abs(correctAnswer - b))
+    .slice()
+    .sort((a, b) => logDist(a, correctAnswer) - logDist(b, correctAnswer))
     .slice(0, numTipsToRemove >= 1 ? -numTipsToRemove : tips.length)
     .sort(() => Math.random() - 0.5);
 }
 
-export async function createQuestionRunV2(
+export async function createQuestionRun(
   questionId: string,
   userId: string,
   context: ModelContext
@@ -898,7 +435,7 @@ export async function createQuestionRunV2(
   return { ...params, ...data, settings: question.settings };
 }
 
-export async function getCurrentGenerationTipsV2(
+export async function getCurrentGenerationTips(
   questionId: string,
   runId: string,
   generationNumber: number,
@@ -914,7 +451,7 @@ export async function getCurrentGenerationTipsV2(
   return data;
 }
 
-export async function createQuestionTipV2(
+export async function createQuestionTip(
   {
     tipId,
     id,
@@ -947,7 +484,7 @@ export async function createQuestionTipV2(
   context: ModelContext & { runLock: RunLock }
 ) {
   const { runLock, sql } = context;
-  const currentTips = await getCurrentGenerationTipsV2(
+  const currentTips = await getCurrentGenerationTips(
     id,
     runId,
     generation,
@@ -1019,7 +556,7 @@ export async function createQuestionTipV2(
           runLock.unlock(`${runId}#${generation}`);
         } else {
           // new generation and new previous tips
-          const newPreviousTips = getNewPreviousTipsV2(
+          const newPreviousTips = getNewPreviousTips(
             allGenerationTips,
             correctAnswer,
             strategy

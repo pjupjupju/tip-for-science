@@ -2,7 +2,7 @@ import { ValidationError } from 'yup';
 import { GraphQLContext } from '..';
 import {
   findUserById,
-  getEnabledQuestionRunsV2,
+  getEnabledQuestionRuns,
   getQuestionTranslation,
   updateLastQuestion,
 } from '../../model';
@@ -56,13 +56,13 @@ export async function getNextQuestion(
     ? userRecord.bundle[userRecord.bundle.indexOf(lastQuestion) + 1]
     : userRecord.bundle[0];
 
-  const nextQuestionRuns = await getEnabledQuestionRunsV2(
+  const nextQuestionRuns = await getEnabledQuestionRuns(
     nextQuestionId,
     context
   );
 
   // get the preferred run from cache
-  const runRecord = await runCache.getRunV2(
+  const runRecord = await runCache.getRun(
     nextQuestionId,
     nextQuestionRuns,
     user.id
