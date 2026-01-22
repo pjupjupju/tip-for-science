@@ -1,7 +1,7 @@
 import { ValidationError } from 'yup';
 import { getQuestionBatch } from '../../io';
 import {
-  batchCreateQuestionsV2,
+  batchCreateQuestions,
   getNotImportedQuestions,
 } from '../../model';
 import { GraphQLContext } from '../context';
@@ -32,7 +32,7 @@ export async function importQuestions(
     return true;
   }
 
-  const importData = await batchCreateQuestionsV2(questions, context);
+  const importData = await batchCreateQuestions(questions, context);
   let notImported = [];
 
   if (importData.some((chunk) => chunk.error)) {

@@ -75,17 +75,6 @@ type QuestionStrategy = {
 /**
  * Question from db
  */
-export interface DynamoQuestion {
-  id: string;
-  qsk: string;
-  gsi_pk: string;
-  gsi_sk: string;
-  generation: number;
-  run: number;
-  settings: QuestionSettings;
-  strategy: QuestionStrategy;
-}
-
 export interface DynamoTip {
   id: string;
   qsk: string;
@@ -107,18 +96,6 @@ export type RunStrategy = {
   numTipsToShow: number;
   maxGenerations: number;
 };
-
-export interface DynamoRun {
-  id: string;
-  qsk: string;
-  gsi_pk: string;
-  gsi_sk: string;
-  generation: number;
-  previousTips: number[];
-  run: number;
-  settings: QuestionSettings;
-  strategy: RunStrategy;
-}
 
 export interface PostgresRun {
   id: string;
