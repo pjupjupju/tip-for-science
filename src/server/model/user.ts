@@ -17,7 +17,7 @@ import {
   UserRole,
   UserSettings,
 } from './types';
-import { getQuestionCorpusV2 } from './question';
+import { getQuestionCorpus } from './question';
 
 async function generateIpipBundle(supabase: SupabaseClient): Promise<number[]> {
   const { data } = await supabase.from('ipip_questionnaire').select('id');
@@ -41,7 +41,7 @@ export async function createUser(
   const { dynamo, supabase } = context;
   const id = ulid();
 
-  const questions = await getQuestionCorpusV2(supabase);
+  const questions = await getQuestionCorpus(supabase);
   const currentIndex = await getCurrentUserIndex(dynamo);
 
   const initialQuestions = questions
