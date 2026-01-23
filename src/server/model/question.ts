@@ -630,6 +630,10 @@ export async function exportTipDataV2({ sql }: ModelContext): Promise<string> {
     'answertime',
     'limit',
     'tip',
+    'numTipsToShow',
+    'popSize',
+    'selectionPressure',
+    'maxGenerations',
   ];
 
   const returnValueOrEmptyString = (value: any) =>
@@ -670,6 +674,22 @@ export async function exportTipDataV2({ sql }: ModelContext): Promise<string> {
           (q.settings->>'correctAnswer')::numeric,
           (q.settings->>'correct_answer')::numeric
         ) as correct_answer,
+        COALESCE(
+          (r.strategy->>'maxGenerations')::numeric,
+          (r.strategy->>'max_generations')::numeric
+        ) as max_generations,
+        COALESCE(
+          (r.strategy->>'selectionPressure')::numeric,
+          (r.strategy->>'selection_pressure')::numeric
+        ) as selection_pressure,
+        COALESCE(
+          (r.strategy->>'numTipsToShow')::numeric,
+          (r.strategy->>'num_tips_to_show')::numeric
+        ) as num_tips_to_show,
+        COALESCE(
+          (r.strategy->>'tipsPerGeneration')::numeric,
+          (r.strategy->>'tip_per_generation')::numeric
+        ) as tips_per_generation,
         r.run_num
       FROM tip t
       JOIN question q ON q.id = t.question_id
@@ -703,6 +723,10 @@ export async function exportTipDataV2({ sql }: ModelContext): Promise<string> {
         runNum,
         timeLimit,
         tip,
+        numTipsToShow,
+        tipsPerGeneration,
+        selectionPressure,
+        maxGenerations,
       } = row;
 
       const createdISO =
@@ -730,7 +754,6 @@ export async function exportTipDataV2({ sql }: ModelContext): Promise<string> {
         parent2: returnValueOrEmptyString(previousTips?.[1]),
         parent3: returnValueOrEmptyString(previousTips?.[2]),
         parent4: returnValueOrEmptyString(previousTips?.[3]),
-
         answered: returnValueOrEmptyString(answered).toString(),
         knewAnswer: returnValueOrEmptyString(knewAnswer).toString(),
         answertime: msElapsed,
@@ -738,8 +761,11 @@ export async function exportTipDataV2({ sql }: ModelContext): Promise<string> {
           typeof timeLimit === 'undefined' || timeLimit === null
             ? 'false'
             : timeLimit * 1000,
-
         tip,
+        numTipsToShow,
+        popSize: tipsPerGeneration,
+        selectionPressure,
+        maxGenerations,
       });
     }
 
