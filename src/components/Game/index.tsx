@@ -244,6 +244,7 @@ const Game = ({
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
             sx={inputStyles}
+            autoFocus
           />
           {!!unit && unit !== '' && (
             <Typography color="white" ml={-1} mr={2}>

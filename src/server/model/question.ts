@@ -606,3 +606,164 @@ export async function createQuestionTip(
     }
   });
 }
+
+export async function exportTipDataV2({ sql }: ModelContext): Promise<string> {
+  let downloadUrl: Promise<string> | string;
+
+  const headers = [
+    'time',
+    'date',
+    'itemId',
+    'participantId',
+    'questionId',
+    'questionSheetId',
+    'runId',
+    'generationId',
+    'correct',
+    'nparents',
+    'parent1',
+    'parent2',
+    'parent3',
+    'parent4',
+    'answered',
+    'knewAnswer',
+    'answertime',
+    'limit',
+    'tip',
+  ];
+
+  const returnValueOrEmptyString = (value: any) =>
+    typeof value === 'undefined' ? '' : value;
+
+  const stream = format({ headers });
+
+  if (process.env.NODE_ENV !== 'production') {
+    const writableStream = fs.createWriteStream(
+      `export-tipdata-${Date.now()}.csv`
+    );
+
+    // @ts-ignore
+    stream.pipe(writableStream);
+  }
+
+  const BATCH_SIZE = 2000;
+
+  let lastCreatedAt: string | null = null;
+  let lastId: string | null = null;
+
+  while (true) {
+    const rows = await sql`
+      SELECT
+        t.id as id,
+        t.created_at as created_at,
+        t.created_by as created_by,
+        t.question_id as question_id,
+        t.generation as generation,
+        t.previous_tips as previous_tips,
+        t.answered as answered,
+        t.knew_answer as knew_answer,
+        t.ms_elapsed as ms_elapsed,
+        t.time_limit as time_limit,
+        t.tip as tip,
+        q.id_in_sheet as question_sheet_id,
+        COALESCE(
+          (q.settings->>'correctAnswer')::numeric,
+          (q.settings->>'correct_answer')::numeric
+        ) as correct_answer,
+        r.run_num
+      FROM tip t
+      JOIN question q ON q.id = t.question_id
+      JOIN run r ON r.id = t.run_id
+      WHERE ${
+        lastCreatedAt === null
+          ? sql`true`
+          : sql`(t.created_at, t.id) > (${lastCreatedAt}::timestamptz, ${lastId}::text)`
+      }
+      ORDER BY t.created_at ASC, t.id ASC
+      LIMIT ${BATCH_SIZE}
+    `;
+
+    if (!rows || rows.length === 0) {
+      break;
+    }
+
+    for (const row of rows) {
+      const {
+        id,
+        answered,
+        knewAnswer,
+        msElapsed,
+        createdAt,
+        createdBy,
+        previousTips,
+        correctAnswer,
+        questionId,
+        questionSheetId,
+        generation,
+        runNum,
+        timeLimit,
+        tip,
+      } = row;
+
+      const createdISO =
+        typeof createdAt === 'string'
+          ? createdAt
+          : createdAt instanceof Date
+          ? createdAt.toISOString()
+          : String(createdAt);
+
+      stream.write({
+        time: new Date(Date.parse(createdISO))
+          .toTimeString()
+          .split('(')[0]
+          .trim(),
+        date: createdISO.substring(0, 10),
+        itemId: id, // pozor: v headers máš itemID, v původním objektu itemId
+        participantId: createdBy,
+        questionId,
+        questionSheetId,
+        runId: runNum,
+        generationId: generation,
+        correct: correctAnswer ?? '',
+        nparents: Array.isArray(previousTips) ? previousTips.length : 0,
+        parent1: returnValueOrEmptyString(previousTips?.[0]),
+        parent2: returnValueOrEmptyString(previousTips?.[1]),
+        parent3: returnValueOrEmptyString(previousTips?.[2]),
+        parent4: returnValueOrEmptyString(previousTips?.[3]),
+
+        answered: returnValueOrEmptyString(answered).toString(),
+        knewAnswer: returnValueOrEmptyString(knewAnswer).toString(),
+        answertime: msElapsed,
+        limit:
+          typeof timeLimit === 'undefined' || timeLimit === null
+            ? 'false'
+            : timeLimit * 1000,
+
+        tip,
+      });
+    }
+
+    // update cursor to last row in this batch
+    const last = rows[rows.length - 1];
+    const batchLastCreatedAt = last.createdAt;
+
+    lastCreatedAt =
+      typeof batchLastCreatedAt === 'string'
+        ? batchLastCreatedAt
+        : batchLastCreatedAt instanceof Date
+        ? batchLastCreatedAt.toISOString()
+        : String(batchLastCreatedAt);
+
+    lastId = last.id;
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    downloadUrl = uploadCsvToS3(stream, `export-tipdata-${Date.now()}`);
+  } else {
+    downloadUrl = 'local';
+  }
+
+  stream.end();
+
+  return downloadUrl;
+}
