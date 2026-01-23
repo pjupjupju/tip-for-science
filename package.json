@@ -76,7 +76,6 @@
     "build-storybook": "build-storybook -s public",
     "types": "tsc -p . --noEmit",
     "test:initial": "TESTING=true ts-node -P migrations/tsconfig.json migrations/test_initial.ts",
-    "test:stress": "TESTING=true ts-node -P migrations/tsconfig.json migrations/stress_test.ts",
     "migrate:dynamodb": "ts-node -P migrations/tsconfig.json migrations/migrate_dynamodb.ts",
     "user:create:admin": "ts-node -P migrations/tsconfig.json migrations/create_admin.ts",
     "seed:dynamodb": "ts-node -P migrations/tsconfig.json migrations/create_seed_data.ts",
