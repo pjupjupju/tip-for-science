@@ -2,6 +2,7 @@ export * from './authQuery';
 export * from './batchSlugifyMutation';
 export * from './exportMutation';
 export * from './getQuestionnaireQuery';
+export * from './getLanguagesQuery';
 export * from './getUserStats';
 export * from './highScoreQuery';
 export * from './myScoreQuery';

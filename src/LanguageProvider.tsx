@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { IntlProvider } from 'react-intl';
 import csMessages from './translations/cs.json';
 
@@ -20,13 +20,47 @@ interface LanguageProviderProps {
   serverLanguage?: string;
 }
 
+interface LanguageContextValue {
+  language: string;
+  changeLanguage: (nextLanguage: string) => void;
+}
+
+const LanguageContext = createContext<LanguageContextValue | null>(null);
+
+const getInitialLanguage = (serverLanguage?: string): string => {
+  if (serverLanguage) {
+    return serverLanguage;
+  }
+
+  if (typeof window !== 'undefined' && window.__INITIAL_LANGUAGE__) {
+    return window.__INITIAL_LANGUAGE__;
+  }
+
+  return DEFAULT_LANGUAGE;
+};
+
 const LanguageProvider = ({
   serverLanguage,
   storage,
   children,
 }: LanguageProviderProps) => {
-  const [language, setLanguage] = useState<string | null>(
-    serverLanguage || window.__INITIAL_LANGUAGE__ || DEFAULT_LANGUAGE
+  const [language, setLanguage] = useState<string>(getInitialLanguage(serverLanguage));
+
+  const persistLanguage = useCallback(
+    (nextLanguage: string) => {
+      if (storage) {
+        storage.setItem('userLanguage', nextLanguage);
+      }
+    },
+    [storage]
+  );
+
+  const changeLanguage = useCallback(
+    (nextLanguage: string) => {
+      setLanguage(nextLanguage);
+      persistLanguage(nextLanguage);
+    },
+    [persistLanguage]
   );
 
   useEffect(() => {
@@ -35,24 +69,35 @@ const LanguageProvider = ({
       let storedLanguage = storage.getItem('userLanguage');
 
       if (!storedLanguage) {
-        storedLanguage = window.__INITIAL_LANGUAGE__ || DEFAULT_LANGUAGE;
-        storage.setItem('userLanguage', storedLanguage);
+        storedLanguage = getInitialLanguage(serverLanguage);
       }
-      setLanguage(storedLanguage);
+      changeLanguage(storedLanguage);
     } else {
-      setLanguage(serverLanguage);
+      setLanguage(getInitialLanguage(serverLanguage));
     }
-  }, [storage, serverLanguage]);
+  }, [storage, serverLanguage, changeLanguage]);
 
   return (
-    <IntlProvider
-      locale={language}
-      defaultLocale={DEFAULT_LANGUAGE}
-      messages={messages[language]}
-    >
-      {children}
-    </IntlProvider>
+    <LanguageContext.Provider value={{ language, changeLanguage }}>
+      <IntlProvider
+        locale={language}
+        defaultLocale={DEFAULT_LANGUAGE}
+        messages={messages[language]}
+      >
+        {children}
+      </IntlProvider>
+    </LanguageContext.Provider>
   );
 };
 
-export { LanguageProvider };
+const useLanguage = (): LanguageContextValue => {
+  const context = useContext(LanguageContext);
+
+  if (!context) {
+    throw new Error('useLanguage must be used within a LanguageProvider');
+  }
+
+  return context;
+};
+
+export { LanguageProvider, useLanguage };

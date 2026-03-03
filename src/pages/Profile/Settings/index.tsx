@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import { FormattedMessage, useIntl } from 'react-intl';
 import * as Yup from 'yup';
 
+import { LanguageSelector } from '../../../components/LanguageSelector';
 import {
   labelStyles,
   settingInputStyles,
@@ -21,6 +22,7 @@ import {
   MIN_PASSWORD_LENGTH,
   useYupValidationResolver,
 } from '../../../helpers';
+import { useLanguage } from '../../../LanguageProvider';
 import { AuthQueryName, UPDATE_USER_MUTATION } from '../../../gql';
 import { User } from '../../../types';
 import { validationMessages } from './messages';
@@ -50,6 +52,7 @@ const alertStyles = { backgroundColor: '#15de46' };
 const submitButtonStyles = { flex: 1, color: 'white' };
 
 const Settings = ({ user }: { user: User | null }) => {
+  const { language: currentLanguage, changeLanguage } = useLanguage();
   const intl = useIntl();
   const placeholder = intl.formatMessage({
     id: 'app.settings.menu.specifygender',
@@ -101,6 +104,10 @@ const Settings = ({ user }: { user: User | null }) => {
       .max(120)
       .nullable()
       .transform((value) => (!!value ? value : undefined)),
+    language: Yup.string()
+      .notRequired()
+      .nullable()
+      .transform((value) => (!!value ? value : undefined)),
     gender: Yup.string()
       .notRequired()
       .nullable()
@@ -114,6 +121,7 @@ const Settings = ({ user }: { user: User | null }) => {
   const { control, register, handleSubmit, watch } = useForm({
     resolver,
     defaultValues: {
+      language: user.language,
       email: user.email,
       oldPassword: '',
       age: user.age || '',
@@ -135,6 +143,7 @@ const Settings = ({ user }: { user: User | null }) => {
   });
 
   const onSubmit = async (values: {
+    language?: string;
     email: string;
     oldPassword: string;
     newPassword: string;
@@ -154,6 +163,9 @@ const Settings = ({ user }: { user: User | null }) => {
         oldPassword: values.oldPassword,
       };
     }
+    if (values.language != null) {
+      changeSet = { ...changeSet, language: values.language };
+    }
     if (typeof values.age !== 'undefined') {
       changeSet = { ...changeSet, age: parseInt(values.age) };
     }
@@ -171,8 +183,8 @@ const Settings = ({ user }: { user: User | null }) => {
       variables: changeSet,
     });
 
-    if (data && data.updateUser.errors) {
-      setErrors(data!.updateUser!.errors);
+    if (data?.updateUser && values.language && values.language !== currentLanguage) {
+      changeLanguage(values.language);
     }
   };
 
@@ -334,6 +346,23 @@ const Settings = ({ user }: { user: User | null }) => {
           description="Settings header"
         />
       </Typography>
+      <InputLabel htmlFor="language" sx={labelStyles}>
+        <FormattedMessage
+          id="app.settings.menu.language"
+          defaultMessage="Language"
+          description="Language label"
+        />
+      </InputLabel>
+      <Controller
+        name="language"
+        control={control}
+        render={({ field }) => (
+          <LanguageSelector
+            value={field.value}
+            onChange={(language) => field.onChange(language)}
+          />
+        )}
+      />
       <InputLabel htmlFor="email" sx={labelStyles}>
         <FormattedMessage
           id="app.settings.menu.email"

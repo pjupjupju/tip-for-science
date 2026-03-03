@@ -189,3 +189,9 @@ export type Questionnaire = {
   item: string;
   value?: number;
 };
+
+export type Language = {
+  id: string;
+  lang: string;
+  label: string;
+};

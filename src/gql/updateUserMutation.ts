@@ -7,6 +7,7 @@ export const UPDATE_USER_MUTATION = gql`
     $newPassword: String
     $age: Int
     $gender: String
+    $language: String
   ) {
     updateUser(
       email: $email
@@ -14,6 +15,7 @@ export const UPDATE_USER_MUTATION = gql`
       newPassword: $newPassword
       age: $age
       gender: $gender
+      language: $language
     )
   }
 `;

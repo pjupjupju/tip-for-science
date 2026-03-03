@@ -17,6 +17,7 @@ import {
 } from './mutation';
 import {
   getHighScore,
+  getLanguages,
   getMyScore,
   getOnlineStats,
   getNextQuestion,
@@ -77,6 +78,12 @@ export const typeDefs = /* GraphQL */ gql`
     online: Int!
   }
 
+  type LanguageOption {
+    id: String!
+    lang: String!
+    label: String!
+  }
+
   type HighScore {
     slug: String!
     score: Float
@@ -84,6 +91,7 @@ export const typeDefs = /* GraphQL */ gql`
 
   type Query {
     getHighScore: [HighScore!]!
+    getLanguages: [LanguageOption!]!
     getMyScore: Float!
     getNextQuestion: Question
     getOnlineStats: OnlineStats!
@@ -124,6 +132,7 @@ export const typeDefs = /* GraphQL */ gql`
       oldPassword: String
       age: Int
       gender: String
+      language: String
     ): Boolean!
     wipeBatches: Boolean
   }
@@ -206,6 +215,7 @@ export const resolvers = {
   },
   Query: {
     getHighScore,
+    getLanguages,
     getNextQuestion,
     getMyScore,
     getOnlineStats,

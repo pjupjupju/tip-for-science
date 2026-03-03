@@ -11,4 +11,11 @@ export interface User {
   gender?: string;
   nextQuestionnaireAfterQuestion?: string;
   isQuestionnaireActive?: boolean;
+  language?: string;
+}
+
+export interface LanguageOption {
+  id: string;
+  lang: string;
+  label: string;
 }
