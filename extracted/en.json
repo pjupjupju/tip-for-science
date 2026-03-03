@@ -127,6 +127,7 @@
     "defaultMessage": "Home",
     "description": "Questionnaire go to main page button"
   },
+  
   "app.questionnaire.button.play": {
     "defaultMessage": "Play",
     "description": "Questionnaire play next question button"
