@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { IntlProvider } from 'react-intl';
 import csMessages from './translations/cs.json';
+import plMessages from './translations/pl.json';
 
 declare global {
   interface Window {
@@ -12,6 +13,7 @@ export const DEFAULT_LANGUAGE = 'en';
 
 const messages = {
   cs: csMessages,
+  pl: plMessages,
 };
 
 interface LanguageProviderProps {
