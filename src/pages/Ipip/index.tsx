@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import { Container } from './../../components/Container';
 import { Questionnaire } from '../../components/Questionnaire';
 import { QUESTIONNAIRE_QUERY } from '../../gql';
-import { LoadingContainer, Spinner } from '../../components';
+import { LoadingContainer } from '../../components';
 
 const Ipip = ({ onQuestionnaireFinish, user }) => {
   const { loading, data } = useQuery(QUESTIONNAIRE_QUERY, {
