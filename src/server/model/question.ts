@@ -793,3 +793,25 @@ export async function exportTipDataV2({ sql }: ModelContext): Promise<string> {
 
   return downloadUrl;
 }
+
+export async function getQuestionsIdsAndSpreadsheetIds({
+  sql,
+}: ModelContext): Promise<{
+  [key: string]: string;
+}> {
+  const questions = await sql`
+    SELECT 
+      q.id, q."id_in_sheet"
+    FROM "question" q
+  `;
+
+  const list = questions.reduce(
+    (arr, item) => ({
+      ...arr,
+      [item.idInSheet.toString()]: item.id,
+    }),
+    {}
+  );
+
+  return list;
+}

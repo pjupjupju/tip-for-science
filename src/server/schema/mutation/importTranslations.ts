@@ -2,26 +2,39 @@ import { ValidationError } from 'yup';
 import decamelizeKeys from 'decamelize-keys';
 import { getTranslationBatch } from '../../io';
 import { GraphQLContext } from '../context';
-import questions from './../../io/questions.json';
+import {
+  findAllLanguages,
+  getQuestionsIdsAndSpreadsheetIds,
+} from '../../model';
 
 // Google spreadsheet ID
-const translationsSpreadsheetId =
-  '1RJE0l2t5xPGJKIM89zNlndVKSuSvbtpm4lWTE-WcPiU';
+const translationsSpreadsheetId = process.env.RAZZLE_QUESTIONS_SPREADSHEET;
 
 export async function importTranslations(
   parent: any,
-  _: any,
-  { supabase, user }: GraphQLContext
+  { lang }: { lang: string },
+  context: GraphQLContext
 ) {
+  const { supabase, user } = context;
+
   if (user == null) {
     throw new ValidationError('Unauthorized.');
   }
 
   // only allow user who is admin, so first load user role
 
+  const languages = await findAllLanguages(context);
+
+  const existingLanguage = languages.find((i) => i.lang === lang);
+
+  if (!existingLanguage) {
+    console.log('language does not exist');
+    return false;
+  }
+
   const translations = await getTranslationBatch(
     translationsSpreadsheetId,
-    'import'
+    lang
   );
 
   if (translations.length === 0) {
@@ -30,44 +43,20 @@ export async function importTranslations(
     return true;
   }
 
-  /* ENGLISH
-  const dataToImport = questions.map((question) => {
-    const settings = translations.find(
-      (t) => t.question === question.settings.question.S.trim()
-    );
+  const questionList = await getQuestionsIdsAndSpreadsheetIds(context);
 
-    if (!settings) {
-      console.log('MISSING: ', question.settings.question.S);
-      return null;
-    }
-
-    const { qIdInSheet, question: q, ...restSettings } = settings;
-
-    return decamelizeKeys({
-      lang: 'cs',
-      questionId: question.id,
-      ...restSettings,
-    });
-  });
-  */
-
-  const dataToImport = questions.map((q) => {
-    const { unit, fact, question } = q.settings;
-
-    return decamelizeKeys({
-      lang: 'cs',
-      questionId: q.id,
-      qT: question.S,
-      ...(fact.S !== '' ? { factT: fact.S } : {}),
-      ...(unit.S !== '' ? { unitT: unit.S } : {}),
-    });
-  });
+  const dataToImport = translations.map((i) => ({
+    lang,
+    questionId: questionList[i.qIdInSheet],
+    qT: i.qT,
+    factT: i.factT,
+    unitT: i.unitT,
+  }));
 
   try {
-    const { error } = await supabase
+    await supabase
       .from('question_translations')
-      .insert(dataToImport);
-    console.log('error', error);
+      .insert(decamelizeKeys(dataToImport));
   } catch (e) {
     console.log(e);
   }

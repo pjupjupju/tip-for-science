@@ -20,7 +20,7 @@ function getToken() {
 
 async function getQuestionBatch(
   spreadsheetId: string,
-  sheetName: string,
+  sheetName: string
 ): Promise<ImportedQuestionSettings[]> {
   const googleJwt = getToken();
   const sheets = google.sheets('v4');
@@ -47,7 +47,7 @@ async function getQuestionBatch(
       includeGridData: true,
     });
 
-    // Slice only rows of finds
+    // Slice only rows of questions
     const rows = response!.data!.values!.slice(1);
 
     if (rows.length === 0) {
@@ -77,7 +77,7 @@ async function getQuestionBatch(
 
 async function getTranslationBatch(
   spreadsheetId: string,
-  sheetName: string
+  sheetName: string // = language code
 ): Promise<ImportedTranslationSettings[]> {
   const googleJwt = getToken();
   const sheets = google.sheets('v4');
@@ -88,7 +88,6 @@ async function getTranslationBatch(
       range: `${sheetName}!A1:L`,
     });
 
-    // Slice only rows of finds
     const rows = response!.data!.values!.slice(1);
 
     if (rows.length === 0) {
@@ -96,13 +95,15 @@ async function getTranslationBatch(
       return [];
     }
 
-    return rows.map((r) => ({
-      qIdInSheet: r[0],
-      question: r[1].trim(),
-      qT: r[2].trim(),
-      ...(r[4].trim() !== '' ? { unitT: r[4].trim() } : {}),
-      ...(r[7].trim() !== '' ? { factT: r[7].trim() } : {})
-    }));
+    return rows
+      .filter((i) => i[0] !== '' && typeof i[0] !== 'undefined')
+      .map((r) => ({
+        qIdInSheet: r[0],
+        lang: sheetName,
+        qT: r[1].trim(),
+        factT: r[2].trim(),
+        unitT: r[3] !== '' && typeof r[3] !== 'undefined' ? r[3].trim() : '',
+      }));
   } catch (e) {
     console.error(e);
     new Error(

@@ -104,7 +104,7 @@ export const typeDefs = /* GraphQL */ gql`
     batchSlugify: String
     exportData: String
     importQuestions: Boolean
-    importTranslations: Boolean
+    importTranslations(lang: String!): Boolean
     requestPasswordReset(email: String!): RequestPasswordResetResult!
     resetPassword(
       id: String!
