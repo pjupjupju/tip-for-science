@@ -91,7 +91,7 @@ const PasswordUpdateForm = ({ id, token }: PasswordUpdateFormProps) => {
           <Stack direction="row" justifyContent="center" my={3}>
             <Typography color="white">
               <FormattedMessage
-                id="app.reset.menu.sent"
+                id="app.reset.menu.updated"
                 defaultMessage="Your password has been successfully updated. You can now return and"
                 description="Password reset success text"
               />{' '}
