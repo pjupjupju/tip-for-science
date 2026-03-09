@@ -127,10 +127,57 @@
     "defaultMessage": "Home",
     "description": "Questionnaire go to main page button"
   },
-  
   "app.questionnaire.button.play": {
     "defaultMessage": "Play",
     "description": "Questionnaire play next question button"
+  },
+  "app.questionnaire.completed": {
+    "defaultMessage": "You have completed all the questionnaire questions. Now you can continue playing the game or return to the main screen.",
+    "description": "Everything completed message"
+  },
+  "app.questionnaire.completelyacurate": {
+    "defaultMessage": "Completely Accurate",
+    "description": "Completely Acurate"
+  },
+  "app.questionnaire.completelyinnacurate": {
+    "defaultMessage": "Completely Inaccurate",
+    "description": "Completely Innacurate"
+  },
+  "app.questionnaire.finished": {
+    "defaultMessage": "Done, there is nothing more here 🎉!",
+    "description": "Finished"
+  },
+  "app.questionnaire.header.explanation": {
+    "defaultMessage": "Below are statements describing different ways of thinking, feeling, and behaving. For each statement, indicate to what extent it generally applies to you. This is not about how you feel right now, but what you are usually like.",
+    "description": "Explanation"
+  },
+  "app.questionnaire.header.instruction": {
+    "defaultMessage": "Indicate to what extent each statement generally applies to you.",
+    "description": "Instruction"
+  },
+  "app.questionnaire.header.pause": {
+    "defaultMessage": "Now there will be a short break. But don’t worry—after completing this short personality questionnaire, a few more guessing questions will be waiting for you.",
+    "description": "Short pause"
+  },
+  "app.questionnaire.page": {
+    "defaultMessage": "Page",
+    "description": "Page"
+  },
+  "app.questionnaire.questionnaire": {
+    "defaultMessage": "Questionnaire",
+    "description": "Questionnaire"
+  },
+  "app.questionnaire.send": {
+    "defaultMessage": "Send",
+    "description": "Send"
+  },
+  "app.questionnaire.thankyou": {
+    "defaultMessage": "Thank you!",
+    "description": "Thank you message"
+  },
+  "app.questionnaire.warning": {
+    "defaultMessage": "Please fill in all answers before continuing.",
+    "description": "Instruction"
   },
   "app.reset": {
     "defaultMessage": "Reset password",
@@ -168,6 +215,10 @@
     "defaultMessage": "Password reset request successfully sent. You can return to",
     "description": "Password reset request sent text"
   },
+  "app.reset.menu.updated": {
+    "defaultMessage": "Your password has been successfully updated. You can now return and",
+    "description": "Password reset success text"
+  },
   "app.settings.menu.age": {
     "defaultMessage": "Age:",
     "description": "Age label"
@@ -183,6 +234,10 @@
   "app.settings.menu.gender": {
     "defaultMessage": "I am...",
     "description": "Gender label"
+  },
+  "app.settings.menu.language": {
+    "defaultMessage": "Language",
+    "description": "Language label"
   },
   "app.settings.menu.man": {
     "defaultMessage": "Man",

@@ -37,12 +37,20 @@ const NoMoreQuestions = ({ onFinish }) => {
     <Stack sx={mainStackStyles}>
       <Box sx={staticHeaderStyles} flexShrink={0} flexGrow={0}>
         <Typography variant="h6" mb={1} color="#FFFFFF">
-          Dotazník
+          <FormattedMessage
+            id="app.questionnaire.questionnaire"
+            defaultMessage="Questionnaire"
+            description="Questionnaire"
+          />
         </Typography>
 
         <Stack direction="row" justifyContent="flex-start" alignItems="top">
           <Typography variant="body2" color="#FFFFFF" mb={1}>
-            Hotovo, víc toho tady není 🎉!
+            <FormattedMessage
+              id="app.questionnaire.finished"
+              defaultMessage="Hotovo, víc toho tady není 🎉!"
+              description="Finished"
+            />
           </Typography>
         </Stack>
 
@@ -62,11 +70,19 @@ const NoMoreQuestions = ({ onFinish }) => {
       >
         <Stack alignItems="center" justifyContent="center" mt="-30vh">
           <Typography variant="h4" color="#FFFFFF" mb={2}>
-            Děkujeme!
+            <FormattedMessage
+              id="app.questionnaire.thankyou"
+              defaultMessage="Thank you!"
+              description="Thank you message"
+            />
           </Typography>
           <Typography variant="body2" color="#FFFFFF" mb={1}>
-            Všechny otázky dotazníku jsi vyplnil/a a teď můžeš dále pokračovat
-            ve hře, nebo na hlavní obrazovku.
+            <FormattedMessage
+              id="app.questionnaire.completed"
+              defaultMessage="Všechny otázky dotazníku jsi vyplnil*a a teď můžeš dále pokračovat
+            ve hře, nebo na hlavní obrazovku."
+              description="Everything completed message"
+            />
           </Typography>
           <Stack
             width="100%"

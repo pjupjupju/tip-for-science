@@ -30,6 +30,7 @@ import {
 } from './styles';
 import { QuestionnaireDone } from './QuestionnaireDone';
 import { NoMoreQuestions } from './NoMoreQuestions';
+import { FormattedMessage } from 'react-intl';
 
 type QuestionnaireItem = {
   id: number;
@@ -148,31 +149,52 @@ const Questionnaire = ({
             {pageNum === 1 ? (
               <>
                 <Typography component="p" variant="body2" color="#FFFFFF">
-                  Nyní přichází krátká pauza. Ale neboj, po vyplnění tohoto
+                  <FormattedMessage
+                    id="app.questionnaire.header.pause"
+                    defaultMessage="Nyní přichází krátká pauza. Ale neboj, po vyplnění tohoto
                   krátkého osobnostního dotazníku na Tebe čeká ještě několik
-                  otázek k tipování.
+                  otázek k tipování."
+                    description="Short pause"
+                  />
                 </Typography>
                 <Typography component="p" variant="body2" color="#FFFFFF">
-                  Níže jsou uvedena tvrzení, která popisují různé způsoby
+                  <FormattedMessage
+                    id="app.questionnaire.header.explanation"
+                    defaultMessage="Níže jsou uvedena tvrzení, která popisují různé způsoby
                   myšlení, prožívání a chování. U každého tvrzení označ, do jaké
                   míry pro Tebe obecně platí. Nejde o to, jak se cítíš právě
-                  teď, ale jaký*á obvykle jsi.
+                  teď, ale jaký*á obvykle jsi."
+                    description="Explanation"
+                  />
                 </Typography>
               </>
             ) : (
               <Typography component="p" variant="body2" color="#FFFFFF">
-                Označ, do jaké míry pro vás jednotlivá tvrzení obecně platí.
+                <FormattedMessage
+                  id="app.questionnaire.header.instruction"
+                  defaultMessage="Označ, do jaké míry pro vás jednotlivá tvrzení obecně platí."
+                  description="Instruction"
+                />
               </Typography>
             )}
           </Stack>
           <Typography variant="body2" color="#FFFFFF" mb={1} flexShrink={0}>
-            Strana <b>{pageNum}</b> / <b>{pages}</b>
+            <FormattedMessage
+              id="app.questionnaire.page"
+              defaultMessage="Page"
+              description="Instruction"
+            />
+            <b>{pageNum}</b> / <b>{pages}</b>
           </Typography>
         </Stack>
 
         {showValidation && (
           <Alert severity="warning" sx={mediumBMargin}>
-            Vyplň prosím všechny odpovědi, než budeš pokračovat.
+            <FormattedMessage
+              id="app.questionnaire.warning"
+              defaultMessage="Vyplň prosím všechny odpovědi, než budeš pokračovat."
+              description="Instruction"
+            />
           </Alert>
         )}
 
@@ -194,10 +216,18 @@ const Questionnaire = ({
                 </Typography>
                 <Stack direction="row" justifyContent="space-between" mb={0.5}>
                   <Typography variant="caption" color="secondary">
-                    Úplně nesouhlasím
+                    <FormattedMessage
+                      id="app.questionnaire.completelyinnacurate"
+                      defaultMessage="Completely Inaccurate"
+                      description="Completely Innacurate"
+                    />
                   </Typography>
                   <Typography variant="caption" color="secondary">
-                    Úplně souhlasím
+                    <FormattedMessage
+                      id="app.questionnaire.completelyacurate"
+                      defaultMessage="Completely Accurate"
+                      description="Completely Acurate"
+                    />{' '}
                   </Typography>
                 </Stack>
                 <RadioGroup
@@ -232,7 +262,11 @@ const Questionnaire = ({
           disabled={!isComplete || isSaveAnswerLoading || isSubmitLoading}
           onClick={handleNext}
         >
-          Odeslat
+          <FormattedMessage
+            id="app.questionnaire.send"
+            defaultMessage="Send"
+            description="Send"
+          />
         </Button>
       </Box>
     </Box>
