@@ -123,7 +123,7 @@ export type ImportedQuestionSettings = {
 
 export type ImportedTranslationSettings = {
   qIdInSheet: string;
-  question: string;
+  lang: string;
   qT: string;
   factT?: string;
   unitT?: string;

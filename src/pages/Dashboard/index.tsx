@@ -11,11 +11,10 @@ import { BackButton, Container, Spinner } from '../../components';
 import {
   EXPORT_MUTATION,
   IMPORT_MUTATION,
+  IMPORT_TRANSLATIONS_MUTATION,
   ONLINE_STATS_QUERY,
-  WIPE_BATCHES_MUTATION,
 } from '../../gql';
 import { User, UserRole } from '../../types';
-import { WipeBatchesButton } from './WipeBatchesButton';
 
 const buttonStyles = { width: { xs: '100% ', sm: 150 }, my: 2 };
 
@@ -37,6 +36,7 @@ interface DashboardProps {
 
 const Dashboard = ({ user }: DashboardProps) => {
   const [log, setLog] = useState<string[]>([]);
+  const [lang, setLang] = useState<string>('en');
   const { loading, data } = useQuery(ONLINE_STATS_QUERY);
 
   const [importQuestions, { loading: importLoading }] = useMutation(
@@ -55,6 +55,7 @@ const Dashboard = ({ user }: DashboardProps) => {
     }
   );
 
+  /*
   const [wipeBatches, { loading: wipeBatchesLoading }] = useMutation(
     WIPE_BATCHES_MUTATION,
     {
@@ -70,6 +71,20 @@ const Dashboard = ({ user }: DashboardProps) => {
       },
     }
   );
+  */
+  const [importTranslations, { loading: importTranslationsLoading }] =
+    useMutation(IMPORT_TRANSLATIONS_MUTATION, {
+      onCompleted: ({ importTranslations }) => {
+        setLog([
+          ...log,
+          JSON.stringify(
+            importTranslations
+              ? 'All translations have been saved.'
+              : 'Error: Some translations could not be imported.'
+          ),
+        ]);
+      },
+    });
 
   const [exportData, { loading: exportLoading }] = useMutation(
     EXPORT_MUTATION,
@@ -92,6 +107,9 @@ const Dashboard = ({ user }: DashboardProps) => {
   };
   const handleClickImport = () => {
     importQuestions();
+  };
+  const handleClickImportTranslations = () => {
+    importTranslations({ variables: { lang } });
   };
 
   if (!user || user.role !== UserRole.admin) {
@@ -171,16 +189,19 @@ const Dashboard = ({ user }: DashboardProps) => {
           <Box flex={1} display="flex" flexDirection="column">
             <Typography color="white" fontFamily="Tahoma">
               <FormattedMessage
-                id="app.dashboard.menu.wipe"
-                defaultMessage="Wipe batches"
-                description="Wipe batches button"
+                id="app.dashboard.menu.importtranslations"
+                defaultMessage="Import translations"
+                description="Import translations button"
               />
             </Typography>
-            <WipeBatchesButton
-              mutation={wipeBatches}
-              loading={wipeBatchesLoading}
-              buttonStyles={buttonStyles}
-            />
+            <Button
+              variant="contained"
+              disabled={importTranslationsLoading}
+              sx={buttonStyles}
+              onClick={handleClickImportTranslations}
+            >
+              {importLoading ? '... importing' : 'Import'}
+            </Button>
           </Box>
         </Stack>
         <Box sx={consoleStyle}>

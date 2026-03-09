@@ -29,7 +29,6 @@ import {
   radioGroupStyles,
 } from './styles';
 import { QuestionnaireDone } from './QuestionnaireDone';
-import { NoMoreQuestions } from './NoMoreQuestions';
 import { FormattedMessage } from 'react-intl';
 
 type QuestionnaireItem = {
@@ -121,14 +120,10 @@ const Questionnaire = ({
     }
   };
 
-  if (allIpipDone) {
+  if (allIpipDone || (questionnaire.length === 0 && pageNum === 0)) {
     return (
       <QuestionnaireDone onFinish={onFinish} pageNum={pageNum} pages={pages} />
     );
-  }
-
-  if (questionnaire.length === 0 && pageNum === 0) {
-    return <NoMoreQuestions onFinish={onFinish} />;
   }
 
   return (
