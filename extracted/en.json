@@ -123,14 +123,6 @@
     "defaultMessage": "Previous tips:",
     "description": "Previous tips"
   },
-  "app.questionnaire.button.home": {
-    "defaultMessage": "Home",
-    "description": "Questionnaire go to main page button"
-  },
-  "app.questionnaire.button.play": {
-    "defaultMessage": "Play",
-    "description": "Questionnaire play next question button"
-  },
   "app.questionnaire.completed": {
     "defaultMessage": "You have completed all the questionnaire questions. Now you can continue playing the game or return to the main screen.",
     "description": "Everything completed message"
