@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
 import Helmet from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
-import { redirect } from 'react-router-dom';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Navigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -11,10 +11,10 @@ import { BackButton, Container, Spinner } from '../../components';
 import {
   EXPORT_MUTATION,
   IMPORT_MUTATION,
-  IMPORT_TRANSLATIONS_MUTATION,
   ONLINE_STATS_QUERY,
 } from '../../gql';
 import { User, UserRole } from '../../types';
+import { TranslationImporter } from './TranslationImporter';
 
 const buttonStyles = { width: { xs: '100% ', sm: 150 }, my: 2 };
 
@@ -35,8 +35,8 @@ interface DashboardProps {
 }
 
 const Dashboard = ({ user }: DashboardProps) => {
+  const intl = useIntl();
   const [log, setLog] = useState<string[]>([]);
-  const [lang, setLang] = useState<string>('en');
   const { loading, data } = useQuery(ONLINE_STATS_QUERY);
 
   const [importQuestions, { loading: importLoading }] = useMutation(
@@ -47,44 +47,13 @@ const Dashboard = ({ user }: DashboardProps) => {
           ...log,
           JSON.stringify(
             importQuestions
-              ? 'All available questions imported.'
-              : 'Some questions were not imported.'
+              ? intl.formatMessage({ id: 'app.dashboard.log.importSuccess', defaultMessage: 'All available questions imported.' })
+              : intl.formatMessage({ id: 'app.dashboard.log.importPartial', defaultMessage: 'Some questions were not imported.' })
           ),
         ]);
       },
     }
   );
-
-  /*
-  const [wipeBatches, { loading: wipeBatchesLoading }] = useMutation(
-    WIPE_BATCHES_MUTATION,
-    {
-      onCompleted: ({ wipeBatches }) => {
-        setLog([
-          ...log,
-          JSON.stringify(
-            wipeBatches
-              ? 'All user question were deleted.'
-              : 'Error: Some user question batches were not deleted.'
-          ),
-        ]);
-      },
-    }
-  );
-  */
-  const [importTranslations, { loading: importTranslationsLoading }] =
-    useMutation(IMPORT_TRANSLATIONS_MUTATION, {
-      onCompleted: ({ importTranslations }) => {
-        setLog([
-          ...log,
-          JSON.stringify(
-            importTranslations
-              ? 'All translations have been saved.'
-              : 'Error: Some translations could not be imported.'
-          ),
-        ]);
-      },
-    });
 
   const [exportData, { loading: exportLoading }] = useMutation(
     EXPORT_MUTATION,
@@ -94,8 +63,8 @@ const Dashboard = ({ user }: DashboardProps) => {
           ...log,
           JSON.stringify(
             exportData === 'local'
-              ? 'Local file created.'
-              : `Download link: ${exportData}`
+              ? intl.formatMessage({ id: 'app.dashboard.log.exportLocal', defaultMessage: 'Local file created.' })
+              : intl.formatMessage({ id: 'app.dashboard.log.exportLink', defaultMessage: 'Download link: {url}' }, { url: exportData })
           ),
         ]);
       },
@@ -108,12 +77,9 @@ const Dashboard = ({ user }: DashboardProps) => {
   const handleClickImport = () => {
     importQuestions();
   };
-  const handleClickImportTranslations = () => {
-    importTranslations({ variables: { lang } });
-  };
 
   if (!user || user.role !== UserRole.admin) {
-    redirect('/');
+    return <Navigate to="/" replace />;
   }
 
   if (loading) {
@@ -134,7 +100,7 @@ const Dashboard = ({ user }: DashboardProps) => {
 
   return (
     <Container>
-      <Helmet title="Admin dashboard"></Helmet>
+      <Helmet title={intl.formatMessage({ id: 'app.dashboard.title', defaultMessage: 'Admin dashboard' })} />
       <Typography variant="h4" color="primary" my={4}>
         <FormattedMessage
           id="app.dashboard.menu.dasboard"
@@ -164,7 +130,9 @@ const Dashboard = ({ user }: DashboardProps) => {
               sx={buttonStyles}
               onClick={handleClickExport}
             >
-              {exportLoading ? '... generating' : 'Download'}
+              {exportLoading
+                ? <FormattedMessage id="app.dashboard.button.generating" defaultMessage="Generating…" />
+                : <FormattedMessage id="app.dashboard.button.download" defaultMessage="Download" />}
             </Button>
           </Box>
 
@@ -182,28 +150,14 @@ const Dashboard = ({ user }: DashboardProps) => {
               sx={buttonStyles}
               onClick={handleClickImport}
             >
-              {importLoading ? '... importing' : 'Import'}
+              {importLoading
+                ? <FormattedMessage id="app.dashboard.button.importing" defaultMessage="Importing…" />
+                : <FormattedMessage id="app.dashboard.button.import" defaultMessage="Import" />}
             </Button>
           </Box>
 
-          <Box flex={1} display="flex" flexDirection="column">
-            <Typography color="white" fontFamily="Tahoma">
-              <FormattedMessage
-                id="app.dashboard.menu.importtranslations"
-                defaultMessage="Import translations"
-                description="Import translations button"
-              />
-            </Typography>
-            <Button
-              variant="contained"
-              disabled={importTranslationsLoading}
-              sx={buttonStyles}
-              onClick={handleClickImportTranslations}
-            >
-              {importLoading ? '... importing' : 'Import'}
-            </Button>
-          </Box>
         </Stack>
+        <TranslationImporter />
         <Box sx={consoleStyle}>
           {log.map((line, index) => (
             <Typography
@@ -235,7 +189,7 @@ const Dashboard = ({ user }: DashboardProps) => {
               defaultMessage="Online users playing: "
               description="Online button"
             />
-            {data.getOnlineStats.online}
+            {' '}{data.getOnlineStats.online}
           </Typography>
         </Box>
       </Box>

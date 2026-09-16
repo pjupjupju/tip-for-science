@@ -1,7 +1,10 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 import { IntlProvider } from 'react-intl';
 import csMessages from './translations/cs.json';
 import plMessages from './translations/pl.json';
+import { useQuery } from '@apollo/client';
+import { AUTH_QUERY } from './gql/authQuery';
+import { DEFAULT_LANGUAGE, getUserLanguage } from './language';
 
 declare global {
   interface Window {
@@ -9,7 +12,7 @@ declare global {
   }
 }
 
-export const DEFAULT_LANGUAGE = 'en';
+export { DEFAULT_LANGUAGE } from './language';
 
 const messages = {
   cs: csMessages,
@@ -18,13 +21,11 @@ const messages = {
 
 interface LanguageProviderProps {
   children: React.ReactNode;
-  storage?: Storage;
   serverLanguage?: string;
 }
 
 interface LanguageContextValue {
   language: string;
-  changeLanguage: (nextLanguage: string) => void;
 }
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
@@ -43,44 +44,20 @@ const getInitialLanguage = (serverLanguage?: string): string => {
 
 const LanguageProvider = ({
   serverLanguage,
-  storage,
   children,
 }: LanguageProviderProps) => {
-  const [language, setLanguage] = useState<string>(getInitialLanguage(serverLanguage));
-
-  const persistLanguage = useCallback(
-    (nextLanguage: string) => {
-      if (storage) {
-        storage.setItem('userLanguage', nextLanguage);
-      }
-    },
-    [storage]
-  );
-
-  const changeLanguage = useCallback(
-    (nextLanguage: string) => {
-      setLanguage(nextLanguage);
-      persistLanguage(nextLanguage);
-    },
-    [persistLanguage]
-  );
+  const { data } = useQuery(AUTH_QUERY, { fetchPolicy: 'cache-first' });
+  const user = data?.viewer?.user;
+  const language = user
+    ? getUserLanguage(user.language)
+    : getInitialLanguage(serverLanguage);
 
   useEffect(() => {
-    if (storage) {
-      // Attempt to retrieve language from localStorage first
-      let storedLanguage = storage.getItem('userLanguage');
-
-      if (!storedLanguage) {
-        storedLanguage = getInitialLanguage(serverLanguage);
-      }
-      changeLanguage(storedLanguage);
-    } else {
-      setLanguage(getInitialLanguage(serverLanguage));
-    }
-  }, [storage, serverLanguage, changeLanguage]);
+    document.documentElement.lang = language;
+  }, [language]);
 
   return (
-    <LanguageContext.Provider value={{ language, changeLanguage }}>
+    <LanguageContext.Provider value={{ language }}>
       <IntlProvider
         locale={language}
         defaultLocale={DEFAULT_LANGUAGE}

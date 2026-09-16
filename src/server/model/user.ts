@@ -91,6 +91,7 @@ export async function findUserById(
     .get({
       TableName: TABLE_USER,
       Key: { id, userskey: `USER#${id}` },
+      ConsistentRead: true,
     })
     .promise();
 

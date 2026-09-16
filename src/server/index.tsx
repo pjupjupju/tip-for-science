@@ -23,7 +23,6 @@ import { resolve } from 'path';
 import { App } from '../App';
 import { Document } from './Document';
 import {
-  countries,
   DynamoSessionStore,
   RunCache,
   RunLock,
@@ -32,6 +31,7 @@ import {
 import { createContext, typeDefs, resolvers, schema } from './schema';
 import { AWS_REGION, TABLE_SESSION } from '../config';
 import { LanguageProvider } from '../LanguageProvider';
+import { resolveRequestLanguage } from './resolveRequestLanguage';
 
 // eslint-disable-next-line import/no-dynamic-require
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
@@ -178,12 +178,7 @@ export async function createServer(): Promise<express.Application> {
         entrypoints: ['client'],
       });
 
-      let language = context.user?.language;
-      if (!language) {
-        const countryResponse = await fetch(`https://api.country.is/${req.ip}`);
-        const country = await countryResponse.json();
-        language = countries[country?.country || 'GB'].language;
-      }
+      const language = await resolveRequestLanguage(client, context);
 
       const cache = createCache({ key: 'css' });
       const { extractCriticalToChunks, constructStyleTagsFromChunks } =

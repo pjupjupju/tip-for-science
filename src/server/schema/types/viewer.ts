@@ -2,6 +2,7 @@ import { IResolverObject } from 'graphql-tools';
 import { GraphQLContext } from '../context';
 import { type User as UserType, findUserById } from '../../model';
 import { getNextQuestionnaireCursor, isQuestionnaireActive } from '../../io/utils';
+import { getUserLanguage } from '../../../language';
 
 export const Viewer: IResolverObject<any, GraphQLContext> = {
   id: () => 1,
@@ -16,6 +17,7 @@ export const Viewer: IResolverObject<any, GraphQLContext> = {
 };
 
 export const User: IResolverObject<any, GraphQLContext> = {
+  language: (user: UserType) => getUserLanguage(user.language),
   isQuestionnaireActive: (userObj: UserType, _args: any, _context) => isQuestionnaireActive(userObj) ?? null,
   nextQuestionnaireAfterQuestion: (userObj: UserType, _args: any, _context) => getNextQuestionnaireCursor(userObj) ?? null,
 };

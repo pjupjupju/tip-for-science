@@ -1,10 +1,10 @@
-import { ValidationError } from 'yup';
 import { getQuestionBatch } from '../../io';
 import {
   batchCreateQuestions,
   getNotImportedQuestions,
 } from '../../model';
 import { GraphQLContext } from '../context';
+import { requireAdmin } from '../requireAdmin';
 
 // Google spreadsheet ID
 const spreadsheetId = process.env.RAZZLE_QUESTIONS_SPREADSHEET;
@@ -14,13 +14,7 @@ export async function importQuestions(
   _: any,
   context: GraphQLContext
 ) {
-  const { user } = context;
-
-  if (user == null) {
-    throw new ValidationError('Unauthorized.');
-  }
-
-  // only allow user who is admin, so first load user role
+  await requireAdmin(context);
   const questions = await getQuestionBatch(
     spreadsheetId,
     'import',

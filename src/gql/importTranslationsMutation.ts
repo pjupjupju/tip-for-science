@@ -2,6 +2,11 @@ import { gql } from '@apollo/client';
 
 export const IMPORT_TRANSLATIONS_MUTATION = gql`
   mutation ImportTranslationsMutation($lang: String!) {
-    importTranslations(lang: $lang)
+    importTranslations(lang: $lang) {
+      success
+      inserted
+      updated
+      errors
+    }
   }
 `;

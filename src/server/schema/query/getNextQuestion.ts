@@ -7,6 +7,7 @@ import {
   updateLastQuestion,
 } from '../../model';
 import { selectPreviousTipsToDisplay } from '../../../helpers/selectPreviousTipsToDisplay';
+import { getUserLanguage } from '../../../language';
 
 type Question = {
   id: string;
@@ -40,7 +41,7 @@ export async function getNextQuestion(
     return null;
   }
 
-  const language = user.language || 'cs'; // use DEFAULT_LANGUAGE later
+  const language = getUserLanguage(userRecord.language);
   const lastQuestion = userRecord.lastQuestion;
 
   // if this is the last question in whole bundle, ie. user has completed everything

@@ -5,7 +5,8 @@ import { GraphQLContext, UserTokenData } from '../context';
 import { findUserByEmail, updateUserSettings } from '../../model';
 import { JWT_SECRET } from '../../../config';
 import { SignInResultSource } from '../types';
-import { countries } from '../../io';
+import { detectLanguage } from '../../io/detectLanguage';
+import { setLanguageCookie } from '../../io/languageCookie';
 
 export async function signIn(
   parent: any,
@@ -37,17 +38,14 @@ export async function signIn(
 
     let language = user.language;
 
-    if (!user.country) {
-      const countryResponse = await fetch(
-        `https://api.country.is/${context.request.ip}`
-      );
-      const country = await countryResponse.json();
-      language = countries[country?.country || 'GB'].language;
+    if (!language) {
+      const detected = await detectLanguage(context.request.ip);
+      language = detected.language;
 
       await updateUserSettings(
         user.id,
         {
-          country: country?.country || 'N/A',
+          country: user.country || detected.country,
           language,
         },
         context
@@ -79,6 +77,8 @@ export async function signIn(
         reject(e);
       }
     });
+
+    setLanguageCookie(context.response, language);
 
     return {
       type: 'SignInSuccess',

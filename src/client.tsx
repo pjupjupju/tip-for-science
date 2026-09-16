@@ -40,11 +40,11 @@ loadableReady().then(() => {
   const content = (
     <CacheProvider value={emotionCache}>
       <BrowserRouter>
-        <LanguageProvider storage={localStorage}>
-          <ApolloProvider client={client}>
+        <ApolloProvider client={client}>
+          <LanguageProvider>
             <App />
-          </ApolloProvider>
-        </LanguageProvider>
+          </LanguageProvider>
+        </ApolloProvider>
       </BrowserRouter>
     </CacheProvider>
   );

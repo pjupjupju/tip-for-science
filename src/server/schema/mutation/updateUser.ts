@@ -1,9 +1,10 @@
 import { compareSync, hashSync } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import * as yup from 'yup';
-import { findUserById, updateUserSettings } from '../../model';
+import { findAllLanguages, findUserById, updateUserSettings } from '../../model';
 import { JWT_SECRET } from '../../../config';
 import { GraphQLContext, UserTokenData } from '../context';
+import { setLanguageCookie } from '../../io/languageCookie';
 
 type ChangeSet = {
   email?: string;
@@ -50,6 +51,7 @@ export async function updateUser(
 
   const { oldPassword, newPassword, ...rest } = validatedChangeSet;
   const userRecord = await findUserById(user.id, context);
+  if (!userRecord) throw new yup.ValidationError('User does not exist.');
 
   if (
     newPassword != null &&
@@ -59,6 +61,13 @@ export async function updateUser(
   }
 
   let settings: ChangeSet = rest;
+
+  if (settings.language != null) {
+    const languages = await findAllLanguages(context);
+    if (!languages.some(({ lang }) => lang === settings.language)) {
+      throw new yup.ValidationError('Unsupported language.');
+    }
+  }
 
   if (newPassword) {
     settings = { ...settings, password: hashSync(newPassword, 10) };
@@ -91,6 +100,7 @@ export async function updateUser(
         reject(error);
       }
     });
+    setLanguageCookie(context.response, settings.language);
   }
 
   return true;
