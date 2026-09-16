@@ -1,4 +1,5 @@
 {
+  "app.settings.menu.language": "Język",
   "app.404.footer.home": "Strona główna",
   "app.consent": "Niniejszym wyrażam zgodę na przetwarzanie moich danych osobowych przez Mgr Pavlínę Hillerovą (hillerovap@natur.cuni.cz), w szczególności: {lineBreak}\n – mojego adresu e-mail {lineBreak}\n – informacji osobowych wynikających z moich odpowiedzi na pytania zawarte w kwestionariuszach, {lineBreak} na potrzeby badania dotyczącego przekazu kulturowego. {lineBreak}{lineBreak}\nOświadczam, że rozumiem, iż: {lineBreak}\n – będę otrzymywać informacje na podany adres e-mail, {lineBreak}\n – mam prawo zażądać informacji o tym, jakie moje dane osobowe są przetwarzane, {lineBreak}\n – mogę zażądać poprawienia moich danych osobowych, {lineBreak}\n jeśli są nieprawidłowe lub nieaktualne, {lineBreak} – mogę zażądać wstrzymania przetwarzania moich danych osobowych do czasu rozpatrzenia powyższych żądań, {lineBreak} – mam prawo wnieść skargę do organu nadzorczego, {lineBreak}\n – mogę w każdej chwili cofnąć zgodę, żądając usunięcia mojego profilu {lineBreak}\n drogą mailową na adres hillerovap@natur.cuni.cz.",
   "app.consenthelmet": "Wyrażam zgodę na warunki",

@@ -1,66 +1,41 @@
-import { ValidationError } from 'yup';
-import decamelizeKeys from 'decamelize-keys';
-import { getTranslationBatch } from '../../io';
-import { GraphQLContext } from '../context';
 import {
-  findAllLanguages,
-  getQuestionsIdsAndSpreadsheetIds,
-} from '../../model';
-
-// Google spreadsheet ID
-const translationsSpreadsheetId = process.env.RAZZLE_QUESTIONS_SPREADSHEET;
+  getTranslationBatch,
+  getTranslationSheets,
+} from '../../io/googleSheets';
+import { findAllLanguages } from '../../model/language';
+import { upsertQuestionTranslations } from '../../model/importTranslations';
+import { GraphQLContext } from '../context';
+import { requireAdmin } from '../requireAdmin';
 
 export async function importTranslations(
   parent: any,
   { lang }: { lang: string },
   context: GraphQLContext
 ) {
-  const { supabase, user } = context;
-
-  if (user == null) {
-    throw new ValidationError('Unauthorized.');
-  }
-
-  // only allow user who is admin, so first load user role
-
-  const languages = await findAllLanguages(context);
-
-  const existingLanguage = languages.find((i) => i.lang === lang);
-
-  if (!existingLanguage) {
-    console.log('language does not exist');
-    return false;
-  }
-
-  const translations = await getTranslationBatch(
-    translationsSpreadsheetId,
-    lang
-  );
-
-  if (translations.length === 0) {
-    // return true but log, that nothing was found to be imported
-    console.log('No data to import, skipping database insert.');
-    return true;
-  }
-
-  const questionList = await getQuestionsIdsAndSpreadsheetIds(context);
-
-  const dataToImport = translations.map((i) => ({
-    lang,
-    questionId: questionList[i.qIdInSheet],
-    qT: i.qT,
-    factT: i.factT,
-    unitT: i.unitT,
-  }));
-
+  await requireAdmin(context);
   try {
-    await supabase
-      .from('question_translations')
-      .insert(decamelizeKeys(dataToImport));
-  } catch (e) {
-    console.log(e);
+    const spreadsheet = process.env.RAZZLE_QUESTIONS_SPREADSHEET;
+    const [sheets, languages] = await Promise.all([
+      getTranslationSheets(spreadsheet),
+      findAllLanguages(context),
+    ]);
+    if (!sheets.includes(lang)) {
+      throw new Error('Select an existing translation sheet.');
+    }
+    if (!languages.some((language) => language.lang === lang)) {
+      throw new Error(
+        `Language "${lang}" is not registered. Add it to the language table before importing.`
+      );
+    }
+    const translations = await getTranslationBatch(spreadsheet, lang);
+    const result = await upsertQuestionTranslations(lang, translations, context);
+    return { success: true, ...result, errors: [] };
+  } catch (error) {
+    return {
+      success: false,
+      inserted: 0,
+      updated: 0,
+      errors: (error.message || 'Translation import failed.').split('\n'),
+    };
   }
-
-  // return true for successfull import of all questions, false when something did not succeed
-  return true;
 }

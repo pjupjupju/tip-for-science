@@ -1,4 +1,5 @@
 {
+  "app.settings.menu.language": "Jazyk",
   "app.404.footer.home": "Domů 🏠",
   "app.consent": "Tímto uděluji souhlas Mgr. Pavlíně Hillerové (hillerovap@natur.cuni.cz), která je správcem osobních údajů, se zpracováním svých osobních údajů v rozsahu: {lineBreak} - moje e-mailová adresa {lineBreak} - osobních údajů, které vyplynou z odpovědí na v dotaznících uvedené otázky, {lineBreak} za účelem studie kulturního přenosu pro diplomovou práci. {lineBreak} {lineBreak} Beru na vědomí, že: {lineBreak} - mi budou zasílány informace na uvedenou e-mailovou adresu, {lineBreak} - mám práva: {lineBreak}  - požádat o informaci, jaké osobní údaje jsou o mé osobě zpracovávány, {lineBreak}   - požadovat opravu osobních údajů, pokud jsou neplatné nebo zastaralé, {lineBreak}   - požadovat, aby nebyly moje osobní údaje zpracovávány do doby, než bude vyřešena oprávněnost výše uvedených požadavků, {lineBreak}  - podat stížnost u dozorového úřadu, {lineBreak}   - souhlas kdykoli odvolat zrušením svého profilu zasláním e-mailu na adresu hillerovap@natur.cuni.cz.",
   "app.consenthelmet": "Souhlas s podmínkami",

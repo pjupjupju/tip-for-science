@@ -1,5 +1,6 @@
 import { ValidationError } from 'yup';
 import { GraphQLContext } from '..';
+import { getUserLanguage } from '../../../language';
 import {
   Questionnaire,
   findUserById,
@@ -27,7 +28,7 @@ export async function getQuestionnaire(
     return [];
   }
 
-  const language = user.language || 'cs'; // use DEFAULT_LANGUAGE later
+  const language = getUserLanguage(userRecord.language);
   const lastIpipQuestion = userRecord.lastIpipQuestion;
 
   // if this is the last question in whole IPIP bundle, ie. user has completed everything

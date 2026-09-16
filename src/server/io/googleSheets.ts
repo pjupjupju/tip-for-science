@@ -4,6 +4,7 @@ import {
   ImportedTranslationSettings,
 } from '../model/types';
 import googleCredentials from './google-credentials.json';
+import { parseTranslations } from './parseTranslations';
 
 process.env.GOOGLE_APPLICATION_CREDENTIALS = './google-credentials.json';
 
@@ -81,37 +82,25 @@ async function getTranslationBatch(
 ): Promise<ImportedTranslationSettings[]> {
   const googleJwt = getToken();
   const sheets = google.sheets('v4');
-  try {
-    const response = await sheets.spreadsheets.values.get({
-      auth: googleJwt,
-      spreadsheetId,
-      range: `${sheetName}!A1:L`,
-    });
+  if (!spreadsheetId) throw new Error('The import spreadsheet is not configured.');
+  const response = await sheets.spreadsheets.values.get({
+    auth: googleJwt,
+    spreadsheetId,
+    range: `'${sheetName.replace(/'/g, "''")}'!A1:D`,
+  });
+  return parseTranslations(response.data.values || [], sheetName);
+}
 
-    const rows = response!.data!.values!.slice(1);
-
-    if (rows.length === 0) {
-      console.log('No data found inside spreadsheet.');
-      return [];
-    }
-
-    return rows
-      .filter((i) => i[0] !== '' && typeof i[0] !== 'undefined')
-      .map((r) => ({
-        qIdInSheet: r[0],
-        lang: sheetName,
-        qT: r[1].trim(),
-        factT: r[2].trim(),
-        unitT: r[3] !== '' && typeof r[3] !== 'undefined' ? r[3].trim() : '',
-      }));
-  } catch (e) {
-    console.error(e);
-    new Error(
-      'The Spreadsheet API returned an error. Check your arguments and try again.'
-    );
-  }
-
-  return [];
+export async function getTranslationSheets(spreadsheetId: string): Promise<string[]> {
+  if (!spreadsheetId) throw new Error('The import spreadsheet is not configured.');
+  const { data } = await google.sheets('v4').spreadsheets.get({
+    auth: getToken(),
+    spreadsheetId,
+    fields: 'sheets.properties.title',
+  });
+  return (data.sheets || [])
+    .map(sheet => sheet.properties.title)
+    .filter(title => title && title !== 'import');
 }
 
 export { getQuestionBatch, getTranslationBatch };

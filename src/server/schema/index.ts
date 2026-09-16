@@ -18,6 +18,7 @@ import {
 import {
   getHighScore,
   getLanguages,
+  getTranslationImportLanguages,
   getMyScore,
   getOnlineStats,
   getNextQuestion,
@@ -84,12 +85,25 @@ export const typeDefs = /* GraphQL */ gql`
     label: String!
   }
 
+  type TranslationImportLanguages {
+    languages: [String!]!
+    errors: [String!]!
+  }
+
+  type TranslationImportResult {
+    success: Boolean!
+    inserted: Int!
+    updated: Int!
+    errors: [String!]!
+  }
+
   type HighScore {
     slug: String!
     score: Float
   }
 
   type Query {
+    getTranslationImportLanguages: TranslationImportLanguages!
     getHighScore: [HighScore!]!
     getLanguages: [LanguageOption!]!
     getMyScore: Float!
@@ -104,7 +118,7 @@ export const typeDefs = /* GraphQL */ gql`
     batchSlugify: String
     exportData: String
     importQuestions: Boolean
-    importTranslations(lang: String!): Boolean
+    importTranslations(lang: String!): TranslationImportResult!
     requestPasswordReset(email: String!): RequestPasswordResetResult!
     resetPassword(
       id: String!
@@ -214,6 +228,7 @@ export const resolvers = {
     wipeBatches,
   },
   Query: {
+    getTranslationImportLanguages,
     getHighScore,
     getLanguages,
     getNextQuestion,

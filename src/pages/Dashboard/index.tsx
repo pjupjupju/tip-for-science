@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
 import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
-import { redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -11,10 +11,10 @@ import { BackButton, Container, Spinner } from '../../components';
 import {
   EXPORT_MUTATION,
   IMPORT_MUTATION,
-  IMPORT_TRANSLATIONS_MUTATION,
   ONLINE_STATS_QUERY,
 } from '../../gql';
 import { User, UserRole } from '../../types';
+import { TranslationImporter } from './TranslationImporter';
 
 const buttonStyles = { width: { xs: '100% ', sm: 150 }, my: 2 };
 
@@ -36,7 +36,6 @@ interface DashboardProps {
 
 const Dashboard = ({ user }: DashboardProps) => {
   const [log, setLog] = useState<string[]>([]);
-  const [lang, setLang] = useState<string>('en');
   const { loading, data } = useQuery(ONLINE_STATS_QUERY);
 
   const [importQuestions, { loading: importLoading }] = useMutation(
@@ -54,37 +53,6 @@ const Dashboard = ({ user }: DashboardProps) => {
       },
     }
   );
-
-  /*
-  const [wipeBatches, { loading: wipeBatchesLoading }] = useMutation(
-    WIPE_BATCHES_MUTATION,
-    {
-      onCompleted: ({ wipeBatches }) => {
-        setLog([
-          ...log,
-          JSON.stringify(
-            wipeBatches
-              ? 'All user question were deleted.'
-              : 'Error: Some user question batches were not deleted.'
-          ),
-        ]);
-      },
-    }
-  );
-  */
-  const [importTranslations, { loading: importTranslationsLoading }] =
-    useMutation(IMPORT_TRANSLATIONS_MUTATION, {
-      onCompleted: ({ importTranslations }) => {
-        setLog([
-          ...log,
-          JSON.stringify(
-            importTranslations
-              ? 'All translations have been saved.'
-              : 'Error: Some translations could not be imported.'
-          ),
-        ]);
-      },
-    });
 
   const [exportData, { loading: exportLoading }] = useMutation(
     EXPORT_MUTATION,
@@ -108,12 +76,9 @@ const Dashboard = ({ user }: DashboardProps) => {
   const handleClickImport = () => {
     importQuestions();
   };
-  const handleClickImportTranslations = () => {
-    importTranslations({ variables: { lang } });
-  };
 
   if (!user || user.role !== UserRole.admin) {
-    redirect('/');
+    return <Navigate to="/" replace />;
   }
 
   if (loading) {
@@ -186,24 +151,8 @@ const Dashboard = ({ user }: DashboardProps) => {
             </Button>
           </Box>
 
-          <Box flex={1} display="flex" flexDirection="column">
-            <Typography color="white" fontFamily="Tahoma">
-              <FormattedMessage
-                id="app.dashboard.menu.importtranslations"
-                defaultMessage="Import translations"
-                description="Import translations button"
-              />
-            </Typography>
-            <Button
-              variant="contained"
-              disabled={importTranslationsLoading}
-              sx={buttonStyles}
-              onClick={handleClickImportTranslations}
-            >
-              {importLoading ? '... importing' : 'Import'}
-            </Button>
-          </Box>
         </Stack>
+        <TranslationImporter />
         <Box sx={consoleStyle}>
           {log.map((line, index) => (
             <Typography

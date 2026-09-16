@@ -22,7 +22,6 @@ import {
   MIN_PASSWORD_LENGTH,
   useYupValidationResolver,
 } from '../../../helpers';
-import { useLanguage } from '../../../LanguageProvider';
 import { AuthQueryName, UPDATE_USER_MUTATION } from '../../../gql';
 import { User } from '../../../types';
 import { validationMessages } from './messages';
@@ -52,7 +51,6 @@ const alertStyles = { backgroundColor: '#15de46' };
 const submitButtonStyles = { flex: 1, color: 'white' };
 
 const Settings = ({ user }: { user: User | null }) => {
-  const { language: currentLanguage, changeLanguage } = useLanguage();
   const intl = useIntl();
   const placeholder = intl.formatMessage({
     id: 'app.settings.menu.specifygender',
@@ -136,6 +134,7 @@ const Settings = ({ user }: { user: User | null }) => {
 
   const [updateUser] = useMutation(UPDATE_USER_MUTATION, {
     refetchQueries: [AuthQueryName],
+    awaitRefetchQueries: true,
     onCompleted: ({ updateUser }) => {
       setLog(updateUser);
       setTimeout(() => setLog(false), 5000);
@@ -179,13 +178,9 @@ const Settings = ({ user }: { user: User | null }) => {
       };
     }
 
-    const { data } = await updateUser({
+    await updateUser({
       variables: changeSet,
     });
-
-    if (data?.updateUser && values.language && values.language !== currentLanguage) {
-      changeLanguage(values.language);
-    }
   };
 
   return (

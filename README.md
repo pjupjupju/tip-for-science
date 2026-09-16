@@ -29,4 +29,45 @@ It uses GraphQL for client-server communication and DynamoDB to store data.
 - `yarn build` to create production build in the `build` folder.
 - `yarn eject` to eject config files and edit them yourself (warning: this is a one-way operation)
 
+## Languages and translation imports
+
+Guest full-page loads always detect language from IP. A `tfs_language` cookie is
+used only as a fallback if that lookup fails; a cookie does not skip detection.
+For signed-in users, the saved account language controls both the interface and
+dynamic questions, with no IP lookup. Server rendering preloads `AUTH_QUERY` and
+reuses its Apollo cache in the provider and app instead of fetching the account
+again for language selection.
+
+The server sets a one-year, HttpOnly, SameSite=Lax language cookie (Secure in
+production), and updates it on signup, signin, and language changes. The account
+preference takes precedence over an older cookie. Language no longer uses
+`localStorage`; old values are ignored. IP detection also supplies the initial
+language during signup or signin when an existing account has no saved language.
+
+After successful signup, users are redirected to `/profile/settings`, where they
+can change the suggested language using the language picker and save it.
+
+The admin dashboard loads translation tabs from `RAZZLE_QUESTIONS_SPREADSHEET`,
+excluding `import`. Tab names must match language codes registered in the
+`language` table. Each tab has a header, followed by these columns:
+
+| A | B | C | D |
+| --- | --- | --- | --- |
+| Question ID (`id_in_sheet`) | Translated question | Fact (optional) | Unit (optional) |
+
+Imports match each sheet ID to exactly one generated question ID and update or
+insert by `(lang, question_id)`. Empty optional cells are saved as empty strings.
+Invalid/duplicate sheet rows or unknown/ambiguous question IDs reject the entire
+import. A transaction and database advisory lock serialize imports, including
+concurrent requests, without requiring a new PostgreSQL constraint. Any other
+writer to `question_translations` must use the same lock or a database uniqueness
+constraint. The result includes inserted/updated counts and errors. Both imports
+and translation-tab discovery require administrator privileges.
+
+Run regression tests with `CI=true yarn test --runInBand --watchAll=false --watchman=false`.
+For SQL integration checks, point `TEST_DATABASE_URL` at a disposable local
+PostgreSQL database named `translation_import_test`, then run
+`yarn exec ts-node --transpile-only migrations/test_translation_import.ts`.
+The check creates an isolated schema; discard the test database afterward.
+
 ## Happy coding!
