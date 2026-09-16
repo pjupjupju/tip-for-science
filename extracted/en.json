@@ -173,6 +173,10 @@
     "defaultMessage": "Previous tips:",
     "description": "Previous tips"
   },
+  "app.profile.menu.home": {
+    "defaultMessage": "Home",
+    "description": "Home link"
+  },
   "app.questionnaire.completed": {
     "defaultMessage": "You have completed all the questionnaire questions. Now you can continue playing the game or return to the main screen.",
     "description": "Everything completed message"
@@ -421,10 +425,6 @@
   },
   "app.signup.validation.pwdrequired": {
     "defaultMessage": "Password is required"
-  },
-  "app.stats.menu.home": {
-    "defaultMessage": "Home",
-    "description": "Home link"
   },
   "app.stats.menu.progress": {
     "defaultMessage": "Your progress:",

@@ -1,7 +1,18 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { IntlProvider } from 'react-intl';
+import arMessages from './translations/ar.json';
+import aryMessages from './translations/ary.json';
+import bgMessages from './translations/bg.json';
+import cebMessages from './translations/ceb.json';
 import csMessages from './translations/cs.json';
+import deMessages from './translations/de.json';
+import elMessages from './translations/el.json';
+import esMessages from './translations/es.json';
+import huMessages from './translations/hu.json';
+import jaMessages from './translations/ja.json';
+import koMessages from './translations/ko.json';
 import plMessages from './translations/pl.json';
+import skMessages from './translations/sk.json';
 import { useQuery } from '@apollo/client';
 import { AUTH_QUERY } from './gql/authQuery';
 import { DEFAULT_LANGUAGE, getUserLanguage } from './language';
@@ -15,8 +26,19 @@ declare global {
 export { DEFAULT_LANGUAGE } from './language';
 
 const messages = {
+  ar: arMessages,
+  ary: aryMessages,
+  bg: bgMessages,
+  ceb: cebMessages,
   cs: csMessages,
+  de: deMessages,
+  el: elMessages,
+  es: esMessages,
+  hu: huMessages,
+  ja: jaMessages,
+  ko: koMessages,
   pl: plMessages,
+  sk: skMessages,
 };
 
 interface LanguageProviderProps {

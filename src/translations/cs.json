@@ -112,7 +112,7 @@
   "app.signup.validation.pwdnotmatch": "Hesla se neshodují",
   "app.signup.validation.pwdrequired": "Heslo je povinný údaj",
   "app.specifygender": "upřesni (chceš-li)",
-  "app.stats.menu.home": "Domů",
+  "app.profile.menu.home": "Domů",
   "app.stats.menu.profile": "Profil",
   "app.stats.menu.progress": "Tvůj postup:",
   "app.stats.menu.score": "Tvoje skóre:",
