@@ -80,7 +80,7 @@ const PasswordResetRequestForm = () => {
                   defaultMessage="Home"
                   description="Reset password home link"
                 />
-              </HrefLink>
+              </HrefLink> 
             </Typography>
           </Stack>
         </>
