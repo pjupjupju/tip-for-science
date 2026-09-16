@@ -11,9 +11,33 @@
     "defaultMessage": "Consent to Terms",
     "description": "Consent helmet"
   },
+  "app.dashboard.button.download": {
+    "defaultMessage": "Download"
+  },
+  "app.dashboard.button.generating": {
+    "defaultMessage": "Generating…"
+  },
+  "app.dashboard.button.import": {
+    "defaultMessage": "Import"
+  },
+  "app.dashboard.button.importing": {
+    "defaultMessage": "Importing…"
+  },
   "app.dashboard.footer.home": {
     "defaultMessage": "Home",
     "description": "Home button"
+  },
+  "app.dashboard.log.exportLink": {
+    "defaultMessage": "Download link: {url}"
+  },
+  "app.dashboard.log.exportLocal": {
+    "defaultMessage": "Local file created."
+  },
+  "app.dashboard.log.importPartial": {
+    "defaultMessage": "Some questions were not imported."
+  },
+  "app.dashboard.log.importSuccess": {
+    "defaultMessage": "All available questions imported."
   },
   "app.dashboard.menu.actions": {
     "defaultMessage": "Actions",
@@ -39,9 +63,35 @@
     "defaultMessage": "Stats",
     "description": "Stats button"
   },
-  "app.dashboard.menu.wipe": {
-    "defaultMessage": "Wipe batches",
-    "description": "Wipe batches button"
+  "app.dashboard.title": {
+    "defaultMessage": "Admin dashboard"
+  },
+  "app.dashboard.translations.description": {
+    "defaultMessage": "Select a language tab from the import spreadsheet. Existing translations will be updated and new translations added."
+  },
+  "app.dashboard.translations.empty": {
+    "defaultMessage": "No translation tabs found. Add a language tab alongside the import tab."
+  },
+  "app.dashboard.translations.importError": {
+    "defaultMessage": "Import failed: {error}"
+  },
+  "app.dashboard.translations.loadError": {
+    "defaultMessage": "Could not load languages: {error}"
+  },
+  "app.dashboard.translations.loading": {
+    "defaultMessage": "Loading languages…"
+  },
+  "app.dashboard.translations.reload": {
+    "defaultMessage": "Reload languages"
+  },
+  "app.dashboard.translations.selectLanguage": {
+    "defaultMessage": "select language"
+  },
+  "app.dashboard.translations.success": {
+    "defaultMessage": "{inserted} translations added; {updated} updated."
+  },
+  "app.dashboard.translations.title": {
+    "defaultMessage": "Import translations"
   },
   "app.game.checkmail": {
     "defaultMessage": "You can check or update it in the Settings.",

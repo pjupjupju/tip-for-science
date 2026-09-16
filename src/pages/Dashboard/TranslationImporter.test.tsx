@@ -2,7 +2,9 @@ import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 import { fireEvent, getByRole } from '@testing-library/dom';
+import { IntlProvider } from 'react-intl';
 import { TranslationImporter } from './TranslationImporter';
+import csMessages from '../../translations/cs.json';
 
 let mockQuery: any;
 let mockMutation: any;
@@ -15,7 +17,11 @@ jest.mock('@apollo/client', () => ({
 
 let container: HTMLDivElement;
 let root: Root;
-const render = () => act(() => root.render(<TranslationImporter />));
+const render = (locale = 'en') => act(() => root.render(
+  <IntlProvider locale={locale} defaultLocale="en" messages={locale === 'cs' ? csMessages : {}}>
+    <TranslationImporter />
+  </IntlProvider>
+));
 
 beforeEach(() => {
   (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
@@ -53,4 +59,35 @@ test('sheet errors are visible and prevent imports', () => {
   render();
   expect(container.textContent).toContain('Spreadsheet unavailable');
   expect((getByRole(container, 'button', { name: 'Import translations' }) as HTMLButtonElement).disabled).toBe(true);
+});
+
+test('Czech locale translates controls, progress, results and error messages', () => {
+  render('cs');
+  expect(getByRole(container, 'combobox', { name: 'vyber jazyk' })).toBeTruthy();
+  expect(getByRole(container, 'button', { name: 'Import překladů' })).toBeTruthy();
+  expect(getByRole(container, 'button', { name: 'Znovu načíst jazyky' })).toBeTruthy();
+
+  mockQuery.loading = true;
+  render('cs');
+  expect(getByRole(container, 'button', { name: 'Načítání jazyků…' })).toBeTruthy();
+  mockQuery.loading = false;
+  mockMutation.loading = true;
+  render('cs');
+  expect(getByRole(container, 'button', { name: 'Importování…' })).toBeTruthy();
+
+  mockMutation.loading = false;
+  mockMutation.data = { importTranslations: { success: true, inserted: 2, updated: 1, errors: [] } };
+  render('cs');
+  expect(container.textContent).toContain('Přidáno překladů: 2; aktualizováno: 1.');
+
+  mockQuery.error = new Error('Network unavailable');
+  mockMutation.error = new Error('Access denied');
+  render('cs');
+  expect(container.textContent).toContain('Jazyky se nepodařilo načíst: Network unavailable');
+  expect(container.textContent).toContain('Import se nezdařil: Access denied');
+
+  mockQuery.error = undefined;
+  mockQuery.data.getTranslationImportLanguages.languages = [];
+  render('cs');
+  expect(container.textContent).toContain('Nebyly nalezeny žádné jazykové listy.');
 });
