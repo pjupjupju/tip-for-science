@@ -168,7 +168,7 @@
     "description": "Thank you message"
   },
   "app.questionnaire.warning": {
-    "defaultMessage": "Please fill in all answers before continuing.",
+    "defaultMessage": "Please fill in all answers before you continue.",
     "description": "Instruction"
   },
   "app.reset": {
