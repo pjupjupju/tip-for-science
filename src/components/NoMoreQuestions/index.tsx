@@ -15,8 +15,8 @@ const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => {
   const handleClickHome = () => {
     navigate('/');
   };
-  const handleClickSettings = () => {
-    navigate('/profile/settings');
+  const handleClickAccount = () => {
+    navigate('/profile/account');
   };
 
   return (
@@ -72,8 +72,8 @@ const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => {
           <br />
           <FormattedMessage
             id="app.game.checkmail"
-            defaultMessage="You can check or update it in the Settings."
-            description="mail settings"
+            defaultMessage="You can check or update it in the Account tab."
+            description="Account email settings"
           />{' '}
         </Typography>
         <Box display="flex" justifyContent="space-between" width="100%" mt={6}>
@@ -89,15 +89,15 @@ const NoMoreQuestions = ({ score }: NoMoreQuestionsProps) => {
             />
           </Button>
           <Button
-            onClick={handleClickSettings}
+            onClick={handleClickAccount}
             sx={{ flex: 2 }}
             color="primary"
             variant="contained"
           >
             <FormattedMessage
-              id="app.stats.menu.settings"
-              defaultMessage="Settings"
-              description="Settings link"
+              id="app.profile.menu.account"
+              defaultMessage="Account"
+              description="Account link"
             />
           </Button>
         </Box>

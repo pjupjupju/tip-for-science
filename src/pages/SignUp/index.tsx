@@ -73,7 +73,7 @@ const SignUp = () => {
     });
 
     if (data && !data.signUp.errors) {
-      navigate('/profile/settings');
+      navigate('/profile/profile');
     } else {
       setErrors(data!.signUp!.errors);
     }

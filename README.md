@@ -44,8 +44,9 @@ preference takes precedence over an older cookie. Language no longer uses
 `localStorage`; old values are ignored. IP detection also supplies the initial
 language during signup or signin when an existing account has no saved language.
 
-After successful signup, users are redirected to `/profile/settings`, where they
-can change the suggested language using the language picker and save it.
+After successful signup, users are redirected to `/profile/profile`, where they
+can change the suggested language using the language picker. Language changes
+are saved immediately; voluntary profile details use their own save button.
 
 The admin dashboard loads translation tabs from `RAZZLE_QUESTIONS_SPREADSHEET`,
 excluding `import`. Tab names must match language codes registered in the

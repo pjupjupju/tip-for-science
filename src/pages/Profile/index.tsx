@@ -1,12 +1,19 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { NavLink, Route, Routes, NavLinkProps } from 'react-router-dom';
+import {
+  Navigate,
+  NavLink,
+  Route,
+  Routes,
+  NavLinkProps,
+} from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Link, { LinkProps } from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 
 import { Stats } from './Stats';
-import { Settings } from './Settings';
+import { Account } from './Account';
+import { ProfileSettings } from './ProfileSettings';
 import { Container } from '../../components';
 import { User } from '../../types';
 import Helmet from 'react-helmet';
@@ -74,18 +81,30 @@ const Profile = ({ user }: { user: User | null }) => (
             description="Stats link"
           />
         </NavbarLink>
-        <NavbarLink to="/profile/settings">
+        <NavbarLink to="/profile/profile">
           <FormattedMessage
-            id="app.stats.menu.settings"
-            defaultMessage="Settings"
-            description="Settings link"
+            id="app.home.menu.profile"
+            defaultMessage="Profile"
+            description="Profile link"
+          />
+        </NavbarLink>
+        <NavbarLink to="/profile/account">
+          <FormattedMessage
+            id="app.profile.menu.account"
+            defaultMessage="Account"
+            description="Account link"
           />
         </NavbarLink>
       </Stack>
       <Routes>
         <Route index element={<Stats user={user} />} />
         <Route path="stats" element={<Stats user={user} />} />
-        <Route path="settings" element={<Settings user={user} />} />
+        <Route path="profile" element={<ProfileSettings user={user} />} />
+        <Route path="account" element={<Account user={user} />} />
+        <Route
+          path="settings"
+          element={<Navigate to="/profile/profile" replace />}
+        />
       </Routes>
     </Stack>
   </Container>

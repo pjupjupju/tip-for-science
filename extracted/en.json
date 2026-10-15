@@ -94,8 +94,8 @@
     "defaultMessage": "Import translations"
   },
   "app.game.checkmail": {
-    "defaultMessage": "You can check or update it in the Settings.",
-    "description": "mail settings"
+    "defaultMessage": "You can check or update it in the Account tab.",
+    "description": "Account email settings"
   },
   "app.game.closedontworry": {
     "defaultMessage": "Don't worry, this won't affect your score, but it helps us with data analysis. :)",
@@ -172,6 +172,10 @@
   "app.previoustis": {
     "defaultMessage": "Previous tips:",
     "description": "Previous tips"
+  },
+  "app.profile.menu.account": {
+    "defaultMessage": "Account",
+    "description": "Account link"
   },
   "app.profile.menu.home": {
     "defaultMessage": "Home",
@@ -433,10 +437,6 @@
   "app.stats.menu.score": {
     "defaultMessage": "Your score:",
     "description": "Score text"
-  },
-  "app.stats.menu.settings": {
-    "defaultMessage": "Settings",
-    "description": "Settings link"
   },
   "app.stats.menu.stats": {
     "defaultMessage": "Stats",
