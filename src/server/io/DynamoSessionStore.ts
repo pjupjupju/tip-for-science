@@ -79,6 +79,14 @@ export class DynamoSessionStore extends Store {
       if (!isValidItem(Item) || isExpired(Item)) {
         callback(undefined, undefined);
       } else {
+        const { expires, ...cookie } = Item.data.cookie;
+        if (expires && typeof expires === 'object') {
+          // Older sessions stored Date objects as empty DynamoDB maps.
+          Item.data.cookie = {
+            ...cookie,
+            expires: Item.expires == null ? null : new Date(Item.expires * 1000),
+          };
+        }
         callback(undefined, Item.data);
       }
     } catch (e) {
@@ -98,7 +106,7 @@ export class DynamoSessionStore extends Store {
             id: sid,
             expires: prolongSessionExpiration(session),
             data: {
-              ...session,
+              ...JSON.parse(JSON.stringify(session)),
               __updatedAt: Date.now(),
             },
           },
