@@ -48,7 +48,7 @@ const NoMoreQuestions = ({ onFinish }) => {
           <Typography variant="body2" color="#FFFFFF" mb={1}>
             <FormattedMessage
               id="app.questionnaire.finished"
-              defaultMessage="Hotovo, víc toho tady není 🎉!"
+              defaultMessage="Done, there is nothing more here 🎉!"
               description="Finished"
             />
           </Typography>
@@ -79,8 +79,7 @@ const NoMoreQuestions = ({ onFinish }) => {
           <Typography variant="body2" color="#FFFFFF" mb={1}>
             <FormattedMessage
               id="app.questionnaire.completed"
-              defaultMessage="Všechny otázky dotazníku jsi vyplnil*a a teď můžeš dále pokračovat
-            ve hře, nebo na hlavní obrazovku."
+              defaultMessage="You have completed all the questionnaire questions. Now you can continue playing the game or return to the home screen."
               description="Everything completed message"
             />
           </Typography>

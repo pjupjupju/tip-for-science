@@ -130,7 +130,11 @@ const Questionnaire = ({
     <Box sx={mediumBPadding}>
       <Box sx={headerStyles}>
         <Typography variant="h6" mb={1} color="#FFFFFF">
-          Dotazník
+          <FormattedMessage
+            id="app.questionnaire.questionnaire"
+            defaultMessage="Questionnaire"
+            description="Questionnaire"
+          />
         </Typography>
 
         <Stack
@@ -146,19 +150,14 @@ const Questionnaire = ({
                 <Typography component="p" variant="body2" color="#FFFFFF">
                   <FormattedMessage
                     id="app.questionnaire.header.pause"
-                    defaultMessage="Nyní přichází krátká pauza. Ale neboj, po vyplnění tohoto
-                  krátkého osobnostního dotazníku na Tebe čeká ještě několik
-                  otázek k tipování."
+                    defaultMessage="Now there will be a short break. But don’t worry—after completing this short personality questionnaire, a few more guessing questions will be waiting for you."
                     description="Short pause"
                   />
                 </Typography>
                 <Typography component="p" variant="body2" color="#FFFFFF">
                   <FormattedMessage
                     id="app.questionnaire.header.explanation"
-                    defaultMessage="Níže jsou uvedena tvrzení, která popisují různé způsoby
-                  myšlení, prožívání a chování. U každého tvrzení označ, do jaké
-                  míry pro Tebe obecně platí. Nejde o to, jak se cítíš právě
-                  teď, ale jaký*á obvykle jsi."
+                    defaultMessage="Below are statements describing different ways of thinking, feeling, and behaving. For each statement, indicate to what extent it generally applies to you. This is not about how you feel right now, but what you are usually like."
                     description="Explanation"
                   />
                 </Typography>
@@ -167,7 +166,7 @@ const Questionnaire = ({
               <Typography component="p" variant="body2" color="#FFFFFF">
                 <FormattedMessage
                   id="app.questionnaire.header.instruction"
-                  defaultMessage="Označ, do jaké míry pro vás jednotlivá tvrzení obecně platí."
+                  defaultMessage="Indicate to what extent each statement generally applies to you."
                   description="Instruction"
                 />
               </Typography>
@@ -177,8 +176,8 @@ const Questionnaire = ({
             <FormattedMessage
               id="app.questionnaire.page"
               defaultMessage="Page"
-              description="Instruction"
-            />
+              description="Page"
+            />{' '}
             <b>{pageNum}</b> / <b>{pages}</b>
           </Typography>
         </Stack>
@@ -187,7 +186,7 @@ const Questionnaire = ({
           <Alert severity="warning" sx={mediumBMargin}>
             <FormattedMessage
               id="app.questionnaire.warning"
-              defaultMessage="Vyplň prosím všechny odpovědi, než budeš pokračovat."
+              defaultMessage="Please fill in all answers before you continue."
               description="Instruction"
             />
           </Alert>

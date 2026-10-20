@@ -48,7 +48,7 @@ const QuestionnaireDone = ({ onFinish, pageNum, pages }) => {
           <Typography variant="body2" color="#FFFFFF" mb={1}>
             <FormattedMessage
               id="app.questionnaire.finished"
-              defaultMessage="Hotovo, víc toho tady není 🎉!"
+              defaultMessage="Done, there is nothing more here 🎉!"
               description="Finished"
             />{' '}
           </Typography>
