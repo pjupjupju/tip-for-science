@@ -68,9 +68,9 @@ const Slide2 = ({ handleNextStep }: SlideProps) => {
           15 000{' '}
         </Typography>
         <FormattedMessage
-          id="app.tutorial.slide.elekg"
+          id="app.kgunit"
           defaultMessage="kg"
-          description="Tut2 kg"
+          description="kgunit"
         />
         .
       </Typography>

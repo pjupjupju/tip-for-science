@@ -65,9 +65,9 @@ const GameOverScreen = ({ onContinue }: GameOverScreenProps) => {
               sx={leftButtonStyles}
             >
               <FormattedMessage
-                id="app.tutorial.menu.home"
+                id="app.home"
                 defaultMessage="Home"
-                description="Tut home button"
+                description="Home button"
               />
             </Button>
             <Button

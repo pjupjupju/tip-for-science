@@ -107,9 +107,9 @@ const SignIn = () => {
         >
           <InputLabel htmlFor="email" sx={labelStyles}>
             <FormattedMessage
-              id="app.signin.menu.email"
+              id="app.reset.menu.email"
               defaultMessage="E-mail"
-              description="SignIn E-mail label"
+              description="E-mail"
             />
           </InputLabel>
           <OutlinedInput
@@ -135,9 +135,9 @@ const SignIn = () => {
           <Stack direction="row" justifyContent="center" my={2}></Stack>
           <MenuButton type="submit" sx={buttonStyles} primary>
             <FormattedMessage
-              id="app.signin.menu.login"
-              defaultMessage="Login"
-              description="SignIn Login button"
+              id="app.tutorial.slide.signin"
+              defaultMessage="Sign in"
+              description="Signin"
             />
           </MenuButton>
           {errors.length > 0 && (
@@ -178,9 +178,9 @@ const SignIn = () => {
             <Typography color="white" fontSize={14}>
               <HrefLink component={Link} color="text.secondary" to="/">
                 <FormattedMessage
-                  id="app.signin.menu.home"
+                  id="app.home"
                   defaultMessage="Home"
-                  description="SignIn Home link"
+                  description="Home button"
                 />
               </HrefLink>
             </Typography>

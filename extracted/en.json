@@ -177,10 +177,6 @@
     "defaultMessage": "Account",
     "description": "Account link"
   },
-  "app.profile.menu.home": {
-    "defaultMessage": "Home",
-    "description": "Home link"
-  },
   "app.questionnaire.completed": {
     "defaultMessage": "You have completed all the questionnaire questions. Now you can continue playing the game or return to the main screen.",
     "description": "Everything completed message"
@@ -245,13 +241,9 @@
     "defaultMessage": "E-mail",
     "description": "Request reset password email label"
   },
-  "app.reset.menu.home": {
-    "defaultMessage": "Home",
-    "description": "Reset password home link"
-  },
   "app.reset.menu.password": {
     "defaultMessage": "New Password",
-    "description": "Reset password new password label"
+    "description": "New password label"
   },
   "app.reset.menu.passwordagain": {
     "defaultMessage": "Repeat new password",
@@ -276,10 +268,6 @@
   "app.settings.menu.anon": {
     "defaultMessage": "All data will be anonymized before evaluation.",
     "description": "Anon text"
-  },
-  "app.settings.menu.email": {
-    "defaultMessage": "E-mail",
-    "description": "Email label"
   },
   "app.settings.menu.gender": {
     "defaultMessage": "I am...",
@@ -309,14 +297,6 @@
     "defaultMessage": "Current password",
     "description": "PasswordCur label"
   },
-  "app.settings.menu.passwordnew": {
-    "defaultMessage": "New password",
-    "description": "PasswordNew label"
-  },
-  "app.settings.menu.passwordnew2": {
-    "defaultMessage": "Reenter new password",
-    "description": "PasswordNew2 label"
-  },
   "app.settings.menu.save": {
     "defaultMessage": "Save",
     "description": "Save label"
@@ -345,17 +325,9 @@
     "defaultMessage": "Create an account",
     "description": "SignIn CreateAcc link"
   },
-  "app.signin.menu.email": {
-    "defaultMessage": "E-mail",
-    "description": "SignIn E-mail label"
-  },
   "app.signin.menu.forgottenpassword": {
     "defaultMessage": "Or you can reset",
     "description": "Forgotten password help text"
-  },
-  "app.signin.menu.home": {
-    "defaultMessage": "Home",
-    "description": "SignIn Home link"
   },
   "app.signin.menu.login": {
     "defaultMessage": "Login",
@@ -381,17 +353,9 @@
     "defaultMessage": "Create",
     "description": "SignUp Agree text"
   },
-  "app.signup.menu.email": {
-    "defaultMessage": "E-mail",
-    "description": "SignUp Email label"
-  },
   "app.signup.menu.forgottenpasswordlink": {
     "defaultMessage": "forgotten password",
     "description": "Forgotten password link"
-  },
-  "app.signup.menu.home": {
-    "defaultMessage": "Home",
-    "description": "SignUp Home link"
   },
   "app.signup.menu.login": {
     "defaultMessage": "Log in",
@@ -461,10 +425,6 @@
   "app.tipeval": {
     "defaultMessage": "Your tip:",
     "description": "Tipeval"
-  },
-  "app.tutorial.menu.home": {
-    "defaultMessage": "Home",
-    "description": "Tut home button"
   },
   "app.tutorial.menu.next": {
     "defaultMessage": "Next",
@@ -570,10 +530,6 @@
     "defaultMessage": "We have almost perfected social transmission.",
     "description": "Tut11 perfected"
   },
-  "app.tutorial.slide.play": {
-    "defaultMessage": "Play",
-    "description": "Tut15 play"
-  },
   "app.tutorial.slide.poets": {
     "defaultMessage": "We learn from each other - we create, build, paint, write poems - inspired by painters, inventors, scientists and poets of the past.",
     "description": "Tut11 poets"
@@ -604,7 +560,7 @@
   },
   "app.tutorial.slide.signin": {
     "defaultMessage": "Sign in",
-    "description": "Tut15 signin"
+    "description": "Signin"
   },
   "app.tutorial.slide.survive": {
     "defaultMessage": "The ones that survive can be shown to you as a previous tip.",
