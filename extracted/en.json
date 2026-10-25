@@ -458,10 +458,6 @@
     "defaultMessage": "Are you curious...",
     "description": "Tut1 curious"
   },
-  "app.tutorial.slide.elekg": {
-    "defaultMessage": "kg",
-    "description": "Tut2 kg"
-  },
   "app.tutorial.slide.elemale": {
     "defaultMessage": "The largest male elephant on record weighed",
     "description": "Tut4 elemale"
