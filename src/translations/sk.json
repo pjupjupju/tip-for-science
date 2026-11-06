@@ -138,12 +138,14 @@
   "app.questionnaire.header.pause": "Teraz nasleduje krátka prestávka. Nemajte však obavy – po vyplnení tohto krátkeho osobnostného dotazníka Vás ešte čaká niekoľko otázok, pri ktorých budete tipovať odpovede.",
   "app.questionnaire.header.explanation": "Nižšie sú uvedené tvrdenia, ktoré opisujú rôzne spôsoby myslenia, prežívania a správania. Pri každom tvrdení uveďte, do akej miery Vás vo všeobecnosti vystihuje. Nejde o to, ako sa cítite práve teraz, ale o to, čo je pre Vás zvyčajne typické.",
   "app.questionnaire.header.instruction": "Pri každom tvrdení uveďte, do akej miery Vás vo všeobecnosti vystihuje.",
-  "app.questionnaire.thankyou": "Ďakujeme!",
+  "app.questionnaire.thankyou": "Ďakujeme",
   "app.questionnaire.warning": "Pred pokračovaním vyplňte všetky odpovede.",
   "app.questionnaire.page": "Strana",
   "app.questionnaire.completelyinnacurate": "Vôbec nevystihuje",
   "app.questionnaire.innacurate": "Skôr nevystihuje",
   "app.questionnaire.neither": "Ani vystihuje, ani nevystihuje",
   "app.questionnaire.acurate": "Skôr vystihuje",
-  "app.questionnaire.completelyacurate": "Úplne vystihuje"
+  "app.questionnaire.completelyacurate": "Úplne vystihuje",
+  "app.questionnaire.completed": "Odpovedali ste na všetky otázky dotazníka. Teraz môžete pokračovať v hre alebo sa vrátiť na hlavnú obrazovku.",
+  "app.questionnaire.finished": "Hotovo, už tu nie je nič ďalšie!"
 }
