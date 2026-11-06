@@ -124,7 +124,7 @@
   "app.tutorial.slide.washingtonq": "ラシュモア山に彫られたジョージ・ワシントン彫刻の頭の大きさは？",
   "app.tutorial.slide.previousp": "今度は、これまでのみんなの予想をヒントとして見ることができます：",
   "app.tutorial.slide.meter": "m",
-  "app.tutorial.slide.metersq": "m？",
+  "app.tutorial.slide.metersq": "m?",
   "app.tutorial.slide.ffwash": "ジョージ・ワシントン像の頭の高さは{correct} mです。当初の彫刻案では、先住民を含むアメリカ西部の著名人を描く予定でした。最終的には、像に「より広い意味」を持たせるため、歴代大統領が選ばれたそうです。",
   "app.tutorial.slide.inheritance": "私たちの生活は、文化的な継承の上に成り立っています。",
   "app.tutorial.slide.perfected": "人間は、社会の中で情報を流通させることで、多くのものを完成させてきました。",
@@ -138,12 +138,15 @@
   "app.questionnaire.header.pause": "ここでちょっとひと休み。もっとやりたいって？心配ご無用。この短い性格アンケートに答えてもらったら、まだいくつかの予想問題が待っています。",
   "app.questionnaire.header.explanation": "以下に、考え方・感じ方・行動のしかたを表す文が並んでいます。それぞれが普段の自分にどの程度当てはまるか答えてください。今この瞬間の気分ではなく、いつもの自分について考えてください。",
   "app.questionnaire.header.instruction": "それぞれの文が、いつもの自分にどの程度当てはまるか答えてください。",
-  "app.questionnaire.thankyou": "ありがとう！",
+  "app.questionnaire.thankyou": "ありがとうございます",
   "app.questionnaire.warning": "次へ進む前に、すべての項目に回答してください。",
   "app.questionnaire.page": "ページ",
   "app.questionnaire.completelyinnacurate": "まったく当てはまらない",
   "app.questionnaire.innacurate": "あまり当てはまらない",
   "app.questionnaire.neither": "どちらともいえない",
   "app.questionnaire.acurate": "やや当てはまる",
-  "app.questionnaire.completelyacurate": "とてもよく当てはまる"
+  "app.questionnaire.completelyacurate": "とてもよく当てはまる",
+  "app.questionnaire.completed": "アンケートの質問にはすべて回答しました。このままゲームを続けるか、メイン画面に戻ることができます。",
+  "app.questionnaire.finished": "完了です。ここにはもう何もありません！",
+  "app.questionnare.send": "送信"
 }

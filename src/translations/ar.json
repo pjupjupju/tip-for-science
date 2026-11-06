@@ -138,12 +138,15 @@
   "app.questionnaire.header.pause": "والآن تأتي استراحة قصيرة. لكن لا تقلق، فبعد إكمال هذا الاستبيان القصير للشخصية، ستنتظرك بضعة أسئلة أخرى لتخمينها.",
   "app.questionnaire.header.explanation": "فيما يلي عبارات تصف طرقًا مختلفة في التفكير والشعور والتصرف. لكل عبارة، يرجى تحديد إلى أي مدى تنطبق عليك بشكل عام. لا يتعلق الأمر بما تشعر به الآن، بل بطبيعتك المعتادة.",
   "app.questionnaire.header.instruction": "يرجى تحديد إلى أي مدى تنطبق عليك كل عبارة بشكل عام.",
-  "app.questionnaire.thankyou": "شكرًا لك!",
+  "app.questionnaire.thankyou": "شكرًا",
   "app.questionnaire.warning": "يرجى استكمال جميع الإجابات قبل المتابعة.",
   "app.questionnaire.page": "صفحة",
   "app.questionnaire.completelyinnacurate": "غير دقيق إطلاقًا  (لا يصفني على الإطلاق)",
   "app.questionnaire.innacurate": "غير دقيق إلى حد ما",
   "app.questionnaire.neither": "لا دقيق ولا غير دقيق",
   "app.questionnaire.acurate": "دقيق إلى حد ما",
-  "app.questionnaire.completelyacurate": "دقيق تمامًا  (يصفني تماماً)"
+  "app.questionnaire.completelyacurate": "دقيق تمامًا  (يصفني تماماً)",
+  "app.questionnaire.completed": "لقد أكملت جميع أسئلة الاستبيان. يمكنك الآن مواصلة اللعب أو العودة إلى الشاشة الرئيسية.",
+  "app.questionnaire.finished": "تم الانتهاء، لا يوجد شيء آخر هنا!",
+  "app.questionnare.send": "إرسال"
 }

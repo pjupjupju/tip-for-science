@@ -145,5 +145,8 @@
   "app.questionnaire.innacurate": "Medyo sayop",
   "app.questionnaire.neither": "Dili husto ug dili usab sayop",
   "app.questionnaire.acurate": "Medyo husto",
-  "app.questionnaire.completelyacurate": "Husto kaayo"
+  "app.questionnaire.completelyacurate": "Husto kaayo",
+  "app.questionnaire.completed": "Natubag na nimo ang tanang pangutana sa questionnaire. Mahimo ka nang mopadayon sa pagdula o mobalik sa pangunang screen.",
+  "app.questionnaire.finished": "Human na! Wala nay lain dinhi!",
+  "app.questionnare.send": "Ipadala"
 }

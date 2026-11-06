@@ -138,12 +138,15 @@
   "app.questionnaire.header.pause": "Jetzt kommt eine kurze Pause. Aber keine Sorge: Nachdem du diesen kurzen Persönlichkeitsfragebogen ausgefüllt hast, folgen noch ein paar weitere Schätzfragen.",
   "app.questionnaire.header.explanation": "Im Folgenden findest du Aussagen, die unterschiedliche Denk-, Erlebens- und Verhaltensweisen beschreiben. Gib bei jeder Aussage bitte an, inwieweit sie im Allgemeinen auf dich zutrifft. Es geht nicht darum, wie du dich gerade fühlst, sondern darum, wie du normalerweise bist.",
   "app.questionnaire.header.instruction": "Bitte gib an, inwieweit jede Aussage im Allgemeinen auf dich zutrifft.",
-  "app.questionnaire.thankyou": "Danke schön!",
+  "app.questionnaire.thankyou": "Vielen Dank!",
   "app.questionnaire.warning": "Bitte bewerte alle Aussagen, bevor du fortfährst.",
   "app.questionnaire.page": "Seite",
   "app.questionnaire.completelyinnacurate": "Trifft überhaupt nicht zu",
   "app.questionnaire.innacurate": "Trifft eher nicht zu",
   "app.questionnaire.neither": "Teils/teils",
   "app.questionnaire.acurate": "Trifft eher zu",
-  "app.questionnaire.completelyacurate": "Trifft völlig zu"
+  "app.questionnaire.completelyacurate": "Trifft völlig zu",
+  "app.questionnaire.completed": "Du hast alle Fragen des Fragebogens beantwortet. Jetzt kannst du weiterspielen oder zum Hauptbildschirm zurückkehren.",
+  "app.questionnaire.finished": "Fertig! Hier gibt es nichts mehr.",
+  "app.questionnare.send": "Senden"
 }

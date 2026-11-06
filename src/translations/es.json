@@ -138,12 +138,15 @@
   "app.questionnaire.header.pause": "Ahora viene una breve pausa. Pero no te preocupes: después de completar este breve cuestionario de personalidad, todavía quedan algunas preguntas más en las que tendrás que hacer estimaciones.",
   "app.questionnaire.header.explanation": "A continuación encontrarás afirmaciones que describen distintas formas de pensar, sentir y comportarse. Para cada afirmación, indica en qué medida se aplica a ti en general. No se trata de cómo te sientes ahora, sino de cómo eres habitualmente.",
   "app.questionnaire.header.instruction": "Indica en qué medida cada afirmación se aplica a ti en general.",
-  "app.questionnaire.thankyou": "¡Gracias!",
+  "app.questionnaire.thankyou": "Muchas gracias.",
   "app.questionnaire.warning": "Completa todas las respuestas antes de continuar.",
   "app.questionnaire.page": "Página",
   "app.questionnaire.completelyinnacurate": "No me describe en absoluto",
   "app.questionnaire.innacurate": "Me describe poco",
   "app.questionnaire.neither": "Me describe en parte",
   "app.questionnaire.acurate": "Me describe bastante",
-  "app.questionnaire.completelyacurate": "Me describe muy bien"
+  "app.questionnaire.completelyacurate": "Me describe muy bien",
+  "app.questionnaire.completed": "Has respondido a todas las preguntas del cuestionario. Ahora puedes seguir jugando o volver a la pantalla principal.",
+  "app.questionnaire.finished": "¡Listo! No hay nada más aquí.",
+  "app.questionnare.send": "Enviar"
 }

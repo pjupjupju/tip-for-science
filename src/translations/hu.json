@@ -138,12 +138,16 @@
   "app.questionnaire.header.pause": "Most egy rövid szünet következik. De ne aggódj, miután kitöltötted ezt a rövid személyiség tesztet, még néhány további tippelős kérdés vár rád.",
   "app.questionnaire.header.explanation": "Az alábbi állítások különböző gondolkodásmódokat, élményeket és viselkedésformákat írnak le. Minden állítás esetén kérjük, jelezd, hogy az mennyire jellemző rád általában. Nem arról van szó, hogy éppen most hogyan érzed magad, hanem arról, hogy általában hogyan szoktál lenni.",
   "app.questionnaire.header.instruction": "Kérjük, jelezd, hogy az egyes állítások mennyire jellemzőek rád általában.",
-  "app.questionnaire.thankyou": "Köszönöm!",
+  "app.questionnaire.thankyou": "Köszönjük!",
   "app.questionnaire.warning": "Kérjük, válaszolj minden kérdésre, mielőtt tovább lépnél.",
   "app.questionnaire.page": "Oldal",
   "app.questionnaire.completelyinnacurate": "Egyáltalán nem jellemző",
   "app.questionnaire.innacurate": "Közepesen nem jellemző",
   "app.questionnaire.neither": "Jellemző is, meg nem is",
   "app.questionnaire.acurate": "Közepesen jellemző",
-  "app.questionnaire.completelyacurate": "Nagyon jellemző"
+  "app.questionnaire.completelyacurate": "Nagyon jellemző",
+  "app.questionnaire.completed": "A kérdőív összes kérdését megválaszoltad. Most folytathatod a játékot, vagy visszatérhetsz a főképernyőre.",
+  "app.questionnaire.finished": "Kész, itt nincs egyéb teendőd.",
+  "app.questionnare.send": "Küldés"
 }
+
