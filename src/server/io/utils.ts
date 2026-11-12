@@ -1,4 +1,4 @@
-import { MAX_GENERATION_NUMBER } from '../../config';
+import { MAX_GENERATION_NUMBER, QUESTIONS_BEFORE_IPIP } from '../../config';
 import { type User, RunConfig } from '../model';
 
 const getGenerationSize = (): number => {
@@ -263,8 +263,7 @@ export const getNextQuestionnaireCursor = (user: User) => {
     return null;
   }
 
-  // 100th question
-  return bundle[99];
+  return bundle[QUESTIONS_BEFORE_IPIP - 1];
 };
 
 export const isQuestionnaireActive = (user: User) => {
