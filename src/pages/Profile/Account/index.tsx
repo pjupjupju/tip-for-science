@@ -150,9 +150,9 @@ const Account = ({ user }: { user: User | null }) => {
       </Typography>
       <InputLabel htmlFor="email" sx={labelStyles}>
         <FormattedMessage
-          id="app.settings.menu.email"
+          id="app.reset.menu.email"
           defaultMessage="E-mail"
-          description="Email label"
+          description="E-mail"
         />
       </InputLabel>
       <OutlinedInput
@@ -178,9 +178,9 @@ const Account = ({ user }: { user: User | null }) => {
       />
       <InputLabel htmlFor="newPassword" sx={labelStyles}>
         <FormattedMessage
-          id="app.settings.menu.passwordnew"
-          defaultMessage="New password"
-          description="PasswordNew label"
+          id="app.reset.menu.password"
+          defaultMessage="New Password"
+          description="New password label"
         />
       </InputLabel>
       <OutlinedInput
@@ -191,9 +191,9 @@ const Account = ({ user }: { user: User | null }) => {
       />
       <InputLabel htmlFor="confirmNewPassword" sx={labelStyles}>
         <FormattedMessage
-          id="app.settings.menu.passwordnew2"
-          defaultMessage="Reenter new password"
-          description="PasswordNew2 label"
+          id="app.reset.menu.passwordagain"
+          defaultMessage="Repeat new password"
+          description="Reset password repeat new password label"
         />
       </InputLabel>
       <OutlinedInput

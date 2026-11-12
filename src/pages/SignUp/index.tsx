@@ -18,7 +18,10 @@ import {
   emailRegex,
   useYupValidationResolver,
 } from '../../helpers';
-import { settingInputStyles, labelStyles } from '../../components/commonStyleSheets';
+import {
+  settingInputStyles,
+  labelStyles,
+} from '../../components/commonStyleSheets';
 import { validationMessages } from './messages';
 
 const SignUp = () => {
@@ -113,9 +116,9 @@ const SignUp = () => {
             />{' '}
             <HrefLink component={Link} to="/signin" color="primary">
               <FormattedMessage
-                id="app.signup.menu.login"
-                defaultMessage="Log in"
-                description="SignUp Login text"
+                id="app.tutorial.slide.signin"
+                defaultMessage="Sign in"
+                description="Signin"
               />
             </HrefLink>{' '}
           </Typography>
@@ -131,9 +134,9 @@ const SignUp = () => {
         >
           <InputLabel htmlFor="email" sx={labelStyles}>
             <FormattedMessage
-              id="app.signup.menu.email"
+              id="app.reset.menu.email"
               defaultMessage="E-mail"
-              description="SignUp Email label"
+              description="E-mail"
             />
           </InputLabel>
           <OutlinedInput
@@ -145,9 +148,9 @@ const SignUp = () => {
           />
           <InputLabel htmlFor="password" sx={labelStyles}>
             <FormattedMessage
-              id="app.signup.menu.password"
+              id="app.signin.menu.password"
               defaultMessage="Password"
-              description="SignUp Password label"
+              description="SignIn Password label"
             />
           </InputLabel>
           <OutlinedInput
@@ -207,9 +210,9 @@ const SignUp = () => {
             <Typography color="white" fontSize={14}>
               <HrefLink component={Link} color="text.secondary" to="/">
                 <FormattedMessage
-                  id="app.signup.menu.home"
+                  id="app.home"
                   defaultMessage="Home"
-                  description="SignUp Home link"
+                  description="Home button"
                 />
               </HrefLink>
             </Typography>

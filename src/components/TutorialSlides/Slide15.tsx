@@ -92,9 +92,9 @@ const Slide15 = () => {
             sx={{ flex: 3 }}
           >
             <FormattedMessage
-              id="app.tutorial.slide.play"
+              id="app.home.menu.play"
               defaultMessage="Play"
-              description="Tut15 play"
+              description="Play button"
             />
           </Button>
         )}
@@ -108,7 +108,7 @@ const Slide15 = () => {
             <FormattedMessage
               id="app.tutorial.slide.signin"
               defaultMessage="Sign in"
-              description="Tut15 signin"
+              description="Signin"
             />
           </Button>
         )}

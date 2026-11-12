@@ -97,9 +97,9 @@ const PasswordUpdateForm = ({ id, token }: PasswordUpdateFormProps) => {
               />{' '}
               <HrefLink component={Link} color="text.secondary" to="/signin">
                 <FormattedMessage
-                  id="app.signup.menu.login"
-                  defaultMessage="Log in"
-                  description="SignUp Login text"
+                  id="app.tutorial.slide.signin"
+                  defaultMessage="Sign in"
+                  description="Signin"
                 />
               </HrefLink>
               .
@@ -112,7 +112,7 @@ const PasswordUpdateForm = ({ id, token }: PasswordUpdateFormProps) => {
             <FormattedMessage
               id="app.reset.menu.password"
               defaultMessage="New Password"
-              description="Reset password new password label"
+              description="New password label"
             />
           </InputLabel>
           <OutlinedInput
@@ -160,9 +160,9 @@ const PasswordUpdateForm = ({ id, token }: PasswordUpdateFormProps) => {
               />{' '}
               <HrefLink component={Link} color="text.secondary" to="/">
                 <FormattedMessage
-                  id="app.reset.menu.home"
+                  id="app.home"
                   defaultMessage="Home"
-                  description="Reset password home link"
+                  description="Home button"
                 />
               </HrefLink>
               .

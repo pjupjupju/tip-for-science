@@ -68,9 +68,9 @@ const Profile = ({ user }: { user: User | null }) => (
         <NavbarLink fontSize={18} to="/">
           {'← '}
           <FormattedMessage
-            id="app.profile.menu.home"
+            id="app.home"
             defaultMessage="Home"
-            description="Home link"
+            description="Home button"
           />
         </NavbarLink>
         <Box mx="auto" />

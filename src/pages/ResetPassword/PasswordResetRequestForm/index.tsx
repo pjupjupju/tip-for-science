@@ -76,11 +76,11 @@ const PasswordResetRequestForm = () => {
               />{' '}
               <HrefLink component={Link} color="text.secondary" to="/">
                 <FormattedMessage
-                  id="app.reset.menu.home"
+                  id="app.home"
                   defaultMessage="Home"
-                  description="Reset password home link"
+                  description="Home button"
                 />
-              </HrefLink> 
+              </HrefLink>
             </Typography>
           </Stack>
         </>
@@ -97,7 +97,7 @@ const PasswordResetRequestForm = () => {
               <FormattedMessage
                 id="app.reset.menu.email"
                 defaultMessage="E-mail"
-                description="Request reset password email label"
+                description="E-mail"
               />
             </InputLabel>
             <OutlinedInput
@@ -134,9 +134,9 @@ const PasswordResetRequestForm = () => {
               />{' '}
               <HrefLink component={Link} color="text.secondary" to="/">
                 <FormattedMessage
-                  id="app.reset.menu.home"
+                  id="app.home"
                   defaultMessage="Home"
-                  description="Reset password home link"
+                  description="Home button"
                 />
               </HrefLink>
             </Typography>
