@@ -20,6 +20,7 @@ export const JWT_SECRET = 'd3860b4c-6df7-4fa4-bd34-4de82b437608';
 export const INITIAL_GENERATION_NUMBER = 1;
 export const MAX_GENERATION_NUMBER = 10;
 export const QUESTIONNAIRE_BUNDLE_SIZE = 10;
+export const QUESTIONS_BEFORE_IPIP = 10;
 
 // EMAILS
 export const EMAIL_FROM = 'tipforscienceapp@gmail.com';
