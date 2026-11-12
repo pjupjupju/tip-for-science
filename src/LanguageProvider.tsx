@@ -8,10 +8,15 @@ import csMessages from './translations/cs.json';
 import deMessages from './translations/de.json';
 import elMessages from './translations/el.json';
 import esMessages from './translations/es.json';
+import frMessages from './translations/fr.json';
 import huMessages from './translations/hu.json';
+import idMessages from './translations/id.json';
+import itMessages from './translations/it.json';
 import jaMessages from './translations/ja.json';
 import koMessages from './translations/ko.json';
+import nlMessages from './translations/nl.json';
 import plMessages from './translations/pl.json';
+import seMessages from './translations/se.json';
 import skMessages from './translations/sk.json';
 import { useQuery } from '@apollo/client';
 import { AUTH_QUERY } from './gql/authQuery';
@@ -34,10 +39,15 @@ const messages = {
   de: deMessages,
   el: elMessages,
   es: esMessages,
+  fr: frMessages,
   hu: huMessages,
+  id: idMessages,
+  it: itMessages,
   ja: jaMessages,
   ko: koMessages,
+  nl: nlMessages,
   pl: plMessages,
+  se: seMessages,
   sk: skMessages,
 };
 
